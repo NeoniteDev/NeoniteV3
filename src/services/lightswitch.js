@@ -49,7 +49,7 @@ app.get("/api/service/:serviceId/status", CheckClientAuthorization, (req, res) =
             "a7f138b2e51945ffbfdacc1af0541053"
         ] : [],
         banned: false,
-        allowedActions: req.jwtinfo.iai ? [
+        allowedActions: req.auth.account_id ? [
             "PLAY",
             "DOWNLOAD"
         ] : [],

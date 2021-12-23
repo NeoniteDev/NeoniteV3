@@ -95,24 +95,6 @@ export interface profile {
     }
 }
 
-/*
-{
-        'token': token,
-        'session_id': token,
-        'token_type': 'bearer',
-        'client_id': req.jwtinfo.clid,
-        'internal_client': req.jwtinfo.ic,
-        'client_service': req.jwtinfo.clsvc,
-        'account_id': req.jwtinfo.sub || undefined,
-        'expires_in': expire_in / 1000,
-        'expires_at': expires_date,
-        'auth_method': req.jwtinfo.am,
-        'display_name': req.jwtinfo.dn || undefined,
-        'app': req.jwtinfo.clsvc,
-        'in_app_id': req.jwtinfo.iai
-    }
-    */
-
 
 
 database.query('CREATE TABLE IF NOT EXISTS Accounts (displayName varchar(50) not null, accountId varchar(32) not null, email varchar(255) not null, password varchar(255) not null);')
