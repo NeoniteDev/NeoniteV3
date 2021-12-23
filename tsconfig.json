@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "ES2021",
+
+    },
+    "include": [
+        "src/*/*.ts",
+        "src/structs/*.ts",
+        "src/middlewares/*.ts",
+    ]
+}

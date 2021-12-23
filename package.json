@@ -1,0 +1,46 @@
+{
+  "name": "neonite",
+  "version": "3.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --build",
+    "run": "node app.js"
+  },
+  "author": "BeatYT",
+  "license": "Neolicense",
+  "engines": {
+    "node": ">=16.5.0"
+  },
+  "dependencies": {
+    "@cspotcode/source-map-support": "^0.7.0",
+    "@types/ws": "^8.2.2",
+    "axios": "^0.21.4",
+    "colors": "^1.4.0",
+    "config-ini-parser": "^1.5.9",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "memory-stream": "^1.0.0",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.12",
+    "ts-node": "^10.4.0",
+    "ws": "^7.5.6",
+    "xml-parser": "^1.2.1",
+    "xmlbuilder2": "^3.0.2",
+    "xmllint": "github:Beat-YT/xml.js",
+    "xmpp.js": "^0.12.0"
+  },
+  "config": {
+    "port": 80
+  },
+  "typings": "./structs/types.d.ts",
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/mysql": "^2.15.19",
+    "@types/node": "^16.11.11"
+  }
+}

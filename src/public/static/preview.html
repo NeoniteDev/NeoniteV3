@@ -1,0 +1,2189 @@
+<!DOCTYPE html>
+<!-- based on UTStats page. UT RULES!!!! -->
+<html lang="en-US" xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+        <style>
+            body,td,th {
+            	font-family: "Open Sans", Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
+            	font-style: normal;
+            	font-weight: normal;
+            	font-size: 16px;
+            	color: #000000;
+                margin: 0px;
+            }
+            body, html {
+            	background-color: #DFDFDF;
+            	height: 100%;
+            }
+
+            table{
+            	border-spacing: 0px;
+            	border-width: 0px !important;
+            	border-collapse: collapse;
+            }
+
+            a:link {
+            	color: #3274E2;
+            	text-decoration: none;
+            }
+            a:visited {
+            	text-decoration: none;
+            	color: #599DC8;
+            }
+            a:hover {
+            	text-decoration: underline;
+            	color: #B9B9B9;
+            }
+            a:active {
+            	text-decoration: none;
+            	color: #BFF2FF;
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+            color: #fff;
+            background-color: #272727;
+            font-family: "Roboto Condensed";
+            margin-top: 0px;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            padding-top: 4px;
+            text-align: center;
+            font-weight: normal;
+            /* text-transform: uppercase; */
+            }
+
+            .tablink {
+              background-color: #555;
+              font-family: "Roboto Condensed";
+              color: white;
+              float: left;
+              border: none;
+              outline: none;
+              cursor: pointer;
+              padding: 14px 16px;
+              font-size: 2.0vw;
+              width: 25%;
+            }
+
+            .tablink:hover {
+              background-color: #777;
+            }
+
+            /* Style the tab content (and add height:100% for full page content) */
+            .tabcontent {
+              display: none;
+              padding-top: 75px;
+            	padding-left: 20px;
+            	padding-right: 20px;
+            	padding-bottom: 100px;
+              height: 100%;
+            }
+
+			.StatBoxContent {
+				overflow: auto;
+			}
+
+            #BR {}
+            #CR {}
+            #StW {}
+            #EM {}
+
+            .flag {
+              display: inline-block;
+              padding: 14px 12px;
+              vertical-align: middle;
+              background-size: contain;
+              background-repeat: no-repeat
+            }
+
+            .flag.ar {
+              background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAVOSURBVHja7JdZbFRlGIaf/5wzM50y02kHytoOVooVZXWJligQg4lI1LhFMS4hxrjc6YVXxkRjiNeuiVuiCcTEcKGRJXEXa60KWtAEkdJSulBa205nOXPO+RcvZkqntFi8KTd8yZ9zLs7/nve83/f933uEMYaLGRYXOS4REIANRErX2QwFeA5Qtfn9p4dtMbvvt4Rg3/bXkw6QsITFLY3X/z+Ec7tHiP+1/c/TxwESDhCRWuEFPqOFDMYYRDmgMZhSrgwghABjCFmhoo5aEbIcPO2ffW5873iLj++hhFETjeOpACDiAGitcaVHQfoX8OUapE/zZc0sr6lDYxjMj/LpsW/AssGaua5d6RMoBYADEBiFGxRwg8IMZRPg2GGuW3AV6xatIOvmAUNTsoHmJSO09rXjullwwv8JE7Yd/KICRQJSSbKeS84/HwED0mf1/CY2N6wnErZoPfktHSNHUVqRqmlk3aLrWDFvGT92H+SH3t/ADo0nZErYwkaWKyCNJuPlyfnu2TxN2qolzYtX8+CqrbSe/IZD/a1klCASTiIVdHS18cfAIa6cu5ItTXdiWw77On/EIKYtToHAV365AgFjfnZ6BVRAQ3WKB1bcxv5je2jp/pKhQhWLk0tZGJ1PrKKSrLeU74+30Z/+jn/cUbatfJTOdB8/97RDKDIFUqNxZRmBQCkyXh438KYUnDCaTfXXcLDnCG09X2NUHankXCwbTqX7COfCVEdiJOZU4QdVHB1s54vj33HTojW09BzG93JFPcuU0EYTlNdAoCVjXg4v8Cd62hgwimiokuVzU+w/tg8IcXntcrrzfdRE4mitSURiaGNYtegKsjmXghtw+HQb117zFFE7wrA7CpYzcXYIQaAlgZITs0BqRaaQJxe4xeWX7gs5kpE4BIa0O0AiOo+66gXk/ALzKpOMeTkG8yM4ts1fZ7pYEK9hYVU9Y94Q0g+oragm52aLeOOYfp5MIY8sESilICDru2dZlRdf52gfyoaT6TMkY5XUVS1k1M1wYqSHmmicREWc/uw/hB2HVfMbaenspit9Gm1DR7qXkUIG5OS2DNkOiYpYmQJKIrVCaT15GRjMjdJ5+iQN1cv4s/93GmvraV6ykvb+Y5xKD3B8sIsTQ6e4qmYpN6TWcLCnhVRVAwPDZ+gdG0QhpuBKrfCDshQESmKMQRs9eWGQskDGctm67HYitsPrB17jxc3P8OKGx5kXilHtVPLktffw3MbtvNv2IcP5XrYuvxsTEeT8HJqpuMYYpA4mCCilpidgDFJL3mrbTXV0Drc2PsTeo7vY/vETNMxN8e79r/D2fS9zQ2otz3/2Au+07uDG+ju4uraRN9s+Ie9l0KWqP5dAIIPJbYg1MTwmz02HjpEu9na38si6e6kMVbD3r11s+3ALtbE6BA6D2VNUVyZ4bO2zPLT2fn7oOcQv/Ycxdmjq1Bw/XpSefBTbtoPGTGtZtAUvffUGPQP9PHvzw2xs2siBju8ZSnfjK0lt1V2sX7aB+aE4O3/9nB0/f4C2KLXf9JiBLusCpRS2cTi/QxbghHnvyG6aL1vNusVNrElezcL6Tdi2TV/6DI5UdGV7efXXj1DCgHDO+/WY4jvPEtBaF2f2f5o3C2yH9qG/Sfs5lOvzx/AeFJqmRIrYnBhpmcUIZnR3Qgi0LiNQNCEX4GjsEK/9tBMQ2OEKlJ8DYxDhORgVgAogHJ3RHQkEWpsyAtogBMQjlTOTiESLGhogXFF2xFacd/xO72smCCiMIZPOzK4nLtaHEsACYBVQO8u2fBA4Ikr/BPHSdTbDAzLi0s/pxSbw7wDB6+rEbyQmFwAAAABJRU5ErkJggg==)
+            }
+
+            .flag.de {
+              background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACwElEQVRYw+2WvXLUMBRGz5Vsb8KGSRnegJaSR0rDq1DneeiZoWPIE5CCZsPGsf4uhSSv7E0GkiINuTMayWNb37nflWTDa7zGa4h0gJ6fnyvwIm3WEukEkTNUb6+urtjv9w2XsNls6Puevu8BsNYiIlhrH8wlxoiqEmMEwHuP955pmlDV+bntdsvl5SWIvO2ADuD6+pqbm5sFgIjM47Zfj4GFQB23fXv/4uKiDrsOYBgGxnHEe/8s8adCjOPIMAw473P2ALvdDu/9QvAh8X8FeExcVdntdvMzM0Ct13Ozf4oL1ekFQAiBEMKzs3+KC1VnBvgCvHcOcQ4rghXBAEYEgbktXFkLrwWbllRJQFQlqqJdxw/gYwWIwP00wThijTkCQBWzLsUjABUiZdpjgJTAWmLrQASYJkwIiOoh89aBCvMIwDqM6gwlJYFU5k7TtARIgIQAzmFEcsbGIKoH8ScCoJpbcTKmlMVVkb7PDrUOiPeIc4c6r+r/LICmPFKAJB88xyWQsgjXGc/XZUL5C4DWe8XJ+qyozo7i3ArgM/AhIOryi1byWwbEKEK7LVn0x9ugdUDRJLnGCsQMoRKI34BPFSAC6hAtJ6HqwfJ0UBNpMtdWbVkenfegHrawlkRUEXGE2DgQIqABTQGVdgNnF2bTy7pau1DLvTyDykU6/iBrCtSzqANwHpzzWPUMdWKti0cWxc0u6CPrQA7Zl3dU80SmViGBTwHnG4B737O/FwbTIVawCMYUkCratLkcjQWzM22mgJjiTMpmJFUmD3dTD5Sv4RTecDuecrp5Sycdp4PBdIIYMHPWApJtmEEqTBUs60JKHY1CUrClFw8xBvaT486NwF0GsP2Wr98Nm03H2bbn9MRijSB/3ez/HqoQkzKOwu420PVb4Bf5lwzeAWe8bPwGfkr5KT1pP80vFAG45zX++/gDDmbSCQ7/bH4AAAAASUVORK5CYII=)
+            }
+
+            .flag.en_US {
+              background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEfElEQVRYw+1XS2gUSRj+amYSMxoJIngw7EWIMxNnsoeIXnwQEEFED5KDwReJRuMDFbzubUGRBI0aHzGJUTx5CR4E2YuoJ91kYswkGePBRVjZZTWHPIzOo7v2/6urJ9WdkUVYNofNwM9X1d1V31f/q3tCWOBfaFHAooCFFyBECPKnXEXFEkxOZr57gzR+/u41gYoK2JOTiAlRwh4oAySePm3Ckye/Y8uW1Xj+/A9s3boaL1/+hc2bK5FMfsSGDasIPykcHPyE9etXYWDgI6KI0WrnJy0LUtKMUM1zOdhkMpNR193nxLJl+K2lhYdlIScMEvfvj6GurhLt7a/Q0FBFOIR9+yJobU1i//4ILl4cxIEDEVy4MEjztTh/Pqk2a+htoOXSIVaszpjNtu0CumM2IQTsTZuARCKkcqC0VGD79h9w584YkUZJzFsii+LevTc4dCiGu3cd7O1ljNJ8nDBC98dBapxTKW4552cm0tcYhSuM761cCbunx0xC9sA49u6t0qRRRdbYGENPTxpNTdUaY+juHsPhw9UKHdrcPNJiImB6aGoKtrcKJOrr1yiSxkYme6NIurrSOHKkGrdvj6K5eR06O0dx9GhcIc+7ukhE34PC5h4ybXxyQe5nU7nhhuXcOaC21hVgKw8cPBhRmzY3xwtkt26N4tixOG7cGEFLyzrCFKEzV79duxzib3jBzI2CF5YuhfXokdcDnHg3b47S5gnCERw/nsD16yM4cSKBa9eGcepUDa5eTREmCIcVdnSkaG3WW2NmHmivCCMP1H1KPcsbApvc/JoSby2uXEkqEZcvDyjyS5f6CeNUDb8qEW1t/Th5MkHzfrXyyy8PvSfVY856c8xmUQgsXaLWu3cAVUJBAJdWRwef2Dnp6dM1VIopnDlTQ2JSOHv2R8LXHmxvH4aoqyvebMy6p3GAWRi5BMNhWC9eeEPQ2TmGbNYmDwyT6gCdnFHQSYdU3ba1DaknW1tfaRzSLs4Vb3dGzJnUIg8ocg5HSYm3Ch4/3ol4PK6IgsGgskAgoIyvmVaIbWFcPz/2vkqQRhUIDgFds0YoibdtcwRYO3ZAxGIQMzNOsriEbhLx2Cg1E+cd3L3HAo01wi1JvlBeDiudnvOASot8HiKbdRaaJ9Wt0z3xPwnwe0Eae7l9QRKXpwqsvj7QWwaCXC/I7WDXu2NXUJEw+MvNfBf4G5Fyvw4FW56TcPduR0B+zx6gshJyehryWyfSxLKIF6QPi/UDz63ly5H/8GHOA9xKsvTaDJKV+jb2n7jQUIqFgZ6V8yKhK0Hvx67PUQiyZgi+dnfj88aN9FYshaAaDZaVIUDdyg2B8FUDjEQ13S58FaCyXyPPbSK26dsgMzuL2WfPQG83R0CGXgzTK1YgTKQhsjCXoK6CgFEJamOjOlAsFDpp4TYfsqBGfs4iEZ8p2WcnJuY8EKQvlCSRLiHycmoSYe4Fmujf+in3k6gvtO8UiQgRJ0gEC8g3vX9fxdX5H3+PzjA3C/hK9ucCfCHnmZu+iGVeq1n8Y/L/FPA3/7tunQ7qxrgAAAAASUVORK5CYII=)
+            }
+
+            .flag.es_ES {
+              background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD5UlEQVRYw+2WzW4cRRSFv1PdPTMem4TYIQlJFvxIISiIZVjyHFnyAGxZsUHiBXgK3gGxZAEbdoQgkBdEENskkmOPPTNd3feyqOqetj1hg5RNUlLN9NR01zn33Fv3NLwer8erPoRUfju5EavLl4jPj14KaIf1YLFXlcDEgftff0l7Os+s0kcxGhOqklBVab0okEQoiryV93EAWNvi7njbpt8xYrGhrZfgq7uL6QY/fP4FwKQESgeO/9il3n+K8nYhiKC0cZAQQgJlMGkFDI57f4V7+ra8aO6YOZ4pj65f7ciUJYCPKmy+wJuYswKYcISkdHMm49Cv6ZwOngF9eO0Z1gfE5gt8VMECyu6B5miGxYaQN3cJcuRD8EH4/ThPYPWHZ0XyzGo0R7P+mRLg3jd7vPPRPrJTQhBFECGkNAhQEAopYkk9YsdjiOtdpM4K1BwzaC2nIkzxT/fgs0ygbQFv8gRceWa5FTialwBcnrYEtwTuqxL0lQyIs4RyTvJMWLlOMwEDrAavkeeC8xR5bAoe/Thmfizcnc1LBR/ej4zHLbRr83BmTQ7KpNSRsDJhDgksFkuwOUUIFIUIJTzfFwbEGNl9UlBtbvDeTsPBPzMKwZVtehJncZPkoIRnjjm0rdOaQSguEsCXBBqEE7ICy/I688OSg1+eUp5e4da9B1TXlhz6d0w4YtsP1ncah4APuoQTAMt7my/PEjAD0YDXBATuBA/Ue5uc/Dni4PiQZ5MJmzNjun2d5d/bhEmLrsSB9GtY5JwHROuWwR2pygoNFJBH5HXOW2pHzayl2oncuvaMg2c7/P7b97w1O2L05oTmxPv71xLoCy5ddvmXAz46l4IW5DWiTkWDkIny7SWMHf9ryQfzXUaLwPzxEVt3PyZUhmx5UX3PDcrVF0ba0/tixOs1p4AmRyQwQYCn9QlxseDO3cju8bvotOT9rZ/ZbZ4TTNxRBPuPFOC45b5h+Yi642rWFKHVOQ2JuVrxyc1f0/GpxG1+QnIU4GZ8mJ5uOwPQubPf9+N8/DpwJRW8phkq8PCrq2zc3sFmE4JEAYQsZWdI0gpEvLD4L3iBdd1QSQRzJ7yxxcPHJ8CTRCDi1E2Dx0iFCJ0XAKZhdGft54IZoZUjDoh47wvQ4jQxEvNTiUBVssAJZUGhAArZglk7V56kCybkL5jmjvKRiIK6LAY1sDFhsTFmvLVJqEaMQ6BUyP6fq7hLRXahtDY4cVpF2ZuSBjaQlbYmUi+X1BtjOMwEqumURxYZV2KzMCaFCNh51/1fwz11wrkZx0RG02n/TrgF3AC2XvL76AzYE1IJTLp0vMTRAAtej1d+/AvTGl9eW3KtnAAAAABJRU5ErkJggg==)
+            }
+
+            .flag.es_MX {
+              background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEA0lEQVRYw+2WvW8cVRTFf3c+1l7bm7Vi48RCAQEKikBKmyJ0kRAfHRRISNBHNHRINNQU1BS0+QcoadyABEgpaCBSkBxFsRJCYhx219mZeR+X4r15s7s2Vqo0yZVGM7vz5t3zzj33vAfP43k86yGIFHx02Qz7q/w7PTxx8I2vvnuiSW9cevfE98WpAXY05oPx7bIAllH4+tPPOKyrCEsQhKWypMwLyqIA4Pz584gIIhKHhbuqpruqsvHtNwB4Y/DW4usmvIsA8pU+v3z+JcByARSocvPeHvdHByAthgzJYqJMAOGTS1dSojZ5Gy0IgPFPv6Kq+Ji0ew6/y61NfCSjAOjlBdOmxjgbVi+CiIIGIOHeJVxM3v6XmLC2A6SaLkXxCn5aQS+wWrSDRtVjjLMhoYQJJctA/BHKTxSVCBibkiuaStOyYccTfMRXtB8aazHOIeID5SKI+sTISatfZCEw0JZFFzTi0aJIeggAvGK9w3oXJtIs1b3VwXHJqskjHt6+ydYrb1D2V7uXxsxrQ7vkAOocLkJIJWisobEWyQRBwUfxeUnCbMMrHNy5zu7PP/D7b3/g+2f48OoXDDe3wnSNCXTPCTTqQBVt8laEHYC6rpnWFVmWdSWQkLydqKpCm9bVAYeNYf/RY/Ynjnx0ix+/v8aVj68CMJ1W+Ag6aAA8ilPF+6CpIwzU1mC9Q9Uh2goxa+0q9f9o9DdSVbjHd/H1GOsz3rz8PkaF0fgBw1NbYC2S+j5qIJYCUWiaRQbAek/jQglUPZkIKj7Vu71M/Q+7+4YHByWDi++wXu+wd3ePt95+j8nkPuvDM6gxiW4IJe18QqF0C12ginGWxlnwQXiBfumcMbLQX91ie/one8UF7uxeh1dfZ/vcRZxM2Bi8Fr5rTLCcuGhNYoxWVJb4uRJ4pWkBiCA6D0BEkg4GgxewpuLC/i1eXq0xTc5wrWLz9DnW17dDoiRCXbDqSHxjcIsitN6FEoggPiaPApwtgYhweuMl1te3mZydIM6zMlgjL5a61oslQBUf5/AzewVLboEBVRproxMKOtMByXxmAADkRY/h8PSxHpHaUDXMoUmO4fkIA60RORdXHpMLEDthduc7aTds9wJm6D/iCc5idUEDxhiMMZAJZFkCIeI7Mc6U4/9sOVlxuxfMbMMavUCNxcyWoEQQ6ylUkCxH8jyCSFnnvGARyCIzWfR6BTJaDWjwBlUalLrIOwAreUmfnEF/QNFfJusVAYQw1wnHsXBcKXovbqdn37ohYFCsMdRNTbPc6wCsLvXJHo4oekuUfUtelnMibGNnZ+eJjmT3pDnybWvHU7GMXU25spLOhGvAWWDtKZ9HJ8Bf4VAKy7Nng6cUFqh4Hs98/Adm9HeFbDg6iAAAAABJRU5ErkJggg==)
+            }
+
+            .flag.fr {
+              background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADTklEQVRYw+2WvY4cRRSFv1vTPT/rRUggWaQO/AqEREhEpGRIRDyHE4Qc8UZ+ACREggQiIUKCyGB7tme6qu5xUFU9PT+73siJt6Se7pmprnvuOefeKngYD+NDH4ZZx1fP48dXK/6/2d85+fefvr7Xoq+/++bO/8Oja3z7hs9//q3vgDWC599/yXaXKizDgFW/oO/KBfD06RPMDDOr08pd0nSXxPjsh/I9JjwlPI4goZb1esMfPz4DWHdAB86ff7/k3/8GwAoAM8zC9AzGt188mQK14G00EADx118Qwr0EdQmX06aETz7Fy3PXASwXxrBPxORgATOwAOAVxHHA0+DttwlETiBhDazAKgCXYL/DS2i6Cp9XQyRmpyRrmIcKogY3XQx8CQgpY3Vdo8hSUi53bbd4nd9VAokpTwAshBJYjYUiwW3Zn7GQE2qy1MsA3EEqvtAcgJzkImWBOeaGBYeJhQLyLNNL9AOW0swbDqoGdS+r5FykmAMYozMmx0LArAY3Bz9kf++RYgmk8qbJJx/ggrAgnwLY73cMu0QIiyLBzP2qLWO3291qxDkDwzBUjQ2XSkUIsnyqjMyJBPtYZJB7ob1WQ13nqP7f5QVyxmrdBwmXsHqVOo2nDIjkYkzCgpCLEFrjEBYMm8z4bgCW0mQ+NQHdqxzCuv7chDGLMTmEmq07NPc72D16wdwDU9epZrBWihJ0HZlTEyZnzGWSWc22AjAzdFKGtwGQhMViQptadP2oZlRM51VQJPBZFywARJiyv7QPXGYgFQ9UCdRQtMuX5FMJxlRkMHPklBYMYHmqhlMj3tYXiLHRQaujAwvCUiQdM5BJ2Uk5l/Qn9zcZptvRRnRpN2xVULpP+02TJZBQzicAPBNjJMYMYVEDe+0FoXaUQ9C7ZJCEWiOaqK/dpJZkipHoMwA9Cct7Oso+YAsrQDgY8VLwOYA5M6HrS/Opb0rVkBLuzt7FEMIBwFUvNiHy0fWSbr0i9BssLKocdrH3XyrJJkF4/LgAKuoTCgm4Ox4jN8OOoesPAB6tl4SXf9GtVvT7Kxb9qlJ/TPGLF8t7bQW718O5NECWGMaRV9sbus1mOhNeA58B1+/5PPoG+KccSmF9OBu8t5GAHQ/jgx9vAeuWM1NKsWrZAAAAAElFTkSuQmCC)
+            }
+
+            .flag.it {
+              background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADPElEQVRYw+2WPY4kRRCFv8jK6une3dEaIC0XGIkzYOMhbJzlBpwAYSFhIK7AWcbCQloLAwkJA60DBuJndqZrKjMjMDKyqrp6/nDW2UknW1XV9V6+9yKi4HE9rnd9CSKRLz9Kz7dP+We4vPPhn19+/6CXvvr0szvv96enpIsLXv76Ux+BLcC3n3zBZRqcliACJ11P30X6LgJwdnaGiCAi/ljdzWzazYzn330DgKZMyQkdU73nBLrdlh+++hpgG4GIGr/8+Zo/rv6aCQQHEhAJIPD5hx9PQA28rUYC4O8fX2EGalqJmKFm1EeMzfvvUe8QI8AmRPb5mlQyBEEQRGUigukB4Bq8XZuUyGWhikOpuQpGGYYGTfSn+Pf6iqQFwYEbuB5LfmeoRCDnJguGYQtwMyO/uWwKNAKQNJM0IyZIF+rLNLgF1Yr7SDQVLGdsmQ3VySY1hZxpiYhNnqyFrKWeHq2nF99tJnCTDUv5qwV5ClwLpvpuZlgpqK0IjCUzaq7hswAKEgIUHPx++ScCqZ7Qqrig/suqHdolyoEFalwPA/s8EEKowIKrIP4qYRiGW4O4VGC/30/g1XdQDNVqgQgrBQyuNZGtYFoQgltx6P19lTCtnGFpifnpPYiktAqhGtnULQiYKiEEWgVVWx5OwHKmYqpbZxMJMOQoA2YkrRkAQUJAVOt/BSjyvxSwlBedz3f33zAsZnRdBWMjYH5a939K+aoMbyNgZlhKh2W47AeAxVRzORNgtqB576VnPheaAg9qSilPcmur/0VJ2qansLJgLKk2IhGMeQ6wAr0NeHldJwW0ZXy2xAxSphxkoHgjKgWCG+/gTANJjgbRTdOwvi97A5iHUMuDmkEpawJKSomUEsTgBBbAq/DdZYOZoWnVCakMzAmUlEhLAn0RZFSi1S4o0kEX5iq4wYK1HUtlQh9ddghugU69QEkYo8+bCPBENuxyx+nmlLjbErZ9HUihRf+4999Uks2CkxcvmItw9j95hVwOe9Kmnwk83WwJry+IJxv6J4VuE2sZrvr/+fn5g2bBb+PVsTWuwjCOXAxX9Lvd9E34DPgAePaWv0ffAL/Xj9L6XRjfMoEMDDyud379B2DGSfkCXdK+AAAAAElFTkSuQmCC)
+            }
+
+            .flag.ja {
+              background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAC30lEQVRYw+1WzWsTURCfTdZ80LUqtCIFc1AKTbAgWsFDqyfBgsf+Dx78AwTBiwfvHkQE/wSPPXixqKWgxQhaqRDBiGjwYDXkcz+SXd+8ZjazL2/T6CGXZmDy8mZn3+83897MW4CJTOSwiwGGYX7a3fUSiQT4vj8WUMLKFwpHTDHPBEEAuVwOcJSsDCNUdMYxZNyz038Ueg9H+k9zBCI7X79cLuPfDBIw0cnzPOnAgVHRRiQ4ICfFSXAiBI4jJ4Lv9rJtJvCXP4yLMrJv/2hTyRMpyYAT0C2gKkpjpwS11zvQLv/AlyF79jRMX16EqXPzA0Rwrq4dS0BlrC7m2w5UHj+F6ua7iL31+RvsPduC4ysXYO7mGhjplDaIWALdbje+TNgC5ftPoPG+1CufqGCMvze2wd2rwpl7t7RngwthJlQCupSj/Hn5FmrbHyFwXam+60WU7OiDvgetR5hhBmzbloZkMimVqoBeqqy/ED5t3kCUDPQjRd/UUj6SblTEIeABAtQgeO1ztb9WRISd2K3iiUZfKmHKAjUfGiME0ECRogMnQxp0uhB4oxFAX55uXAsBCZz1gX4GdLXPCWTmZsH58n0kAuirnnp17YEt0NU815nry1B9/mYkAuira988SG0VxHUzSWB1GY5eLMhtGKbTlxalr66P6DIwQEDXPknyj+7C7OqKOIy90nP2db8MPfls4eEdbQBqJjqdTn8LaKLeZqokp7Iw/+A2nFy7Br/WX0HjQ0m2Yuv8AszcuALHRCcc1nz4mYgQcEUDQcX6T6VSQ289nJ+4uiT1oOuYP6Oy7OLNK8ARLySATajZbIbg1Ih0qYvborgrml9GPjYlsd2OwGu1Wv0z4DgO1Ot1acTvAt6M1G8BHXjcnN4NA+qdNwyWCJjUfovFIqTTabAsC7LZrLTpTvH/iky/AG+321Cr1cA0zfCb0BLjKaEWjFcaQn/Kj1JsXpSNMQqWgQ0TOfTyF6yD/mWmnla2AAAAAElFTkSuQmCC)
+            }
+
+            .flag.ko {
+              background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEyklEQVRYw+1XTUhjVxT+El+i+VHTsRm1Y2aKYovRMgWxjlZhSmUsVYaRtpRKR9BVN4KIFNqFC8FVdyLqprNqUSTQOrQMKuIfbmpFq3V0I0qt+C9Wo/lPes/R++Y9k1UXbuohN/fdk3vv+e53z88LcCM38n8XAwwGZeXly5DRaEQ0Gr0Wo9JWgdttUsQ4JRaL4e7du6CeURkMaiNJSkp6hVijl71cR718JolEIjq9dv/19XV6TDGKL4XQhEIhbuFwmBst3t/fR29vL9bW1nQba58T6eh5Y2MDfX192Nzc5L3kvtLOJdsKAeDBVYTUBgcHebHH48Hw8DB8Pp/u5Lq7vNQFAgGMjo7yWjI0MjKiY03akdetA6CV8fFxeL1e3sRqtWJ5eRkmk0k3J+oLcNOKoihYXV2F2WxmMJmZmZiamopjSwJQtAAkyu3tbYyNjSErK4t1u7u7aG5uZgA09v6+jOPRaQT/3uX5pmwnHFXvI/XBfQZQX1+PiYkJHB4eYmVlBQcHB+xjOTk5iQFIZ9Geory8HPPz8zyxsrKSwZAcDL7A3g/PRfgIwIpyQfvmNk5/+wOvf/YxnF8+htPphMvl4vUEuqysjBnRirQZB4BOSLTV1NQgLy8PMzMzqK6u5t9OZv/E7jMPDGbBBEXG5bUpIqxiAuj+jz8h+d4dpFUWo7S0FEtLSyguLobb7eZ9tXbiAPj9fjXkqFGs5ubmMojz83NExXjh53Gk+s7ELCsMnEQE/WRYMSNkMOKWz48dz69QiguYZroK6oPBIDNJdqThhAyQUUIqe237JxTDzM4ZnoSjCAaCF8YRxfN0F8bSsxEW/vyueQ9PN7Zh8J7DkGrTRZVMPrLXASCFdECaoAUjW3IsgqmUDNisTlT4jxAVuhep2fCkucQGZCiGaWsmXKEo3NEIYppQpb3IoDRO+8U5YaIMpwVgTzHh9m0Hvt+6h19S7yBiNOBAsQLBEBunD4JhbOW+CUN6Gi3Whd3VvVXWrwLQNor9rq4ulcLPPywUsR3CXzEztkQLiLsNCKOBYEToRX8eQMVHJRwdtKanpwcLCwtxh9E6pM4HJLqdnR32fkpGJycnGBoaQl1dHR49eAtPPy3Fs/4Z4a0Cu+kiDBEW60MRfPHJe6h5WMT+MTk5ienpaSwuLqKiokINZbJBjMQxoEV5dnaGgYEB2Gw2Dqf+/n5sbW3xb980foDvvq3DfXeOyJBmWCxmvPP2G+j8+jE6vnoEo5izt7fH7FVVVXFEUSo/Pj7WMUB1QWVADmSeptCrra3F3NwcJ5CMjAx0dHSgu7ubx08eFnI7PvVxKngtzaKup706Ozs5dAsKCjihka6wsFB1PDlPZYDilBrlfekwjY2NnBtmZ2dxdHTEyYSKkfYUt9JtyHDYdDrK//n5+Tg9PeVMSIdoaGhQoypClVcYJ3sqADJEtFMvSyVNbm9vZwpbW1vR0tICh8ORMEK0OrvdznWjra2N2WpqanpVvKgGiOsOCDvEkHoFhJoQWywWrgPUy0xI7wM01pZgrdFELyY0LikpQVFRkVoD+FCX/kaH1QGgUxJVycnJfAIySLpEdf+/ivR8ukaKLOWykNFR7KKnUme/5vdRL0U8v5TSu5lk4xqFwsB/87/gRv4FWvK1+SyQvjEAAAAASUVORK5CYII=)
+            }
+
+            .flag.pl {
+              background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAECSURBVHja7Jc9agQxDEafZmbZZn8gEHKIkCb3v0WOkDKQQJYEFlv6UsyAJ1MsbGM3VmNkF36WLOuzSaKlDTS2DmDACOyXsaY5cJ2Ak6TPJqc3exiAc8MMnIcl/K1s36ugA3SADjABvD+/4j+/kFKdXXc7xtOxAETO4A4RldqQEykXAOWMKVAlAFOgnAqA58wk1YuARKQVQKSM0P0RMEAbn2Vuu7YB8HUKwjOME9wrUHXD121y938AMeuhigo5PMo74BFgVlMKEbECCAmrCGArgLkMNUdgOBzqpUAFwAP4unxXfYKX2+YGPAEvwGPlNvABvNkiSo8NxOkVuFj/nLYG+BsA7IN3I+J4MQQAAAAASUVORK5CYII=)
+            }
+
+            .flag.pt_BR {
+              background-image: url(data:image/png;base64,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)
+            }
+
+            .flag.ru {
+              background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACjElEQVRYw+2VPW/bMBCGnztRbmwnnTtl69CsHbMHKNA/2zX/IWs6dMjaJUva2DFF8TqIlCn6o00LZGkOMCRR4r0P78vwaq/2v5sg4r7e3naqSozxRUSz1oeLi9YBJ2bG+fk5ZjZQiYw/VUVEtsRpPd8D4z4zG+/zc4xxXC/9393dAZw4wMUY6boOM5sIqypmNkKUgiVUCVGCZPEY4wRERHK0nQKTl4dOOcnbM9dq+AwF4EqAfQ7q32+LqvpGRHZ8lwC6D+CY4DGIQ9/XvnYA+r4/6nQfTF2Yf7KntKzpAC4ve66uYLUq83UoAsdTsJtJwUzGqxksFnB9XQBAz2bzxHoNqg0iDaCIaNpIepaJ40q66oiYYA2zCETMemLsaZpBswKAEBQzGYVzJKb3hwDqSOgINURAMYuIKJtNrAEiIQjeg4hiRpoBW/HnA2zTIaLE2CffkbYVIE4j0HWC92XfMp7+7yIwTU/OPwiz2Z4UeJ8B6hNL6mWphA8BWNpTQuQCHPx5XwF84TMfw3vUP6AiNCJo6lEtxvMxeauveeKJEFPAezOiGTG85YZvfMoAPYD3SNcNQlm06r06CUWSJ+tWvB/3ZJ9miPeE9IkDhocQsBCwwxOpCPA0CrbTiHsHwvZVCFMAD/iuo+k6ZpXjnSkHSP7T2gNpO8Vo48i1FO0uBHwJ8NS2PIowcw4paqA8qVQpkBLObBKZaTluIxOBaMYGWLUtdN0AsFks+DGfMz87wznHXBVNedVSzGzM976GtCLXmKFJtElXAfoQePSe1XoNq9UA0CyX3KjyxjlO25Z509BUhfWvZqkL1iI8hIBbLuH+HkHkFHgHnPKy9hP4Log44GQ7lF7MAvDEq/339guT9XxCIODYjwAAAABJRU5ErkJggg==)
+            }
+
+            .flag.tr {
+              background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEV0lEQVRYw+2WS6hWVRTHf2uf8z3uQ03BCnxTFkJUJNFEsJdENKlRlERJlJOsIGzqpAc4KRo0UAgNQgc6yQaGhERvkASlST5GpmF079V7r+f79t5nrwZ7n8e9mg0CIXLBZu+zzznr/19r/9c6B27aTfu/myCSH+0tcfmihfhLl28IaIX1yHCikwN9gHXv7kBni8hKIjfT62LyHNPpxP08BwGTZdGT1mEAEMoSFNT7eO0cwXvC0AKKpudlbISTr70F0M+BPACDU2cpL/5R+zMiGJF6LYCkmXlrBTR5r9YKhNZcrQGyW5cSUjJyAO12CEVBcA5TORepkOKLInWoUu21CNACVrQmhGokr3EvAFIUaLcDQ8gBAhCmp1HnUBEUQRMJETCdnN7DG+g9uJ78zjsQEfzpM7hjPzM8+g2klFdgaOKqMe2awCtiYXq6ykCLgPPgPIggpoleFi9m4fY3yFevREQoT5/FnfyFMDFFdttSxrduYWbvfsLk5D9mgaCgSnB+LoESYhSljy+LIGKQPGPR22+Sr1qBiDD76T6GXxyeW0Z5Tv/JxykOHa4JtHTZaENDQ8j7iNlkQFFrwTqMSFUG9Dc9QbZyOQCDL7+iOPg5tTQShFpHcfAQitK5/17s8RNJF43oKvlLEiNZRkh36wwMhkO0KMiMIUsK7z9wH0VRQAhM7voEBoMm8nm1rcDIyy9QfPgx2R1rGH79HeXU1JxqKFUpQ0CMzM1AqaDWIt4nAUXxde9ai4gQzp1HJ6euAq0sW7aM3sYNmCWLueW9HczuO0C4eLEp2SRGVBGJWKW2CCggvgTn6tRSV4FAZqJA/8ZEA4gipOdDQJxvzrwtRBTpdOrjMfEIFJwDa8FaxDlwDv/rKUSEzorlmNGR+v784U+dYXbXHnRikqlt2+HyNGbRwugzDWn5x7mI2RAArEvD1vPwyNGYhSxjwStbYGiR64zpd3ZifzrGlT2fEc5fmEe07dvVGjBVH6D0YB3qfGxI1nFl/wHK02cREUafforxlzZDCHMiIzOMvfg8OIf99odmf2hhGP2oddGnixiU1+gDalOaUp1JysrEq6+zZNdHdO9ey4JtW+k/uhH7/Y+U586Tr1lFtnoll3a8Hx23KqL6JsQGPq8krcO3CXgUvEe9T604PqdA+dsF/nzmOcY2P8vIpsfoPrSe7j3rsMeOMzx8hJmdHxCsr4HboqsaUWxuzb76Eq+tPuAUbBJKByFLn+NYkYJ6z8zuvczu3kvzSeKaZanziDSdMUZUopTO4dqNaNjJKQSyPMOIIReDiESBJKD2qPfScVVRSjv9aZiksUgk9kcrMOjkrQyM9Jnt9+iPjdHrdsnEkKceYGpQiVFU/wa02jHaRK6KJiqawDNVQsXOOwprGfT7DYF8bJQTWtIzGeNG6WfxGOamWOfNV536dfajDEuFIsC0evKx0SosGQduB8a5sTYD/C6IVP+F+Q0m4IHBv/Zy0/7z9heOep8A/+oLuAAAAABJRU5ErkJggg==)
+            }
+
+            .flag.brmode {
+            	background-image: url("data/img/BR.png");
+            	margin-right: 1px;
+            }
+
+            .flag.stwmode {
+            	background-image: url("data/img/StW.png");
+            	margin-right: 1px;
+            }
+
+            .PageHeader{
+                background-color: #000000;
+                width: 100%;
+                height: 58px;
+                align-content: flex-start;
+                vertical-align: top;
+                margin-top: 0px;
+            }
+
+            .logo {
+              text-align: center;
+              margin-left: 8px;
+              margin-right: 30px;
+              margin-top: 8px;
+              display: inline;
+              float: left;
+            }
+
+            .mainheader{
+                background-color: #000000;
+                display: inline;
+                padding-left: 15px;
+                font-family: "Roboto Condensed";
+                float: left;
+                margin-top: 7px;
+                font-size: 28px;
+                text-transform: none;
+            }
+
+            .StatBoxHeader{
+                font-family: "Roboto Condensed";
+                text-transform: uppercase;
+                font-weight: 500;
+            	text-align: left;
+            	padding-left: 20px;
+            }
+
+
+            .StatBox
+            {
+            background-color: #bcbcbc;
+            padding: 0px 0px 10px 0px;
+            margin-top: 6px;
+            margin-bottom: 25px;
+            margin-left: auto;
+            margin-right: auto;
+            min-width: 358px;
+            text-align: center;
+            width:94%;
+            -webkit-box-shadow: 0px 0px 5px 1px rgba(56,56,56,1);
+            -moz-box-shadow: 0px 0px 5px 1px rgba(56,56,56,1);
+            box-shadow: 0px 0px 5px 1px rgba(56,56,56,1);
+            }
+
+            .SubStatBox
+            {
+            background-color: #a3a3a3;
+            padding: 0px;
+            margin-top: 6px;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-bottom: 6px;
+            display: inline-block;
+            min-width: 358px;
+            vertical-align:top;
+            text-align: left;
+            }
+
+            .WeaponBox
+            {
+            width: 358px;
+            min-height: 200px;
+            background-color: #a3a3a3;
+            padding: 0px;
+            margin-top: 6px;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-bottom: 6px;
+            display: inline-block;
+            vertical-align:top;
+            text-align: left;
+            }
+
+            .DiagramBox
+            {
+            width: 500px;
+            min-height: 300px;
+            background-color: #a3a3a3;
+            padding: 0px;
+            margin-top: 6px;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-bottom: 6px;
+            display: inline-block;
+            vertical-align:top;
+            text-align: left;
+            }
+
+
+            #LastUpdated{
+            	font-size: 20px;
+            	font-family: "Roboto Condensed";
+            	color: white;
+            	line-height: 60px;
+            	margin-left: 50px;
+            }
+
+            #BRLastUpdated, #CRLastUpdated, #STWLastUpdated, #EMSGLastUpdated{
+            	font-size: 20px;
+            	font-family: "Roboto Condensed";
+            	color: black;
+            	font-weight: bold;
+            	text-align: center;
+            	line-height: 50px;
+
+            }
+
+            .CollapsedIndicator
+            {
+                display:none;
+            }
+
+            }
+        </style>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link
+            href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300,400italic,300italic,800,800italic,700italic,600italic&subset=latin,cyrillic-ext,latin-ext,cyrillic"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700&subset=latin,cyrillic-ext,cyrillic,latin-ext,greek,greek-ext"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <link
+            rel="stylesheet"
+            href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"
+        />
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"
+        ></script>
+        <script src="https://kit.fontawesome.com/68b6930d16.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div class="PageHeader">
+            <img
+                class="logo"
+                src="data:image/png;base64,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"
+                height="40px"
+            />
+            <h1 class="mainheader">CMS Live Monitoring</h1>
+            <span id="LastUpdated"></span>
+        </div>
+
+        <button class="tablink" onclick="openPage('BR', this, '#7f7f7f')" id="defaultOpen">
+            BATTLE ROYALE
+        </button>
+        <button class="tablink" onclick="openPage('CR', this, '#7f7f7f')">CREATIVE</button>
+        <button class="tablink" onclick="openPage('StW', this, '#7f7f7f')">SAVE THE WORLD</button>
+        <button class="tablink" onclick="openPage('EM', this, '#7f7f7f')">EMERGENCY MESSAGE</button>
+        <br />
+        <!--
+
+# ========================================================
+# Battle Royale MOTD display
+# ========================================================
+-->
+
+        <div id="BR" class="tabcontent">
+            <!-- English -->
+            <div id="BRLastUpdated"></div>
+            <div class="StatBox" id="EN-MOTD">
+                <h2 id="EN-BRHeader" class="StatBoxHeader">
+                    <span class="flag en_US"></span>&nbsp;&nbsp;English (US)
+                </h2>
+                <span class="CollapsedIndicator" id="EN-BRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="EN-BRBoxContent">
+                    <table>
+                        <tr id="EN_BR_MOTD">
+                            <!--		<h3 id="EN-BRPlatformHeader" class="StatBoxHeader">Platform message</h3> -->
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Arabic -->
+            <div class="StatBox" id="AR-MOTD">
+                <h2 id="AR-BRHeader" class="StatBoxHeader">
+                    <span class="flag ar"></span>&nbsp;&nbsp;Arabic
+                </h2>
+                <span class="CollapsedIndicator" id="AR-BRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="AR-BRBoxContent">
+                    <table>
+                        <tr id="AR_BR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- French -->
+            <div class="StatBox" id="FR-MOTD">
+                <h2 id="FR-BRHeader" class="StatBoxHeader">
+                    <span class="flag fr"></span>&nbsp;&nbsp;French
+                </h2>
+                <span class="CollapsedIndicator" id="FR-BRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="FR-BRBoxContent">
+                    <table>
+                        <tr id="FR_BR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- German -->
+            <div class="StatBox" id="DE-MOTD">
+                <h2 id="DE-BRHeader" class="StatBoxHeader">
+                    <span class="flag de"></span>&nbsp;&nbsp;German
+                </h2>
+                <span class="CollapsedIndicator" id="DE-BRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="DE-BRBoxContent">
+                    <table>
+                        <tr id="DE_BR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Italian -->
+            <div class="StatBox" id="IT-MOTD">
+                <h2 id="IT-BRHeader" class="StatBoxHeader">
+                    <span class="flag it"></span>&nbsp;&nbsp;Italian
+                </h2>
+                <span class="CollapsedIndicator" id="IT-BRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="IT-BRBoxContent">
+                    <table>
+                        <tr id="IT_BR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Japanese -->
+            <div class="StatBox" id="JA-MOTD">
+                <h2 id="JA-BRHeader" class="StatBoxHeader">
+                    <span class="flag ja"></span>&nbsp;&nbsp;Japanese
+                </h2>
+                <span class="CollapsedIndicator" id="JA-BRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="JA-BRBoxContent">
+                    <table>
+                        <tr id="JA_BR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Korean -->
+            <div class="StatBox" id="KO-MOTD">
+                <h2 id="KO-BRHeader" class="StatBoxHeader">
+                    <span class="flag ko"></span>&nbsp;&nbsp;Korean
+                </h2>
+                <span class="CollapsedIndicator" id="KO-BRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="KO-BRBoxContent">
+                    <table>
+                        <tr id="KO_BR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Polish -->
+            <div class="StatBox" id="PL-MOTD">
+                <h2 id="PL-BRHeader" class="StatBoxHeader">
+                    <span class="flag pl"></span>&nbsp;&nbsp;Polish
+                </h2>
+                <span class="CollapsedIndicator" id="PL-BRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="PL-BRBoxContent">
+                    <table>
+                        <tr id="PL_BR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Portuguese -->
+            <div class="StatBox" id="PT-MOTD">
+                <h2 id="PT-BRHeader" class="StatBoxHeader">
+                    <span class="flag pt_BR"></span>&nbsp;&nbsp;Portuguese (BR)
+                </h2>
+                <span class="CollapsedIndicator" id="PT-BRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="PT-BRBoxContent">
+                    <table>
+                        <tr id="PT_BR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Russian -->
+            <div class="StatBox" id="RU-MOTD">
+                <h2 id="RU-BRHeader" class="StatBoxHeader">
+                    <span class="flag ru"></span>&nbsp;&nbsp;Russian
+                </h2>
+                <span class="CollapsedIndicator" id="RU-BRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="RU-BRBoxContent">
+                    <table>
+                        <tr id="RU_BR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Spanish (MX) -->
+            <div class="StatBox" id="EM-MOTD">
+                <h2 id="EM-BRHeader" class="StatBoxHeader">
+                    <span class="flag es_MX"></span>&nbsp;&nbsp;Spanish (MX)
+                </h2>
+                <span class="CollapsedIndicator" id="EM-BRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="EM-BRBoxContent">
+                    <table>
+                        <tr id="EM_BR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Spanish (ES) -->
+            <div class="StatBox" id="ES-MOTD">
+                <h2 id="ES-BRHeader" class="StatBoxHeader">
+                    <span class="flag es_ES"></span>&nbsp;&nbsp;Spanish
+                </h2>
+                <span class="CollapsedIndicator" id="ES-BRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="ES-BRBoxContent">
+                    <table>
+                        <tr id="ES_BR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Turkish -->
+            <div class="StatBox" id="TR-MOTD">
+                <h2 id="TR-BRHeader" class="StatBoxHeader">
+                    <span class="flag tr"></span>&nbsp;&nbsp;Turkish
+                </h2>
+                <span class="CollapsedIndicator" id="TR-BRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="TR-BRBoxContent">
+                    <table>
+                        <tr id="TR_BR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!--
+
+# ========================================================
+# Creative MOTD display
+# ========================================================
+-->
+
+        <div id="CR" class="tabcontent">
+            <!-- English -->
+            <div id="CRLastUpdated"></div>
+            <div class="StatBox" id="EN-MOTD">
+                <h2 id="EN-CRHeader" class="StatBoxHeader">
+                    <span class="flag en_US"></span>&nbsp;&nbsp;English (US)
+                </h2>
+                <span class="CollapsedIndicator" id="EN-CRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="EN-CRBoxContent">
+                    <table>
+                        <tr id="EN_CR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Arabic -->
+            <div class="StatBox" id="AR-MOTD">
+                <h2 id="AR-CRHeader" class="StatBoxHeader">
+                    <span class="flag ar"></span>&nbsp;&nbsp;Arabic
+                </h2>
+                <span class="CollapsedIndicator" id="AR-CRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="AR-CRBoxContent">
+                    <table>
+                        <tr id="AR_CR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- French -->
+            <div class="StatBox" id="FR-MOTD">
+                <h2 id="FR-CRHeader" class="StatBoxHeader">
+                    <span class="flag fr"></span>&nbsp;&nbsp;French
+                </h2>
+                <span class="CollapsedIndicator" id="FR-CRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="FR-CRBoxContent">
+                    <table>
+                        <tr id="FR_CR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- German -->
+            <div class="StatBox" id="DE-MOTD">
+                <h2 id="DE-CRHeader" class="StatBoxHeader">
+                    <span class="flag de"></span>&nbsp;&nbsp;German
+                </h2>
+                <span class="CollapsedIndicator" id="DE-CRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="DE-CRBoxContent">
+                    <table>
+                        <tr id="DE_CR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Italian -->
+            <div class="StatBox" id="IT-MOTD">
+                <h2 id="IT-CRHeader" class="StatBoxHeader">
+                    <span class="flag it"></span>&nbsp;&nbsp;Italian
+                </h2>
+                <span class="CollapsedIndicator" id="IT-CRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="IT-CRBoxContent">
+                    <table>
+                        <tr id="IT_CR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Japanese -->
+            <div class="StatBox" id="JA-MOTD">
+                <h2 id="JA-CRHeader" class="StatBoxHeader">
+                    <span class="flag ja"></span>&nbsp;&nbsp;Japanese
+                </h2>
+                <span class="CollapsedIndicator" id="JA-CRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="JA-CRBoxContent">
+                    <table>
+                        <tr id="JA_CR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Korean -->
+            <div class="StatBox" id="KO-MOTD">
+                <h2 id="KO-CRHeader" class="StatBoxHeader">
+                    <span class="flag ko"></span>&nbsp;&nbsp;Korean
+                </h2>
+                <span class="CollapsedIndicator" id="KO-CRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="KO-CRBoxContent">
+                    <table>
+                        <tr id="KO_CR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Polish -->
+            <div class="StatBox" id="PL-MOTD">
+                <h2 id="PL-CRHeader" class="StatBoxHeader">
+                    <span class="flag pl"></span>&nbsp;&nbsp;Polish
+                </h2>
+                <span class="CollapsedIndicator" id="PL-CRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="PL-CRBoxContent">
+                    <table>
+                        <tr id="PL_CR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Portuguese -->
+            <div class="StatBox" id="PT-MOTD">
+                <h2 id="PT-CRHeader" class="StatBoxHeader">
+                    <span class="flag pt_BR"></span>&nbsp;&nbsp;Portuguese (BR)
+                </h2>
+                <span class="CollapsedIndicator" id="PT-CRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="PT-CRBoxContent">
+                    <table>
+                        <tr id="PT_CR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Russian -->
+            <div class="StatBox" id="RU-MOTD">
+                <h2 id="RU-CRHeader" class="StatBoxHeader">
+                    <span class="flag ru"></span>&nbsp;&nbsp;Russian
+                </h2>
+                <span class="CollapsedIndicator" id="RU-CRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="RU-CRBoxContent">
+                    <table>
+                        <tr id="RU_CR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Spanish (MX) -->
+            <div class="StatBox" id="EM-MOTD">
+                <h2 id="EMHeader" class="StatBoxHeader">
+                    <span class="flag es_MX"></span>&nbsp;&nbsp;Spanish (MX)
+                </h2>
+                <span class="CollapsedIndicator" id="EMCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="EMBoxContent">
+                    <table>
+                        <tr id="EM_CR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Spanish (ES) -->
+            <div class="StatBox" id="ES-MOTD">
+                <h2 id="ESHeader" class="StatBoxHeader">
+                    <span class="flag es_ES"></span>&nbsp;&nbsp;Spanish
+                </h2>
+                <span class="CollapsedIndicator" id="ESCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="ESBoxContent">
+                    <table>
+                        <tr id="ES_CR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Turkish -->
+            <div class="StatBox" id="TR-MOTD">
+                <h2 id="TRHeader" class="StatBoxHeader">
+                    <span class="flag tr"></span>&nbsp;&nbsp;Turkish
+                </h2>
+                <span class="CollapsedIndicator" id="TRCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="TRBoxContent">
+                    <table>
+                        <tr id="TR_CR_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!--
+
+# ========================================================
+# STW MOTD display
+# ========================================================
+-->
+
+        <div id="StW" class="tabcontent">
+            <!-- English -->
+            <div id="STWLastUpdated"></div>
+            <div class="StatBox" id="EN-MOTD">
+                <h2 id="EN-STWHeader" class="StatBoxHeader">
+                    <span class="flag en_US"></span>&nbsp;&nbsp;English (US)
+                </h2>
+                <span class="CollapsedIndicator" id="EN-STWCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="EN-STWBoxContent">
+                    <table>
+                        <tr id="EN_STW_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Arabic -->
+            <div class="StatBox" id="AR-MOTD">
+                <h2 id="AR-STWHeader" class="StatBoxHeader">
+                    <span class="flag ar"></span>&nbsp;&nbsp;Arabic
+                </h2>
+                <span class="CollapsedIndicator" id="AR-STWCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="AR-STWBoxContent">
+                    <table>
+                        <tr id="AR_STW_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- French -->
+            <div class="StatBox" id="FR-MOTD">
+                <h2 id="FR-STWHeader" class="StatBoxHeader">
+                    <span class="flag fr"></span>&nbsp;&nbsp;French
+                </h2>
+                <span class="CollapsedIndicator" id="FR-STWCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="FR-STWBoxContent">
+                    <table>
+                        <tr id="FR_STW_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- German -->
+            <div class="StatBox" id="DE-MOTD">
+                <h2 id="DE-STWHeader" class="StatBoxHeader">
+                    <span class="flag de"></span>&nbsp;&nbsp;German
+                </h2>
+                <span class="CollapsedIndicator" id="DE-STWCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="DE-STWBoxContent">
+                    <table>
+                        <tr id="DE_STW_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Italian -->
+            <div class="StatBox" id="IT-MOTD">
+                <h2 id="IT-STWHeader" class="StatBoxHeader">
+                    <span class="flag it"></span>&nbsp;&nbsp;Italian
+                </h2>
+                <span class="CollapsedIndicator" id="IT-STWCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="IT-STWBoxContent">
+                    <table>
+                        <tr id="IT_STW_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Japanese -->
+            <div class="StatBox" id="JA-MOTD">
+                <h2 id="JA-STWHeader" class="StatBoxHeader">
+                    <span class="flag ja"></span>&nbsp;&nbsp;Japanese
+                </h2>
+                <span class="CollapsedIndicator" id="JA-STWCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="JA-STWBoxContent">
+                    <table>
+                        <tr id="JA_STW_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Korean -->
+            <div class="StatBox" id="KO-MOTD">
+                <h2 id="KO-STWHeader" class="StatBoxHeader">
+                    <span class="flag ko"></span>&nbsp;&nbsp;Korean
+                </h2>
+                <span class="CollapsedIndicator" id="KO-STWCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="KO-STWBoxContent">
+                    <table>
+                        <tr id="KO_STW_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Polish -->
+            <div class="StatBox" id="PL-MOTD">
+                <h2 id="PL-STWHeader" class="StatBoxHeader">
+                    <span class="flag pl"></span>&nbsp;&nbsp;Polish
+                </h2>
+                <span class="CollapsedIndicator" id="PL-STWCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="PL-STWBoxContent">
+                    <table>
+                        <tr id="PL_STW_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Portuguese -->
+            <div class="StatBox" id="PT-MOTD">
+                <h2 id="PT-STWHeader" class="StatBoxHeader">
+                    <span class="flag pt_BR"></span>&nbsp;&nbsp;Portuguese (BR)
+                </h2>
+                <span class="CollapsedIndicator" id="PT-STWCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="PT-STWBoxContent">
+                    <table>
+                        <tr id="PT_STW_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Russian -->
+            <div class="StatBox" id="RU-MOTD">
+                <h2 id="RU-STWHeader" class="StatBoxHeader">
+                    <span class="flag ru"></span>&nbsp;&nbsp;Russian
+                </h2>
+                <span class="CollapsedIndicator" id="RU-STWCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="RU-STWBoxContent">
+                    <table>
+                        <tr id="RU_STW_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Spanish (MX) -->
+            <div class="StatBox" id="EM-MOTD">
+                <h2 id="EM-STWHeader" class="StatBoxHeader">
+                    <span class="flag es_MX"></span>&nbsp;&nbsp;Spanish (MX)
+                </h2>
+                <span class="CollapsedIndicator" id="EM-STWCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="EM-STWBoxContent">
+                    <table>
+                        <tr id="EM_STW_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Spanish (ES) -->
+            <div class="StatBox" id="ES-MOTD">
+                <h2 id="ES-STWHeader" class="StatBoxHeader">
+                    <span class="flag es_ES"></span>&nbsp;&nbsp;Spanish
+                </h2>
+                <span class="CollapsedIndicator" id="ES-STWCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="ES-STWBoxContent">
+                    <table>
+                        <tr id="ES_STW_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Turkish -->
+            <div class="StatBox" id="TR-MOTD">
+                <h2 id="TR-STWHeader" class="StatBoxHeader">
+                    <span class="flag tr"></span>&nbsp;&nbsp;Turkish
+                </h2>
+                <span class="CollapsedIndicator" id="TR-STWCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="TR-STWBoxContent">
+                    <table>
+                        <tr id="TR_STW_MOTD"></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!--
+
+# ========================================================
+# Emergency Messaging display
+# ========================================================
+-->
+
+        <div id="EM" class="tabcontent">
+            <!-- English -->
+            <div id="EMSGLastUpdated"></div>
+            <div class="StatBox" id="EN-MOTD">
+                <h2 id="EN-EMSGHeader" class="StatBoxHeader">
+                    <span class="flag en_US"></span>&nbsp;&nbsp;English (US)
+                </h2>
+                <span class="CollapsedIndicator" id="EN-EMSGCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="EN-EMSGBoxContent">
+                    <div id="EN_EMSG"></div>
+                </div>
+            </div>
+
+            <!-- Arabic -->
+            <div class="StatBox" id="AR-MOTD">
+                <h2 id="AR-EMSGHeader" class="StatBoxHeader">
+                    <span class="flag ar"></span>&nbsp;&nbsp;Arabic
+                </h2>
+                <span class="CollapsedIndicator" id="AR-EMSGCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="AR-EMSGBoxContent">
+                    <div id="AR_EMSG"></div>
+                </div>
+            </div>
+
+            <!-- French -->
+            <div class="StatBox" id="FE-MOTD">
+                <h2 id="FR-EMSGHeader" class="StatBoxHeader">
+                    <span class="flag fr"></span>&nbsp;&nbsp;French
+                </h2>
+                <span class="CollapsedIndicator" id="FR-EMSGCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="FR-EMSGBoxContent">
+                    <div id="FR_EMSG"></div>
+                </div>
+            </div>
+
+            <!-- German -->
+            <div class="StatBox" id="DE-MOTD">
+                <h2 id="DE-EMSGHeader" class="StatBoxHeader">
+                    <span class="flag de"></span>&nbsp;&nbsp;German
+                </h2>
+                <span class="CollapsedIndicator" id="DE-EMSGCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="DE-EMSGBoxContent">
+                    <div id="DE_EMSG"></div>
+                </div>
+            </div>
+
+            <!-- Italian -->
+            <div class="StatBox" id="IT-MOTD">
+                <h2 id="IT-EMSGHeader" class="StatBoxHeader">
+                    <span class="flag it"></span>&nbsp;&nbsp;Italian
+                </h2>
+                <span class="CollapsedIndicator" id="IT-EMSGCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="IT-EMSGBoxContent">
+                    <div id="IT_EMSG"></div>
+                </div>
+            </div>
+
+            <!-- Japanese -->
+            <div class="StatBox" id="JA-MOTD">
+                <h2 id="JA-EMSGHeader" class="StatBoxHeader">
+                    <span class="flag ja"></span>&nbsp;&nbsp;Japanese
+                </h2>
+                <span class="CollapsedIndicator" id="JA-EMSGCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="JA-EMSGBoxContent">
+                    <div id="JA_EMSG"></div>
+                </div>
+            </div>
+
+            <!-- Korean -->
+            <div class="StatBox" id="KO-MOTD">
+                <h2 id="KO-EMSGHeader" class="StatBoxHeader">
+                    <span class="flag ko"></span>&nbsp;&nbsp;Korean
+                </h2>
+                <span class="CollapsedIndicator" id="KO-EMSGCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="KO-EMSGBoxContent">
+                    <div id="KO_EMSG"></div>
+                </div>
+            </div>
+
+            <!-- Polish -->
+            <div class="StatBox" id="PL-MOTD">
+                <h2 id="PL-EMSGHeader" class="StatBoxHeader">
+                    <span class="flag pl"></span>&nbsp;&nbsp;Polish
+                </h2>
+                <span class="CollapsedIndicator" id="PL-EMSGCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="PL-EMSGBoxContent">
+                    <div id="PL_EMSG"></div>
+                </div>
+            </div>
+
+            <!-- Portuguese -->
+            <div class="StatBox" id="PT-MOTD">
+                <h2 id="PT-EMSGHeader" class="StatBoxHeader">
+                    <span class="flag pt_BR"></span>&nbsp;&nbsp;Portuguese (BR)
+                </h2>
+                <span class="CollapsedIndicator" id="PT-EMSGCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="PT-EMSGBoxContent">
+                    <div id="PT_EMSG"></div>
+                </div>
+            </div>
+
+            <!-- Russian -->
+            <div class="StatBox" id="RU-MOTD">
+                <h2 id="RU-EMSGHeader" class="StatBoxHeader">
+                    <span class="flag ru"></span>&nbsp;&nbsp;Russian
+                </h2>
+                <span class="CollapsedIndicator" id="RU-EMSGCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="RU-EMSGBoxContent">
+                    <div id="RU_EMSG"></div>
+                </div>
+            </div>
+
+            <!-- Spanish (MX) -->
+            <div class="StatBox" id="EM-MOTD">
+                <h2 id="EM-EMSGHeader" class="StatBoxHeader">
+                    <span class="flag es_MX"></span>&nbsp;&nbsp;Spanish (MX)
+                </h2>
+                <span class="CollapsedIndicator" id="EM-EMSGCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="EM-EMSGBoxContent">
+                    <div id="EM_EMSG"></div>
+                </div>
+            </div>
+
+            <!-- Spanish (ES) -->
+            <div class="StatBox" id="ES-MOTD">
+                <h2 id="ES-EMSGHeader" class="StatBoxHeader">
+                    <span class="flag es_ES"></span>&nbsp;&nbsp;Spanish
+                </h2>
+                <span class="CollapsedIndicator" id="ES-EMSGCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="ES-EMSGBoxContent">
+                    <div id="ES_EMSG"></div>
+                </div>
+            </div>
+
+            <!-- Turkish -->
+            <div class="StatBox" id="TR-MOTD">
+                <h2 id="TR-EMSGHeader" class="StatBoxHeader">
+                    <span class="flag tr"></span>&nbsp;&nbsp;Turkish
+                </h2>
+                <span class="CollapsedIndicator" id="TR-EMSGCollapsed"
+                    ><i class="fas fa-chevron-down"></i> Collapsed
+                    <i class="fas fa-chevron-down"></i
+                ></span>
+                <div class="StatBoxContent" id="TR-EMSGBoxContent">
+                    <div id="TR_EMSG"></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function openPage(pageName, elmnt, color) {
+                // Hide all elements with class="tabcontent" by default */
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName('tabcontent');
+                for (let content of tabcontent) {
+                    content.style.display = 'none';
+                }
+
+                // Remove the background color of all tablinks/buttons
+                tablinks = document.getElementsByClassName('tablink');
+
+                for (let content of tablinks) {
+                    content.style.backgroundColor = '';
+                }
+
+                // Show the specific tab content
+                document.getElementById(pageName).style.display = 'block';
+
+                // Add the specific color to the button used to open the tab content
+                elmnt.style.backgroundColor = color;
+            }
+
+            document.getElementById('defaultOpen').click();
+
+            var languages = [
+                'en',
+                'ar',
+                'fr',
+                'de',
+                'it',
+                'ja',
+                'ko',
+                'ru',
+                'pl',
+                'pt',
+                'es-es',
+                'es-mx',
+                'tr'
+            ];
+            var fullLanguages = [
+                'EN',
+                'AR',
+                'FR',
+                'DE',
+                'IT',
+                'JA',
+                'KO',
+                'RU',
+                'PL',
+                'PT',
+                'ES',
+                'EM',
+                'TR'
+            ];
+
+            function fetchData() {
+                for (var i = 0; i < languages.length; i++) {
+                    fetchContentForLocale(
+                        '/content/api/pages/fortnite-game',
+                        languages[i],
+                        fullLanguages[i]
+                    );
+                }
+            }
+
+            function fetchContentForLocale(endpoint, language, fullLanguage) {
+                fetch(endpoint + '?lang=' + language)
+                    .then(response => response.json())
+                    .then(data => {
+                        propagate(data, fullLanguage);
+					})
+					.catch((err) => console.error(err));
+			}
+			
+			fetchData();
+
+            // JSON Magic happens here
+            // times(en, "EN");
+            // propagate(ru, "RU");
+            // propagate(ar, "AR");
+            // propagate(fr, "FR");
+            // propagate(de, "DE");
+            // propagate(it, "IT");
+            // propagate(ja, "JA");
+            // propagate(ko, "KO");
+            // propagate(pl, "PL");
+            // propagate(pt, "PT");
+            // propagate(es, "ES");
+            // propagate(em, "EM");
+            // propagate(tr, "TR");
+
+            function times(arr, lang) {
+                var dopt = {weekday: 'long', month: 'long', day: 'numeric'};
+                var topt = {hour: `2-digit`, minute: `2-digit`};
+                var lang;
+
+                if (window.navigator.languages) {
+                    lang = window.navigator.languages[0];
+                } else {
+                    lang = window.navigator.userLanguage || window.navigator.language;
+                }
+
+                var changeDate = new Date(arr.lastModified);
+                var BRdate = new Date(arr.battleroyalenews.lastModified);
+                var CRdate = new Date(arr.creativenews.lastModified);
+                var STWdate = new Date(arr.savetheworldnews.lastModified);
+                var EMSGdate = new Date(arr.emergencynotice.lastModified);
+
+                document.getElementById('LastUpdated').innerHTML =
+                    'Last updated on ' +
+                    changeDate.toLocaleDateString(lang, dopt) +
+                    '   ' +
+                    changeDate.toLocaleTimeString(lang, topt);
+                document.getElementById('BRLastUpdated').innerHTML =
+                    'Last updated on ' +
+                    BRdate.toLocaleDateString(lang, dopt) +
+                    '   ' +
+                    BRdate.toLocaleTimeString(lang, topt);
+                document.getElementById('CRLastUpdated').innerHTML =
+                    'Last updated on ' +
+                    CRdate.toLocaleDateString(lang, dopt) +
+                    '   ' +
+                    CRdate.toLocaleTimeString(lang, topt);
+                document.getElementById('STWLastUpdated').innerHTML =
+                    'Last updated on ' +
+                    STWdate.toLocaleDateString(lang, dopt) +
+                    '   ' +
+                    STWdate.toLocaleTimeString(lang, topt);
+                document.getElementById('EMSGLastUpdated').innerHTML =
+                    'Last updated on ' +
+                    EMSGdate.toLocaleDateString(lang, dopt) +
+                    '   ' +
+                    EMSGdate.toLocaleTimeString(lang, topt);
+            }
+
+            function propagate(myArr, lang) {
+                populateBR(myArr, lang);
+                populateStW(myArr, lang);
+                populateCR(myArr, lang);
+                populateEM(myArr, lang);
+            }
+
+            function populateBR(arr, lang) {
+				if (!arr.battleroyalenews || !arr.battleroyalenews.news || !arr.battleroyalenews.news.motds) return;
+				var motds = arr.battleroyalenews.news.motds;
+                var target = lang + '_BR_MOTD';
+
+                motds.sort(function(a, b) {
+                    return a.sortingPriority - b.sortingPriority;
+                });
+
+                motds = motds.reverse();
+                motdblock = document.getElementById(lang + '_BR_MOTD');
+
+                for (motdIdx in arr.battleroyalenews.news.motds) {
+                    motd = arr.battleroyalenews.news.motds[motdIdx];
+
+                    var tile = document.createElement('td');
+                    var thumb = document.createElement('img');
+                    var large = document.createElement('img');
+                    large.style =
+                        'width: 344px; height: 172px; overflow: hidden; background-image: url("' +
+                        motd.image +
+                        '"); background-size: 344px 172px;';
+                    thumb.style =
+                        'width: 344px; height: 172px; overflow: hidden; background-image: url("' +
+                        motd.tileImage +
+                        '"); background-size: 344px 172px; background-position: right top;';
+                    tile.style = 'min-width: 345px;min-height: 320px;vertical-align:top;';
+                    var header = document.createElement('h3');
+                    var title = document.createTextNode(motd.title);
+                    if (motd.tabTitleOverride != 'undefined') {
+                        var tabtitle = document.createTextNode(
+                            'Tab title: ' + motd.tabTitleOverride
+                        );
+                        var linebreak = document.createElement('hr');
+                    }
+                    var body = document.createTextNode(motd.body);
+
+                    var status = document.createElement('span');
+                    isAB = document.createElement('i');
+                    isAB.className = 'fas fa-funnel-dollar';
+                    isAB.style = 'margin-right: 10px;width: auto;';
+                    isAB.alt = 'This tile is part of A/B testing';
+                    hasVideo = document.createElement('i');
+                    hasVideo.className = 'fas fa-video';
+                    hasVideo.style = 'margin-right: 10px;width: auto;';
+                    hasVideo.alt = 'This tile has video';
+                    if (motd.videoAutoplay != null && motd.videoAutoplay == true) {
+                        hasVideo.style = 'margin-right: 10px;width: auto;color: red;';
+                        hasVideo.alt = 'This tile has autoplay video';
+                    }
+                    hasStoreLink = document.createElement('i');
+                    hasStoreLink.className = 'fas fa-dollar-sign';
+                    hasStoreLink.style = 'margin-right: 10px;width: auto;color:#5c5c5c;';
+                    hasStoreLink.alt = 'This tile has a link to the store offer';
+                    hasChallengeLink = document.createElement('i');
+                    hasChallengeLink.className = 'fas fa-tasks';
+                    hasChallengeLink.style = 'margin-right: 10px;width: auto;';
+                    hasChallengeLink.alt = 'This tile has a link to challanges';
+                    hasPlaylistLink = document.createElement('i');
+                    hasPlaylistLink.className = 'fas fa-gamepad';
+                    hasPlaylistLink.style = 'margin-right: 10px;width: auto;';
+                    hasPlaylistLink.alt = 'This tile has a link to challanges';
+                    tooBigTile = document.createElement('i');
+                    tooBigTile.className = 'fas fa-exclamation-triangle';
+                    tooBigTile.style = 'margin-right: 10px;width: auto;color: red;';
+                    tooBigImage = document.createElement('i');
+                    tooBigImage.className = 'fas fa-exclamation-triangle';
+                    tooBigImage.style = 'margin-right: 10px;width: auto;color: red;';
+
+                    if (motd.videoVideoString != null) {
+                        status.appendChild(hasVideo);
+                    }
+                    if (motd.playlistId != null) {
+                        status.appendChild(hasPlaylistLink);
+                    }
+                    if (motd.offerId != null) {
+                        hasStoreLink.style = 'margin-right: 10px;width: auto;color:#black;';
+                        status.appendChild(hasStoreLink);
+                    }
+                    if (motd.challengeCategoryTag != null) {
+                        status.appendChild(hasChallengeLink);
+                    }
+                    if (motd.playlistId != null) {
+                        status.appendChild(hasPlaylistLink);
+                    }
+                    if (motd.experiment_percent != null) {
+                        status.appendChild(isAB);
+                    }
+
+                    if (motd.image != null) {
+                        imageFilesize = getFileSize(motd.image);
+                    }
+                    if (motd.tileImage != null) {
+                        thumbFilesize = getFileSize(motd.tileImage);
+                    }
+
+                    header.appendChild(title);
+                    tile.appendChild(large);
+                    tile.appendChild(thumb);
+                    tile.appendChild(header);
+                    if (imageFilesize > 1500000) {
+                        tile.appendChild(tooBigImage);
+                        tile.appendChild(document.createTextNode('Main image is over 1.5MB'));
+                        tile.appendChild(document.createElement('hr'));
+                    }
+                    if (thumbFilesize > 1000000) {
+                        tile.appendChild(tooBigTile);
+                        tile.appendChild(document.createTextNode('Tile image is over 1MB'));
+                        tile.appendChild(document.createElement('hr'));
+                    }
+                    if (motd.tabTitleOverride != null) {
+                        tile.appendChild(tabtitle);
+                        tile.appendChild(linebreak);
+                    }
+                    tile.appendChild(body);
+                    tile.appendChild(document.createElement('hr'));
+                    tile.appendChild(status);
+                    motdblock.appendChild(tile);
+                }
+
+                for (motdIdx in arr.battleroyalenews.news.platform_motds) {
+                    motd = arr.battleroyalenews.news.platform_motds[motdIdx];
+
+                    var tile = document.createElement('td');
+                    var thumb = document.createElement('img');
+                    var large = document.createElement('img');
+                    large.style =
+                        'width: 172px; height: 172px; overflow: hidden; background-image: url("' +
+                        motd.message.image +
+                        '"); background-size: 344px 172px;';
+                    thumb.style =
+                        'width: 172px; height: 172px; overflow: hidden; background-image: url("' +
+                        motd.message.tileImage +
+                        '"); background-size: 344px 172px; background-position: right top;';
+                    tile.style = 'min-width: 345px;min-height: 320px;vertical-align:top;';
+                    var header = document.createElement('h3');
+                    var title = document.createTextNode(' ' + motd.message.title);
+                    if (motd.message.tabTitleOverride != 'undefined') {
+                        var tabtitle = document.createTextNode(
+                            'Tab title: ' + motd.message.tabTitleOverride
+                        );
+                        var linebreak = document.createElement('hr');
+                    }
+                    var body = document.createTextNode(motd.message.body);
+
+                    var platform = document.createElement('i');
+                    if (motd.platform == 'xbox') {
+                        platform.className = 'fab fa-xbox';
+                    } else if (motd.platform == 'ios') {
+                        platform.className = 'fab fa-apple';
+                    } else if (motd.platform == 'android') {
+                        platform.className = 'fab fa-android';
+                    } else if (motd.platform == 'pc') {
+                        platform.className = 'fas fa-desktop';
+                    } else if (motd.platform == 'switch') {
+                        platform.className = 'fas fa-suitcase';
+                    } else if (motd.platform == 'ps4') {
+                        platform.className = 'fab fa-playstation';
+                    }
+
+                    var status = document.createElement('span');
+                    isAB = document.createElement('i');
+                    isAB.className = 'fas fa-funnel-dollar';
+                    isAB.style = 'margin-right: 10px;width: auto;';
+                    isAB.alt = 'This tile is part of A/B testing';
+                    hasVideo = document.createElement('i');
+                    hasVideo.className = 'fas fa-video';
+                    hasVideo.style = 'margin-right: 10px;width: auto;';
+                    hasVideo.alt = 'This tile has video';
+                    if (motd.message.videoAutoplay != null && motd.message.videoAutoplay == true) {
+                        hasVideo.style = 'margin-right: 10px;width: auto;color: red;';
+                        hasVideo.alt = 'This tile has autoplay video';
+                    }
+
+                    hasStoreLink = document.createElement('i');
+                    hasStoreLink.className = 'fas fa-dollar-sign';
+                    hasStoreLink.style = 'margin-right: 10px;width: auto;color:#5c5c5c;';
+                    hasStoreLink.alt = 'This tile has a link to the store offer';
+                    hasChallengeLink = document.createElement('i');
+                    hasChallengeLink.className = 'fas fa-tasks';
+                    hasChallengeLink.style = 'margin-right: 10px;width: auto;';
+                    hasChallengeLink.alt = 'This tile has a link to challanges';
+                    hasPlaylistLink = document.createElement('i');
+                    hasPlaylistLink.className = 'fas fa-gamepad';
+                    hasPlaylistLink.style = 'margin-right: 10px;width: auto;';
+                    hasPlaylistLink.alt = 'This tile has a link to challanges';
+                    tooBigTile = document.createElement('i');
+                    tooBigTile.className = 'fas fa-exclamation-triangle';
+                    tooBigTile.style = 'margin-right: 10px;width: auto;color: red;';
+                    tooBigImage = document.createElement('i');
+                    tooBigImage.className = 'fas fa-exclamation-triangle';
+                    tooBigImage.style = 'margin-right: 10px;width: auto;color: red;';
+
+                    if (motd.videoVideoString != null) {
+                        status.appendChild(hasVideo);
+                    }
+                    if (motd.playlistId != null) {
+                        status.appendChild(hasPlaylistLink);
+                    }
+                    if (motd.offerId != null) {
+                        hasStoreLink.style = 'margin-right: 10px;width: auto;color:#black;';
+                        status.appendChild(hasStoreLink);
+                    }
+                    if (motd.challengeCategoryTag != null) {
+                        status.appendChild(hasChallengeLink);
+                    }
+                    if (motd.playlistId != null) {
+                        status.appendChild(hasPlaylistLink);
+                    }
+                    if (motd.experiment_percent != null) {
+                        status.appendChild(isAB);
+                    }
+
+                    imageFilesize = getFileSize(motd.message.image);
+                    thumbFilesize = getFileSize(motd.message.tileImage);
+
+                    header.appendChild(platform);
+                    header.appendChild(title);
+                    tile.appendChild(large);
+                    tile.appendChild(thumb);
+                    tile.appendChild(header);
+                    if (imageFilesize > 1200000) {
+                        tile.appendChild(tooBigImage);
+                        tile.appendChild(document.createTextNode('Main image is over 1.5MB'));
+                        tile.appendChild(document.createElement('hr'));
+                    }
+                    if (thumbFilesize > 1000000) {
+                        tile.appendChild(tooBigTile);
+                        tile.appendChild(document.createTextNode('Tile image is over 1MB'));
+                        tile.appendChild(document.createElement('hr'));
+                    }
+                    if (motd.tabTitleOverride != null) {
+                        tile.appendChild(tabtitle);
+                        tile.appendChild(linebreak);
+                    }
+                    tile.appendChild(body);
+                    tile.appendChild(document.createElement('hr'));
+                    tile.appendChild(status);
+                    motdblock.appendChild(tile);
+                }
+            }
+
+            function populateCR(arr, lang) {
+				if (!arr.creativenews || !arr.creativenews.news || !arr.creativenews.news.motds) return;
+                var motds = arr.creativenews.news.motds;
+                var target = lang + '_CR_MOTD';
+                motds.sort(function(a, b) {
+                    return a.sortingPriority - b.sortingPriority;
+                });
+
+                motds = motds.reverse();
+                motdblock = document.getElementById(target);
+
+                for (motdIdx in arr.creativenews.news.motds) {
+                    motd = arr.creativenews.news.motds[motdIdx];
+
+                    var tile = document.createElement('td');
+                    var thumb = document.createElement('img');
+                    var large = document.createElement('img');
+                    large.style =
+                        'width: 344px; height: 172px; overflow: hidden; background-image: url("' +
+                        motd.image +
+                        '"); background-size: 344px 172px;';
+                    thumb.style =
+                        'width: 344px; height: 172px; overflow: hidden; background-image: url("' +
+                        motd.tileImage +
+                        '"); background-size: 344px 172px; background-position: right top;';
+                    tile.style = 'min-width: 345px;min-height: 320px;vertical-align:top;';
+                    var header = document.createElement('h3');
+                    var title = document.createTextNode(motd.title);
+                    if (motd.tabTitleOverride != 'undefined') {
+                        var tabtitle = document.createTextNode(
+                            'Tab title: ' + motd.tabTitleOverride
+                        );
+                        var linebreak = document.createElement('hr');
+                    }
+                    var body = document.createTextNode(motd.body);
+
+                    var status = document.createElement('span');
+                    isAB = document.createElement('i');
+                    isAB.className = 'fas fa-funnel-dollar';
+                    isAB.style = 'margin-right: 10px;width: auto;';
+                    isAB.alt = 'This tile is part of A/B testing';
+                    hasVideo = document.createElement('i');
+                    hasVideo.className = 'fas fa-video';
+                    hasVideo.style = 'margin-right: 10px;width: auto;';
+                    hasVideo.alt = 'This tile has video';
+                    if (motd.videoAutoplay != null && motd.videoAutoplay == true) {
+                        hasVideo.style = 'margin-right: 10px;width: auto;color: red;';
+                        hasVideo.alt = 'This tile has autoplay video';
+                    }
+
+                    hasStoreLink = document.createElement('i');
+                    hasStoreLink.className = 'fas fa-dollar-sign';
+                    hasStoreLink.style = 'margin-right: 10px;width: auto;color:#5c5c5c;';
+                    hasStoreLink.alt = 'This tile has a link to the store offer';
+                    hasChallengeLink = document.createElement('i');
+                    hasChallengeLink.className = 'fas fa-tasks';
+                    hasChallengeLink.style = 'margin-right: 10px;width: auto;';
+                    hasChallengeLink.alt = 'This tile has a link to challanges';
+                    hasPlaylistLink = document.createElement('i');
+                    hasPlaylistLink.className = 'fas fa-gamepad';
+                    hasPlaylistLink.style = 'margin-right: 10px;width: auto;';
+                    hasPlaylistLink.alt = 'This tile has a link to challanges';
+                    tooBigTile = document.createElement('i');
+                    tooBigTile.className = 'fas fa-exclamation-triangle';
+                    tooBigTile.style = 'margin-right: 10px;width: auto;color: red;';
+                    tooBigImage = document.createElement('i');
+                    tooBigImage.className = 'fas fa-exclamation-triangle';
+                    tooBigImage.style = 'margin-right: 10px;width: auto;color: red;';
+
+                    if (motd.videoVideoString != null) {
+                        status.appendChild(hasVideo);
+                    }
+                    if (motd.playlistId != null) {
+                        status.appendChild(hasPlaylistLink);
+                    }
+                    if (motd.offerId != null) {
+                        hasStoreLink.style = 'margin-right: 10px;width: auto;color:#black;';
+                        status.appendChild(hasStoreLink);
+                    }
+                    if (motd.challengeCategoryTag != null) {
+                        status.appendChild(hasChallengeLink);
+                    }
+                    if (motd.playlistId != null) {
+                        status.appendChild(hasPlaylistLink);
+                    }
+                    if (motd.experiment_percent != null) {
+                        status.appendChild(isAB);
+                    }
+
+                    if (motd.image != null) {
+                        imageFilesize = getFileSize(motd.image);
+                    }
+                    if (motd.tileImage != null) {
+                        thumbFilesize = getFileSize(motd.tileImage);
+                    }
+
+                    header.appendChild(title);
+                    tile.appendChild(large);
+                    tile.appendChild(thumb);
+                    tile.appendChild(header);
+                    if (imageFilesize > 1500000) {
+                        tile.appendChild(tooBigImage);
+                        tile.appendChild(document.createTextNode('Main image is over 1.5MB'));
+                        tile.appendChild(document.createElement('hr'));
+                    }
+                    if (thumbFilesize > 1000000) {
+                        tile.appendChild(tooBigTile);
+                        tile.appendChild(document.createTextNode('Tile image is over 1MB'));
+                        tile.appendChild(document.createElement('hr'));
+                    }
+                    if (motd.tabTitleOverride != null) {
+                        tile.appendChild(tabtitle);
+                        tile.appendChild(linebreak);
+                    }
+                    tile.appendChild(body);
+                    tile.appendChild(document.createElement('hr'));
+                    tile.appendChild(status);
+                    motdblock.appendChild(tile);
+                }
+
+                for (motdIdx in arr.creativenews.news.platform_motds) {
+                    motd = arr.creativenews.news.platform_motds[motdIdx];
+
+                    var tile = document.createElement('td');
+                    var thumb = document.createElement('img');
+                    var large = document.createElement('img');
+                    large.style =
+                        'width: 172px; height: 172px; overflow: hidden; background-image: url("' +
+                        motd.message.image +
+                        '"); background-size: 344px 172px;';
+                    thumb.style =
+                        'width: 172px; height: 172px; overflow: hidden; background-image: url("' +
+                        motd.message.tileImage +
+                        '"); background-size: 344px 172px; background-position: right top;';
+                    tile.style = 'min-width: 345px;min-height: 320px;vertical-align:top;';
+                    var header = document.createElement('h3');
+                    var title = document.createTextNode(' ' + motd.message.title);
+                    if (motd.message.tabTitleOverride != 'undefined') {
+                        var tabtitle = document.createTextNode(
+                            'Tab title: ' + motd.message.tabTitleOverride
+                        );
+                        var linebreak = document.createElement('hr');
+                    }
+                    var body = document.createTextNode(motd.message.body);
+
+                    var platform = document.createElement('i');
+                    if (motd.platform == 'xbox') {
+                        platform.className = 'fab fa-xbox';
+                    } else if (motd.platform == 'ios') {
+                        platform.className = 'fab fa-apple';
+                    } else if (motd.platform == 'android') {
+                        platform.className = 'fab fa-android';
+                    } else if (motd.platform == 'pc') {
+                        platform.className = 'fas fa-desktop';
+                    } else if (motd.platform == 'switch') {
+                        platform.className = 'fas fa-suitcase';
+                    } else if (motd.platform == 'ps4') {
+                        platform.className = 'fab fa-playstation';
+                    }
+
+                    var status = document.createElement('span');
+                    isAB = document.createElement('i');
+                    isAB.className = 'fas fa-funnel-dollar';
+                    isAB.style = 'margin-right: 10px;width: auto;';
+                    isAB.alt = 'This tile is part of A/B testing';
+                    hasVideo = document.createElement('i');
+                    hasVideo.className = 'fas fa-video';
+                    hasVideo.style = 'margin-right: 10px;width: auto;';
+                    hasVideo.alt = 'This tile has video';
+                    if (motd.message.videoAutoplay != null && motd.message.videoAutoplay == true) {
+                        hasVideo.style = 'margin-right: 10px;width: auto;color: red;';
+                        hasVideo.alt = 'This tile has autoplay video';
+                    }
+
+                    hasStoreLink = document.createElement('i');
+                    hasStoreLink.className = 'fas fa-dollar-sign';
+                    hasStoreLink.style = 'margin-right: 10px;width: auto;color:#5c5c5c;';
+                    hasStoreLink.alt = 'This tile has a link to the store offer';
+                    hasChallengeLink = document.createElement('i');
+                    hasChallengeLink.className = 'fas fa-tasks';
+                    hasChallengeLink.style = 'margin-right: 10px;width: auto;';
+                    hasChallengeLink.alt = 'This tile has a link to challanges';
+                    hasPlaylistLink = document.createElement('i');
+                    hasPlaylistLink.className = 'fas fa-gamepad';
+                    hasPlaylistLink.style = 'margin-right: 10px;width: auto;';
+                    hasPlaylistLink.alt = 'This tile has a link to challanges';
+                    tooBigTile = document.createElement('i');
+                    tooBigTile.className = 'fas fa-exclamation-triangle';
+                    tooBigTile.style = 'margin-right: 10px;width: auto;color: red;';
+                    tooBigImage = document.createElement('i');
+                    tooBigImage.className = 'fas fa-exclamation-triangle';
+                    tooBigImage.style = 'margin-right: 10px;width: auto;color: red;';
+
+                    if (motd.videoVideoString != null) {
+                        status.appendChild(hasVideo);
+                    }
+                    if (motd.playlistId != null) {
+                        status.appendChild(hasPlaylistLink);
+                    }
+                    if (motd.offerId != null) {
+                        hasStoreLink.style = 'margin-right: 10px;width: auto;color:#black;';
+                        status.appendChild(hasStoreLink);
+                    }
+                    if (motd.challengeCategoryTag != null) {
+                        status.appendChild(hasChallengeLink);
+                    }
+                    if (motd.playlistId != null) {
+                        status.appendChild(hasPlaylistLink);
+                    }
+                    if (motd.experiment_percent != null) {
+                        status.appendChild(isAB);
+                    }
+
+                    imageFilesize = getFileSize(motd.message.image);
+                    thumbFilesize = getFileSize(motd.message.tileImage);
+
+                    header.appendChild(platform);
+                    header.appendChild(title);
+                    tile.appendChild(large);
+                    tile.appendChild(thumb);
+                    tile.appendChild(header);
+                    if (imageFilesize > 1500000) {
+                        tile.appendChild(tooBigImage);
+                        tile.appendChild(document.createTextNode('Main image is over 1.5MB'));
+                        tile.appendChild(document.createElement('hr'));
+                    }
+                    if (thumbFilesize > 1000000) {
+                        tile.appendChild(tooBigTile);
+                        tile.appendChild(document.createTextNode('Tile image is over 1MB'));
+                        tile.appendChild(document.createElement('hr'));
+                    }
+                    if (motd.tabTitleOverride != null) {
+                        tile.appendChild(tabtitle);
+                        tile.appendChild(linebreak);
+                    }
+                    tile.appendChild(body);
+                    tile.appendChild(document.createElement('hr'));
+                    tile.appendChild(status);
+                    motdblock.appendChild(tile);
+                }
+            }
+
+            function populateStW(arr, lang) {
+				if (!arr.savetheworldnews || !arr.savetheworldnews.news || !arr.savetheworldnews.news.motds) return;
+                var motds = arr.savetheworldnews.news.motds;
+                var target = lang + '_STW_MOTD';
+
+                motdblock = document.getElementById(target);
+
+                for (motdIdx in arr.savetheworldnews.news.messages) {
+                    motd = arr.savetheworldnews.news.messages[motdIdx];
+
+                    var tile = document.createElement('td');
+                    var thumb = document.createElement('img');
+                    thumb.src = motd.image;
+                    thumb.style = 'max-width: 400px;height: auto;';
+                    tile.style = 'max-width: 400px;min-height: 320px;vertical-align:top;';
+                    var header = document.createElement('h3');
+                    var title = document.createTextNode(motd.title);
+                    var body = document.createTextNode(motd.body);
+
+                    header.appendChild(title);
+                    tile.appendChild(thumb);
+                    tile.appendChild(header);
+                    tile.appendChild(body);
+                    motdblock.appendChild(tile);
+                }
+            }
+
+            function populateEM(arr, lang) {
+                var target = lang + '_EMSG';
+
+                motdblock = document.getElementById(target);
+
+				if (!arr.emergencynotice || !arr.emergencynotice.news || !arr.emergencynotice.news.messages) return;
+                for (motdIdx in arr.emergencynotice.news.messages) {
+                    var motd = arr.emergencynotice.news.messages[motdIdx];
+                    var sPlaylist = '';
+
+                    if (motd.playlistId != null) {
+                        sPlaylist = '    ' + motd.playlistId;
+                    }
+
+                    if (!motd.hidden) {
+                        var tile = document.createElement('div');
+                        //			tile.style = "max-width: 400px;min-height: 320px;vertical-align:top;";
+                        var header = document.createElement('h3');
+                        if (motd.title != null) {
+                            var title = document.createTextNode(motd.title);
+                        } else {
+                            var title = document.createTextNode('No Title');
+                        }
+                        var playlist = document.createElement('i');
+                        playlist.style = 'margin-left: 5px;';
+                        if (motd.subgame != null) {
+                            var mode = document.createElement('span');
+                            mode.appendChild(document.createTextNode(' '));
+                            if (motd.subgame == 'br') {
+                                mode.className = 'flag brmode';
+                            }
+                            if (motd.subgame == 'stw') {
+                                mode.className = 'flag stwmode';
+                            }
+                        }
+                        var playlistname = document.createTextNode(sPlaylist);
+                        playlist.className = 'fas fa-list';
+                        var body = document.createTextNode(motd.body);
+
+                        if (mode != null) {
+                            header.appendChild(mode);
+                            header.appendChild(document.createTextNode(' > '));
+                        }
+                        if (motd.playlistId != null) {
+                            header.appendChild(playlist);
+                            header.appendChild(playlistname);
+                            header.appendChild(document.createTextNode(' > '));
+                        }
+                        header.appendChild(title);
+                        tile.appendChild(header);
+                        //tile.appendChild(linebreak);
+                        tile.appendChild(body);
+                        tile.appendChild(document.createElement('br'));
+                        tile.appendChild(document.createElement('br'));
+                        motdblock.appendChild(tile);
+                    }
+                }
+
+                for (motdIdx in arr.emergencynotice.news.region_messages) {
+                    motd = arr.emergencynotice.news.region_messages[motdIdx];
+                    region = document.createTextNode(motd.region.toUpperCase());
+
+                    if (motd.message.playlistId != null) {
+                        sPlaylist = '    ' + motd.message.playlistId;
+                    }
+
+                    if (!motd.message.hidden) {
+                        var tile = document.createElement('div');
+                        //			tile.style = "max-width: 400px;min-height: 320px;vertical-align:top;";
+                        var header = document.createElement('h3');
+                        if (motd.message.title != null) {
+                            var title = document.createTextNode(motd.message.title);
+                        } else {
+                            var title = document.createTextNode('No Title');
+                        }
+                        var playlist = document.createElement('i');
+                        playlist.style = 'margin-left: 5px;';
+                        if (motd.message.subgame != null) {
+                            var mode = document.createElement('span');
+                            mode.appendChild(document.createTextNode(' '));
+                            if (motd.message.subgame == 'br') {
+                                mode.className = 'flag brmode';
+                            }
+                            if (motd.message.subgame == 'stw') {
+                                mode.className = 'flag stwmode';
+                            }
+                        }
+                        var playlistname = document.createTextNode(sPlaylist);
+                        playlist.className = 'fas fa-list';
+                        var body = document.createTextNode(motd.message.body);
+
+                        header.appendChild(region);
+                        header.appendChild(document.createTextNode(' > '));
+                        if (mode != null) {
+                            header.appendChild(mode);
+                            header.appendChild(document.createTextNode(' > '));
+                        }
+                        if (motd.message.playlistId != null) {
+                            header.appendChild(playlist);
+                            header.appendChild(playlistname);
+                            header.appendChild(document.createTextNode(' > '));
+                        }
+                        header.appendChild(title);
+                        tile.appendChild(header);
+                        //tile.appendChild(linebreak);
+                        tile.appendChild(body);
+                        tile.appendChild(document.createElement('br'));
+                        tile.appendChild(document.createElement('br'));
+                        motdblock.appendChild(tile);
+                    }
+                }
+
+                if (motdblock.childNodes.length == 0) {
+                    motdblock.innerHTML = 'No emergency messaging set';
+                }
+            }
+
+            function getFileSize(url) {
+                var fileSize = '';
+				var http = new XMLHttpRequest();
+				try {
+					http.open('HEAD', url, false);
+					http.send(null);
+
+					if (http.status === 200) {
+						fileSize = http.getResponseHeader('content-length');
+					}
+				} catch (ex) {
+					console.error(ex);
+					return 0;
+				}
+
+                return fileSize;
+            }
+            // Get the element with id="defaultOpen" and click on it
+
+            $('#EN-BRHeader').click(function() {
+                $('#EN-BRBoxContent').toggle();
+                $('#EN-BRCollapsed').toggle();
+            });
+            $('#AR-BRHeader').click(function() {
+                $('#AR-BRBoxContent').toggle();
+                $('#AR-BRCollapsed').toggle();
+            });
+            $('#FR-BRHeader').click(function() {
+                $('#FR-BRBoxContent').toggle();
+                $('#FR-BRCollapsed').toggle();
+            });
+            $('#DE-BRHeader').click(function() {
+                $('#DE-BRBoxContent').toggle();
+                $('#DE-BRCollapsed').toggle();
+            });
+            $('#IT-BRHeader').click(function() {
+                $('#IT-BRBoxContent').toggle();
+                $('#IT-BRCollapsed').toggle();
+            });
+            $('#JA-BRHeader').click(function() {
+                $('#JA-BRBoxContent').toggle();
+                $('#JA-BRCollapsed').toggle();
+            });
+            $('#KO-BRHeader').click(function() {
+                $('#KO-BRBoxContent').toggle();
+                $('#KO-BRCollapsed').toggle();
+            });
+            $('#PL-BRHeader').click(function() {
+                $('#PL-BRBoxContent').toggle();
+                $('#PL-BRCollapsed').toggle();
+            });
+            $('#PT-BRHeader').click(function() {
+                $('#PT-BRBoxContent').toggle();
+                $('#PT-BRCollapsed').toggle();
+            });
+            $('#RU-BRHeader').click(function() {
+                $('#RU-BRBoxContent').toggle();
+                $('#RU-BRCollapsed').toggle();
+            });
+            $('#EM-BRHeader').click(function() {
+                $('#EM-BRBoxContent').toggle();
+                $('#EM-BRCollapsed').toggle();
+            });
+            $('#ES-BRHeader').click(function() {
+                $('#ES-BRBoxContent').toggle();
+                $('#ES-BRCollapsed').toggle();
+            });
+            $('#TR-BRHeader').click(function() {
+                $('#TR-BRBoxContent').toggle();
+                $('#TR-BRCollapsed').toggle();
+            });
+
+            // creative
+
+            $('#EN-CRHeader').click(function() {
+                $('#EN-CRBoxContent').toggle();
+                $('#EN-CRCollapsed').toggle();
+            });
+            $('#AR-CRHeader').click(function() {
+                $('#AR-CRBoxContent').toggle();
+                $('#AR-CRCollapsed').toggle();
+            });
+            $('#FR-CRHeader').click(function() {
+                $('#FR-CRBoxContent').toggle();
+                $('#FR-CRCollapsed').toggle();
+            });
+            $('#DE-CRHeader').click(function() {
+                $('#DE-CRBoxContent').toggle();
+                $('#DE-CRCollapsed').toggle();
+            });
+            $('#IT-CRHeader').click(function() {
+                $('#IT-CRBoxContent').toggle();
+                $('#IT-CRCollapsed').toggle();
+            });
+            $('#JA-CRHeader').click(function() {
+                $('#JA-CRBoxContent').toggle();
+                $('#JA-CRCollapsed').toggle();
+            });
+            $('#KO-CRHeader').click(function() {
+                $('#KO-CRBoxContent').toggle();
+                $('#KO-CRCollapsed').toggle();
+            });
+            $('#PL-CRHeader').click(function() {
+                $('#PL-CRBoxContent').toggle();
+                $('#PL-CRCollapsed').toggle();
+            });
+            $('#PT-CRHeader').click(function() {
+                $('#PT-CRBoxContent').toggle();
+                $('#PT-CRCollapsed').toggle();
+            });
+            $('#RU-CRHeader').click(function() {
+                $('#RU-CRBoxContent').toggle();
+                $('#RU-CRCollapsed').toggle();
+            });
+            $('#EM-CRHeader').click(function() {
+                $('#EM-CRBoxContent').toggle();
+                $('#EM-CRCollapsed').toggle();
+            });
+            $('#ES-CRHeader').click(function() {
+                $('#ES-CRBoxContent').toggle();
+                $('#ES-CRCollapsed').toggle();
+            });
+            $('#TR-CRHeader').click(function() {
+                $('#TR-CRBoxContent').toggle();
+                $('#TR-CRCollapsed').toggle();
+            });
+
+            // Save the World
+
+            $('#EN-STWHeader').click(function() {
+                $('#EN-STWBoxContent').toggle();
+                $('#EN-STWCollapsed').toggle();
+            });
+            $('#AR-STWHeader').click(function() {
+                $('#AR-STWBoxContent').toggle();
+                $('#AR-STWCollapsed').toggle();
+            });
+            $('#FR-STWHeader').click(function() {
+                $('#FR-STWBoxContent').toggle();
+                $('#FR-STWCollapsed').toggle();
+            });
+            $('#DE-STWHeader').click(function() {
+                $('#DE-STWBoxContent').toggle();
+                $('#DE-STWCollapsed').toggle();
+            });
+            $('#IT-STWHeader').click(function() {
+                $('#IT-STWBoxContent').toggle();
+                $('#IT-STWCollapsed').toggle();
+            });
+            $('#JA-STWHeader').click(function() {
+                $('#JA-STWBoxContent').toggle();
+                $('#JA-STWCollapsed').toggle();
+            });
+            $('#KO-STWHeader').click(function() {
+                $('#KO-STWBoxContent').toggle();
+                $('#KO-STWCollapsed').toggle();
+            });
+            $('#PL-STWHeader').click(function() {
+                $('#PL-STWBoxContent').toggle();
+                $('#PL-STWCollapsed').toggle();
+            });
+            $('#PT-STWHeader').click(function() {
+                $('#PT-STWBoxContent').toggle();
+                $('#PT-STWCollapsed').toggle();
+            });
+            $('#RU-STWHeader').click(function() {
+                $('#RU-STWBoxContent').toggle();
+                $('#RU-STWCollapsed').toggle();
+            });
+            $('#EM-STWHeader').click(function() {
+                $('#EM-STWBoxContent').toggle();
+                $('#EM-STWCollapsed').toggle();
+            });
+            $('#ES-STWHeader').click(function() {
+                $('#ES-STWBoxContent').toggle();
+                $('#ES-STWCollapsed').toggle();
+            });
+            $('#TR-STWHeader').click(function() {
+                $('#TR-STWBoxContent').toggle();
+                $('#TR-STWCollapsed').toggle();
+            });
+
+            // Emergency Message
+
+            $('#EN-EMSGHeader').click(function() {
+                $('#EN-EMSGBoxContent').toggle();
+                $('#EN-EMSGCollapsed').toggle();
+            });
+            $('#AR-EMSGHeader').click(function() {
+                $('#AR-EMSGBoxContent').toggle();
+                $('#AR-EMSGCollapsed').toggle();
+            });
+            $('#FR-EMSGHeader').click(function() {
+                $('#FR-EMSGBoxContent').toggle();
+                $('#FR-EMSGCollapsed').toggle();
+            });
+            $('#DE-EMSGHeader').click(function() {
+                $('#DE-EMSGBoxContent').toggle();
+                $('#DE-EMSGCollapsed').toggle();
+            });
+            $('#IT-EMSGHeader').click(function() {
+                $('#IT-EMSGBoxContent').toggle();
+                $('#IT-EMSGCollapsed').toggle();
+            });
+            $('#JA-EMSGHeader').click(function() {
+                $('#JA-EMSGBoxContent').toggle();
+                $('#JA-EMSGCollapsed').toggle();
+            });
+            $('#KO-EMSGHeader').click(function() {
+                $('#KO-EMSGBoxContent').toggle();
+                $('#KO-EMSGCollapsed').toggle();
+            });
+            $('#PL-EMSGHeader').click(function() {
+                $('#PL-EMSGBoxContent').toggle();
+                $('#PL-EMSGCollapsed').toggle();
+            });
+            $('#PT-EMSGHeader').click(function() {
+                $('#PT-EMSGBoxContent').toggle();
+                $('#PT-EMSGCollapsed').toggle();
+            });
+            $('#RU-EMSGHeader').click(function() {
+                $('#RU-EMSGBoxContent').toggle();
+                $('#RU-EMSGCollapsed').toggle();
+            });
+            $('#EM-EMSGHeader').click(function() {
+                $('#EM-EMSGBoxContent').toggle();
+                $('#EM-EMSGCollapsed').toggle();
+            });
+            $('#ES-EMSGHeader').click(function() {
+                $('#ES-EMSGBoxContent').toggle();
+                $('#ES-EMSGCollapsed').toggle();
+            });
+            $('#TR-EMSGHeader').click(function() {
+                $('#TR-EMSGBoxContent').toggle();
+                $('#TR-EMSGCollapsed').toggle();
+            });
+        </script>
+    </body>
+</html>
