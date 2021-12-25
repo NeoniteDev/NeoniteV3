@@ -1,28 +1,5 @@
 const express = require('express');
 const errors = require("./../structs/errors");
-const { ApiException } = errors;
-
-/**
- * @param {string[]} method
- */
-module.exports.Method = function (...method) {
-    /**
-     * @param {Request} req
-     * @param {Response} res
-     * @param {NextFunction} next
-     */
-    return function (req, res, next) {
-        if (req.method === 'OPTIONS') {
-            method.push('OPTIONS');
-            return res.send(method.json(', '));
-        }
-
-        if (!method.includes(req.method)) {
-            throw new ApiException(errors.com.epicgames.common.method_not_allowed)
-        }
-        next()
-    }
-}
 
 const regexp = '(.*)/(.*)-CL-(\\d+) (\\w+)/.*';
 const regexp2 = 'game=(.*), engine=UE4, build=(.*)-CL-(\\d+)';

@@ -354,12 +354,11 @@ app.get('/api/epicdomains/ssodomains', (req, res) => {
 
 app.get('/api/public/account/:accountId', CheckAuthorization, (req, res) => {
     if (req.auth.account_id === req.params.accountId) {
-        var displayName = Buffer.from(req.params.accountId, 'hex').toString();
         return res.json({
             "id": req.params.accountId,
-            "displayName": Buffer.from(req.params.accountId, 'hex').toString(),
-            "name": displayName,
-            "email": `${req.params.accountId}@gmail.com`,
+            "displayName": req.auth.displayName,
+            "name": req.auth.displayName,
+            "email": `${req.params.accountId}@neonite.com`,
             "failedLoginAttempts": 0,
             "lastLogin": new Date(),
             "numberOfDisplayNameChanges": 0,
@@ -380,7 +379,7 @@ app.get('/api/public/account/:accountId', CheckAuthorization, (req, res) => {
     }
     res.json({
         id: req.params.accountId,
-        displayName: Buffer.from(req.params.accountId, 'hex').toString(),
+        displayName: '',
         externalAuths: {}
     });
 });

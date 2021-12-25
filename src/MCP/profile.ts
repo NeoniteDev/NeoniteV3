@@ -1,176 +1,152 @@
 import { randomUUID } from 'crypto';
-import { profile as profileTypes } from '../structs/types';
+import { profile as types } from '../structs/types';
 import { profiles } from '../database/mysqlManager';
+import * as fs from 'fs';
+import * as Path from 'path';
+import versions from './versions';
+import { mcpResponse } from './operations';
+import errors from '../structs/errors';
 
-export async function getOrCreate(profileId: string, accountId: string) : Promise<profileTypes.Profile | undefined> {
-    const profile = await profiles.get(profileId, accountId);
-    
-    if (!profile) {
-        return await createProfile(profileId, accountId);
-    } else {
-        return profile;
+export async function ensureProfileExist(profileId: string, accountId: string): Promise<boolean> {
+    var hasProfile = await profiles.has(profileId, accountId);
+
+    if (!hasProfile) {
+        const success = await createProfile(profileId, accountId);
+
+        if (!success) {
+            return undefined;
+        }
+    }
+
+    return true;
+}
+
+export class Profile implements Omit<types.Profile, 'items'> {
+    constructor(profileId: types.ProfileID, accountId: string) {
+        this.accountId = accountId;
+        this.profileId = profileId;
+    }
+
+
+    accountId: string;
+    profileId: types.ProfileID;
+
+    stats: types.Stats;
+    _id?: string;
+    commandRevision: number;
+    created: string;
+    rvn: number;
+    updated: string;
+    version?: string;
+    wipeNumber: number;
+
+    baseRvn: number;
+
+    async init() {
+        const infos = await profiles.getInfos(this.profileId, this.accountId);
+        this.commandRevision = infos.commandRevision;
+        this.created = infos.created;
+        this.rvn = infos.rvn;
+        this.baseRvn = infos.rvn;
+        this.stats = infos.stats;
+        this.updated = infos.updated;
+        this.version = infos.version;
+        this.wipeNumber = infos.wipeNumber;
+    }
+
+    getItem(itemId: string): Promise<types.ItemValue | undefined> {
+        return profiles.getItem(itemId, this.profileId, this.accountId);
+    }
+
+    addItem(itemId: string, itemValue: types.ItemValue) {
+        return profiles.addItem(itemId, itemValue, this.profileId, this.accountId);
+    }
+
+    removeItem(itemId: string) {
+        return profiles.removeItem(itemId, this.profileId, this.accountId);
+    }
+
+    setItemAttribute(itemId: string, attributeName: string, attributeValue: any) {
+        return profiles.setItemAttr(itemId, attributeName, attributeValue, this.profileId, this.accountId);
+    }
+
+    getFullProfile(): Promise<types.Profile | undefined> {
+        return profiles.get(this.profileId, this.accountId);
+    }
+
+    bumpRvn(respone: mcpResponse | mcpResponse['multiUpdate'][0], command = true) {
+        this.rvn++;
+        if (command) {
+            this.commandRevision++;
+        }
+        respone.profileRevision = this.rvn;
+        respone.profileCommandRevision = this.commandRevision;
+
+        return profiles.setRevision(this.rvn, this.profileId, this.accountId);
     }
 }
 
-export async function createProfile(profileId: string, accountId: string) {
-    var profile: profileTypes.Profile | undefined = undefined;
+/*
+export async function getOrCreate(profileId: string, accountId: string): Promise<types.Profile | undefined> {
+    const existOrCreated = ensureProfileExist(profileId, accountId);
 
-    switch (profileId) {
-        case 'athena': profile = createAthena(accountId); break;
-        case 'common_core': profile = createCommonCore(accountId); break;
-        default: return undefined;
+    if (!existOrCreated) {
+        return undefined;
     }
 
-    await profiles.add(profileId, accountId, profile);
+    const versionUpdate = versions.find(x => x.profileId == profileId);
+
+    if (versionUpdate && profile.version != versionUpdate.data.version) {
+        profile.items = Object.assign(
+            profile.items,
+            Object.fromEntries(versionUpdate.data.items.map(item => [randomUUID(), item]))
+        )
+
+        profile.stats.attributes = Object.assign(
+            profile.stats.attributes,
+            versionUpdate.data.stats
+        )
+
+        profile.version = versionUpdate.data.version;
+        profile.rvn++;
+
+        profiles.add(profileId, accountId, profile);
+    }
 
     return profile;
+}*/
+
+interface handler {
+    handle: (accountId: string) => Promise<types.Profile>,
+    profileId: string;
 }
 
-function createAthena(accountId: string): profileTypes.Profile {
-    const loadout = randomUUID();
-    return {
-        "created": new Date().toISOString(),
-        "updated": new Date().toISOString(),
-        "rvn": 1,
-        "wipeNumber": 1,
-        "accountId": accountId,
-        "profileId": 'athena',
-        "items": {
-            [loadout]: {
-                "templateId": "CosmeticLocker:cosmeticlocker_athena",
-                "attributes": {
-                    "locker_slots_data": {
-                        "slots": {
-                            "Character": {
-                                "items": new Array(1).fill(null),
-                                "activeVariants": new Array(1).fill(null)
-                            },
-                            "Backpack": {
-                                "items": new Array(1).fill(null),
-                                "activeVariants": new Array(1).fill(null)
-                            },
-                            "Pickaxe": {
-                                "items": new Array(1).fill(null),
-                                "activeVariants": new Array(1).fill(null)
-                            },
-                            "Dance": {
-                                "items": new Array(6).fill(null),
-                                "activeVariants": new Array(6).fill(null)
-                            },
-                            "ItemWrap": {
-                                "items": new Array(8).fill(null),
-                                "activeVariants": new Array(8).fill(null)
-                            },
-                            "Glider": {
-                                "items": new Array(1).fill(null),
-                                "activeVariants": new Array(1).fill(null)
-                            },
-                            "SkyDiveContrail": {
-                                "items": new Array(1).fill(null),
-                                "activeVariants": new Array(1).fill(null)
-                            },
-                            "LoadingScreen": {
-                                "items": new Array(1).fill(null),
-                                "activeVariants": new Array(1).fill(null)
-                            },
-                            "MusicPack": {
-                                "items": new Array(1).fill(null),
-                                "activeVariants": new Array(1).fill(null)
-                            }
-                        }
-                    },
-                    "use_count": 1,
-                    "banner_icon_template": "galileob",
-                    "banner_color_template": "standardbanner1",
-                    "locker_name": "",
-                    "item_seen": false,
-                    "favorite": false
-                },
-                "quantity": 1
-            }
-        },
-        "stats": {
-            "attributes": {
-                "use_random_loadout": false,
-                "past_seasons": [],
-                "season_match_boost": 0,
-                "loadouts": [loadout],
-                "style_points": 0,
-                "mfa_reward_claimed": false,
-                "rested_xp_overflow": 0,
-                "quest_manager": {
-                    "dailyLoginInterval": "2021-11-20T20:26:32.305Z",
-                    "dailyQuestRerolls": 1
-                },
-                "book_level": 1,
-                "season_num": 19,
-                "season_update": 1,
-                "book_xp": 0,
-                "creative_dynamic_xp": {
-                    "timespan": 21.362747192382812,
-                    "bucketXp": 0,
-                    "bankXp": 0,
-                    "bankXpMult": 1.0,
-                    "dailyExcessXpMult": 1.0,
-                    "currentDayXp": 0,
-                    "currentDay": -1
-                },
-                "permissions": [],
-                "battlestars": 0,
-                "battlestars_season_total": 0,
-                "alien_style_points": 0,
-                "party_assist_quest": "",
-                "lifetime_wins": 4,
-                "book_purchased": false,
-                "purchased_battle_pass_tier_offers": {},
-                "rested_xp_exchange": 0.4,
-                "level": 1,
-                "xp_overflow": 0,
-                "rested_xp": 162000,
-                "rested_xp_mult": 13.9,
-                "season_first_tracking_bits": [],
-                "accountLevel": 172,
-                "competitive_identity": {},
-                "inventory_limit_bonus": 0,
-                "pinned_quest": "",
-                "last_applied_loadout": loadout,
-                "daily_rewards": {},
-                "xp": 0,
-                "season_friend_match_boost": 0,
-                "purchased_bp_offers": [],
-                "last_match_end_datetime": new Date(0).toISOString(),
-                "last_stw_accolade_transfer_datetime": new Date(0).toISOString(),
-                "active_loadout_index": 0
-            }
-        },
-        "commandRevision": 0
-    };
-}
+const templatesDir = Path.join(__dirname, 'templates');
 
-function createCommonCore(accountId: string): profileTypes.Profile {
-    return {
-        "created": new Date().toISOString(),
-        "updated": new Date().toISOString(),
-        "rvn": 1,
-        "wipeNumber": 1,
-        "accountId": accountId,
-        'profileId': 'common_core',
-        "items": {
-            "Currency:MtxPurchased": {
-                "attributes": {
-                    "platform": "EpicPC"
-                },
-                "quantity": 0,
-                "templateId": "Currency:MtxPurchased"
-            }
-        },
-        "stats": {
-            "attributes": {
-                "mtx_affiliate": "Neonite",
-                "current_mtx_platform": "EpicPC",
-                "mtx_purchase_history": {}
-            }
-        },
-        'commandRevision': 0
+const templates = fs.readdirSync(templatesDir).map(
+    (name) => {
+        const module: handler = require(Path.join(templatesDir, name));
+        if (!module.handle) return undefined;
+
+        return {
+            execute: module.handle,
+            profileId: module.profileId,
+            filename: name
+        }
     }
+)
+
+
+export async function createProfile(profileId: string, accountId: string) {
+    const handler = templates.find(x => x.profileId == profileId);
+
+    if (!handler) {
+        return false;
+    }
+
+    const profile = await handler.execute(accountId);
+
+    profiles.set(profileId, accountId, profile);
+
+    return true;
 }

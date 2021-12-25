@@ -1,7 +1,13 @@
+import errors from '../../structs/errors'
 import { mcpResponse, Handleparams } from '../operations'
 import { Profile, ensureProfileExist } from '../profile'
-import { profile as types } from '../../structs/types';
-import errors from '../../structs/errors'
+import * as Path from 'path';
+import { validate, ValidationError } from 'jsonschema';
+import * as fs from 'fs'
+
+const schemaPath = Path.join(__dirname, '../../../resources/schemas/mcp/json/RemoveGiftBox.json');
+
+const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'))
 
 export const supportedProfiles = '*';
 
@@ -40,6 +46,44 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
         "command": config.command,
     }
 
+    const result = validate(config.body, schema);
+
+    if (!result.valid) {
+        console.log(result.errors[0].path)
+        const InvalidFields = result.errors.filter(x => x instanceof ValidationError).map(x => x)
+        throw errors.neoniteDev.internal.validationFailed.withMessage(``)
+    }
+
+    const giftBoxItemIds: any[] = config.body.giftBoxItemIds;
+
+    const removePromises : Array<Promise<void>> = [];
+
+    if (giftBoxItemIds &&
+        giftBoxItemIds instanceof Array &&
+        giftBoxItemIds.length > 0
+    ) {
+        for (let giftBoxItemId of giftBoxItemIds) {
+            const item = await profile.getItem(giftBoxItemId);
+            const isGiftBox = item.templateId.startsWith('GiftBox:');
+
+            if (isGiftBox) {
+                var promise = profile.removeItem(giftBoxItemId);
+                removePromises.push(promise);
+
+                response.profileChanges.push(
+                    {
+                        changeType: 'itemRemoved',
+                        itemId: giftBoxItemId
+                    }
+                )
+            }
+        }
+
+        await Promise.all(removePromises);
+
+        profile.bumpRvn(response);
+    }
+
     if (!bIsUpToDate) {
         response.profileChanges = [
             {
@@ -48,6 +92,9 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
             }
         ]
     }
+
+    response.profileRevision = profile.rvn;
+    response.profileCommandRevision = profile.commandRevision;
 
     return response;
 }

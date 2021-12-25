@@ -6,7 +6,7 @@ const { default: axios } = require('axios');
 const iniparser = require('config-ini-parser').ConfigIniParser;
 const checkMethod = require('../middlewares/Method');
 const MemoryStream = require('memory-stream');
-const { userAgentParse } = require('../middlewares/utilities')
+const cookieParser = require('cookie-parser');
 
 const Errors = require('../structs/errors');
 const { neoniteDev, ApiError } = Errors;
@@ -14,17 +14,18 @@ const { neoniteDev, ApiError } = Errors;
 const online = require('../online');
 
 const { CheckAuthorization, CheckClientAuthorization } = require('../middlewares/authorization');
-const cookieParser = require('cookie-parser');
+const { userAgentParse } = require('../middlewares/utilities')
 
 const app = express.Router();
 
 const hotfixPath = Path.join(__dirname, '../../cloudstorage/system');
-const settingsPath = Path.join(__dirname, '../../config/settings');
+const settingsPath = Path.join(__dirname, '../../saved');
 
 app.use(express.json());
-app.use(require('../MCP'))
 
 app.use(userAgentParse);
+app.use(require('../MCP').default)
+
 
 /**
  * @typedef {import('./../structs/types').Saved_Profile} Saved_Profile
@@ -202,7 +203,7 @@ app.get('/api/cloudstorage/user/:accountId', CheckAuthorization, (req, res) => {
         throw Errors.neoniteDev.authentication.notYourAccount;
     }
 
-    const dirPath = Path.join(settingsPath, req.auth.in_app_id)
+    const dirPath = Path.join(settingsPath, req.auth.account_id)
 
     if (!fs.existsSync(dirPath)) {
         return res.json([])

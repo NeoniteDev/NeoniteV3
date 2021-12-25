@@ -2,8 +2,17 @@ import { mcpResponse, Handleparams } from '../operations'
 import { Profile, ensureProfileExist } from '../profile'
 import { profile as types } from '../../structs/types';
 import errors from '../../structs/errors'
+import * as Path from 'path'
+import { validate } from 'jsonschema';
+import * as fs from 'fs';
 
-export const supportedProfiles = '*';
+const schemaPath = Path.join(__dirname, '../../../resources/schemas/mcp/json/SetMtxPlatform.json');
+
+const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'))
+
+export const supportedProfiles: types.ProfileID[] = [
+    'common_core',
+]
 
 export async function handle(config: Handleparams): Promise<mcpResponse> {
     const existOrCreated = await ensureProfileExist(config.profileId, config.accountId);
@@ -38,6 +47,12 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
         "profileCommandRevision": profile.commandRevision,
         "responseVersion": 1,
         "command": config.command,
+    }
+
+    const result = validate(config.body, schema);
+
+    if (!result.valid) {
+        console.log(result); return;
     }
 
     if (!bIsUpToDate) {

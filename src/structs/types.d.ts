@@ -604,6 +604,49 @@ export namespace profile {
         commandRevision: number;
     }
 
+    export interface Category {
+        items: string[],
+        activeVariants: {
+            "channel": string,
+            "active": string
+        }[]
+    }
+
+    export type categories =
+        'Backpack' |
+        'VictoryPose' |
+        'LoadingScreen' |
+        'Character' |
+        'Glider' | 'Dance' |
+        'CallingCard' |
+        'ConsumableEmote' |
+        'MapMarker' |
+        'Charm' |
+        'SkyDiveContrail' |
+        'Hat' |
+        'PetSkin' |
+        'ItemWrap' |
+        'MusicPack' |
+        'BattleBus' |
+        'Pickaxe' |
+        'VehicleDecoration'
+
+    export interface locker {
+        templateId: "CosmeticLocker:cosmeticlocker_athena",
+        attributes: {
+            locker_slots_data: {
+                slots: Record<categories, Category>
+            },
+            use_count: 1,
+            banner_icon_template: "galileob",
+            banner_color_template: "standardbanner1",
+            locker_name: "",
+            item_seen: false,
+            favorite: false
+        },
+        quantity: 1
+    }
+
     export interface ItemValue {
         templateId: string;
         attributes: {
@@ -1101,7 +1144,19 @@ export namespace profile {
         completion_s18_complete_darkjonesy_spookystory_q03_obj0?: number;
     }
 
-    export type ProfileID = "athena" | "common_core"
+    export type ProfileID =
+        "athena" |
+        "common_core" |
+        "campaign" |
+        "collection" |
+        "creative" |
+        "common_public" |
+        "profile0" |
+        "outpost0" |
+        "metadata" |
+        "collection_book_schematics0" |
+        "theater0" |
+        "collection_book_people0"
 
     export type Bucket =
         "BR" |
@@ -1224,6 +1279,7 @@ export namespace profile {
     }
 
     export interface Stats {
+        templateId?: string;
         attributes: {
             [key: string]: any
         };

@@ -1,0 +1,49 @@
+{
+    "$id": "http://example.com/example.json",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "default": {},
+    "description": "The root schema comprises the entire JSON document.",
+    "examples": [
+        {
+            "nodeId": "",
+            "rewardGraphId": "",
+            "rewardCfg": ""
+        }
+    ],
+    "required": [],
+    "title": "The root schema",
+    "type": "object",
+    "properties": {
+        "nodeId": {
+            "$id": "#/properties/nodeId",
+            "type": "string",
+            "title": "The nodeId schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                ""
+            ]
+        },
+        "rewardGraphId": {
+            "$id": "#/properties/rewardGraphId",
+            "type": "string",
+            "title": "The rewardGraphId schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                ""
+            ]
+        },
+        "rewardCfg": {
+            "$id": "#/properties/rewardCfg",
+            "type": "string",
+            "title": "The rewardCfg schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                ""
+            ]
+        }
+    },
+    "additionalProperties": true
+}

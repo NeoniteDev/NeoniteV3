@@ -3,7 +3,9 @@ import { Profile, ensureProfileExist } from '../profile'
 import { profile as types } from '../../structs/types';
 import errors from '../../structs/errors'
 
-export const supportedProfiles = '*';
+export const supportedProfiles: types.ProfileID[] = [
+    'profile0',
+]
 
 export async function handle(config: Handleparams): Promise<mcpResponse> {
     const existOrCreated = await ensureProfileExist(config.profileId, config.accountId);
