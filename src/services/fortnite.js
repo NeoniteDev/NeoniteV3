@@ -187,7 +187,7 @@ app.get('/api/cloudstorage/system/:filename', CheckClientAuthorization, (req, re
     }
 
     if (fs.existsSync(filePath)) {
-        const s_content = fs.readFileSync(filePath, 'utf-8').replaceAll('{CURRENT_HOST}', req.headers.host)
+        const s_content = fs.readFileSync(filePath, 'utf-8').replaceAll('{CURRENT_HOST}', req.get('host'))
         res.set('content-type', 'text/plain')
         return res.send(s_content);
     } else {

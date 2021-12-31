@@ -36,6 +36,20 @@ interface itemRemoved {
 
 type profileChange = fullProfileUpdate | itemAdded | itemAttrChanged | statModified | itemRemoved;
 
+export interface CatalogPurchase {
+    "type": "CatalogPurchase",
+    "primary": boolean,
+    "lootResult": {
+        "tierGroupName": string,
+        "items":{
+            "itemType": string,
+            "itemGuid": string,
+            "itemProfile": string,
+            "quantity": number
+        }[]
+    }
+}
+
 export interface mcpResponse {
     profileRevision: number,
     profileId: string,
@@ -43,10 +57,12 @@ export interface mcpResponse {
     multiUpdate?: Omit<mcpResponse, 'responseVersion' | 'serverTime' | 'multiUpdate' | 'command'>[],
     profileChanges: profileChange[],
     serverTime: Date,
+    notifications?: CatalogPurchase[]
     profileCommandRevision: number,
     responseVersion: 1,
     command: string
 }
+
 
 export interface profileRevisions {
     profileId: string,

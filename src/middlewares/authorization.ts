@@ -2,9 +2,7 @@ import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { JsonWebTokenError } from 'jsonwebtoken'
 import * as JWT from 'jsonwebtoken'
 import errors, { neoniteDev } from '../structs/errors';
-import { } from '../structs/types'
 import * as database from '../database/mysqlManager';
-import { info } from 'console';
 
 export async function CheckAuthorization(req: Request, res: Response, next: NextFunction) {
     if (!req.headers.authorization || req.headers.authorization.match(/^bearer /i) == null) {

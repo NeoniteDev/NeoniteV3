@@ -388,7 +388,7 @@ app.get('/api/public/account/:accountId/externalAuths', CheckAuthorization, (req
     res.json([]);
 });
 
-app.get('/api/public/account/', CheckAuthorization, (req, res) => {
+app.get('/api/public/account/', CheckAuthorization, async (req, res) => {
     if (!req.query.accountId) {
         return res.json([])
     }
@@ -403,12 +403,13 @@ app.get('/api/public/account/', CheckAuthorization, (req, res) => {
         throw errors.neoniteDev.account.toManyAccounts;
     }
 
+    const users = await database.users.gets(Ids);
 
     res.json(
-        Ids.map(x => {
+        users.map(x => {
             return {
-                id: x,
-                displayName: Buffer.from(x, 'hex').toString(),
+                id: x.accountId,
+                displayName: x.displayName,
                 passwordResetRequired: x === req.auth.account_id ? false : undefined,
                 externalAuths: {}
             }

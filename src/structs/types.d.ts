@@ -1,4 +1,5 @@
-import { Server } from "ws";
+import { Server } from "http";
+import { WebSocket } from "ws";
 import { IncomingMessage } from "http";
 import { EventEmitter } from "events";
 import { IRoute } from "express";

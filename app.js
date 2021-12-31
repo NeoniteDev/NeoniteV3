@@ -1,8 +1,9 @@
 const express = require('express');
 const fs = require('fs');
-const { neoniteDev } = require('./src/structs/errors');
+const { neoniteDev, default: errors } = require('./src/structs/errors');
 const package = require('./package.json');
 const statuses = require('statuses')
+const crypto = require('crypto')
 
 require('colors')
 
@@ -15,9 +16,14 @@ const app = express();
 app.set('etag', false)
 app.disable('x-powered-by');
 
-app.use(express.static('public'));
+app.use(express.static('resources/public'));
 
 app.use((req, res, next) => {
+    // URL Rewriting
+    if (req.path == '/logout' && 'path' in req.query) {
+        req.url = req.query.path;
+    }
+
     if (req.headers.accept && !req.headers.accept.includes('*/*')) {
         let oldSend = res.send;
 
@@ -27,7 +33,7 @@ app.use((req, res, next) => {
             const content_type = this.get('content-type');
 
             if (!req.accepts(content_type)) {
-                neoniteDev.requestTimedOut.apply(res);
+                errors.neoniteDev.basic.notAcceptable.apply(res);
                 return this;
             } else {
                 return res.send(data);
@@ -36,7 +42,7 @@ app.use((req, res, next) => {
     }
 
     res.setTimeout(10000, function () {
-        
+        errors.neoniteDev.internal.requestTimedOut.apply(res);
     })
 
     next()

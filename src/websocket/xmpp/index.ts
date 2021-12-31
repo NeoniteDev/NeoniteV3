@@ -1,13 +1,16 @@
-const Websocket = require('ws');
-const JWT = require('jsonwebtoken');
-const parser = require('xml-parser');
-const { create: builder } = require('xmlbuilder2');
-const { XMLBuilderImpl } = require('xmlbuilder2/lib/builder/XMLBuilderImpl');
-const { objects: builderObjects, namespaces, string: xmlStrings, build_server_error, validation, validate } = require('./xml.js');
-const path = require('path')
-const crypto = require('crypto')
+import * as websocket from 'ws';
+import parser from 'xml-parser';
+import { create as builder } from 'xmlbuilder2';
+import { XMLBuilderImpl } from 'xmlbuilder2/lib/builder';
+import { } from 'colors';
+import { XmppClient } from '../../structs/types';
+import * as crypto from 'crypto';
+import * as path from 'path';
+import Client from './client';
+import { xmppClients } from '../../structs/globals'
 
-const { xmppClients } = require('../../structs/globals')
+
+const { objects: builderObjects, namespaces, string: xmlStrings, build_server_error, validation, validate } = require('./xml.js');
 
 
 /**
@@ -17,10 +20,10 @@ const { xmppClients } = require('../../structs/globals')
 
 */
 
-/**
-* @type {Websocket.VerifyClientCallbackAsync}
-*/
-module.exports.VerifyClient = (info, callback) => {
+type verifyClientInfos = Parameters<websocket.VerifyClientCallbackAsync>['0'];
+type verifyClientCB = Parameters<websocket.VerifyClientCallbackAsync>['1'];
+
+export function verifyClient(info: verifyClientInfos, callback: verifyClientCB) {
     if (info.req.headers['sec-websocket-protocol'] != 'xmpp') {
         return callback(false, 400);
     }
@@ -28,73 +31,26 @@ module.exports.VerifyClient = (info, callback) => {
     callback(true)
 }
 
-/**
- * @param {Websocket} ws
- */
-module.exports.onConnection = (ws, req) => {
+export function onConnection(ws: websocket, req: verifyClientInfos['req']) {
+    const client: Client | undefined = undefined;
+
     console.log(`[${'XMPP'.yellow}]`, `New Connection`);
 
-    const id = crypto.randomUUID();
-    var bisAuthed = false
-
-    /** @type {Jwt} */
-    var jwt;
-
-    var bIsOpened = false;
-    var bBindedResource = false;
-    var resourcenumber = 1;
-
-
-    /** @type {XmppClient} */
-    const xmppClient = {};
-
-    xmppClient.Websocket = ws;
-
-    const _send = ws.send;
-
-    ws.send = function () {
-        if (arguments[0] instanceof XMLBuilderImpl) {
-            arguments[0] = arguments[0].root().end({ headless: true, prettyPrint: true })
-        }
-
-        _send.apply(this, arguments);
-    }
-
-    ws.onclose = function () {
-        if (xmppClients.includes(xmppClient)) {
-            xmppClients.remove(xmppClient);
-        }
-
-        xmppClients.forEach(client => {
-            client.Websocket.send(builder({
-                presence: {
-                    '@from': xmppClient.Jid,
-                    '@type': 'unavailable',
-                    status: {
-                        '#': xmppClient.presence ? JSON.stringify(xmppClient.presence) : 'Playing Fortnite'
-                    }
-                }
-            }))
-        })
-    }
-
     ws.onerror = function () {
-        if (bIsOpened) {
-            ws.send(
-                '<stream:error>\n' +
-                '    <internal-server-error\n' +
-                "        xmlns='urn:ietf:params:xml:ns:xmpp-streams'/>\n" +
-                '</stream:error>'
-            )
-        }
+        ws.send(
+            '<stream:error>\n' +
+            '    <internal-server-error\n' +
+            "        xmlns='urn:ietf:params:xml:ns:xmpp-streams'/>\n" +
+            '</stream:error>'
+        )
 
         ws.close(1011);
     }
 
     ws.onmessage = function ({ data: msg }) {
-        const xml = parser(msg).root;
+        const xml = parser(msg.toString()).root;
 
-        if (!xml && bIsOpened) {
+        if (!xml && client) {
             const build = builder({
                 'stream:error': {
                     '@xmlns:stream': 'http://etherx.jabber.org/streams',
@@ -246,7 +202,7 @@ module.exports.onConnection = (ws, req) => {
                                     }
                                 }
                             ).end({ headless: true });
-        
+
                             ws.send(build + '\n' + xmlStrings.close);
                             ws.close();
                             return;

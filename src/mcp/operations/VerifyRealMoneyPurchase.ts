@@ -1,15 +1,29 @@
-import errors from '../../structs/errors'
-import { mcpResponse, Handleparams } from '../operations'
+import { mcpResponse, Handleparams, CatalogPurchase } from '../operations'
 import { Profile, ensureProfileExist } from '../profile'
+import errors from '../../structs/errors'
 import * as Path from 'path';
 import { validate, ValidationError } from 'jsonschema';
 import * as fs from 'fs'
+import { pendingPurchases } from '../../database/mysqlManager';
+import { getCatalog } from '../../online';
 
-const schemaPath = Path.join(__dirname, '../../../resources/schemas/mcp/json/RemoveGiftBox.json');
+
+const schemaPath = Path.join(__dirname, '../../../resources/schemas/mcp/json/VerifyRealMoneyPurchase.json');
 
 const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'))
 
-export const supportedProfiles = '*';
+
+export const supportedProfiles = [
+    'common_core'
+]
+
+interface body {
+    appStore: "EpicPurchasingService",
+    appStoreId: symbol,
+    "receiptId": "EntitlementId",
+    "receiptInfo": symbol,
+    "purchaseCorrelationId": "E9158CCB4A589A32F55581B80C8825BB"
+}
 
 export async function handle(config: Handleparams): Promise<mcpResponse> {
     const existOrCreated = await ensureProfileExist(config.profileId, config.accountId);
@@ -41,6 +55,7 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
         "profileChangesBaseRevision": profile.rvn,
         "profileChanges": [],
         "serverTime": new Date(),
+        "notifications": [],
         "profileCommandRevision": profile.commandRevision,
         "responseVersion": 1,
         "command": config.command,
@@ -54,36 +69,26 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
         throw errors.neoniteDev.internal.validationFailed.withMessage(`Validation Failed. Invalid fields were [${invalidFields}]`).with(`[${invalidFields}]`)
     }
 
-    const giftBoxItemIds: any[] = config.body.giftBoxItemIds;
+    const pendingPurchase = await pendingPurchases.getAll({ accountId: config.accountId });
+    const Flatcatalog = (await getCatalog()).storefronts.flatMap((x) => x.catalogEntries)
 
-    const removePromises : Array<Promise<void>> = [];
+    const purchases = pendingPurchase.map((x) => {
+        var catalogItems = x.offers.map(offId =>
+            Flatcatalog.find(y => y.appStoreId.includes(offId))
+        );
 
-    if (giftBoxItemIds &&
-        giftBoxItemIds instanceof Array &&
-        giftBoxItemIds.length > 0
-    ) {
-        for (let giftBoxItemId of giftBoxItemIds) {
-            const item = await profile.getItem(giftBoxItemId);
-            const isGiftBox = item.templateId.startsWith('GiftBox:');
+        const fulfillmentIds = catalogItems
+            .filter(x => x.requirements.length == 1 && x.requirements[0].requirementType == 'DenyOnFulfillment')
+            .map(x => {
+                return x.requirements[0].requiredId;
+            });
 
-            if (isGiftBox) {
-                var promise = profile.removeItem(giftBoxItemId);
-                removePromises.push(promise);
-
-                response.profileChanges.push(
-                    {
-                        changeType: 'itemRemoved',
-                        itemId: giftBoxItemId
-                    }
-                )
-            }
-        }
-
-        await Promise.all(removePromises);
-
-        profile.bumpRvn(response);
-    }
-
+        return {
+            fulfillments: fulfillmentIds,
+            receipt: x.receiptId,
+            catalogItems: catalogItems
+        };
+    })
     if (!bIsUpToDate) {
         response.profileChanges = [
             {
@@ -92,9 +97,6 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
             }
         ]
     }
-
-    response.profileRevision = profile.rvn;
-    response.profileCommandRevision = profile.commandRevision;
 
     return response;
 }

@@ -1,4 +1,6 @@
 import * as mysql from 'mysql';
+import * as crypto from 'crypto';
+
 import { tokenInfo, profile as profileTypes } from '../structs/types';
 
 export interface Gift {
@@ -117,8 +119,7 @@ database.query(`CREATE TABLE IF NOT EXISTS tokens
 );
 `)
 
-database.query(`CREATE TABLE IF NOT EXISTS refresh_tokens
-(
+database.query(`CREATE TABLE IF NOT EXISTS refresh_tokens (
     token varchar(32) not null, 
     clientId varchar(32) not null,
     auth_method varchar(50) not null,
@@ -129,8 +130,16 @@ database.query(`CREATE TABLE IF NOT EXISTS refresh_tokens
     deviceId varchar(32),
     account_id varchar(32),
     displayName varchar(50),
-    in_app_id varchar(32)
-);
+    in_app_id varchar(32) 
+);`)
+
+database.query(`CREATE TABLE IF NOT EXISTS purchases (
+    purchaseToken VARCHAR(32) NOT NULL,
+    accountId VARCHAR(32) NOT NULL,
+    offers LONGTEXT NOT NULL,
+	ip_hash VARCHAR(32) NOT NULL,
+    receiptId VARCHAR(32)
+    );
 `)
 
 
@@ -515,34 +524,140 @@ export namespace users {
         }
     }
 
-    export async function getAll(user: Omit<findType, 'password'>) {
-        var type = user.accountId ? 'accountId' : user.displayName ? 'displayName' : user.email ? 'email' : undefined;
+    export function gets(userId: findType['accountId'][]): Promise<User[]> {
+        const validUsers = userId.filter(x => x.length == 32 && x.match(/^[0-9a-f]{8}[0-9a-f]{4}[0-5][0-9a-f]{3}[089ab][0-9a-f]{3}[0-9a-f]{12}$/) != null);
+        return query<User>(`SELECT * FROM Accounts WHERE accountId IN ?`, [userId]);
+    }
+}
+/*
+purchaseToken VARCHAR(32) NOT NULL,
+    accountId VARCHAR(32) NOT NULL,
+    offers LONGTEXT NOT NULL);
+ */
 
-        var findValue = user.accountId || user.displayName || user.email;
+export namespace pendingPurchases {
+    interface purchase {
+        purchaseToken: string,
+        offers: string[],
+        accountId: string,
+        ip_hash: string,
+        receiptId: string
+    }
 
-        if (!findValue || !type) {
-            throw new Error('Invalid value(s)');
+    const allowed = ['purchaseToken', 'offers', 'accountId', 'ip_hash', 'receiptId']
+
+    type dbpruchase = Omit<purchase, 'offers'> & { offers: string };
+
+    export async function getAll(value: Partial<Omit<purchase, 'offers'>>): Promise<purchase[]> {
+        const entries = Object.entries(value);
+
+        // @ts-ignore
+        if (value.offers) {
+            return undefined;
         }
 
-        var conditions = []
-
-        if (user.accountId) {
-            conditions.push(`accountId=${mysql.escape(user.accountId)}`)
+        if (entries.length <= 0) {
+            return undefined;
         }
 
-        if (user.email) {
-            conditions.push(`email=${mysql.escape(user.email)}`)
+        if (entries.map(x => x[0]).find(x => !allowed.includes(x))) {
+            return undefined;
         }
 
-        if (user.displayName) {
-            conditions.push(`displayName=${mysql.escape(user.displayName)}`)
+        if ('accountId' in value && typeof value.accountId != 'string' ||
+            'ip_hash' in value && typeof value.ip_hash != 'string' ||
+            'purchaseToken' in value && typeof value.purchaseToken != 'string' ||
+            'receiptId' in value && typeof value.receiptId != 'string'
+        ) {
+            return undefined;
         }
 
-        if (conditions.length <= 0) {
-            throw new Error('no conditions');
-        }
 
-        const users = await query(`SELECT * FROM Accounts WHERE ${conditions.join(' OR ')}`);
-        return users;
+        const contions = entries.map(([key, value]) => `\`${key}\` = ${mysql.escape(value)}`).join(' AND ');
+
+        const purchases = await query<dbpruchase>(`SELECT * FROM purchases WHERE ${contions}`);
+
+
+        return purchases.map((x) => {
+            return {
+                ...x,
+                offers: JSON.parse(x.offers)
+            }
+        });
+    }
+    export async function get(value: Partial<Omit<purchase, 'offers'>>): Promise<purchase | undefined> {
+        // @ts-ignore
+        if (value.offers) {
+            return undefined;
+        }
+        
+        const purchases = await getAll(value);
+        return purchases[0];
+    }
+
+    export async function add(param: purchase) {
+        try {
+            var purchase: dbpruchase = {
+                ...param,
+                offers: JSON.stringify(purchase.offers)
+            }
+
+            const entries = Object.entries(purchase);
+
+            if (entries.length != 4) {
+                return false;
+            }
+
+            if (!purchase.accountId || !purchase.ip_hash || !purchase.offers || !purchase.purchaseToken) {
+                return false;
+            }
+
+            if (typeof purchase.accountId != 'string' ||
+                typeof purchase.ip_hash != 'string' ||
+                typeof purchase.offers != 'object' ||
+                typeof purchase.purchaseToken != 'string') {
+                return false;
+            }
+
+            const columnsOrder = entries.flatMap(x => x.at(0)).join(', ');
+            const values = entries.flatMap(x => x.at(1));
+            const result = await query(`INSERT INTO purchases (${columnsOrder}) VALUES (?)`, [values])
+        } catch (e) { console.error(e); return false; }
+    }
+
+    export function setReceiptId(purchaseToken: string, receiptId: string) {
+        return query(`UPDATE Profiles SET receiptId = \`${receiptId}\` WHERE purchaseToken = ?`, [purchaseToken])
+    }
+
+    export async function remove(param: purchase) {
+        try {
+            const entries = Object.entries(param);
+
+            if (entries.length <= 0) {
+                return false;
+            }
+
+            if (entries.map(x => x[0]).find(x => !allowed.includes(x))) {
+                return false;
+            }
+
+            if ('accountId' in param && typeof param.accountId != 'string' ||
+                'ip_hash' in param && typeof param.ip_hash != 'string' ||
+                'offers' in param && typeof param.offers != 'object' ||
+                'purchaseToken' in param && typeof param.purchaseToken != 'string' ||
+                'receiptId' in param && typeof param.receiptId != 'string'
+            ) {
+                return false;
+            }
+
+
+            const contions = entries.map(([key, value]) => `\`${key}\` = ${mysql.escape(value)}`).join(' AND ');
+
+            if (contions.length <= 0) {
+                return false;
+            }
+
+            await query(`DELETE FROM tokens WHERE ${contions}`);
+        } catch (e) { console.error(e); return false; }
     }
 }

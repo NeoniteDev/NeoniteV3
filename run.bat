@@ -1,1 +1,1 @@
-nodemon --ignore config/
+start npx ts-node .

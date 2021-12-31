@@ -27,6 +27,7 @@
     "jsonwebtoken": "^8.5.1",
     "memory-stream": "^1.0.0",
     "mysql": "^2.18.1",
+    "node_cloudflare": "^0.0.6",
     "nodemon": "^2.0.12",
     "ts-node": "^10.4.0",
     "ws": "^7.5.6",
