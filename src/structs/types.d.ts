@@ -4,6 +4,7 @@ import { IncomingMessage } from "http";
 import { EventEmitter } from "events";
 import { IRoute } from "express";
 import * as party from './Party'
+import { ExecSyncOptionsWithStringEncoding } from "child_process";
 
 export interface partyPing {
     from: string;
@@ -41,6 +42,19 @@ export interface PartyConfig {
 export interface Credentials {
     Username: string,
     Password: string
+}
+
+export interface fulltokenInfo {
+    token: string,
+    account_id: string,
+    clientId: string,
+    displayName: string,
+    auth_method: string,
+    in_app_id: string,
+    internal: boolean,
+    expireAt: number,
+    client_service: string;
+    deviceId: string,
 }
 
 export interface tokenInfo {
@@ -154,23 +168,31 @@ export namespace Middlewares {
     }
 }
 
-interface XmppClient {
-    jwt: tokenInfo;
-    token: string;
-    Jid: string;
-    /** Jid without resource */
-    adress: string;
-    Websocket: WebSocket;
-    uuid: string;
-    partyId?: party;
-    presence?: object;
-}
 
 interface MatchmakingAuth {
     ticketType: string
     payload: string
     signature: string
 }
+
+export interface partyMember {
+    account_id: string,
+    meta: Record<string, string>,
+    connections: [
+        {
+            id: string,
+            connected_at: Date,
+            updated_at: Date,
+            yield_leadership: boolean,
+            meta: Record<string, string>
+        }
+    ],
+    revision: 0,
+    updated_at: Date,
+    joined_at: Date,
+    role: "CAPTAIN" | "MEMBER"
+}
+
 
 
 export type ArgumentTypes<F extends Function> = F extends (...args: infer A) => any ? A : never;

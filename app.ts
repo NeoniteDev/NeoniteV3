@@ -1,11 +1,12 @@
-const express = require('express');
-const fs = require('fs');
-const { neoniteDev, default: errors } = require('./src/structs/errors');
-const package = require('./package.json');
-const statuses = require('statuses')
-const crypto = require('crypto')
+import * as express from 'express';
+import { Request, Response, NextFunction } from 'express-serve-static-core';
+import * as fs from 'fs';
+import errors from './src/structs/errors';
+import * as statuses from 'statuses'
+import {} from './src/structs/types'
 
-require('colors')
+const packageFile = require('./package.json');
+const crypto = require('crypto')
 
 require('./src/structs/polyfill');
 
@@ -20,7 +21,7 @@ app.use(express.static('resources/public'));
 
 app.use((req, res, next) => {
     // URL Rewriting
-    if (req.path == '/logout' && 'path' in req.query) {
+    if (req.path == '/logout' && typeof req.query.path == 'string') {
         req.url = req.query.path;
     }
 
@@ -45,18 +46,14 @@ app.use((req, res, next) => {
         errors.neoniteDev.internal.requestTimedOut.apply(res);
     })
 
-    next()
+    next();
 });
 
-
-/**
- * @typedef {import("./src/structs/types").Layer} Layer
- */
-
 fs.readdirSync('./src/services').forEach(filename => {
-    const servicename = filename.replace(".js", "");
     if (!filename.endsWith('.js'))
         return;
+
+    const servicename = filename.replace(".js", "");
 
     try {
         app.use('/' + servicename, require(`./src/services/${filename}`))
@@ -70,30 +67,37 @@ fs.readdirSync('./src/services').forEach(filename => {
 app.use('/', require('./src/services/Uncategorized/index'));
 
 app.use((req, res) => {
-    res.status(404).send(`<h1>HTTP ERROR ${res.statusCode}</h1> <pre>${statuses[res.statusCode]}</pre>`);
+    res.status(404).send(`<h1>HTTP ERROR ${res.statusCode}</h1> <pre>Not Fund</pre>`);
 })
 
-app.use(/**
-    * @param {any} err
-    * @param {express.Request} req
-    * @param {express.Response} res
-    * @param {express.NextFunction} next
-    */
-    function (err, req, res, next) {
+app.use(
+    function (err: any, req: Request, res: Response, next: NextFunction) {
+        console.error(err);
+
         if (res.headersSent) {
             return;
         }
-        console.log(err)
-        res.status(err.status || 500).send(`<h1>HTTP ERROR ${res.statusCode}</h1> <pre>${statuses[res.statusCode]}</pre>`)
+
+        const statusCode: number = typeof err.status == 'number' ? err.status : 500;
+
+        res.status(statusCode).send(`
+            <h1>HTTP ERROR ${res.statusCode}</h1>
+            <pre>${statuses.message[res.statusCode]}</pre>
+        `)
     }
 )
 
-app.httpServer = app.listen(package.config.port, function () {
-    console.log(`[${`API`.cyan}] `, 'Listening on port', app.httpServer.address().port);
+require('colors');
+
+
+
+app.httpServer = app.listen(packageFile.config.port, function () {
+    // @ts-ignore
+    console.log(`[${`API`.cyan}]`, 'Listening on port', app.httpServer.address().port);
 })
 
 process.on('uncaughtException', (error) => console.error(error))
 
+require('./src/tcp/xmpp');
 require('./src/websocket')(app)
 require('./src/udp/ping');
-// require('./src/tcp/xmpp');

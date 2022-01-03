@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { CheckAuthorization } from '../middlewares/authorization'
-import * as checkMethod from '../middlewares/Method.js'
+import * as checkMethod from '../middlewares/Method'
 import * as Path from 'path';
 import errors from '../structs/errors';
 import * as operations from './operations';

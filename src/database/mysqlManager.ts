@@ -36,10 +36,18 @@ export interface Stats {
 
 export interface Profiles {
     accountId: string;
-    athena: Profile[],
-    commom_core: Profile[],
-    creative: Profile[],
-    common_public: Profile[]
+    athena: Profile,
+    commom_core: Profile,
+    creative: Profile,
+    common_public: Profile
+}
+
+interface ProfilesDB {
+    accountId: string;
+    athena: string,
+    commom_core: string,
+    creative: string,
+    common_public: string
 }
 
 const database = mysql.createConnection({
@@ -102,7 +110,6 @@ export interface profile {
 database.query('CREATE TABLE IF NOT EXISTS Accounts (displayName varchar(50) not null, accountId varchar(32) not null, email varchar(255) not null, password varchar(255) not null);')
 database.query('CREATE TABLE IF NOT EXISTS ExchangeCodes (code varchar(32) not null, accountId varchar(32) not null, createdAt BIGINT not null, expireAt BIGINT not null);')
 database.query('CREATE TABLE IF NOT EXISTS WebTokens (token varchar(32) not null, accountId varchar(32), expireAt BIGINT);')
-database.query('CREATE TABLE IF NOT EXISTS Profiles (accountId varchar(32) not null, athena LONGTEXT, common_core LONGTEXT, campaign LONGTEXT, creative LONGTEXT, collections LONGTEXT);')
 database.query(`CREATE TABLE IF NOT EXISTS tokens
 (
     token varchar(32) not null, 
@@ -140,6 +147,22 @@ database.query(`CREATE TABLE IF NOT EXISTS purchases (
 	ip_hash VARCHAR(32) NOT NULL,
     receiptId VARCHAR(32)
     );
+`)
+
+database.query(`CREATE TABLE IF NOT EXISTS Profiles (
+    accountId varchar(32) not null,
+    athena LONGTEXT,
+    campaign LONGTEXT,
+    collections LONGTEXT,
+    collection_book_people0 LONGTEXT,
+    collection_book_schematics0 LONGTEXT,
+    common_core LONGTEXT,
+    common_public LONGTEXT,
+    creative LONGTEXT,
+    metadata LONGTEXT,
+    outpost0 LONGTEXT,
+    profile0 LONGTEXT,
+    theater0 LONGTEXT);
 `)
 
 
@@ -382,10 +405,12 @@ export namespace profiles {
     }
 
 
-    export async function get(profileId: string, accountId: string): Promise<profileTypes.Profile | undefined> {
-        const profiles = (await query<Profiles>(`SELECT ${profileId} FROM Profiles WHERE accountId = ?`, [accountId]))[0];
+    export async function get(profileId: keyof Omit<Profiles, 'accountId'>, accountId: string): Promise<profileTypes.Profile | undefined> {
+        const profiles = (await query<ProfilesDB>(`SELECT ${profileId} FROM Profiles WHERE accountId = ?`, [accountId]))[0];
 
-        if (!profiles || !profiles[profileId]) {
+        const profile_s = profiles[profileId];
+
+        if (!profiles || !profile_s) {
             return undefined;
         }
 
@@ -425,7 +450,7 @@ export namespace webTokens {
 
 export namespace exchanges {
     // code varchar(32) not null, accountId varchar(32) not null, createdAt BIGINT not null, expireAt BIGINT not null
-    export async function add(code, accountId, created: Date, expire: Date) {
+    export async function add(code: string, accountId: string, created: Date, expire: Date) {
         database.query(`DELETE FROM ExchangeCodes WHERE expireAt < ?`, [Date.now()]);
 
         await query<ExchangeCode>(
@@ -524,7 +549,7 @@ export namespace users {
         }
     }
 
-    export function gets(userId: findType['accountId'][]): Promise<User[]> {
+    export function gets(userId: string[]): Promise<User[]> {
         const validUsers = userId.filter(x => x.length == 32 && x.match(/^[0-9a-f]{8}[0-9a-f]{4}[0-5][0-9a-f]{3}[089ab][0-9a-f]{3}[0-9a-f]{12}$/) != null);
         return query<User>(`SELECT * FROM Accounts WHERE accountId IN ?`, [userId]);
     }
@@ -553,15 +578,15 @@ export namespace pendingPurchases {
 
         // @ts-ignore
         if (value.offers) {
-            return undefined;
+            return [];
         }
 
         if (entries.length <= 0) {
-            return undefined;
+            return [];
         }
 
         if (entries.map(x => x[0]).find(x => !allowed.includes(x))) {
-            return undefined;
+            return [];
         }
 
         if ('accountId' in value && typeof value.accountId != 'string' ||
@@ -569,7 +594,7 @@ export namespace pendingPurchases {
             'purchaseToken' in value && typeof value.purchaseToken != 'string' ||
             'receiptId' in value && typeof value.receiptId != 'string'
         ) {
-            return undefined;
+            return [];
         }
 
 
@@ -590,7 +615,7 @@ export namespace pendingPurchases {
         if (value.offers) {
             return undefined;
         }
-        
+
         const purchases = await getAll(value);
         return purchases[0];
     }
@@ -599,7 +624,7 @@ export namespace pendingPurchases {
         try {
             var purchase: dbpruchase = {
                 ...param,
-                offers: JSON.stringify(purchase.offers)
+                offers: JSON.stringify(param.offers)
             }
 
             const entries = Object.entries(purchase);

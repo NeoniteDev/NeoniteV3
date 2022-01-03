@@ -19,6 +19,7 @@ var client_token: clientToken | undefined;
 
 export async function getClientToken() {
     var isInvalid =
+        !client_token ||
         !client_token.access_token ||
         new Date(client_token.expires_at).getTime() <= Date.now() ||
         (await
@@ -48,6 +49,8 @@ export async function getClientToken() {
             client_token = request.data;
         }
     }
+
+    return client_token;
 }
 
 
@@ -60,15 +63,4 @@ export async function getCatalog() {
     }
 
     return catalog;
-}
-
-module.exports = {
-    async getCatalog() {
-        await checkCatalog();
-        return catalog;
-    },
-    async getClientToken() {
-        await checkToken();
-        return client_token;
-    }
 }

@@ -4,13 +4,13 @@ interface ResponseBody {
     errorCode: string
     errorMessage: string
     messageVars?: string[]
-    numericErrorCode: number
+    numericErrorCode: number | null
     originatingService: 'neonite'
     intent: 'unknown'
 }
 
 export class ApiError {
-    constructor(code: string, message: string, numeric: number, statusCode: number) {
+    constructor(code: string, message: string, numeric: number | null, statusCode: number) {
         this.statusCode = statusCode;
 
         this.response = {
@@ -31,7 +31,7 @@ export class ApiError {
         return this;
     }
 
-    with(...messagevars): typeof this {
+    with(...messagevars: string[]): typeof this {
         if (!this.response.messageVars) {
             this.response.messageVars = messagevars;
         } else {

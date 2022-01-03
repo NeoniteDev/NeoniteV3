@@ -1,10 +1,10 @@
-const { create: builder } = require('xmlbuilder2')
-const xmlparser = require('xml-parser')
+import { create as builder } from 'xmlbuilder2';
+import { Node } from 'xml-parser';
 
-module.exports.objects = {
+
+export const objects = Object.freeze({
    open: {
       open: {
-         '@id': 'PLACEHOLDER',
          '@xmlns': 'urn:ietf:params:xml:ns:xmpp-framing',
          '@from': 'neonite.dev'
       }
@@ -41,9 +41,16 @@ module.exports.objects = {
          'not-authorized': {}
       }
    },
-   'not_binded': function (xml_string) {
-      const build = builder(xml_string).root()
-      const xml = xmlparser(xml_string).root;
+   'system-shutdown': {
+      'stream:error': {
+         'system-shutdown': { '@xmlns': 'urn:ietf:params:xml:ns:xmpp-streams' }
+      }
+   }
+})
+
+export const buildFunctions = Object.freeze({
+   notBinded(msg: string, xml: Node) {
+      const build = builder(msg).root()
 
       build.att('type', 'error');
 
@@ -52,7 +59,7 @@ module.exports.objects = {
       }
 
       build.ele(
-         ErrorObject(
+         error(
             401,
             'auth',
             'not-authorized',
@@ -60,20 +67,19 @@ module.exports.objects = {
          )
       )
 
-      return build.toObject();
+      return build;
    },
-   'service_unavailable': function (xml_string) {
-      const build = builder(xml_string).root();
-      const xml = xmlparser(xml_string).root;
+   serviceUnavailable(msg: string, xml: Node) {
+      const build = builder(msg).root();
 
       build.att('type', 'error');
 
       if (!xml.attributes.xmlns) {
-         build2.att('xmlns', 'jabber:client');
+         build.att('xmlns', 'jabber:client');
       }
 
       build.ele(
-         ErrorObject(
+         error(
             503,
             'cancel',
             'service-unavailable',
@@ -81,16 +87,10 @@ module.exports.objects = {
          )
       );
 
-      return build.toObject();
+      return build;
    },
-   'system-shutdown': {
-      'stream:error': {
-         'system-shutdown': { '@xmlns': 'urn:ietf:params:xml:ns:xmpp-streams' }
-      }
-   },
-   'feature_not_implemented': function (xml_string) {
-      const build = builder(xml_string).root();
-      const xml = xmlparser(xml_string).root;
+   sessionNotAuthorized(msg: string, xml: Node, message = 'Session is not yet authorized.') {
+      const build = builder(msg).root();
 
       build.att('type', 'error');
 
@@ -99,39 +99,17 @@ module.exports.objects = {
       }
 
       build.ele(
-         ErrorObject(
-            501,
-            'cancel',
-            'feature-not-implemented',
-            'Feature not supported yet.'
-         )
-      );
-
-      return build.toObject();
-   },
-   /** @returns {{"error":{"@code":"5","@type":"type","sus":{"@xmlns":"urn:ietf:params:xml:ns:xmpp-stanzas"},"text":{"@xmlns":"urn:ietf:params:xml:ns:xmpp-stanzas","@xml:lang":"en","#":"text"}}}} */
-   'session_not_authorized': function (xml_string) {
-      const build = builder(xml_string).root();
-      const xml = xmlparser(xml_string).root;
-
-      build.att('type', 'error');
-
-      if (!xml.attributes.xmlns) {
-         build.att('xmlns', 'jabber:client');
-      }
-
-      build.ele(
-         ErrorObject(
+         error(
             401,
             'auth',
             'not-authorized',
-            'Session is not yet authorized.'
+            message
          )
       );
 
-      return build.toObject();
+      return build;
    },
-   build_tigase_error(msg, xml) {
+   tigaseError(msg: string, xml: Node) {
       const build = builder(msg).root();
       build.att('id', 'tigase-error-tigase')
       build.removeAtt('to');
@@ -146,18 +124,52 @@ module.exports.objects = {
       });
 
       return build;
+   },
+   featureNotImplemented(msg: string, xml: Node) {
+      const build = builder(msg).root();
+      build.att('type', 'error');
+
+      if (!xml.attributes.xmlns) {
+         build.att('xmlns', 'jabber:client');
+      }
+
+      build.ele(
+         error(
+            501,
+            'cancel',
+            'feature-not-implemented',
+            'Feature not supported yet.'
+         )
+      );
+
+      return build;
+   },
+   buildError(msg: string, xml: Node) {
+      const build = builder(msg).root();
+      build.removeAtt('from');
+      build.removeAtt('to');
+      build.att('from', xml.attributes.to || 'Neonite.dev');
+      build.att('to', xml.attributes.from || 'null');
+
+      return build;
    }
-}
-module.exports.string = {
+})
+
+export const rawXML = Object.freeze({
    'system-shutdown':
       '<stream:error>\n' +
       '\t<system-shutdown\n' +
       "\t\txmlns='urn:ietf:params:xml:ns:xmpp-streams'/>\n" +
       '</stream:error>',
-   'close': "<close xmlns='urn:ietf:params:xml:ns:xmpp-framing' from='Neonite.dev'/>"
-}
+   'internal-server-error': '<stream:error>\n' +
+      '    <internal-server-error\n' +
+      "        xmlns='urn:ietf:params:xml:ns:xmpp-streams'/>\n" +
+      '</stream:error>',
 
-module.exports.namespaces = {
+   close: "<close xmlns='urn:ietf:params:xml:ns:xmpp-framing' from='Neonite.dev'/>"
+})
+
+export const namespaces = Object.freeze({
    'xmpp-framing': 'urn:ietf:params:xml:ns:xmpp-framing',
    'xmpp-sasl': 'urn:ietf:params:xml:ns:xmpp-sasl',
    'xmpp-bind': 'urn:ietf:params:xml:xmpp-bind',
@@ -167,22 +179,11 @@ module.exports.namespaces = {
    'delay': 'urn:xmpp:delay',
    'client': 'jabber:client',
    'iq-auth': 'http://jabber.org/features/iq-auth',
-}
+})
 
-module.exports.build_server_error = function (xml_string) {
-   const xml = xmlparser(xml_string).root;
-   const build = builder(msg).root();
-   build.removeAtt('from');
-   build.removeAtt('to');
-   build.att('from', xml.attributes.to || 'Neonite.dev');
-   build.att('to', xml.attributes.from || 'null');
-
-   return build;
-}
-
-const { readFileSync } = require('fs');
-const xmlLint = require('xmllint');
-const path = require('path');
+import { readFileSync } from 'fs';
+import * as xmlLint from 'xmllint';
+import * as path from 'path';
 
 const schemas_dir = path.join(__dirname, 'schemas');
 
@@ -195,26 +196,16 @@ const schemas = {
    binding: readFileSync(path.join(schemas_dir, 'bind.xsd'), 'utf-8')
 }
 
-/**
- * 
- * @param {String} xml 
- * @param {keyof schemas} type
- */
-module.exports.validate = (xml, type) => {
+
+export function validate(xml: string, type: keyof typeof schemas) {
    return xmlLint.validateXML({
       xml,
       schema: schemas[type]
    })
 }
 
-/**
- * 
- * @param {Number} status 
- * @param {String} type 
- * @param {String} elename 
- * @param {String} text 
- */
-function ErrorObject(status, type, elename, text) {
+
+function error(status: number, type: string, elename: string, text: string) {
    return {
       error: {
          '@code': status.toString(),

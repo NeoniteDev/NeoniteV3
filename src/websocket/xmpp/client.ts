@@ -1,33 +1,50 @@
 import { WebSocket } from "ws";
 import * as crypto from 'crypto';
-import { tokenInfo } from "../../structs/types";
+import { fulltokenInfo, tokenInfo } from "../../structs/types";
+import { xmppClients } from '../../structs/globals'
+import party from '../../structs/Party'
+import { rawXML } from "./xml";
+import { states } from "./index";
 
-interface config {
+
+
+export interface config {
     websocket: WebSocket,
     resource: string,
+    authorization: fulltokenInfo,
+    id: string,
+    /** {adress}/{resource} */
+    jabberId: string,
+    /** jabberId without resource */
     adress: string,
-    authorization: tokenInfo,
-    id: string
+    state:states
 }
 
-export default class {
+export default class implements config {
     constructor(config: config) {
         this.websocket = config.websocket;
         this.id = config.id;
         this.adress = config.adress;
         this.authorization = config.authorization;
         this.resource = config.resource;
-
-        
+        this.jabberId = config.jabberId;
     }
-    
+
+    party?: party;
     websocket: WebSocket;
     resource: string;
-    adress: string;
-    authorization: tokenInfo;
+    authorization: fulltokenInfo;
     id: string;
+    state: states = states.binded;
+
+    /** {adress}/{resource} */
+    jabberId: string;
+    /** jabberId without resource */
+    adress: string;
 
     destroy() {
-
+        this.websocket.send(rawXML.close);
+        this.websocket.close();
+        xmppClients.remove(this);
     }
 }

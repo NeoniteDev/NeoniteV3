@@ -131,6 +131,8 @@ app.get('/api/cloudstorage/system/LanguagePatches.ini', CheckClientAuthorization
 
     const client_token = await online.getClientToken();
 
+    console.log(client_token);
+
     const config = {
         headers: { Authorization: `Bearer ${client_token.access_token}` },
         validateStatus: () => true

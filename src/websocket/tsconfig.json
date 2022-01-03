@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "moduleResolution": "Node"
+    },
+    "extends": "../../tsconfig.json",
+    "exclude": [
+        "node_modules"
+    ],
+    "include": [
+        "./*/*.ts"
+    ]
+}

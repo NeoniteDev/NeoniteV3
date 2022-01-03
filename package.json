@@ -2,11 +2,10 @@
   "name": "neonite",
   "version": "3.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc --build",
-    "run": "node app.js"
+    "run": "npx ts-node ."
   },
   "author": "BeatYT",
   "license": "Neolicense",
@@ -15,7 +14,11 @@
   },
   "dependencies": {
     "@cspotcode/source-map-support": "^0.7.0",
+    "@types/colors": "^1.2.1",
+    "@types/statuses": "^2.0.0",
     "@types/ws": "^8.2.2",
+    "@types/xml-parser": "^1.2.30",
+    "@types/xmlbuilder": "^11.0.1",
     "axios": "^0.21.4",
     "colors": "^1.4.0",
     "config-ini-parser": "^1.5.9",
@@ -27,14 +30,13 @@
     "jsonwebtoken": "^8.5.1",
     "memory-stream": "^1.0.0",
     "mysql": "^2.18.1",
-    "node_cloudflare": "^0.0.6",
     "nodemon": "^2.0.12",
+    "statuses": "^2.0.1",
     "ts-node": "^10.4.0",
+    "typescript": "^4.5.4",
     "ws": "^7.5.6",
     "xml-parser": "^1.2.1",
-    "xmlbuilder2": "^3.0.2",
-    "xmllint": "github:Beat-YT/xml.js",
-    "xmpp.js": "^0.12.0"
+    "xmlbuilder2": "^3.0.2"
   },
   "config": {
     "port": 80

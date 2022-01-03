@@ -1,14 +1,24 @@
 const net = require('net');
 const builder = require('xmlbuilder2');
 const tls = require('tls');
+const parser = require('xml-parser');
+const fs = require('fs');
+const path = require('path');
+const { randomUUID } = require('crypto');
+require('colors');
 
 const server = net.createServer();
 
 var baseLog = `[${'TCP XMPP'.cyan}]`;
 
-/**
- * @typedef {import('../structs/types')}
- */
+
+const options = {
+    key: fs.readFileSync(path.join('certs/server.key')),
+    cert: fs.readFileSync('certs/server/server.crt'),
+    ca: fs.readFileSync('certs/ca/ca.crt'), // authority chain for the clients
+    requestCert: true, // ask for a client cert
+    //rejectUnauthorized: false, // act on unauthorized clients at the app level
+};
 
 server.on('connection', (socket) => {
     console.log(baseLog, 'new connection');
@@ -18,20 +28,20 @@ server.on('connection', (socket) => {
         const message = data.toString();
         if (message.startsWith('<stream:stream')) {
 
-            var stream_open= builder.create(
+            var stream_open= builder.fragment(
                 {
                     'stream:stream': {
                         '@xmlns': 'jabber:client',
                         '@from': 'neonite.dev',
-                        '@id': '++TR84Sm6A3hnt3Q065SnAbbk3Y=',
+                        '@id': randomUUID(),
                         '@xml:lang': 'en',
                         '@version': '1.0',
                         '@xmlns:stream': 'http://etherx.jabber.org/streams'
                     }
                 }
-            ).end().removeLast('/');
+            ).end().replace(/\/[>]$/g, '>');
 
-            var stream_feature = builder.create({
+            var stream_feature = builder.fragment({
                 'stream:features': {
                     '@xmlns:stream': 'http://etherx.jabber.org/streams',
                     '@xmlns': 'urn:ietf:params:xml:ns:xmpp-sasl',
@@ -60,7 +70,7 @@ server.on('connection', (socket) => {
             }).end({ headless:true })
 
             socket.write(proceed);
-            socket.wrap(new tls.TLSSocket(socket))
+            socket.wrap(new tls.TLSSocket(socket, options))
         }
         socket.resume();
         console.log(baseLog, 'data'.bgYellow, message);
@@ -84,4 +94,4 @@ server.on('listening', () => {
 })
 
 // since it doesn't work.
-// server.listen(5222);
+server.listen(5222);

@@ -1,35 +1,27 @@
 const { throws } = require('assert');
 const { randomUUID } = require('crypto');
-const { create: builder } = require('xmlbuilder2');
-const XmppMessage = require('./xmpp_message');
 
-function WithoutProperties(obj, ...keys) {
-    var target = {};
-    for (var i in obj) {
-        if (keys.indexOf(i) >= 0) continue;
-        if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
-        target[i] = obj[i];
-    }
-    return target;
+import xmppMessage from './xmpp_message'
+import Client from '../websocket/xmpp/client'
+import errors from './errors';
+import { PartyConfig, partyMember } from './types';
+
+interface metaUpdate {
+    update: Record<string, string>,
+    delete: string[]
 }
 
-/**
- * @typedef {import('./types').XmppClient} XmppClient
- * @typedef {import('./types').PartyConfig} PartyConfig
- */
 class Party {
-    /** @param {XmppClient} creator */
-    constructor(creator, config, join_info, meta) {
-        /** @type {string} */
+    constructor(creator: Client, config: any, join_info: any, meta: any) {
         this.id = randomUUID();
 
         this.members = [
             {
-                account_id: creator.jwt.in_app_id,
+                account_id: creator.authorization.account_id,
                 meta: join_info.connection.meta || {},
                 connections: [
                     {
-                        id: creator.Jid,
+                        id: creator.jabberId,
                         connected_at: new Date(),
                         updated_at: new Date(),
                         yield_leadership: false,
@@ -40,15 +32,13 @@ class Party {
                 updated_at: new Date(),
                 joined_at: new Date(),
                 role: "CAPTAIN",
-                xmppClient: creator
+                //xmppClient: creator
             }
         ];
 
-        this.meta = meta;
+        this.clients = [ creator ]
 
-        /**
-         * @type {PartyConfig}
-         */
+        this.meta = meta;
         this.config = Object.assign({
             type: 'DEFAULT',
             joinability: 'INVITE_AND_FORMER',
@@ -68,13 +58,23 @@ class Party {
         this.invites = [];
     }
 
+    id: string;
+    created_at: Date;
+    config: PartyConfig;
+    updated_at: Date;
+    revision: number;
+    invites: any[];
+    meta: Record<string, string>;
+    members: partyMember[]
+    clients: Client[];
+
     partyInfo() {
         return {
             id: this.id,
             created_at: this.created_at,
             updated_at: this.updated_at,
             config: this.config,
-            members: this.members.map(x => WithoutProperties(x, 'xmppClient')),
+            members: this.members,
             applicants: [],
             meta: this.meta,
             invites: this.invites,
@@ -82,8 +82,7 @@ class Party {
         }
     }
 
-    /** @param {{ update: { [key: string]: string  } delete: string[]}} meta */
-    Update(meta) {
+    Update(meta: metaUpdate) {
         if ('update' in meta && Object.keys(meta.update).length > 0) {
             Object.assign(this.meta, meta.update);
         }
@@ -96,6 +95,12 @@ class Party {
 
         this.revision++;
 
+        var captain = this.members.find(x => x.role == "CAPTAIN");
+
+        if (!captain) {
+            throw errors.neoniteDev.party.memberNotFound.withMessage('cannot find party leader.');
+        }
+
         this.sendMessageToAll(
             {
                 sent: new Date().toISOString(),
@@ -103,7 +108,7 @@ class Party {
                 revision: this.revision,
                 ns: "Fortnite",
                 party_id: this.id,
-                captain_id: this.members.find(x => x.role == "CAPTAIN").account_id,
+                captain_id: captain.account_id,
                 party_state_removed: meta.delete || [],
                 party_state_updated: meta.update || {},
                 party_state_overridden: {},
@@ -118,12 +123,15 @@ class Party {
         )
     }
 
-    /** 
-     * @param {string} memberId
-     */
-    UpdateMember(memberId, meta) {
+
+    UpdateMember(memberId: string, meta: metaUpdate) {
         var member = this.members.find(x => x.account_id == memberId);
 
+        if (!member) {
+            throw errors.neoniteDev.party.memberNotFound.with(memberId);
+        }
+
+        // @ts-ignore
         Object.entries(meta.update).forEach(([key, value]) => { member.meta[key] = value })
 
         this.sendMessageToAll(
@@ -149,40 +157,38 @@ class Party {
 
     RemoveMember() { }
 
-    /** @param {XmppClient} xmppClient */
-    addMember(xmppClient, joinInfo, meta) {
-        var member = {
-            account_id: xmppClient.jwt.in_app_id,
+    addMember(client: Client, joinInfo: any, meta: Record<string, string>) {
+        var member: partyMember = {
+            account_id: client.authorization.account_id,
             connections: [joinInfo.connection],
-            joined_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
+            joined_at: new Date(),
+            updated_at: new Date(),
             meta: joinInfo.meta,
             revision: 0,
-            role: "MEMBER",
-            xmppClient: xmppClient
-        };
+            role: "MEMBER"
+        }
 
         this.members.push(member);
-
+        this.clients.push(client);
 
         this.sendMessageToAll(
             {
-                sent: new Date().toISOString(),
+                sent: new Date(),
                 type: "com.epicgames.social.party.notification.v0.MEMBER_JOINED",
                 connection: member.connections[0],
                 revision: member.revision,
                 ns: "Fortnite",
                 party_id: this.id,
                 account_id: member.account_id,
-                account_dn: xmppClient.jwt.in_app_id,
+                account_dn: client.authorization.account_id,
                 member_state_updated: meta,
-                joined_at: "2021-11-19T03:31:34.818Z",
-                updated_at: "2021-11-19T03:31:34.698Z"
+                joined_at: new Date(),
+                updated_at: new Date()
             }
         );
 
         this.members.forEach(partyMember => {
-            new XmppMessage(
+            new xmppMessage(
                 {
                     type: 'com.epicgames.social.interactions.notification.v2',
                     interactions: [
@@ -190,7 +196,7 @@ class Party {
                             _type: 'InteractionUpdateNotification',
                             fromAccountId: member.account_id,
                             toAccountId: partyMember.account_id,
-                            app: 'Chapter_2__Season_8',
+                            app: 'Chapter_3__Season_1',
                             interactionType: 'PartyJoined',
                             namespace: 'Fortnite',
                             happenedAt: Date.now(),
@@ -203,13 +209,13 @@ class Party {
         })
     }
 
-    sendMessageToAll(message) {
-        const x_message = new XmppMessage(message);
+    sendMessageToAll(message: object) {
+        const x_message = new xmppMessage(message);
 
-        this.members.forEach(member => {
-            x_message.send(member.xmppClient);
+        this.clients.forEach(client => {
+            x_message.send(client);
         })
     }
 }
 
-module.exports = Party
+export default Party;
