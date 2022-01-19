@@ -1,3 +1,3 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-src/public/static/preview.html linguist-vendored
+resources/public/static/preview.html linguist-vendored
