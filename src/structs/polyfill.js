@@ -46,11 +46,6 @@ Date.prototype.addYears = function (years) {
     return this;
 };
 
-String.prototype.removeLast = function (char) {
-    var pos = this.lastIndexOf(char);
-    return this.substring(0, pos) + this.substring(pos + 1);
-}
-
 Array.prototype.remove = function (item) {
     let index = this.indexOf(item);
 

@@ -1,10 +1,9 @@
 import { mcpResponse, Handleparams } from '../operations'
 import { Profile, ensureProfileExist } from '../profile'
-import { profile as types } from '../../structs/types';
 import errors from '../../structs/errors'
 
-export const supportedProfiles: types.ProfileID[] = [
-    'profile0',
+export const supportedProfiles = [
+    'profile0'
 ]
 
 export async function handle(config: Handleparams): Promise<mcpResponse> {
@@ -20,7 +19,7 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
     await profile.init();
 
     // since the header is optional
-    const clientCmdRvn: number = config.revisions?.find(x =>
+    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
         x.profileId == config.profileId
     )?.clientCommandRevision;
 
@@ -46,6 +45,7 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
         response.profileChanges = [
             {
                 changeType: 'fullProfileUpdate',
+                // @ts-ignore
                 profile: await profile.getFullProfile()
             }
         ]

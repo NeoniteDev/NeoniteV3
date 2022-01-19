@@ -1,7 +1,6 @@
 import Party from "./Party";
-import { partyPing, XmppClient } from "./types";
-import client from "../websocket/xmpp/client";
+import { partyPing } from "./types";
 
-export const xmppClients : client[] = [];
+export const xmppClients : any[] = [];
 export const parties : Party[] = [];
 export const pings : partyPing[]= [];

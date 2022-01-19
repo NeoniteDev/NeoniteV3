@@ -1,0 +1,199 @@
+{
+    "$id": "http://example.com/example.json",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "default": {},
+    "description": "The root schema comprises the entire JSON document.",
+    "examples": [
+        {
+            "lockerItem": "8d0c06e8-6d25-42a4-9626-73b12e584eed",
+            "category": "Character",
+            "itemToSlot": "AthenaCharacter:cid_a_063_athena_commando_f_cottoncandy",
+            "slotIndex": 0,
+            "variantUpdates": [
+                {
+                    "channel": "Material",
+                    "active": "Mat1",
+                    "owned": [
+                        ""
+                    ]
+                }
+            ],
+            "optLockerUseCountOverride": -1
+        }
+    ],
+    "required": [
+        "lockerItem",
+        "category"
+    ],
+    "title": "The root schema",
+    "type": "object",
+    "properties": {
+        "lockerItem": {
+            "$id": "#/properties/lockerItem",
+            "type": "string",
+            "title": "The lockerItem schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "8d0c06e8-6d25-42a4-9626-73b12e584eed"
+            ]
+        },
+        "category": {
+            "$id": "#/properties/category",
+            "default": "",
+            "description": "An explanation about the purpose of this instance.",
+            "examples": [
+                "Character"
+            ],
+            "title": "The category schema",
+            "enum": [
+                "Backpack",
+                "VictoryPose",
+                "LoadingScreen",
+                "Character",
+                "Glider",
+                "Dance",
+                "CallingCard",
+                "ConsumableEmote",
+                "MapMarker",
+                "Charm",
+                "SkyDiveContrail",
+                "Hat",
+                "PetSkin",
+                "ItemWrap",
+                "MusicPack",
+                "BattleBus",
+                "Pickaxe",
+                "VehicleDecoration"
+            ],
+            "type": "string"
+        },
+        "itemToSlot": {
+            "$id": "#/properties/itemToSlot",
+            "type": "string",
+            "title": "The itemToSlot schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "AthenaCharacter:cid_a_063_athena_commando_f_cottoncandy"
+            ]
+        },
+        "slotIndex": {
+            "$id": "#/properties/slotIndex",
+            "type": "integer",
+            "title": "The slotIndex schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                0
+            ]
+        },
+        "variantUpdates": {
+            "$id": "#/properties/variantUpdates",
+            "type": "array",
+            "title": "The variantUpdates schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    {
+                        "channel": "Material",
+                        "active": "Mat1",
+                        "owned": [
+                            ""
+                        ]
+                    }
+                ]
+            ],
+            "additionalItems": true,
+            "items": {
+                "$id": "#/properties/variantUpdates/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/variantUpdates/items/anyOf/0",
+                        "type": "object",
+                        "title": "The first anyOf schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": {},
+                        "examples": [
+                            {
+                                "channel": "Material",
+                                "active": "Mat1",
+                                "owned": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "required": [
+                            "channel",
+                            "active",
+                            "owned"
+                        ],
+                        "properties": {
+                            "channel": {
+                                "$id": "#/properties/variantUpdates/items/anyOf/0/properties/channel",
+                                "type": "string",
+                                "title": "The channel schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "Material"
+                                ]
+                            },
+                            "active": {
+                                "$id": "#/properties/variantUpdates/items/anyOf/0/properties/active",
+                                "type": "string",
+                                "title": "The active schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "Mat1"
+                                ]
+                            },
+                            "owned": {
+                                "$id": "#/properties/variantUpdates/items/anyOf/0/properties/owned",
+                                "type": "array",
+                                "title": "The owned schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": [],
+                                "examples": [
+                                    [
+                                        ""
+                                    ]
+                                ],
+                                "additionalItems": true,
+                                "items": {
+                                    "$id": "#/properties/variantUpdates/items/anyOf/0/properties/owned/items",
+                                    "anyOf": [
+                                        {
+                                            "$id": "#/properties/variantUpdates/items/anyOf/0/properties/owned/items/anyOf/0",
+                                            "type": "string",
+                                            "title": "The first anyOf schema",
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": "",
+                                            "examples": [
+                                                ""
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "additionalProperties": true
+                    }
+                ]
+            }
+        },
+        "optLockerUseCountOverride": {
+            "$id": "#/properties/optLockerUseCountOverride",
+            "type": "integer",
+            "title": "The optLockerUseCountOverride schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                -1
+            ]
+        }
+    },
+    "additionalProperties": true
+}

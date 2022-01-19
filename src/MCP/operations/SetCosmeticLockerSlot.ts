@@ -2,6 +2,12 @@ import { mcpResponse, Handleparams } from '../operations'
 import { ensureProfileExist, Profile } from '../profile'
 import errors from '../../structs/errors'
 import { loadout, profile as types } from '../../structs/types';
+import * as Path from 'path';
+import { validate, ValidationError, ValidatorResult } from 'jsonschema';
+import * as fs from 'fs'
+
+const schemaPath = Path.join(__dirname, '../../../resources/schemas/mcp/json/SetCosmeticLockerSlot.json');
+const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'))
 
 export const supportedProfiles: types.ProfileID[] = [
     'athena',
@@ -10,32 +16,36 @@ export const supportedProfiles: types.ProfileID[] = [
 
 interface body {
     "lockerItem": string,
-    "category": string,
-    "itemToSlot": string,
-    "slotIndex": number,
-    "variantUpdates": unknown[],
-    "optLockerUseCountOverride": number
+    "category": keyof typeof itemsLenghts,
+    "itemToSlot"?: string,
+    "slotIndex"?: number,
+    "variantUpdates"?: { channel: string, active: string, owned: string[] }[],
+    "optLockerUseCountOverride"?: number
 }
 
-const validCategory = [
-    'Backpack',
-    'VictoryPose',
-    'LoadingScreen',
-    'Character',
-    'Glider', 'Dance',
-    'CallingCard',
-    'ConsumableEmote',
-    'MapMarker',
-    'Charm',
-    'SkyDiveContrail',
-    'Hat',
-    'PetSkin',
-    'ItemWrap',
-    'MusicPack',
-    'BattleBus',
-    'Pickaxe',
-    'VehicleDecoration'
-]
+const itemsLenghts = {
+    VehicleDecoration: 1,
+    Glider: 1,
+    Dance: 6,
+    LoadingScreen: 1,
+    PetSkin: 1,
+    Pickaxe: 1,
+    Hat: 1,
+    MusicPack: 1,
+    MapMarker: 1,
+    BattleBus: 1,
+    Character: 1,
+    CallingCard: 1,
+    Charm: 4,
+    SkyDiveContrail: 1,
+    ItemWrap: 8,
+    VictoryPose: 1
+}
+
+// so typescript wont yell that body is possibly undefined
+function validateBody(body: body | undefined, validatorResult: ValidatorResult): body is body {
+    return body != undefined && validatorResult.valid;
+}
 
 export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
     const existOrCreated = await ensureProfileExist(config.profileId, config.accountId);
@@ -50,7 +60,7 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
     await profile.init();
 
     // since the header is optional
-    const clientCmdRvn: number = config.revisions?.find(x =>
+    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
         x.profileId == config.profileId
     )?.clientCommandRevision;
 
@@ -72,6 +82,15 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
         "command": config.command,
     }
 
+    const result = validate(config.body, schema);
+
+    if (!result.valid || !validateBody(config.body, result)) {
+        const validationErrors = result.errors.filter(x => x instanceof ValidationError)
+        const invalidFields = validationErrors.map(x => x.argument).join(', ');
+        throw errors.neoniteDev.internal.validationFailed.withMessage(`Validation Failed. Invalid fields were [${invalidFields}]`).with(`[${invalidFields}]`)
+    }
+
+
     const lockerItem = await profile.getItem(config.body.lockerItem);
 
     if (!lockerItem ||
@@ -84,23 +103,34 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
 
 
     const slotIndex = config.body.slotIndex != undefined ? config.body.slotIndex : 0;
-    const slot: types.Category = lockerItem.attributes.locker_slots_data.slots[config.body.category];
+    const itemToSlot = config.body.itemToSlot || null;
 
-    slot.items[slotIndex] = config.body.itemToSlot;
+    var slot: types.Category | undefined = lockerItem.attributes.locker_slots_data.slots[config.body.category];
 
 
-    await profile.setItemAttribute(config.body.lockerItem, 'locker_slots_data', lockerItem.attributes.locker_slots_data);
-
-    response.profileChanges.push(
-        {
-            changeType: "itemAttrChanged",
-            itemId: config.body.lockerItem,
-            attributeName: 'locker_slots_data',
-            attributeValue: lockerItem.attributes.locker_slots_data
+    if (!slot || slot.items[slotIndex] != itemToSlot) {
+        if (!slot) {
+            var nullArr = new Array<null>(itemsLenghts[config.body.category]).fill(null);
+            lockerItem.attributes.locker_slots_data.slots[config.body.category] = slot = {
+                "items": nullArr,
+                "activeVariants": nullArr
+            }
         }
-    )
 
-    await profile.bumpRvn(response);
+        slot.items[slotIndex] = config.body.itemToSlot || null;
+        await profile.setItemAttribute(config.body.lockerItem, 'locker_slots_data', lockerItem.attributes.locker_slots_data);
+        await profile.bumpRvn(response);
+
+        response.profileChanges.push(
+            {
+                changeType: "itemAttrChanged",
+                itemId: config.body.lockerItem,
+                attributeName: 'locker_slots_data',
+                attributeValue: lockerItem.attributes.locker_slots_data
+            }
+        )
+    }
+
 
     if (!bIsUpToDate) {
         response.profileChanges = [

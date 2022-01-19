@@ -8,8 +8,6 @@ const errors = require('../structs/errors');
 
 const { CheckClientAuthorization } = require('../middlewares/authorization');
 
-const { ApiException } = errors;
-
 app.get('/api/shared/bulk/offers', CheckClientAuthorization, async (req, res) => {
     const token = await online.getClientToken()
 

@@ -4,17 +4,23 @@ import * as fs from 'fs';
 import errors from './src/structs/errors';
 import * as statuses from 'statuses'
 import {} from './src/structs/types'
+import * as https from 'http'
+import * as dotenv from 'dotenv'
+import * as path from 'path'
+import websocketHandler from './src/websocket'
+import {} from 'colors'
+
 
 const packageFile = require('./package.json');
-const crypto = require('crypto')
-
 require('./src/structs/polyfill');
+dotenv.config();
 
-require('dotenv').config()
+var key = fs.readFileSync('./resources/ssl/privateKey.key');
+var cert = fs.readFileSync('./resources/ssl/certificate.pem');
 
 const app = express();
 
-app.set('etag', false)
+app.set('etag', false);
 app.disable('x-powered-by');
 
 app.use(express.static('resources/public'));
@@ -50,10 +56,10 @@ app.use((req, res, next) => {
 });
 
 fs.readdirSync('./src/services').forEach(filename => {
-    if (!filename.endsWith('.js'))
+    if (!filename.endsWith('.js') && !filename.endsWith('.ts'))
         return;
 
-    const servicename = filename.replace(".js", "");
+    const servicename = filename.replace(/(?:.ts|.js)$/, "");
 
     try {
         app.use('/' + servicename, require(`./src/services/${filename}`))
@@ -67,7 +73,7 @@ fs.readdirSync('./src/services').forEach(filename => {
 app.use('/', require('./src/services/Uncategorized/index'));
 
 app.use((req, res) => {
-    res.status(404).send(`<h1>HTTP ERROR ${res.statusCode}</h1> <pre>Not Fund</pre>`);
+    res.status(404).send(`<h1>HTTP ERROR ${res.statusCode}</h1> <pre>Not Found</pre>`);
 })
 
 app.use(
@@ -89,15 +95,16 @@ app.use(
 
 require('colors');
 
+var server = https.createServer({
+   /* key,
+    cert*/
+}, app);
 
-
-app.httpServer = app.listen(packageFile.config.port, function () {
-    // @ts-ignore
-    console.log(`[${`API`.cyan}]`, 'Listening on port', app.httpServer.address().port);
+server.listen(packageFile.config.port, function () {
+    console.log(`[${`API`.cyan}]`, 'Listening on port', packageFile.config.port);
 })
 
 process.on('uncaughtException', (error) => console.error(error))
 
-require('./src/tcp/xmpp');
-require('./src/websocket')(app)
+websocketHandler(server);
 require('./src/udp/ping');

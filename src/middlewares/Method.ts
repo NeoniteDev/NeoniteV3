@@ -1,23 +1,15 @@
-const express = require('express');
-const errors = require('./../structs/errors')
-/**
- * @typedef {import('./../structs/types').Layer} Layer
- * @typedef {import('./../structs/types').Router} Router
- * @typedef {import('express-serve-static-core').Router} eRouter
- * @param {eRouter} _router
- */
-module.exports = (_router) => {
-    /**
-     * @param {express.Request} req 
-     * @param {express.Response} res 
-     * @param {express.NextFunction} next 
-     */
-    return function (req, res, next) {
+// @ts-nocheck
+
+import { Request, Response, NextFunction, Handler } from 'express-serve-static-core'
+import errors from '../structs/errors';
+
+export default function validateMethod(_router: any): () => Handler {
+    return function (req: Request, res: Response, next: NextFunction) {
         /** 
          * @param {Router} ParentRouter
          * @returns {Layer}
          */
-        function FindRouter(ParentRouter, path) {
+        function FindRouter(ParentRouter: any, path: string) {
             try {
                 return ParentRouter.stack.find(x => x.name === 'router' && x.regexp.test(path) == true);
             } catch { return null }

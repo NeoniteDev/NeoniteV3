@@ -50,11 +50,12 @@ export interface CatalogPurchase {
     }
 }
 
+
 export interface mcpResponse {
     profileRevision: number,
     profileId: string,
     profileChangesBaseRevision: number,
-    multiUpdate?: Omit<mcpResponse, 'responseVersion' | 'serverTime' | 'multiUpdate' | 'command'>[],
+    multiUpdate?: multiUpdate[],
     profileChanges: profileChange[],
     serverTime: Date,
     notifications?: CatalogPurchase[]
@@ -62,6 +63,8 @@ export interface mcpResponse {
     responseVersion: 1,
     command: string
 }
+
+export type multiUpdate = Omit<mcpResponse, 'responseVersion' | 'serverTime' | 'multiUpdate' | 'command'>;
 
 
 export interface profileRevisions {
@@ -90,11 +93,11 @@ export interface commandModule {
     handle: (request: Handleparams) => mcpResponse
 }
 
-const operations = fs.readdirSync(operationDir).map(
+const operations: commandHandle[] = fs.readdirSync(operationDir).map(
     (filename) => {
         const module: commandModule = require(Path.join(operationDir, filename));
         return {
-            command: filename.split('.').shift(),
+            command: filename.split('.').shift() || filename,
             execute: module.handle,
             supportedProfiles: module.supportedProfiles
         }

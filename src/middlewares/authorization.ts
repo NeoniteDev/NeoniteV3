@@ -13,7 +13,7 @@ export async function validateToken(token: string): Promise<tokenInfo | undefine
             return undefined;
         }
 
-        if(!decoded.jti || !decoded.exp) {
+        if (!decoded.jti || !decoded.exp) {
             return undefined;
         }
 
@@ -78,4 +78,12 @@ export async function CheckClientAuthorization(req: Request, res: Response, next
     req.auth = auth;
 
     next();
+}
+
+declare global {
+    namespace Express {
+        interface Request {
+            auth: tokenInfo
+        }
+    }
 }

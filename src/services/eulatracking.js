@@ -1,5 +1,4 @@
 const { Router } = require('express');
-const { Method, userAgentParse: SeasonCheck } = require('./../middlewares/utilities');
 const { CheckAuthorization } = require('../middlewares/authorization');
 const errors = require('./../structs/errors')
 

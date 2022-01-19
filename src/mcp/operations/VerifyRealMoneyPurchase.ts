@@ -38,7 +38,7 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
     await profile.init();
 
     // since the header is optional
-    const clientCmdRvn: number = config.revisions?.find(x =>
+    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
         x.profileId == config.profileId
     )?.clientCommandRevision;
 
@@ -70,25 +70,31 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
     }
 
     const pendingPurchase = await pendingPurchases.getAll({ accountId: config.accountId });
-    const Flatcatalog = (await getCatalog()).storefronts.flatMap((x) => x.catalogEntries)
 
-    const purchases = pendingPurchase.map((x) => {
-        var catalogItems = x.offers.map(offId =>
-            Flatcatalog.find(y => y.appStoreId.includes(offId))
-        );
+    const catalog = await getCatalog();
 
-        const fulfillmentIds = catalogItems
-            .filter(x => x.requirements.length == 1 && x.requirements[0].requirementType == 'DenyOnFulfillment')
-            .map(x => {
-                return x.requirements[0].requiredId;
-            });
+    if (catalog) {
+       /* const Flatcatalog = catalog.storefronts.flatMap((x) => x.catalogEntries)
 
-        return {
-            fulfillments: fulfillmentIds,
-            receipt: x.receiptId,
-            catalogItems: catalogItems
-        };
-    })
+        const purchases = pendingPurchase.map((x) => {
+            var catalogItems = x.offers.map(offId =>
+                Flatcatalog.find(y => y.appStoreId.includes(offId))
+            );
+    
+            const fulfillmentIds = catalogItems
+                .filter(x => x.requirements.length == 1 && x.requirements[0].requirementType == 'DenyOnFulfillment')
+                .map(x => {
+                    return x.requirements[0].requiredId;
+                });
+    
+            return {
+                fulfillments: fulfillmentIds,
+                receipt: x.receiptId,
+                catalogItems: catalogItems
+            };
+        })*/
+    }
+
     if (!bIsUpToDate) {
         response.profileChanges = [
             {

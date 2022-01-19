@@ -2,9 +2,8 @@ const express = require('express');
 const errors = require('./../structs/errors')
 const fs = require('fs');
 
-const { Method, userAgentParse: SeasonCheck } = require('./../middlewares/utilities');
 const { CheckAuthorization } = require('../middlewares/authorization');
-const CheckMethod = require('../middlewares/Method');
+const CheckMethod = require('../middlewares/Method').default;
 
 const app = express.Router();
 

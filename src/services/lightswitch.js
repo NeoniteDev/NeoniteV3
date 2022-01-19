@@ -1,8 +1,9 @@
 const express = require('express');
 
 const { CheckClientAuthorization } = require('./../middlewares/authorization')
-const checkMethod = require('./../middlewares/Method')
+const checkMethod = require('./../middlewares/Method').default;
 const app = express.Router();
+
 app.get('/api/service/bulk/status', CheckClientAuthorization, (req, res) => {
     //adds serviceId based on what the game feeds it, if undefined defaults to fortnite
 

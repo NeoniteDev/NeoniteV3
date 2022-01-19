@@ -1,8 +1,8 @@
 import errors from '../../structs/errors'
-import { mcpResponse, Handleparams } from '../operations'
+import { mcpResponse, Handleparams, multiUpdate } from '../operations'
 import { Profile, ensureProfileExist } from '../profile'
 import * as Path from 'path';
-import { validate } from 'jsonschema';
+import { validate, ValidationError } from 'jsonschema';
 import * as fs from 'fs'
 import { randomUUID } from 'crypto';
 
@@ -54,7 +54,7 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
     await profile.init();
 
     // since the header is optional
-    const clientCmdRvn: number = config.revisions?.find(x =>
+    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
         x.profileId == config.profileId
     )?.clientCommandRevision;
 
@@ -81,7 +81,9 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
     const result = validate(config.body, schema);
 
     if (!result.valid) {
-        console.log(result); return;
+        const validationErrors = result.errors.filter(x => x instanceof ValidationError)
+        const invalidFields = validationErrors.map(x => x.argument).join(', ');
+        throw errors.neoniteDev.internal.validationFailed.withMessage(`Validation Failed. Invalid fields were [${invalidFields}]`).with(`[${invalidFields}]`)
     }
 
     if (
@@ -89,6 +91,7 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
         typeof config.body.rewardGraphId == 'string' &&
         typeof config.body.rewardCfg == 'string'
     ) {
+        // @ts-ignore
         const NodeRewardTemplateId: string | undefined = rewardsNodeIds[id[1]]?.[id[2]]?.[id[3]];
 
         const nodeId: string = config.body.nodeId;
@@ -122,7 +125,8 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
             if (isCommonCoreReward) {
                 const common_core = new Profile('common_core', config.accountId);
 
-                const common_core_response: mcpResponse['multiUpdate'][0] = {
+                Element
+                const common_core_response: multiUpdate = {
                     "profileRevision": common_core.rvn,
                     "profileId": "common_core",
                     "profileChangesBaseRevision": common_core.rvn,

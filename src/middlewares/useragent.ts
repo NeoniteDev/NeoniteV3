@@ -1,35 +1,31 @@
-const express = require('express');
-const errors = require("./../structs/errors");
+import { Request, Response, NextFunction } from 'express-serve-static-core';
+import errors from '../structs/errors';
+
 
 const regexp = '(.*)/(.*)-CL-(\\d+) (\\w+)/.*';
 const regexp2 = 'game=(.*), engine=UE4, build=(.*)-CL-(\\d+)';
 
-/**
- * @param {express.Request} req
- * @param {express.Response} res
- * @param {express.NextFunction} next
- */
-module.exports.userAgentParse = (req, res, next) => {
-
+export default function userAgentParse(req: Request, res: Response, next: NextFunction) {
     const userAgent = req.headers["user-agent"];
 
     if (!userAgent) {
-        throw errors.neoniteDev.internal.invalidUserAgent.with(null, regexp);
+        throw errors.neoniteDev.internal.invalidUserAgent.with('null', regexp);
     }
 
     const newmatch = userAgent.match(regexp);
     const oldmatch = userAgent.match(regexp2);
 
-    if (newmatch == null && oldmatch == null) {
+    if (newmatch == undefined && oldmatch == null) {
         throw errors.neoniteDev.internal.invalidUserAgent.with(userAgent, regexp);
     }
 
     if (newmatch) {
-        var friendlyVersion = newmatch.at(2).split('-').pop();
-        var season = parseInt(friendlyVersion.split('.').pop());
-    
+        let friendlyVersion = <string>(newmatch[2].split('-').pop());
+        // @ts-ignore
+        let season = parseInt(friendlyVersion.split('.').pop());
+
         req.clientInfos = {
-            game:  newmatch.at(1),
+            game: newmatch.at(1),
             version: newmatch.at(2),
             CL: newmatch.at(3),
             platform: newmatch.at(4),
@@ -37,11 +33,12 @@ module.exports.userAgentParse = (req, res, next) => {
             season: season
         }
     } else if (oldmatch) {
-        var friendlyVersion = oldmatch.at(2).split('-').pop();
-        var season = parseInt(friendlyVersion.split('.').pop());
-    
+        let friendlyVersion = <string>(oldmatch[2].split('-').pop());
+        // @ts-ignore
+        let season = parseInt(friendlyVersion.split('.').pop());
+
         req.clientInfos = {
-            game:  oldmatch.at(1),
+            game: oldmatch.at(1),
             version: oldmatch.at(2),
             CL: oldmatch.at(3),
             platform: "Windows",
@@ -52,17 +49,4 @@ module.exports.userAgentParse = (req, res, next) => {
 
     next();
 }
-
-/**
- * @param {Request} req
- * @param {Response} res
- * @param {NextFunction} next
- */
-module.exports.options = (req, res, next) => {
-    console.log(req.route)
-
-    next();
-}
-
-
 

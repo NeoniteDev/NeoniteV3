@@ -3,7 +3,7 @@ import { Profile, ensureProfileExist } from '../profile'
 import { profile as types } from '../../structs/types';
 import errors from '../../structs/errors'
 import * as Path from 'path'
-import { validate } from 'jsonschema';
+import { validate, ValidationError } from 'jsonschema';
 import * as fs from 'fs';
 
 const schemaPath = Path.join(__dirname, '../../../resources/schemas/mcp/json/SetMtxPlatform.json');
@@ -27,7 +27,7 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
     await profile.init();
 
     // since the header is optional
-    const clientCmdRvn: number = config.revisions?.find(x =>
+    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
         x.profileId == config.profileId
     )?.clientCommandRevision;
 
@@ -52,7 +52,9 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
     const result = validate(config.body, schema);
 
     if (!result.valid) {
-        console.log(result); return;
+        const validationErrors = result.errors.filter(x => x instanceof ValidationError)
+        const invalidFields = validationErrors.map(x => x.argument).join(', ');
+        throw errors.neoniteDev.internal.validationFailed.withMessage(`Validation Failed. Invalid fields were [${invalidFields}]`).with(`[${invalidFields}]`)
     }
 
     if (!bIsUpToDate) {

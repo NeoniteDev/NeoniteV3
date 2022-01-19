@@ -1,6 +1,6 @@
 const express = require('express');
 
-const checkMethod = require('./../middlewares/Method');
+const checkMethod = require('./../middlewares/Method').default;
 const { CheckAuthorization, CheckClientAuthorization } = require('./../middlewares/authorization');
 const errors = require('../structs/errors');
 const Party = require('../structs/Party');

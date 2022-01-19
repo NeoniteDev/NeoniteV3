@@ -7,7 +7,7 @@ const { CheckAuthorization, CheckClientAuthorization } = require('../middlewares
 
 
 const app = express.Router();
-const CheckMethod = require('../middlewares/Method');
+const CheckMethod = require('../middlewares/Method').default;
 const database = require('../database/mysqlManager');
 const errors = require('../structs/errors');
 

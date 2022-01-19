@@ -1,7 +1,9 @@
-import { BRShop } from './structs/types';
+import { BRShop, timeline, pastSeasons } from './structs/types';
 import axios from 'axios';
+import * as fs from 'fs';
+import * as path from 'path';
 
-var catalog: BRShop | undefined = undefined;
+
 
 interface clientToken {
     access_token: string,
@@ -13,9 +15,9 @@ interface clientToken {
     client_service: string,
 }
 
-
-
-var client_token: clientToken | undefined;
+var catalog: BRShop | undefined = undefined;
+var client_token: clientToken | undefined = undefined;
+var client_events: timeline.Calendar['channels']['client-events'] | undefined = undefined;
 
 export async function getClientToken() {
     var isInvalid =
@@ -56,11 +58,71 @@ export async function getClientToken() {
 
 export async function getCatalog() {
     if (!catalog || new Date(catalog.expiration).getTime() <= Date.now()) {
-        const request = await axios.get('https://api.nitestats.com/v1/epic/store', { validateStatus: () => true });
+        const request = await axios.get('https://api.nitestats.com/v1/epic/store', { validateStatus: undefined });
         if (request.status == 200) {
             catalog = request.data;
         }
     }
 
     return catalog;
+}
+
+async function checkClientEvents() {
+    if (!client_events || new Date(client_events.cacheExpire).getTime() <= Date.now()) {
+        const request = await axios.get<timeline.Calendar>('https://api.nitestats.com/v1/epic/modes-smart', { validateStatus: undefined });
+        if (request.status == 200) {
+            client_events = request.data.channels['client-events'];
+        }
+    }
+}
+
+export async function getLastestSeason() {
+    await checkClientEvents();
+    return client_events?.states.find(x => x.state.seasonNumber != undefined)?.state.seasonNumber || 1;
+}
+
+interface season {
+    "season": number,
+    "chapter": number,
+    "seasonInChapter": number,
+    "displayName": string,
+    "startDate": string,
+    "endDate": string
+}
+
+var past_seasons: season[] = JSON.parse(
+    fs.readFileSync(
+        path.join(
+            __dirname,
+            '../resources/seasons.json'
+        ),
+        'utf-8'
+    )
+);
+
+export async function getPastSeasons(season?: number) {
+    if (season && process.env.fortniteApiIoKey) {
+        const exist = past_seasons.find(x => x.season == season);
+
+        if (!exist) {
+            var lastest = await getLastestSeason();
+
+            if (season > lastest) {
+                return past_seasons;
+            }
+        }
+
+        const response = await axios.get<pastSeasons>('https://fortniteapi.io/v1/seasons/list?lang=en', {
+            headers: {
+                'authorization': process.env.fortniteApiIoKey
+            },
+            validateStatus: undefined
+        });
+
+        if (response.data.result) {
+
+        }
+    }
+
+    return past_seasons;
 }

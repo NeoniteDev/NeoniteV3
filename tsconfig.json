@@ -2,12 +2,13 @@
     "compilerOptions": {
         "target": "ES2021",
         "strict": true,
-        "moduleResolution": "Node"
+        "moduleResolution": "Node",
+        "outDir": "build"
     },
     "include": [
         "src/*/*.ts",
         "src/structs/*.ts",
         "src/middlewares/*.ts",
-        "*.ts"
+        "*.ts", "src/*/*/*.ts"
     ]
 }

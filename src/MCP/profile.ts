@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { randomUUID } from 'crypto';
 import { profile as types } from '../structs/types';
 import { profiles } from '../database/mysqlManager';
@@ -14,13 +15,12 @@ export async function ensureProfileExist(profileId: string, accountId: string): 
         const success = await createProfile(profileId, accountId);
 
         if (!success) {
-            return undefined;
+            return false;
         }
     }
 
     return true;
 }
-
 export class Profile implements Omit<types.Profile, 'items'> {
     constructor(profileId: types.ProfileID, accountId: string) {
         this.accountId = accountId;
@@ -32,18 +32,23 @@ export class Profile implements Omit<types.Profile, 'items'> {
     profileId: types.ProfileID;
 
     stats: types.Stats;
-    _id?: string;
+    _id: string;
     commandRevision: number;
     created: string;
     rvn: number;
     updated: string;
-    version?: string;
+    version: string;
     wipeNumber: number;
-
     baseRvn: number;
+
+
 
     async init() {
         const infos = await profiles.getInfos(this.profileId, this.accountId);
+        if (!infos) {
+            throw new Error("Profile doesn't exist")
+        }
+
         this.commandRevision = infos.commandRevision;
         this.created = infos.created;
         this.rvn = infos.rvn;
@@ -70,7 +75,7 @@ export class Profile implements Omit<types.Profile, 'items'> {
         return profiles.setItemAttr(itemId, attributeName, attributeValue, this.profileId, this.accountId);
     }
 
-    getFullProfile(): Promise<types.Profile | undefined> {
+    getFullProfile(): Promise<types.Profile> {
         return profiles.get(this.profileId, this.accountId);
     }
 

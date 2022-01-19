@@ -3,7 +3,6 @@ const errors = require('./../../structs/errors')
 const fs = require('fs');
 
 
-const { Method, userAgentParsing: SeasonCheck } = require('./../../middlewares/utilities');
 const { CheckAuthorization } = require('../../middlewares/authorization');
 const exp = require('constants');
 const { ApiException } = errors;

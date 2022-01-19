@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { CheckAuthorization } from '../middlewares/authorization'
-import * as checkMethod from '../middlewares/Method'
+import validateMethod from '../middlewares/Method'
 import * as Path from 'path';
 import errors from '../structs/errors';
 import * as operations from './operations';
@@ -11,6 +11,10 @@ const app = express.Router();
 
 app.post('/api/game/v2/profile/:accountId/client/:command', CheckAuthorization, async (req, res, next) => {
     try {
+        if (!req.auth) {
+            throw errors.neoniteDev.authentication.authenticationFailed;
+        }
+        
         const accountId = req.params.accountId;
         const profileId = <types.ProfileID>(typeof req.query.profileId == 'string' ? req.query.profileId : 'common_core');
         const command = req.params.command;
@@ -60,6 +64,6 @@ app.post('/api/game/v2/profile/:accountId/client/:command', CheckAuthorization, 
     }
 })
 
-app.use(checkMethod(app))
+app.use(validateMethod(app))
 
 export default app;

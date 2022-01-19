@@ -18,7 +18,7 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
     await profile.init();
 
     // since the header is optional
-    const clientCmdRvn: number = config.revisions?.find(x =>
+    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
         x.profileId == config.profileId
     )?.clientCommandRevision;
 
@@ -44,6 +44,7 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
         response.profileChanges = [
             {
                 changeType: 'fullProfileUpdate',
+                //@ts-ignore
                 profile: await profile.getFullProfile()
             }
         ]

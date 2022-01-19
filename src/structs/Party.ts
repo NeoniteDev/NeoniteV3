@@ -1,8 +1,11 @@
 const { throws } = require('assert');
 const { randomUUID } = require('crypto');
 
+import { sendMessageTo } from '../xmppManager';
+sendMessageTo('', {});
+
+
 import xmppMessage from './xmpp_message'
-import Client from '../websocket/xmpp/client'
 import errors from './errors';
 import { PartyConfig, partyMember } from './types';
 
@@ -12,7 +15,7 @@ interface metaUpdate {
 }
 
 class Party {
-    constructor(creator: Client, config: any, join_info: any, meta: any) {
+    constructor(creator: any, config: any, join_info: any, meta: any) {
         this.id = randomUUID();
 
         this.members = [
@@ -66,7 +69,7 @@ class Party {
     invites: any[];
     meta: Record<string, string>;
     members: partyMember[]
-    clients: Client[];
+    clients: any[];
 
     partyInfo() {
         return {
@@ -157,7 +160,7 @@ class Party {
 
     RemoveMember() { }
 
-    addMember(client: Client, joinInfo: any, meta: Record<string, string>) {
+    addMember(client: any, joinInfo: any, meta: Record<string, string>) {
         var member: partyMember = {
             account_id: client.authorization.account_id,
             connections: [joinInfo.connection],

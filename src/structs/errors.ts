@@ -74,7 +74,7 @@ export const neoniteDev = {
         get userOffline() { return new ApiError('errors.com.neoniteDev.party.userOffline', 'User is offline.', 51024, 403) },
     },
     cloudstorage: {
-        get fileNotFound() { return new ApiError('errors.com.neoniteDev.cloudstorage.fileNotFound', 'Cannot find the file you requested.', 12004, 406) }
+        get fileNotFound() { return new ApiError('errors.com.neoniteDev.cloudstorage.fileNotFound', 'Cannot find the file you requested.', 12004, 404) }
     },
     account: {
         get toManyAccounts() { return new ApiError('errors.com.neoniteDev.account.toManyAccounts', "You are trying to query too many accounts at a time", 18066, 400) },
@@ -90,7 +90,7 @@ export const neoniteDev = {
         get missingCookie() { return new ApiError('errors.com.neoniteDev.matchmaking.missingCookie', "Missing NetCL cookie", null, 400) },
         get invalidBucketId() { return new ApiError('errors.com.neoniteDev.matchmaking.invalidBucketId', "blank or invalid bucketId", 16102, 400) },
         get invalidPartyPlayers() { return new ApiError('errors.com.neoniteDev.matchmaking.invalidPartyPlayers', "blank or invalid partyPlayerIds", 16103, 400) },
-        get invalidPlatform() { return new ApiError('errors.com.neoniteDev.matchmaking.invalidPlatform', "blank or invalid platform", 16104, 400) },
+        get invalidPlatform() { return new ApiError('errors.com.neoniteDev.matchmaking.invalidPlatform', "invalid platform", 16104, 400) },
     },
     shop: {
         get itemNotFound() { return new ApiError('errors.com.neoniteDev.shop.itemNotFound', "Could not find the catalog item you requested", 28001, 400) },
@@ -107,6 +107,8 @@ export const neoniteDev = {
         get unsupportedMediaType() { return new ApiError('errors.com.neoniteDev.internal.unsupportedMediaType', "Sorry, your request could not be processed because you provide a type of media that we do not support.", 1006, 415) },
         get notImplemented() { return new ApiError('errors.com.neoniteDev.internal.notImplemented', 'The resource you were trying to find is not yet implemented by the server.', null, 501) },
         get dataBaseError() { return new ApiError('errors.com.neoniteDev.internal.dataBaseError', 'There was an error while interacting with the database. Please report this issue.', null, 500) },
+        get unknownError() { return new ApiError('errors.com.neoniteDev.internal.unknownError', 'Sorry an error occurred and we were unable to resolve it.', null, 500) },
+        get eosError() { return new ApiError('errors.com.neoniteDev.internal.EosError', 'Sorry an error occurred while communication with Epic Online Service Servers.', null, 500) },
     },
     basic: {
         get notFound() { return new ApiError('errors.com.neoniteDev.basic.notFound', "the resource you were trying to find could not be found.", 1004, 404) },

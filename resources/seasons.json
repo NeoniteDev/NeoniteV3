@@ -1,0 +1,162 @@
+[
+    {
+       "season":1,
+       "chapter":1,
+       "seasonInChapter":1,
+       "displayName":"Chapter 1, Season 1",
+       "startDate":"2017-10-24 09:00:00+00:00",
+       "endDate":"2017-12-14 08:59:59+00:00"
+    },
+    {
+       "season":2,
+       "chapter":1,
+       "seasonInChapter":2,
+       "displayName":"Chapter 1, Season 2",
+       "startDate":"2017-12-14 09:00:00+00:00",
+       "endDate":"2018-02-22 08:59:59+00:00"
+    },
+    {
+       "season":3,
+       "chapter":1,
+       "seasonInChapter":3,
+       "displayName":"Chapter 1, Season 3",
+       "startDate":"2018-02-22 09:00:00+00:00",
+       "endDate":"2018-05-01 08:59:59+00:00"
+    },
+    {
+       "season":4,
+       "chapter":1,
+       "seasonInChapter":4,
+       "displayName":"Chapter 1, Season 4",
+       "startDate":"2018-05-01 09:00:00+00:00",
+       "endDate":"2018-07-11 08:59:59+00:00"
+    },
+    {
+       "season":5,
+       "chapter":1,
+       "seasonInChapter":5,
+       "displayName":"Chapter 1, Season 5",
+       "startDate":"2018-07-11 09:00:00+00:00",
+       "endDate":"2018-09-27 08:59:59+00:00"
+    },
+    {
+       "season":6,
+       "chapter":1,
+       "seasonInChapter":6,
+       "displayName":"Chapter 1, Season 6",
+       "startDate":"2018-09-27 09:00:00+00:00",
+       "endDate":"2018-12-06 08:59:59+00:00"
+    },
+    {
+       "season":7,
+       "chapter":1,
+       "seasonInChapter":7,
+       "displayName":"Chapter 1, Season 7",
+       "startDate":"2018-12-06 09:00:00+00:00",
+       "endDate":"2019-02-28 07:59:59+00:00"
+    },
+    {
+       "season":8,
+       "chapter":1,
+       "seasonInChapter":8,
+       "displayName":"Chapter 1, Season 8",
+       "startDate":"2019-02-28 08:00:00+00:00",
+       "endDate":"2019-05-09 07:59:59+00:00"
+    },
+    {
+       "season":9,
+       "chapter":1,
+       "seasonInChapter":9,
+       "displayName":"Chapter 1, Season 9",
+       "startDate":"2019-05-09 08:00:00+00:00",
+       "endDate":"2019-08-01 07:59:59+00:00"
+    },
+    {
+       "season":10,
+       "chapter":1,
+       "seasonInChapter":10,
+       "displayName":"Chapter 1, Season X",
+       "startDate":"2019-08-01 08:00:00+00:00",
+       "endDate":"2019-10-13 18:00:00+00:00"
+    },
+    {
+       "season":11,
+       "chapter":2,
+       "seasonInChapter":1,
+       "displayName":"Chapter 2, Season 1",
+       "startDate":"2019-10-15 08:00:00+00:00",
+       "endDate":"2020-02-20 08:59:59+00:00"
+    },
+    {
+       "season":12,
+       "chapter":2,
+       "seasonInChapter":2,
+       "displayName":"Chapter 2, Season 2",
+       "startDate":"2020-02-20 09:00:00+00:00",
+       "endDate":"2020-06-17 05:59:59+00:00"
+    },
+    {
+       "season":13,
+       "chapter":2,
+       "seasonInChapter":3,
+       "displayName":"Chapter 2, Season 3",
+       "startDate":"2020-06-17 06:00:00+00:00",
+       "endDate":"2020-08-27 05:59:59+00:00"
+    },
+    {
+       "season":14,
+       "chapter":2,
+       "seasonInChapter":4,
+       "displayName":"Chapter 2, Season 4",
+       "startDate":"2020-08-27 06:00:00+00:00",
+       "endDate":"2020-12-02 04:59:59+00:00"
+    },
+    {
+       "season":15,
+       "chapter":2,
+       "seasonInChapter":5,
+       "displayName":"Chapter 2, Season 5",
+       "startDate":"2020-12-02 05:00:00+00:00",
+       "endDate":"2021-03-16 03:59:59+00:00"
+    },
+    {
+       "season":16,
+       "chapter":2,
+       "seasonInChapter":6,
+       "displayName":"Chapter 2, Season 6",
+       "startDate":"2021-03-16 04:00:00+00:00",
+       "endDate":"2021-06-08 05:59:59+00:00"
+    },
+    {
+       "season":17,
+       "chapter":2,
+       "seasonInChapter":7,
+       "displayName":"Chapter 2, Season 7",
+       "startDate":"2021-06-08 06:00:00+00:00",
+       "endDate":"2021-09-13 05:59:59+00:00"
+    },
+    {
+       "season":18,
+       "chapter":2,
+       "seasonInChapter":8,
+       "displayName":"Chapter 2, Season 8",
+       "startDate":"2021-09-13 06:00:00+00:00",
+       "endDate":"2021-12-04 21:15:00+00:00"
+    },
+    {
+       "season":19,
+       "chapter":3,
+       "seasonInChapter":1,
+       "displayName":"Chapter 3, Season 1",
+       "startDate":"2021-12-05 15:00:00+00:00",
+       "endDate":"2022-03-19 08:59:59+00:00"
+    },
+    {
+       "season":20,
+       "chapter":3,
+       "seasonInChapter":2,
+       "displayName":"Chapter 3, Season 2",
+       "startDate":"2022-03-19 09:00:00+00:00",
+       "endDate":null
+    }
+ ]

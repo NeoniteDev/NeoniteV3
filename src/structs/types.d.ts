@@ -200,7 +200,6 @@ export type ArgumentTypes<F extends Function> = F extends (...args: infer A) => 
 declare global {
     namespace Express {
         interface Request {
-            auth?: tokenInfo
             clientInfos: Middlewares.fortniteReq
         }
 
@@ -219,11 +218,6 @@ declare global {
         addYears(param: number): this;
     }
 
-    interface String {
-        /** @file polyfill.js */
-        removeLast(char: string): string;
-    }
-
     interface Array<T> {
         /** @file polyfill.js */
         remove(item: any): this;
@@ -233,189 +227,191 @@ declare global {
 export interface Storefront {
 }
 
-export interface State2 {
-    activePurchaseLimitingEventIds: any[];
-    storefront: Storefront;
-    rmtPromotionConfig: any[];
-    storeEnd: Date;
-}
+export namespace timeline {
+    export interface State2 {
+        activePurchaseLimitingEventIds: any[];
+        storefront: Storefront;
+        rmtPromotionConfig: any[];
+        storeEnd: Date;
+    }
 
-export interface State {
-    validFrom: Date;
-    activeEvents: any[];
-    state: State2;
-}
+    export interface State {
+        validFrom: Date;
+        activeEvents: any[];
+        state: State2;
+    }
 
-export interface StandaloneStore {
-    states: State[];
-    cacheExpire: Date;
-}
+    export interface StandaloneStore {
+        states: State[];
+        cacheExpire: Date;
+    }
 
-export interface OCE {
-    eventFlagsForcedOff: string[];
-}
+    export interface OCE {
+        eventFlagsForcedOff: string[];
+    }
 
-export interface CN {
-    eventFlagsForcedOff: string[];
-}
+    export interface CN {
+        eventFlagsForcedOff: string[];
+    }
 
-export interface REGIONID {
-    eventFlagsForcedOff: string[];
-}
+    export interface REGIONID {
+        eventFlagsForcedOff: string[];
+    }
 
-export interface ASIA {
-    eventFlagsForcedOff: string[];
-}
+    export interface ASIA {
+        eventFlagsForcedOff: string[];
+    }
 
-export interface Region {
-    OCE: OCE;
-    CN: CN;
-    REGIONID: REGIONID;
-    ASIA: ASIA;
-}
+    export interface Region {
+        OCE: OCE;
+        CN: CN;
+        REGIONID: REGIONID;
+        ASIA: ASIA;
+    }
 
-export interface State4 {
-    region: Region;
-}
+    export interface State4 {
+        region: Region;
+    }
 
-export interface State3 {
-    validFrom: Date;
-    activeEvents: any[];
-    state: State4;
-}
+    export interface State3 {
+        validFrom: Date;
+        activeEvents: any[];
+        state: State4;
+    }
 
-export interface ClientMatchmaking {
-    states: State3[];
-    cacheExpire: Date;
-}
+    export interface ClientMatchmaking {
+        states: State3[];
+        cacheExpire: Date;
+    }
 
-export interface State6 {
-    k: string[];
-}
+    export interface State6 {
+        k: string[];
+    }
 
-export interface State5 {
-    validFrom: Date;
-    activeEvents: any[];
-    state: State6;
-}
+    export interface State5 {
+        validFrom: Date;
+        activeEvents: any[];
+        state: State6;
+    }
 
-export interface Tk {
-    states: State5[];
-    cacheExpire: Date;
-}
+    export interface Tk {
+        states: State5[];
+        cacheExpire: Date;
+    }
 
-export interface PlaylistCuratedContent {
-}
+    export interface PlaylistCuratedContent {
+    }
 
-export interface PlaylistCuratedHub {
-    Playlist_PlaygroundV2: string;
-    Playlist_Creative_PlayOnly: string;
-}
+    export interface PlaylistCuratedHub {
+        Playlist_PlaygroundV2: string;
+        Playlist_Creative_PlayOnly: string;
+    }
 
-export interface State8 {
-    islandCodes: string[];
-    playlistCuratedContent: PlaylistCuratedContent;
-    playlistCuratedHub: PlaylistCuratedHub;
-    islandTemplates: any[];
-}
+    export interface State8 {
+        islandCodes: string[];
+        playlistCuratedContent: PlaylistCuratedContent;
+        playlistCuratedHub: PlaylistCuratedHub;
+        islandTemplates: any[];
+    }
 
-export interface State7 {
-    validFrom: Date;
-    activeEvents: any[];
-    state: State8;
-}
+    export interface State7 {
+        validFrom: Date;
+        activeEvents: any[];
+        state: State8;
+    }
 
-export interface FeaturedIslands {
-    states: State7[];
-    cacheExpire: Date;
-}
+    export interface FeaturedIslands {
+        states: State7[];
+        cacheExpire: Date;
+    }
 
-export interface State10 {
-    electionId: string;
-    candidates: any[];
-    electionEnds: Date;
-    numWinners: number;
-}
+    export interface State10 {
+        electionId: string;
+        candidates: any[];
+        electionEnds: Date;
+        numWinners: number;
+    }
 
-export interface State9 {
-    validFrom: Date;
-    activeEvents: any[];
-    state: State10;
-}
+    export interface State9 {
+        validFrom: Date;
+        activeEvents: any[];
+        state: State10;
+    }
 
-export interface CommunityVotes {
-    states: State9[];
-    cacheExpire: Date;
-}
+    export interface CommunityVotes {
+        states: State9[];
+        cacheExpire: Date;
+    }
 
-export interface ActiveEvent {
-    eventType: string;
-    activeUntil: Date;
-    activeSince: Date;
-}
+    export interface ActiveEvent {
+        eventType: string;
+        activeUntil: Date;
+        activeSince: Date;
+    }
 
-export interface EventNamedWeights {
-}
+    export interface EventNamedWeights {
+    }
 
-export interface ActiveEvent2 {
-    instanceId: string;
-    devName: string;
-    eventName: string;
-    eventStart: Date;
-    eventEnd: Date;
-    eventType: string;
-}
+    export interface ActiveEvent2 {
+        instanceId: string;
+        devName: string;
+        eventName: string;
+        eventStart: Date;
+        eventEnd: Date;
+        eventType: string;
+    }
 
-export interface SectionStoreEnds {
-    Featured: Date;
-    Daily: Date;
-    Featured2?: Date;
-    Special?: Date;
-}
+    export interface SectionStoreEnds {
+        Featured: Date;
+        Daily: Date;
+        Featured2?: Date;
+        Special?: Date;
+    }
 
-export interface State12 {
-    activeStorefronts: any[];
-    eventNamedWeights: EventNamedWeights;
-    activeEvents: ActiveEvent2[];
-    seasonNumber: number;
-    seasonTemplateId: string;
-    matchXpBonusPoints: number;
-    eventPunchCardTemplateId: string;
-    seasonBegin: Date;
-    seasonEnd: Date;
-    seasonDisplayedEnd: Date;
-    weeklyStoreEnd: Date;
-    stwEventStoreEnd: Date;
-    stwWeeklyStoreEnd: Date;
-    sectionStoreEnds: SectionStoreEnds;
-    rmtPromotion: string;
-    dailyStoreEnd: Date;
-}
+    export interface State12 {
+        activeStorefronts: any[];
+        eventNamedWeights: EventNamedWeights;
+        activeEvents: ActiveEvent2[];
+        seasonNumber: number;
+        seasonTemplateId: string;
+        matchXpBonusPoints: number;
+        eventPunchCardTemplateId: string;
+        seasonBegin: Date;
+        seasonEnd: Date;
+        seasonDisplayedEnd: Date;
+        weeklyStoreEnd: Date;
+        stwEventStoreEnd: Date;
+        stwWeeklyStoreEnd: Date;
+        sectionStoreEnds: SectionStoreEnds;
+        rmtPromotion: string;
+        dailyStoreEnd: Date;
+    }
 
-export interface State11 {
-    validFrom: Date;
-    activeEvents: ActiveEvent[];
-    state: State12;
-}
+    export interface State11 {
+        validFrom: Date;
+        activeEvents: ActiveEvent[];
+        state: State12;
+    }
 
-export interface ClientEvents {
-    states: State11[];
-    cacheExpire: Date;
-}
+    export interface ClientEvents {
+        states: State11[];
+        cacheExpire: Date;
+    }
 
-export interface Channels {
-    'standalone-store': StandaloneStore;
-    'client-matchmaking': ClientMatchmaking;
-    tk: Tk;
-    'featured-islands': FeaturedIslands;
-    'community-votes': CommunityVotes;
-    'client-events': ClientEvents;
-}
+    export interface Channels {
+        'standalone-store': StandaloneStore;
+        'client-matchmaking': ClientMatchmaking;
+        tk: Tk;
+        'featured-islands': FeaturedIslands;
+        'community-votes': CommunityVotes;
+        'client-events': ClientEvents;
+    }
 
-export interface Calendar {
-    channels: Channels;
-    cacheIntervalMins: number;
-    currentTime: Date;
+    export interface Calendar {
+        channels: Channels;
+        cacheIntervalMins: number;
+        currentTime: Date;
+    }
 }
 
 
@@ -628,11 +624,11 @@ export namespace profile {
     }
 
     export interface Category {
-        items: string[],
-        activeVariants: {
+        items: (string | null)[],
+        activeVariants: ({
             "channel": string,
             "active": string
-        }[]
+        } | null)[]
     }
 
     export type categories =
@@ -1399,6 +1395,26 @@ export namespace profile {
         dailyLoginInterval: string;
         dailyQuestRerolls: number;
     }
+}
+
+
+
+
+export interface pastSeasons {
+    result: boolean;
+    lang: string;
+    seasons: {
+        season: number;
+        chapter: number;
+        seasonInChapter: number;
+        displayName: string;
+        startDate: string;
+        endDate: string;
+        patchList: {
+            version: string;
+            date: string;
+        }[];
+    }[]
 }
 
 

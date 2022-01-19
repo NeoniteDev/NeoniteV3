@@ -2,6 +2,8 @@ import * as mysql from 'mysql';
 import * as crypto from 'crypto';
 
 import { tokenInfo, profile as profileTypes } from '../structs/types';
+import * as path from 'path';
+import { readFileSync } from 'fs';
 
 export interface Gift {
     from: User['accountId'],
@@ -107,38 +109,31 @@ export interface profile {
 
 
 
-database.query('CREATE TABLE IF NOT EXISTS Accounts (displayName varchar(50) not null, accountId varchar(32) not null, email varchar(255) not null, password varchar(255) not null);')
-database.query('CREATE TABLE IF NOT EXISTS ExchangeCodes (code varchar(32) not null, accountId varchar(32) not null, createdAt BIGINT not null, expireAt BIGINT not null);')
-database.query('CREATE TABLE IF NOT EXISTS WebTokens (token varchar(32) not null, accountId varchar(32), expireAt BIGINT);')
-database.query(`CREATE TABLE IF NOT EXISTS tokens
-(
-    token varchar(32) not null, 
-    clientId varchar(32) not null,
-    auth_method varchar(50) not null,
-    internal INT not null,
-    expireAt BIGINT not null,
-    client_service varchar(50) not null,
-    refresh_token varchar(50),
-    deviceId varchar(32),
-    account_id varchar(32),
-    displayName varchar(50),
-    in_app_id varchar(32)
+database.query(`
+CREATE TABLE IF NOT EXISTS Accounts (
+    displayName varchar(50) not null,
+    accountId varchar(32) not null,
+    email varchar(255) not null,
+    password varchar(255) not null,
+    discord_account_id varchar(18),
+    google_account_id varchar(20)
 );
 `)
 
-database.query(`CREATE TABLE IF NOT EXISTS refresh_tokens (
-    token varchar(32) not null, 
-    clientId varchar(32) not null,
-    auth_method varchar(50) not null,
-    internal INT not null,
-    expireAt BIGINT not null,
-    client_service varchar(50) not null,
-    bearer_token varchar(32) not null,
-    deviceId varchar(32),
-    account_id varchar(32),
-    displayName varchar(50),
-    in_app_id varchar(32) 
-);`)
+const queriesDir = path.join(__dirname, '../../resources/sqlQueries/')
+
+database.query(
+    readFileSync(path.join(queriesDir, 'ensureExchangeExist.sql'), 'utf-8')
+)
+database.query('CREATE TABLE IF NOT EXISTS WebTokens (token varchar(32) not null, accountId varchar(32), expireAt BIGINT);')
+
+database.query(
+    readFileSync(path.join(queriesDir, 'ensureRefreshExists.sql'), 'utf-8')
+)
+
+database.query(
+    readFileSync(path.join(queriesDir, 'ensureTokenExists.sql'), 'utf-8')
+)
 
 database.query(`CREATE TABLE IF NOT EXISTS purchases (
     purchaseToken VARCHAR(32) NOT NULL,
@@ -149,21 +144,9 @@ database.query(`CREATE TABLE IF NOT EXISTS purchases (
     );
 `)
 
-database.query(`CREATE TABLE IF NOT EXISTS Profiles (
-    accountId varchar(32) not null,
-    athena LONGTEXT,
-    campaign LONGTEXT,
-    collections LONGTEXT,
-    collection_book_people0 LONGTEXT,
-    collection_book_schematics0 LONGTEXT,
-    common_core LONGTEXT,
-    common_public LONGTEXT,
-    creative LONGTEXT,
-    metadata LONGTEXT,
-    outpost0 LONGTEXT,
-    profile0 LONGTEXT,
-    theater0 LONGTEXT);
-`)
+database.query(
+    readFileSync(path.join(queriesDir, 'ensureProfilesExist.sql'), 'utf-8')
+)
 
 
 function query<T>(sql: string, values?: any): Promise<T[]> {
@@ -549,9 +532,9 @@ export namespace users {
         }
     }
 
-    export function gets(userId: string[]): Promise<User[]> {
-        const validUsers = userId.filter(x => x.length == 32 && x.match(/^[0-9a-f]{8}[0-9a-f]{4}[0-5][0-9a-f]{3}[089ab][0-9a-f]{3}[0-9a-f]{12}$/) != null);
-        return query<User>(`SELECT * FROM Accounts WHERE accountId IN ?`, [userId]);
+    export function gets(userIds: string[]): Promise<User[]> {
+        const validUsers = userIds.filter(x => x.length == 32 && x.match(/^[0-9a-f]{8}[0-9a-f]{4}[0-5][0-9a-f]{3}[089ab][0-9a-f]{3}[0-9a-f]{12}$/) != null);
+        return query<User>(`SELECT * FROM Accounts WHERE accountId IN (?)`, [validUsers]);
     }
 }
 /*

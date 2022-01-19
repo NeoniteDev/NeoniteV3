@@ -24,7 +24,7 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
     await profile.init();
 
     // since the header is optional
-    const clientCmdRvn: number = config.revisions?.find(x =>
+    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
         x.profileId == config.profileId
     )?.clientCommandRevision;
 
@@ -64,6 +64,7 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
     ) {
         for (let giftBoxItemId of giftBoxItemIds) {
             const item = await profile.getItem(giftBoxItemId);
+            if (!item) { continue; }
             const isGiftBox = item.templateId.startsWith('GiftBox:');
 
             if (isGiftBox) {
