@@ -3,8 +3,9 @@ import { WebSocket } from "ws";
 import { IncomingMessage } from "http";
 import { EventEmitter } from "events";
 import { IRoute } from "express";
-import * as party from './Party'
+import * as partyClass from './Party'
 import { ExecSyncOptionsWithStringEncoding } from "child_process";
+import { party } from "../types/bodies";
 
 export interface partyPing {
     from: string;
@@ -30,13 +31,14 @@ export interface oauth_Response {
 }
 
 export interface PartyConfig {
-    type: string,
-    joinability: string,
-    discoverability: string,
-    sub_type: string,
-    max_size: number,
-    invite_ttl: number,
-    join_confirmation: boolean
+    type:              string;
+    joinability:       string;
+    discoverability:   string;
+    sub_type:          string;
+    max_size:          number;
+    invite_ttl:        number;
+    join_confirmation: boolean;
+    intention_ttl:     number;
 }
 
 export interface Credentials {
@@ -58,6 +60,19 @@ export interface fulltokenInfo {
 }
 
 export interface tokenInfo {
+    token: string,
+    account_id: string,
+    deviceId?: string,
+    clientId: string,
+    displayName: string,
+    auth_method: string,
+    in_app_id: string,
+    internal: boolean,
+    expireAt: number,
+    client_service: string;
+}
+
+export interface tokenInfoClient {
     token: string,
     account_id?: string,
     deviceId?: string,
@@ -178,21 +193,23 @@ interface MatchmakingAuth {
 export interface partyMember {
     account_id: string,
     meta: Record<string, string>,
-    connections: [
-        {
-            id: string,
-            connected_at: Date,
-            updated_at: Date,
-            yield_leadership: boolean,
-            meta: Record<string, string>
-        }
-    ],
+    connections: party.JoinParty.Connection[],
     revision: 0,
-    updated_at: Date,
-    joined_at: Date,
+    updated_at: String,
+    joined_at: String,
     role: "CAPTAIN" | "MEMBER"
 }
 
+export interface PartyData {
+    id: string,
+    created_at: string,
+    updated_at: string,
+    config: party.CreateParty.Config,
+    members: partyMember[],
+    meta: Record<string, string>,
+    invites: any[],
+    revision: number
+}
 
 
 export type ArgumentTypes<F extends Function> = F extends (...args: infer A) => any ? A : never;

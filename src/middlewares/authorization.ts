@@ -4,6 +4,7 @@ import * as JWT from 'jsonwebtoken'
 import errors, { neoniteDev } from '../structs/errors';
 import * as database from '../database/mysqlManager';
 import { tokenInfo } from '../structs/types';
+import tokens from '../database/tokenController';
 
 export async function validateToken(token: string): Promise<tokenInfo | undefined> {
     if (token.startsWith('eg1~')) {
@@ -17,7 +18,7 @@ export async function validateToken(token: string): Promise<tokenInfo | undefine
             return undefined;
         }
 
-        const exist = await database.tokens.check(decoded.jti);
+        const exist = await tokens.check(decoded.jti);
         if (!exist) {
             return undefined;
         }
@@ -30,15 +31,17 @@ export async function validateToken(token: string): Promise<tokenInfo | undefine
             expireAt: decoded.exp,
             client_service: decoded.clsvc,
             displayName: decoded.dn,
+            // @ts-ignore
             account_id: decoded.sub,
             in_app_id: decoded.iai
         }
     } else if (token.length == 32) {
-        return await database.tokens.get(token);
+        //@ts-ignore
+        return await tokens.get(token);
     }
 }
 
-export async function CheckAuthorization(req: Request, res: Response, next: NextFunction) {
+export async function VerifyAuthorization(req: Request, res: Response, next: NextFunction): Promise<void> {
     if (!req.headers.authorization || req.headers.authorization.match(/^bearer /i) == null) {
         return next(neoniteDev.authentication.invalidHeader);
     }
@@ -60,7 +63,7 @@ export async function CheckAuthorization(req: Request, res: Response, next: Next
     next();
 }
 
-export default CheckAuthorization;
+export default VerifyAuthorization;
 
 export async function CheckClientAuthorization(req: Request, res: Response, next: NextFunction) {
     if (!req.headers.authorization || req.headers.authorization.match(/^bearer /i) == null) {

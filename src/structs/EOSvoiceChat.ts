@@ -2,6 +2,8 @@ import axios, { AxiosResponse } from 'axios';
 import * as os from 'os';
 import errors from './errors';
 import { randomUUID } from 'crypto';
+import { EOS } from '../types/responses';
+import { statusesEnum } from '../types/statuses';
 
 /// <reference path="../types/responses.d.ts"/>
 /// <reference path="../types/statuses.d.ts"/>
@@ -31,13 +33,11 @@ const axiosClient = axios.create({
     validateStatus: undefined
 })
 
-export default async function generateRoom(): Promise<EOS.room> {
-    const roomId = randomUUID();
-
+export default async function generateJoinToken(partyId: string): Promise<EOS.room> {
     const authorization = await getAuthorization();
 
     const response = await axiosClient.post<never, apiRequest<EOS.room, 200>>(
-        `https://api.epicgames.dev/rtc/v1/${deploymentId}/room/${roomId}`,
+        `https://api.epicgames.dev/rtc/v1/${deploymentId}/room/neo-${partyId}`,
         {
             participants: [
                 {

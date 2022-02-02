@@ -9,6 +9,7 @@
         "src/*/*.ts",
         "src/structs/*.ts",
         "src/middlewares/*.ts",
-        "*.ts", "src/*/*/*.ts"
+        "*.ts",
+        "src/*/*/*.ts"
     ]
 }

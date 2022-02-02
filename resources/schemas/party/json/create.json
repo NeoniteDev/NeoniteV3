@@ -1,0 +1,209 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "config": {
+                "type": "DEFAULT",
+                "joinability": "OPEN",
+                "discoverability": "ALL",
+                "sub_type": "default",
+                "max_size": 16,
+                "invite_ttl": 14400,
+                "join_confirmation": true,
+                "intention_ttl": 60
+            },
+            "join_info": {
+                "connection": {
+                    "id": "7b4c78500866465a9dc36bfe7e6aa8d9@prod.ol.epicgames.com/V2:Fortnite:WIN::a28e7eb4a08a4d56bfb176d7d1106312",
+                    "meta": {}
+                }
+            }
+        }
+    ],
+    "required": [
+        "config",
+        "join_info"
+    ],
+    "properties": {
+        "config": {
+            "$id": "#/properties/config",
+            "default": {},
+            "description": "An explanation about the purpose of this instance.",
+            "examples": [
+                {
+                    "type": "DEFAULT",
+                    "joinability": "OPEN",
+                    "discoverability": "ALL",
+                    "sub_type": "default",
+                    "max_size": 16,
+                    "invite_ttl": 14400,
+                    "join_confirmation": true,
+                    "intention_ttl": 60
+                }
+            ],
+            "title": "The config schema",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "$id": "#/properties/config/properties/type",
+                    "type": "string",
+                    "title": "The type schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "DEFAULT"
+                    ]
+                },
+                "joinability": {
+                    "$id": "#/properties/config/properties/joinability",
+                    "type": "string",
+                    "title": "The joinability schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "OPEN"
+                    ]
+                },
+                "discoverability": {
+                    "$id": "#/properties/config/properties/discoverability",
+                    "type": "string",
+                    "title": "The discoverability schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "ALL"
+                    ]
+                },
+                "sub_type": {
+                    "$id": "#/properties/config/properties/sub_type",
+                    "type": "string",
+                    "title": "The sub_type schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "default"
+                    ]
+                },
+                "max_size": {
+                    "$id": "#/properties/config/properties/max_size",
+                    "type": "integer",
+                    "title": "The max_size schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        16
+                    ]
+                },
+                "invite_ttl": {
+                    "$id": "#/properties/config/properties/invite_ttl",
+                    "type": "integer",
+                    "title": "The invite_ttl schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        14400
+                    ]
+                },
+                "join_confirmation": {
+                    "$id": "#/properties/config/properties/join_confirmation",
+                    "type": "boolean",
+                    "title": "The join_confirmation schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        true
+                    ]
+                },
+                "intention_ttl": {
+                    "$id": "#/properties/config/properties/intention_ttl",
+                    "type": "integer",
+                    "title": "The intention_ttl schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        60
+                    ]
+                }
+            },
+            "additionalProperties": true
+        },
+        "join_info": {
+            "$id": "#/properties/join_info",
+            "type": "object",
+            "title": "The join_info schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "connection": {
+                        "id": "7b4c78500866465a9dc36bfe7e6aa8d9@prod.ol.epicgames.com/V2:Fortnite:WIN::a28e7eb4a08a4d56bfb176d7d1106312",
+                        "meta": {}
+                    }
+                }
+            ],
+            "required": [
+                "connection"
+            ],
+            "properties": {
+                "connection": {
+                    "$id": "#/properties/join_info/properties/connection",
+                    "type": "object",
+                    "title": "The connection schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": {},
+                    "examples": [
+                        {
+                            "id": "7b4c78500866465a9dc36bfe7e6aa8d9@prod.ol.epicgames.com/V2:Fortnite:WIN::a28e7eb4a08a4d56bfb176d7d1106312",
+                            "meta": {}
+                        }
+                    ],
+                    "required": [],
+                    "properties": {
+                        "id": {
+                            "$id": "#/properties/join_info/properties/connection/properties/id",
+                            "type": "string",
+                            "title": "The id schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": "",
+                            "examples": [
+                                "7b4c78500866465a9dc36bfe7e6aa8d9@prod.ol.epicgames.com/V2:Fortnite:WIN::a28e7eb4a08a4d56bfb176d7d1106312"
+                            ]
+                        },
+                        "meta": {
+                            "$id": "#/properties/join_info/properties/connection/properties/meta",
+                            "type": "object",
+                            "title": "The meta schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": {},
+                            "examples": [
+                                {}
+                            ],
+                            "required": [],
+                            "additionalProperties": true
+                        }
+                    },
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true
+        },
+        "meta": {
+            "$id": "#/properties/join_info/properties/connection/properties/meta",
+            "type": "object",
+            "title": "The meta schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {}
+            ],
+            "required": [],
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": true
+}

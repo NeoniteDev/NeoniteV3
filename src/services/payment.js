@@ -3,13 +3,13 @@ const errors = require('./../structs/errors')
 const Path = require('path');
 const fs = require('fs');
 const crypto = require('crypto')
-const { CheckAuthorization, CheckClientAuthorization } = require('./../middlewares/authorization');
+const { VerifyAuthorization, CheckClientAuthorization } = require('./../middlewares/authorization');
 const database = require('../database/mysqlManager');
 const { error } = require('console');
 const app = express.Router();
 app.use(express.json());
 
-app.post('/v1/purchaseToken', CheckAuthorization, async (req, res) => {
+app.post('/v1/purchaseToken', VerifyAuthorization, async (req, res) => {
     const ip = req.get('cf-connecting-ip') || req.ip;
     const ipMd5 = crypto.createHash('md5').update(ip).digest("hex");
 

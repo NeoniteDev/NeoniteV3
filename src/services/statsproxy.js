@@ -6,11 +6,11 @@ const axios = require('axios').default
 const app = express.Router();
 const errors = require('../structs/errors');
 
-const { CheckAuthorization } = require('../middlewares/authorization');
+const { VerifyAuthorization } = require('../middlewares/authorization');
 
 const { ApiException } = errors;
 
-app.get('/api/statsv2/account/:accountId', CheckAuthorization, (req, res) => {
+app.get('/api/statsv2/account/:accountId', VerifyAuthorization, (req, res) => {
     res.json({
         "startTime": 0,
         "endTime": 9223372036854775807,
@@ -214,10 +214,6 @@ app.get('/api/statsv2/account/:accountId', CheckAuthorization, (req, res) => {
         },
         "accountId": req.params.accountId
     })
-})
-
-app.use(() => {
-    throw new ApiException(errors.com.epicgames.common.not_found)
 })
 
 app.use(

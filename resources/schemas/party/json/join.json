@@ -1,0 +1,86 @@
+{
+    "$id": "http://example.com/example.json",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "default": {},
+    "description": "The root schema comprises the entire JSON document.",
+    "examples": [
+        {
+            "connection": {
+                "id": "",
+                "meta": {},
+                "yield_leadership": false
+            },
+            "meta": {}
+        }
+    ],
+    "required": [
+        "connection"
+    ],
+    "title": "The root schema",
+    "type": "object",
+    "properties": {
+        "connection": {
+            "$id": "#/properties/connection",
+            "default": {},
+            "description": "An explanation about the purpose of this instance.",
+            "examples": [
+                {
+                    "id": "",
+                    "meta": {},
+                    "yield_leadership": false
+                }
+            ],
+            "required": [],
+            "title": "The connection schema",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "$id": "#/properties/connection/properties/id",
+                    "type": "string",
+                    "title": "The id schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        ""
+                    ]
+                },
+                "meta": {
+                    "$id": "#/properties/connection/properties/meta",
+                    "type": "object",
+                    "title": "The meta schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": {},
+                    "examples": [
+                        {}
+                    ],
+                    "required": [],
+                    "additionalProperties": true
+                },
+                "yield_leadership": {
+                    "$id": "#/properties/connection/properties/yield_leadership",
+                    "type": "boolean",
+                    "title": "The yield_leadership schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
+                }
+            },
+            "additionalProperties": true
+        },
+        "meta": {
+            "$id": "#/properties/meta",
+            "type": "object",
+            "title": "The meta schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {}
+            ],
+            "required": [],
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": true
+}

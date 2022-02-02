@@ -7,6 +7,7 @@ interface ResponseBody {
     numericErrorCode: number | null
     originatingService: 'neonite'
     intent: 'unknown'
+    validationFailures?: Record<string, Object>
 }
 
 export class ApiError {
@@ -69,15 +70,18 @@ export const neoniteDev = {
         get alreadyInParty() { return new ApiError('errors.com.neoniteDev.party.alreadyInParty', 'Your already in a party.', 51012, 409) },
         get userHasNoParty() { return new ApiError('errors.com.neoniteDev.party.userHasNoParty', 'User has no party to join.', 51019, 404) },
         get notLeader() { return new ApiError('errors.com.neoniteDev.party.notLeader', 'You are not the party leader.', 51015, 403) },
-        get pingNotFound() { return new ApiError('errors.com.neoniteDev.party.pingNotFound', "Sorry, we couldn't find an invitation", 51021, 404) },
+        get pingNotFound() { return new ApiError('errors.com.neoniteDev.party.pingNotFound', "Sorry, we couldn't find a ping.", 51021, 404) },
+        get pingForbidden() { return new ApiError('errors.com.neoniteDev.party.pingForbidden', 'User is not authorized to send pings the desired user', 51020, 403) },
         get notYourAccount() { return new ApiError('errors.com.neoniteDev.party.notYourAccount', "You are not allowed to make changes to other people's accounts", 51023, 403) },
         get userOffline() { return new ApiError('errors.com.neoniteDev.party.userOffline', 'User is offline.', 51024, 403) },
+        get selfPing() { return new ApiError('errors.com.neoniteDev.party.selfPing', 'Self pings are not allowed.', 51028, 400) },
     },
     cloudstorage: {
         get fileNotFound() { return new ApiError('errors.com.neoniteDev.cloudstorage.fileNotFound', 'Cannot find the file you requested.', 12004, 404) }
     },
     account: {
         get toManyAccounts() { return new ApiError('errors.com.neoniteDev.account.toManyAccounts', "You are trying to query too many accounts at a time", 18066, 400) },
+        get accountNotFound() { return new ApiError('errors.com.neoniteDev.account.accountNotFound', "Sorry, we couldn't find an account for {displayName}", 18007, 404) },
     },
     mcp: {
         get wrongCommand() { return new ApiError("errors.com.neoniteDev.mcp.wrongCommand", "Wrong command.", 12801, 404) },
@@ -85,8 +89,10 @@ export const neoniteDev = {
         get templateNotFound() { return new ApiError("errors.com.neoniteDev.mcp.templateNotFound", "Unable to find template configuration for profile", 12813, 404) },
         get invalidHeader() { return new ApiError("errors.com.neoniteDev.mcp.invalidHeader", "Parsing client revisions header failed.", 12831, 400) },
         get operationNotFound() { return new ApiError("errors.com.neoniteDev.mcp.operationNotFound", "Operation not valid", 16035, 404) },
+        get invalidChatRequest() { return new ApiError("errors.com.neoniteDev.mcp.invalidChatRequest", "", 16090, 400) },
     },
     matchmaking: {
+        get unknownSession() { return new ApiError('errors.com.neoniteDev.matchmaking.unknownSession', "unknown session id", 12101, 404) },
         get missingCookie() { return new ApiError('errors.com.neoniteDev.matchmaking.missingCookie', "Missing NetCL cookie", null, 400) },
         get invalidBucketId() { return new ApiError('errors.com.neoniteDev.matchmaking.invalidBucketId', "blank or invalid bucketId", 16102, 400) },
         get invalidPartyPlayers() { return new ApiError('errors.com.neoniteDev.matchmaking.invalidPartyPlayers', "blank or invalid partyPlayerIds", 16103, 400) },
@@ -96,7 +102,10 @@ export const neoniteDev = {
         get itemNotFound() { return new ApiError('errors.com.neoniteDev.shop.itemNotFound', "Could not find the catalog item you requested", 28001, 400) },
     },
     friends: {
-        get selfFriend() { return new ApiError('errors.com.neoniteDev.friends.selfFriend', "You cannot be friend with yourself.", 14001, 400) }
+        get selfFriend() { return new ApiError('errors.com.neoniteDev.friends.selfFriend', "You cannot be friend with yourself.", 14001, 400) },
+        get accountNotFound() { return new ApiError('errors.com.neoniteDev.friends.accountNotFound', "Account does not exist", 14011, 404) },
+        get friendshipNotFound() { return new ApiError('errors.com.neoniteDev.friends.friendshipNotFound', "Friendship does not exist", 14004, 404) },
+        get requestAlreadySent() { return new ApiError('errors.com.neoniteDev.friends.requestAlreadySent', "Friendship request has already been sent.", 14014, 409) }
     },
     internal: {
         get validationFailed() { return new ApiError('errors.com.neoniteDev.internal.validationFailed', '', 1040, 400) },
@@ -111,9 +120,11 @@ export const neoniteDev = {
         get eosError() { return new ApiError('errors.com.neoniteDev.internal.EosError', 'Sorry an error occurred while communication with Epic Online Service Servers.', null, 500) },
     },
     basic: {
+        get badRequest() { return new ApiError('errors.com.neoniteDev.basic.badRequest', "Sorry but your request is invalid.", 1001, 400) },
         get notFound() { return new ApiError('errors.com.neoniteDev.basic.notFound', "the resource you were trying to find could not be found.", 1004, 404) },
         get notAcceptable() { return new ApiError('errors.com.neoniteDev.basic.notAcceptable', 'Sorry your request could not be processed as you do not accept the response type generated by this resource. Please check your Accept header.', 1008, 406) },
-        get methodNotAllowed() { return new ApiError('errors.com.neoniteDev.basic.methodNotAllowed', 'Sorry the resource you were trying to access cannot be accessed with the HTTP method you used.', 1009, 405) }
+        get methodNotAllowed() { return new ApiError('errors.com.neoniteDev.basic.methodNotAllowed', 'Sorry the resource you were trying to access cannot be accessed with the HTTP method you used.', 1009, 405) },
+        get jsonMappingFailed() { return new ApiError('errors.com.neoniteDev.basic.jsonMappingFailed', 'Json mapping failed.', 1019, 400) }
     }
 };
 

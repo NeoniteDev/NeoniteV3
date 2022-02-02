@@ -1,0 +1,166 @@
+{
+    "$id": "http://example.com/example.json",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "default": {},
+    "description": "The root schema comprises the entire JSON document.",
+    "examples": [
+        {
+            "config": {
+                "discoverability": "ALL",
+                "joinability": "OPEN"
+            },
+            "meta": {
+                "delete": [
+                    "urn:epic:cfg:not-accepting-members-reason_i"
+                ],
+                "update": {
+                    "urn:epic:cfg:presence-perm_s": "Anyone",
+                    "urn:epic:cfg:invite-perm_s": "Anyone"
+                }
+            },
+            "revision": 0
+        }
+    ],
+    "required": [
+        "revision"
+    ],
+    "title": "The root schema",
+    "type": "object",
+    "properties": {
+        "config": {
+            "$id": "#/properties/config",
+            "default": {},
+            "description": "An explanation about the purpose of this instance.",
+            "examples": [
+                {
+                    "discoverability": "ALL",
+                    "joinability": "OPEN"
+                }
+            ],
+            "title": "The config schema",
+            "minItems": 2,
+            "type": "object",
+            "properties": {
+                "discoverability": {
+                    "$id": "#/properties/config/properties/discoverability",
+                    "type": "string",
+                    "title": "The discoverability schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "ALL"
+                    ]
+                },
+                "joinability": {
+                    "$id": "#/properties/config/properties/joinability",
+                    "type": "string",
+                    "title": "The joinability schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "OPEN"
+                    ]
+                }
+            },
+            "additionalProperties": true
+        },
+        "meta": {
+            "$id": "#/properties/meta",
+            "default": {},
+            "description": "An explanation about the purpose of this instance.",
+            "examples": [
+                {
+                    "delete": [
+                        "urn:epic:cfg:not-accepting-members-reason_i"
+                    ],
+                    "update": {
+                        "urn:epic:cfg:presence-perm_s": "Anyone",
+                        "urn:epic:cfg:invite-perm_s": "Anyone"
+                    }
+                }
+            ],
+            "title": "The meta schema",
+            "minItems": 1,
+            "type": "object",
+            "properties": {
+                "delete": {
+                    "$id": "#/properties/meta/properties/delete",
+                    "type": "array",
+                    "title": "The delete schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": [],
+                    "examples": [
+                        [
+                            "urn:epic:cfg:not-accepting-members-reason_i"
+                        ]
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/meta/properties/delete/items",
+                        "anyOf": [
+                            {
+                                "$id": "#/properties/meta/properties/delete/items/anyOf/0",
+                                "type": "string",
+                                "title": "The first anyOf schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "urn:epic:cfg:not-accepting-members-reason_i"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "update": {
+                    "$id": "#/properties/meta/properties/update",
+                    "default": {},
+                    "description": "An explanation about the purpose of this instance.",
+                    "examples": [
+                        {
+                            "urn:epic:cfg:presence-perm_s": "Anyone",
+                            "urn:epic:cfg:invite-perm_s": "Anyone"
+                        }
+                    ],
+                    "required": [],
+                    "title": "The update schema",
+                    "type": "object",
+                    "properties": {
+                        "urn:epic:cfg:presence-perm_s": {
+                            "$id": "#/properties/meta/properties/update/properties/urn%3Aepic%3Acfg%3Apresence-perm_s",
+                            "type": "string",
+                            "title": "The urn:epic:cfg:presence-perm_s schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": "",
+                            "examples": [
+                                "Anyone"
+                            ]
+                        },
+                        "urn:epic:cfg:invite-perm_s": {
+                            "$id": "#/properties/meta/properties/update/properties/urn%3Aepic%3Acfg%3Ainvite-perm_s",
+                            "type": "string",
+                            "title": "The urn:epic:cfg:invite-perm_s schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": "",
+                            "examples": [
+                                "Anyone"
+                            ]
+                        }
+                    },
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": true
+        },
+        "revision": {
+            "$id": "#/properties/revision",
+            "type": "integer",
+            "title": "The revision schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                0
+            ]
+        }
+    },
+    "additionalProperties": true
+}

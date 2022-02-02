@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
         "strict": true,
-        "moduleResolution": "Node"
+        "moduleResolution": "Node",
+        "module": "CommonJS"
     },
     "extends": "../../tsconfig.json",
     "exclude": [

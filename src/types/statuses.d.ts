@@ -1,5 +1,5 @@
 
-declare namespace statusesEnum {
+export namespace statusesEnum {
 
     /**
      * @description 1xx Status Codes

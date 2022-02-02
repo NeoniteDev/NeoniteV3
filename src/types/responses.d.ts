@@ -1,4 +1,4 @@
-declare module EOS {
+export declare module EOS {
     export interface room {
         roomId: string;
         participants: {

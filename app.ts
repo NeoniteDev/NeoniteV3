@@ -1,15 +1,16 @@
 import * as express from 'express';
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import * as fs from 'fs';
-import errors from './src/structs/errors';
+import errors, { ApiError } from './src/structs/errors';
 import * as statuses from 'statuses'
 import {} from './src/structs/types'
 import * as https from 'http'
 import * as dotenv from 'dotenv'
 import * as path from 'path'
 import websocketHandler from './src/websocket'
-import {} from 'colors'
-
+import { } from 'colors'
+require('colors');
+import { HttpError } from 'http-errors';
 
 const packageFile = require('./package.json');
 require('./src/structs/polyfill');
@@ -73,7 +74,7 @@ fs.readdirSync('./src/services').forEach(filename => {
 app.use('/', require('./src/services/Uncategorized/index'));
 
 app.use((req, res) => {
-    res.status(404).send(`<h1>HTTP ERROR ${res.statusCode}</h1> <pre>Not Found</pre>`);
+    res.status(404).send(`<h1>HTTP ERROR ${res.statusCode}</h1>&emsp;<pre>Not Found</pre>`);
 })
 
 app.use(
@@ -84,16 +85,20 @@ app.use(
             return;
         }
 
-        const statusCode: number = typeof err.status == 'number' ? err.status : 500;
+        if (err instanceof ApiError) {
+            return err.apply(res);
+        }
 
-        res.status(statusCode).send(`
+        if (err instanceof HttpError) {
+            return next(err);
+        }
+
+        res.status(500).send(`
             <h1>HTTP ERROR ${res.statusCode}</h1>
-            <pre>${statuses.message[res.statusCode]}</pre>
+            &emsp;<pre>${statuses.message[res.statusCode]}</pre>
         `)
     }
 )
-
-require('colors');
 
 var server = https.createServer({
    /* key,

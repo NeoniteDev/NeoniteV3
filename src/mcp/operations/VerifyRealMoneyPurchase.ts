@@ -4,9 +4,8 @@ import errors from '../../structs/errors'
 import * as Path from 'path';
 import { validate, ValidationError } from 'jsonschema';
 import * as fs from 'fs'
-import { pendingPurchases } from '../../database/mysqlManager';
 import { getCatalog } from '../../online';
-
+import pendingPurchases from '../../database/purchasesController';
 
 const schemaPath = Path.join(__dirname, '../../../resources/schemas/mcp/json/VerifyRealMoneyPurchase.json');
 

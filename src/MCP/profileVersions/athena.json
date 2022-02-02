@@ -89472,7 +89472,8 @@
         }
       ],
     "removedItems": [
-
+      "Token:athena_s19_winterfest_key",
+      "AthenaRewardGraph:s19_winterfest"
     ],
     "stats": {}
 }

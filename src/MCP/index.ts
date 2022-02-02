@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { CheckAuthorization } from '../middlewares/authorization'
+import { VerifyAuthorization } from '../middlewares/authorization'
 import validateMethod from '../middlewares/Method'
 import * as Path from 'path';
 import errors from '../structs/errors';
@@ -9,7 +9,7 @@ import { profile as types } from '../structs/types';
 
 const app = express.Router();
 
-app.post('/api/game/v2/profile/:accountId/client/:command', CheckAuthorization, async (req, res, next) => {
+app.post('/api/game/v2/profile/:accountId/client/:command', VerifyAuthorization, async (req, res, next) => {
     try {
         if (!req.auth) {
             throw errors.neoniteDev.authentication.authenticationFailed;

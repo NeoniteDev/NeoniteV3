@@ -1,11 +1,6 @@
-const express = require('express');
-const errors = require('./../../structs/errors')
-const fs = require('fs');
-
-
-const { CheckAuthorization } = require('../../middlewares/authorization');
-const exp = require('constants');
-const { ApiException } = errors;
+import * as express from 'express';
+import VerifyAuthorization from '../../middlewares/authorization';
+import shearchService from './search-service';
 
 const app = express.Router();
 
@@ -999,7 +994,8 @@ const assets = {
     }
 }
 
-app.get('/region', CheckAuthorization, (req, res) => {
+app.use(shearchService);
+app.get('/region', VerifyAuthorization, (req, res) => {
     res.json({
         "continent": {
             "code": "NA",
@@ -1035,7 +1031,7 @@ app.get('/region', CheckAuthorization, (req, res) => {
     })
 })
 
-app.post('/api/v1/assets/Fortnite/:version/:netcl', CheckAuthorization, (req, res) => {
+app.post('/api/v1/assets/Fortnite/:version/:netcl', VerifyAuthorization, (req, res) => {
     const wantedKeys = Object.keys(req.body);
 
     res.json(
@@ -1198,7 +1194,7 @@ app.post('/api/v1/fortnite-br/surfaces/motd/target', (req, res) => {
     })
 })
 
-app.post('/profile/privacy_settings', CheckAuthorization, (req, res) => {
+app.post('/profile/privacy_settings', VerifyAuthorization, (req, res) => {
     res.json({
         "privacySettings": {
             "playRegion": "UNDEFINED_LEVEL",

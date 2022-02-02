@@ -1,15 +1,25 @@
-const express = require('express');
-const { neoniteDev, ApiError } = require('../structs/errors')
-const crypto = require('crypto');
-const jwt = require('jsonwebtoken');
+import Router from "express-promise-router";
+import errors, { ApiError } from "../structs/errors";
+import * as crypto from 'crypto';
+import * as jwt from 'jsonwebtoken';
+import * as express from "express";
+import VerifyAuthorization, { CheckClientAuthorization } from "../middlewares/authorization";
+import validateMethod from "../middlewares/Method";
+import { Credentials } from "../structs/types";
+import tokens from "../database/tokenController";
+import { exchanges } from "../database/exchangesController";
+import users from "../database/usersController";
+import refresh_tokens from "../database/refreshController";
+import { Request, Response, NextFunction } from 'express-serve-static-core';
+import { HttpError } from "http-errors";
 
-const { CheckAuthorization, CheckClientAuthorization } = require('../middlewares/authorization');
+const app = Router();
 
+const jwtSecret = process.env.JWT_SECRECT;
 
-const app = express.Router();
-const CheckMethod = require('../middlewares/Method').default;
-const database = require('../database/mysqlManager');
-const errors = require('../structs/errors');
+if (!jwtSecret) {
+    throw new Error('Missing jwt secret key');
+}
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -32,23 +42,19 @@ app.post('/api/oauth/token', async (req, res, next) => {
 
         const Authorization = req.headers.authorization.replace(/basic /i, '');
 
-        /**
-         * @type {Credentials}
-         */
-        var credentials = {};
         try {
             const arr = Buffer.from(Authorization, 'base64').toString().split(':');
 
-            credentials = Object.fromEntries(arr.map(x => {
-                var i = arr.indexOf(x);
-                return [i == 0 ? 'Username' : 'Password', x]
-            }));
+            var credentials = {
+                username: arr[0],
+                password: arr[1]
+            }
         } catch {
-            throw new errors.neoniteDev.authentication.invalidClient;
+            throw errors.neoniteDev.authentication.invalidClient;
         }
 
-        if (credentials.Username.length != 32) {
-            throw new errors.neoniteDev.authentication.invalidClient;
+        if (credentials.username.length != 32) {
+            throw errors.neoniteDev.authentication.invalidClient;
         }
 
         var grant_type = req.body.grant_type;
@@ -62,19 +68,20 @@ app.post('/api/oauth/token', async (req, res, next) => {
             case 'client_credentials':
                 {
                     const token = crypto.randomUUID().replace(/-/g, '');
+                    var jwtToken: string | undefined = undefined;
 
                     if ('token_type' in req.body && req.body.token_type == 'eg1') {
-                        var jwt_token = 'eg1~' + jwt.sign(
+                        jwtToken = 'eg1~' + jwt.sign(
                             {
                                 'mver': false,
-                                'clid': credentials.Username,
+                                'clid': credentials.username,
                                 'am': grant_type,
                                 'sia': '4e656f6e697465',
                                 'clsvc': 'fortnite',
                                 'ic': true,
                                 't': 's'
                             },
-                            process.env.JWT_SECRECT,
+                            jwtSecret,
                             {
                                 jwtid: token,
                                 expiresIn: '4h'
@@ -84,9 +91,9 @@ app.post('/api/oauth/token', async (req, res, next) => {
 
                     const expires = new Date().addHours(4);
 
-                    await database.tokens.add({
+                    await tokens.add({
                         auth_method: grant_type,
-                        clientId: credentials.Username,
+                        clientId: credentials.username,
                         client_service: 'fortnite',
                         expireAt: expires.getTime(),
                         internal: true,
@@ -94,11 +101,11 @@ app.post('/api/oauth/token', async (req, res, next) => {
                     })
 
                     res.json({
-                        'access_token': jwt_token || token,
+                        'access_token': jwtToken || token,
                         'expires_in': 14400, // in seconds
                         'expires_at': expires,
                         'token_type': 'bearer',
-                        'client_id': credentials.Username,
+                        'client_id': credentials.username,
                         'internal_client': true,
                         'client_service': 'fortnite'
                     })
@@ -109,24 +116,25 @@ app.post('/api/oauth/token', async (req, res, next) => {
             case 'exchange_code':
                 {
                     if (!req.body.exchange_code) {
-                        throw neoniteDev.authentication.invalidRequest
+                        throw errors.neoniteDev.authentication.invalidRequest
                     }
 
-                    const code = await database.exchanges.get(req.body.exchange_code);
-                    const removeSuccess = await database.exchanges.get(req.body.exchange_code);
+                    const code = await exchanges.get(req.body.exchange_code);
+                    const removeSuccess = await exchanges.get(req.body.exchange_code);
 
                     if (!removeSuccess) {
-                        throw neoniteDev.authentication.invalidExchange;
+                        throw errors.neoniteDev.authentication.invalidExchange;
                     }
 
                     if (!code) {
-                        throw neoniteDev.authentication.invalidExchange;
+                        throw errors.neoniteDev.authentication.invalidExchange;
                     };
 
-                    user = await database.users.get({ accountId: code.accountId });
+
+                    user = await users.getById(code.accountId);
 
                     if (!user) {
-                        throw neoniteDev.authentication.invalidExchange;
+                        throw errors.neoniteDev.authentication.invalidExchange;
                     }
 
                     break;
@@ -135,18 +143,16 @@ app.post('/api/oauth/token', async (req, res, next) => {
             case 'password':
                 {
                     if ('username' in req.body == false || 'password' in req.body == false) {
-                        throw neoniteDev.authentication.invalidRequest;
+                        throw errors.neoniteDev.authentication.invalidRequest;
                     }
 
                     var hash_password = crypto.createHash("sha256").update(req.body.password).digest("hex")
 
-                    user = await database.users.get({
-                        email: req.body.username.toLowerCase(),
-                        password: hash_password
-                    })
+                    user = await users.getByEmail(req.body.username.toLowerCase());
 
-                    if (!user) {
-                        throw neoniteDev.authentication.invalidGrant;
+
+                    if (!user || user.password !== hash_password) {
+                        throw errors.neoniteDev.authentication.invalidGrant;
                     }
 
                     break;
@@ -155,7 +161,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
             case 'refresh_token':
                 {
                     if ('refresh_token' in req.body == false) {
-                        throw neoniteDev.authentication.invalidRequest.withMessage('refresh_token is required.')
+                        throw errors.neoniteDev.authentication.invalidRequest.withMessage('refresh_token is required.')
                     }
 
                     /** @type {string} */
@@ -163,19 +169,20 @@ app.post('/api/oauth/token', async (req, res, next) => {
 
                     if (refresh.startsWith('eg1~')) {
                         try {
-                            /**
-                             * @type {import('jsonwebtoken').JwtPayload}
-                             */
-                            var decoded = jwt.verify(req.body.refresh_token.slice(4), process.env.JWT_SECRECT);
+                            var decoded = jwt.verify(req.body.refresh_token.slice(4), jwtSecret);
                         } catch { throw errors.neoniteDev.authentication.invalidRefresh; }
 
-                        var infos = await database.refresh_tokens.get(decoded.jti);
+                        if (typeof decoded != 'object' || !decoded.jti) {
+                            throw errors.neoniteDev.authentication.invalidRefresh;
+                        }
+
+                        var infos = await refresh_tokens.get(decoded.jti);
 
                         if (!infos) {
                             throw errors.neoniteDev.authentication.invalidRefresh;
                         }
                     } else if (refresh.length == 32) {
-                        var infos = await database.refresh_tokens.get(refresh);
+                        var infos = await refresh_tokens.get(refresh);
 
                         if (!infos) {
                             throw errors.neoniteDev.authentication.invalidRefresh;
@@ -184,14 +191,14 @@ app.post('/api/oauth/token', async (req, res, next) => {
                         throw errors.neoniteDev.authentication.invalidRefresh;
                     }
 
-                    if (infos.clientId != credentials.Username) {
-                        throw errors.neoniteDev.authentication.invalidHeader.withMessage(`invalid client ${credentials.Username}`);
+                    if (infos.clientId != credentials.username) {
+                        throw errors.neoniteDev.authentication.invalidHeader.withMessage(`invalid client ${credentials.username}`);
                     }
 
-                    database.refresh_tokens.remove(infos.token);
-                    database.tokens.remove(infos.bearer_token);
+                    refresh_tokens.remove(infos.token);
+                    tokens.remove(infos.bearer_token);
 
-                    user = await database.users.get({ accountId: infos.account_id })
+                    user = await users.getById(infos.account_id)
 
                     if (!user) {
                         throw errors.neoniteDev.authentication.invalidRefresh;
@@ -202,7 +209,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
 
             default:
                 {
-                    throw neoniteDev.authentication.grantNotImplemented;
+                    throw errors.neoniteDev.authentication.grantNotImplemented;
                 }
         }
 
@@ -213,9 +220,9 @@ app.post('/api/oauth/token', async (req, res, next) => {
         const tokenExpires = new Date().addHours(8);
         const refreshExpires = new Date().addHours(24);
 
-        const tokenAdd = database.tokens.add({
+        const tokenAdd = tokens.add({
             auth_method: grant_type,
-            clientId: credentials.Username,
+            clientId: credentials.username,
             client_service: 'fortnite',
             expireAt: tokenExpires.getTime(),
             internal: true,
@@ -226,9 +233,9 @@ app.post('/api/oauth/token', async (req, res, next) => {
             refresh_token: refresh_token
         });
 
-        const refreshAdd = database.refresh_tokens.add({
+        const refreshAdd = refresh_tokens.add({
             auth_method: grant_type,
-            clientId: credentials.Username,
+            clientId: credentials.username,
             client_service: 'fortnite',
             expireAt: tokenExpires.getTime(),
             internal: true,
@@ -244,12 +251,15 @@ app.post('/api/oauth/token', async (req, res, next) => {
             throw errors.neoniteDev.internal.dataBaseError;
         }
 
+        var jwt_token: string | undefined = undefined;
+        var jwt_refresh: string | undefined = undefined;
+
         if (req.body.token_type == 'eg1') {
-            var jwt_token = 'eg1~' + jwt.sign(
+            jwt_token = 'eg1~' + jwt.sign(
                 {
                     'sub': user.accountId,
                     'mver': false,
-                    'clid': credentials.Username,
+                    'clid': credentials.username,
                     'dn': user.displayName,
                     'am': grant_type,
                     'iai': user.accountId,
@@ -258,21 +268,21 @@ app.post('/api/oauth/token', async (req, res, next) => {
                     'ic': true,
                     't': 's'
                 },
-                process.env.JWT_SECRECT,
+                jwtSecret,
                 {
                     expiresIn: tokenExpires.getTime(),
                     jwtid: access_token
                 }
-            )
+            );
 
-            var jwt_refresh = 'eg1~' + jwt.sign(
+            jwt_refresh = 'eg1~' + jwt.sign(
                 {
                     'sub': user.accountId,
                     't': 'r',
-                    'clid': credentials.Username,
+                    'clid': credentials.username,
                     'am': grant_type,
                 },
-                process.env.JWT_SECRECT,
+                jwtSecret,
                 {
                     expiresIn: refreshExpires.getTime(),
                     jwtid: refresh_token
@@ -288,7 +298,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
             'refresh_token': jwt_refresh || refresh_token,
             'refresh_expires': Math.floor((refreshExpires.getTime() - Date.now()) / 1000),
             'refresh_expires_at': refreshExpires,
-            'client_id': credentials.Username,
+            'client_id': credentials.username,
             'account_id': user.accountId,
             'internal_client': true,
             'client_service': 'fortnite',
@@ -303,8 +313,11 @@ app.post('/api/oauth/token', async (req, res, next) => {
 });
 
 app.get('/api/oauth/verify', CheckClientAuthorization, (req, res) => {
-    const token = req.headers.authorization.replace(/^bearer /i, '');
+    if (!req.headers.authorization) {
+        return res.sendStatus(400);
+    }
 
+    const token = req.headers.authorization.replace(/^bearer /i, '');
     const expires_date = new Date(req.auth.expireAt)
     const expire_in = expires_date.getTime() - Date.now()
 
@@ -327,12 +340,12 @@ app.get('/api/oauth/verify', CheckClientAuthorization, (req, res) => {
 
 
 //create exchange
-app.get('/api/oauth/exchange', CheckAuthorization, async (req, res) => {
+app.get('/api/oauth/exchange', VerifyAuthorization, async (req, res) => {
     const exchangeCode = crypto.randomUUID().replace(/-/g, '');
     const expireAt = new Date().addMinutes(5)
     const createdAt = new Date();
 
-    await database.exchanges.add(exchangeCode, req.auth.account_id, createdAt, expireAt);
+    await exchanges.add(exchangeCode, req.auth.account_id, createdAt, expireAt);
 
     res.json({
         "expiresInSeconds": Math.floor((expireAt.getTime() - createdAt.getTime()) / 1000),
@@ -352,7 +365,7 @@ app.get('/api/epicdomains/ssodomains', (req, res) => {
     ])
 })
 
-app.get('/api/public/account/:accountId', CheckAuthorization, (req, res) => {
+app.get('/api/public/account/:accountId', VerifyAuthorization, (req, res) => {
     if (req.auth.account_id === req.params.accountId) {
         return res.json({
             "id": req.params.accountId,
@@ -384,40 +397,48 @@ app.get('/api/public/account/:accountId', CheckAuthorization, (req, res) => {
     });
 });
 
-app.get('/api/public/account/:accountId/externalAuths', CheckAuthorization, (req, res) => {
+app.get('/api/public/account/:accountId/externalAuths', VerifyAuthorization, (req, res) => {
     res.json([]);
 });
 
-app.get('/api/public/account/', CheckAuthorization, async (req, res) => {
+app.get('/api/public/account/', VerifyAuthorization, async (req, res) => {
     if (!req.query.accountId) {
         return res.json([])
     }
 
-    var Ids = req.query.accountId;
+    var Ids: string[] = [];
 
     if (typeof (req.query.accountId) === 'string') {
         Ids = [req.query.accountId]
+    } else if (req.query.accountId instanceof Array && req.query.accountId) {
+        Ids = <string[]>(req.query.accountId);
+    }
+
+
+    if ('length' in Ids === false) {
+        return;
     }
 
     if (Ids.length > 100) {
         throw errors.neoniteDev.account.toManyAccounts;
     }
+    
 
-    const users = await database.users.gets(Ids);
+    const result = await users.gets(Ids);
 
     res.json(
-        users.map(x => {
+        result.map(x => {
             return {
                 id: x.accountId,
                 displayName: x.displayName,
-                passwordResetRequired: x === req.auth.account_id ? false : undefined,
+                passwordResetRequired: x.accountId === req.auth.account_id ? false : undefined,
                 externalAuths: {}
             }
         })
     );
 });
 
-app.get('/api/public/account/displayName/:displayName', CheckAuthorization, (req, res) => {
+app.get('/api/public/account/displayName/:displayName', VerifyAuthorization, (req, res) => {
     res.json({
         'id': Buffer.from(req.params.displayName, 'utf8').toString('hex'),
         'displayName': req.params.displayName,
@@ -425,9 +446,9 @@ app.get('/api/public/account/displayName/:displayName', CheckAuthorization, (req
     })
 })
 
-app.get('/api/public/account/:accountId/deviceAuth', CheckAuthorization, (req, res) => res.json([]));
+app.get('/api/public/account/:accountId/deviceAuth', VerifyAuthorization, (req, res) => res.json([]));
 
-app.post('/api/public/account/:accountId/deviceAuth', CheckAuthorization, (req, res) => {
+app.post('/api/public/account/:accountId/deviceAuth', VerifyAuthorization, (req, res) => {
     res.json({
         accountId: req.params.accountId,
         deviceId: '',
@@ -435,7 +456,7 @@ app.post('/api/public/account/:accountId/deviceAuth', CheckAuthorization, (req, 
     })
 });
 
-app.get('/api/public/account/:accountId/externalAuths', CheckAuthorization, (req, res) => {
+app.get('/api/public/account/:accountId/externalAuths', VerifyAuthorization, (req, res) => {
     res.json([])
 });
 
@@ -448,29 +469,23 @@ app.delete('/api/oauth/sessions/kill/', CheckClientAuthorization, (req, res) => 
 });
 
 
-app.use(CheckMethod(app));
+app.use(validateMethod(app));
 
 app.use(() => {
     throw errors.neoniteDev.basic.notFound;
 })
 
 app.use(
-    /**
-    * @param {any} err
-    * @param {express.Request} req
-    * @param {express.Response} res
-    * @param {express.NextFunction} next
-    */
-    (err, req, res, next) => {
+    (err: any, req: Request, res: Response, next: NextFunction) => {
         if (err instanceof ApiError) {
             err.apply(res);
         }
-        else if (err instanceof SyntaxError && err.type == 'entity.parse.failed') {
-            neoniteDev.internal.jsonParsingFailed.with(err.message).apply(res);
+        else if (err instanceof HttpError && err.type == 'entity.parse.failed') {
+            errors.neoniteDev.internal.jsonParsingFailed.with(err.message).apply(res);
         }
         else {
             console.error(err)
-            neoniteDev.internal.serverError.apply(res);
+            errors.neoniteDev.internal.serverError.apply(res);
         }
     }
 )

@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 import { profile as types } from '../../structs/types';
 
-import { profiles } from '../../database/mysqlManager';
+import { profiles } from '../../database/profilesController';
 
 export const profileId = 'athena';
 
