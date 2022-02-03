@@ -74,7 +74,20 @@ export class Profile implements Omit<types.Profile, 'items'> {
         this.wipeNumber = infos.wipeNumber;
 
 
-      //  const versionUpdate = versions.find(x => x.profileId == this.profileId);
+
+        
+    }
+
+    async verifyVersion() {
+        const versionUpdate = versions.find(x => x.profileId == this.profileId);
+
+        if (!versionUpdate || versionUpdate.data.version == this.version) {
+            return;
+        }
+
+        const fullProfile = await this.getFullProfile();
+
+        fullProfile.items = Object.fromEntries(versionUpdate.data.items)
     }
 
     getItem(itemId: string): Promise<types.ItemValue | undefined> {

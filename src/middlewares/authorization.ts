@@ -5,6 +5,14 @@ import errors, { neoniteDev } from '../structs/errors';
 import * as database from '../database/mysqlManager';
 import { tokenInfo } from '../structs/types';
 import tokens from '../database/tokenController';
+import * as NodeCache from 'node-cache'
+
+// we only use node-cache for the checkperiod
+var tokenCaches = new NodeCache({
+    checkperiod: 120,
+    useClones: false,
+    maxKeys: 350
+})
 
 export async function validateToken(token: string): Promise<tokenInfo | undefined> {
     if (token.startsWith('eg1~')) {
@@ -18,9 +26,17 @@ export async function validateToken(token: string): Promise<tokenInfo | undefine
             return undefined;
         }
 
-        const exist = await tokens.check(decoded.jti);
-        if (!exist) {
-            return undefined;
+        var skipTokenCheck = tokenCaches.has(decoded.jti) && Math.random() > 0.3;
+
+        if (!skipTokenCheck) {
+            const exist = await tokens.check(decoded.jti);
+            if (!exist) {
+                return undefined;
+            }
+
+            try {
+                tokenCaches.set(decoded.jti, '');
+            } catch {}
         }
 
         return {
@@ -36,7 +52,6 @@ export async function validateToken(token: string): Promise<tokenInfo | undefine
             in_app_id: decoded.iai
         }
     } else if (token.length == 32) {
-        //@ts-ignore
         return await tokens.get(token);
     }
 }

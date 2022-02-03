@@ -35,15 +35,20 @@ export namespace party {
 
         export interface Connection {
             id: string;
-            meta?: Record<string, string>;
-            yield_leadership?: boolean;
+            meta: Record<string, string>;
+            yield_leadership: boolean;
         }
     }
 
-    export namespace MetaUpdate {
+    export namespace update {
         export interface Root {
-            update: Record<string, string>;
-            delete: string[];
+            meta?: Meta;
+            config?: Record<string, string>
+        }
+
+        export interface Meta {
+            update?: Record<string, string>;
+            delete?: string[];
         }
     }
 }

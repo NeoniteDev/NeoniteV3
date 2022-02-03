@@ -169,20 +169,19 @@ app.post('/api/v1/:accountId/friends/:friendId', VerifyAuthorization, async (req
 
     const existingRequest = await Friends.getRequest(req.params.accountId, req.params.friendId);
 
-    var status = '';
-
     if (existingRequest.length > 0) {
-        if (existingRequest.find(x => x.direction == 'OUTGOING')) {
+        var incomming = existingRequest.find(x => x.direction == 'INCOMING');
+        
+        if (incomming) {
             await Friends.acceptRequest(req.params.accountId, req.params.friendId);
 
-            status = 'ACCEPTED';
-        } else if (existingRequest.find(x => x.direction == 'OUTGOING')) {
-            throw errors.neoniteDev.friends.requestAlreadySent
-                .withMessage(`Friendship request has already been sent to ${req.params.friendId}`)
-                .with(req.params.friendId);
-        } else {
-            throw errors.neoniteDev.internal.dataBaseError;
+            sendFriendShipUpdate(req.params.accountId, req.params.friendId, 'ACCEPTED', incomming.created);
+            return res.status(204);
         }
+
+        throw errors.neoniteDev.friends.requestAlreadySent
+            .withMessage(`Friendship request has already been sent to ${req.params.friendId}`)
+            .with(req.params.friendId);
     } else {
         const friendUser = await users.getById(req.params.friendId);
 
@@ -191,54 +190,10 @@ app.post('/api/v1/:accountId/friends/:friendId', VerifyAuthorization, async (req
         }
 
         await Friends.addRequest(req.params.accountId, req.params.friendId);
-        status = 'PENDING';
-    }
-
-    if (status == '') {
+        sendFriendShipUpdate(req.params.accountId, req.params.friendId, 'PENDING', new Date());
     }
 
     res.status(204).send();
-
-    xmppApi.sendMesageMulti(
-        [`${req.params.friendId}@xmpp.neonitedev.live`, `${req.params.accountId}@xmpp.neonitedev.live`],
-        {
-            "type": "FRIENDSHIP_REQUEST",
-            "timestamp": new Date().toISOString(),
-            "from": req.params.accountId,
-            "to": req.params.friendId,
-            "status": status
-        }
-    ).catch(() => {})
-
-    xmppApi.sendMesage(
-        `${req.params.friendId}@xmpp.neonitedev.live`,
-        {
-            "payload": {
-                "accountId": req.params.accountId,
-                "status": status,
-                "direction": "INBOUND",
-                "created": new Date(),
-                "favorite": false
-            },
-            "type": "com.epicgames.friends.core.apiobjects.Friend",
-            "timestamp": new Date()
-        }
-    ).catch(() => {})
-
-    xmppApi.sendMesage(
-        `${req.params.accountId}@xmpp.neonitedev.live`,
-        {
-            "payload": {
-                "accountId": req.params.friendId,
-                "status": status,
-                "direction": "OUTBOUND",
-                "created": new Date(),
-                "favorite": false
-            },
-            "type": "com.epicgames.friends.core.apiobjects.Friend",
-            "timestamp": new Date()
-        }
-    ).catch(() => {})
 })
 
 
@@ -273,18 +228,19 @@ app.post('/api/public/friends/:accountId/:friendId', VerifyAuthorization, async 
 
     const existingRequest = await Friends.getRequest(req.params.accountId, req.params.friendId);
 
-    var status = '';
-
     if (existingRequest.length > 0) {
-        if (existingRequest.find(x => x.direction == 'OUTGOING')) {
+        var incomming = existingRequest.find(x => x.direction == 'INCOMING');
+
+        if (incomming) {
             await Friends.acceptRequest(req.params.accountId, req.params.friendId);
 
-            status = 'ACCEPTED';
-        } else if (existingRequest.find(x => x.direction == 'OUTGOING')) {
-            throw errors.neoniteDev.friends.requestAlreadySent
-                .withMessage(`Friendship request has already been sent to ${req.params.friendId}`)
-                .with(req.params.friendId);
+            sendFriendShipUpdate(req.params.accountId, req.params.friendId, 'ACCEPTED', incomming.created);
+            return res.status(204);
         }
+
+        throw errors.neoniteDev.friends.requestAlreadySent
+            .withMessage(`Friendship request has already been sent to ${req.params.friendId}`)
+            .with(req.params.friendId);
     } else {
         const friendUser = await users.getById(req.params.friendId);
 
@@ -293,30 +249,33 @@ app.post('/api/public/friends/:accountId/:friendId', VerifyAuthorization, async 
         }
 
         await Friends.addRequest(req.params.accountId, req.params.friendId);
-        status = 'PENDING';
+        sendFriendShipUpdate(req.params.accountId, req.params.friendId, 'PENDING', new Date());
     }
 
     res.status(204).send();
+})
 
+
+function sendFriendShipUpdate(from: string, to: string, status: string, created: Date) {
     xmppApi.sendMesageMulti(
-        [`${req.params.friendId}@xmpp.neonitedev.live`, `${req.params.accountId}@xmpp.neonitedev.live`],
+        [`${from}@xmpp.neonitedev.live`, `${to}@xmpp.neonitedev.live`],
         {
             "type": "FRIENDSHIP_REQUEST",
-            "timestamp": new Date().toISOString(),
-            "from": req.params.accountId,
-            "to": req.params.friendId,
+            "timestamp": new Date(),
+            "from": from,
+            "to": to,
             "status": status
         }
     );
 
     xmppApi.sendMesage(
-        `${req.params.friendId}@xmpp.neonitedev.live`,
+        `${to}@xmpp.neonitedev.live`,
         {
             "payload": {
-                "accountId": req.params.accountId,
+                "accountId": from,
                 "status": status,
                 "direction": "INBOUND",
-                "created": new Date(),
+                "created": created,
                 "favorite": false
             },
             "type": "com.epicgames.friends.core.apiobjects.Friend",
@@ -325,21 +284,20 @@ app.post('/api/public/friends/:accountId/:friendId', VerifyAuthorization, async 
     );
 
     xmppApi.sendMesage(
-        `${req.params.accountId}@xmpp.neonitedev.live`,
+        `${from}@xmpp.neonitedev.live`,
         {
             "payload": {
-                "accountId": req.params.friendId,
+                "accountId": to,
                 "status": status,
                 "direction": "OUTBOUND",
-                "created": new Date(),
+                "created": created,
                 "favorite": false
             },
             "type": "com.epicgames.friends.core.apiobjects.Friend",
             "timestamp": new Date()
         }
     );
-})
-
+}
 
 
 app.use(validateMethod(app));

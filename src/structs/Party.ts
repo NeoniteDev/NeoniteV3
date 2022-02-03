@@ -2,14 +2,19 @@ const { throws } = require('assert');
 
 import * as xmppApi from '../xmppManager';
 import errors from './errors';
-import { PartyConfig, PartyData, partyMember } from './types';
+import { PartyConfig, PartyData, partyInvite, partyMember } from './types';
 import { party } from '../types/bodies';
 import { randomUUID } from 'crypto';
 import parties from '../database/partiesController';
+import users from '../database/usersController';
+import Friends from '../database/friendsController';
 
-interface metaUpdate {
-    update: Record<string, string>,
-    delete: string[]
+interface partyUpdate {
+    meta: {
+        update: Record<string, string>,
+        delete: string[]
+    },
+    config: Record<string, string>
 }
 
 export async function getParty(id: string) {
@@ -61,7 +66,7 @@ class Party implements PartyData {
     config: PartyConfig;
     updated_at: string;
     revision: number;
-    invites: any[];
+    invites: partyInvite[];
     meta: Record<string, string>;
     members: partyMember[]
 
@@ -78,20 +83,17 @@ class Party implements PartyData {
         }
     }
 
-    update(meta: metaUpdate) {
-        if ('update' in meta && Object.keys(meta.update).length > 0) {
-            Object.assign(this.meta, meta.update);
-        }
+    async update(updated: partyUpdate) {
+        Object.assign(this.config, updated.config);
+        Object.assign(this.meta, updated.meta.update);
 
-        if ('delete' in meta) {
-            this.meta = Object.fromEntries(
-                Object.entries(
-                    this.meta
-                ).filter(
-                    ([key, value]) => !meta.delete.includes(key)
-                )
+        this.meta = Object.fromEntries(
+            Object.entries(
+                this.meta
+            ).filter(
+                ([key, value]) => !updated.meta.delete.includes(key)
             )
-        }
+        );
 
         this.updated_at = new Date().toISOString();
         this.revision++;
@@ -102,10 +104,7 @@ class Party implements PartyData {
             throw errors.neoniteDev.party.memberNotFound.withMessage('cannot find party leader.');
         }
 
-        this.updateDB();
-
-        xmppApi.sendMesageMulti(
-            this.members.flatMap(x => x.connections).map(x => x.id),
+        this.broadcastMessage(
             {
                 sent: new Date().toISOString(),
                 type: "com.epicgames.social.party.notification.v0.PARTY_UPDATED",
@@ -113,10 +112,10 @@ class Party implements PartyData {
                 ns: "Fortnite",
                 party_id: this.id,
                 captain_id: captain.account_id,
-                party_state_removed: meta.delete || [],
-                party_state_updated: meta.update || {},
+                party_state_removed: updated.meta.delete,
+                party_state_updated: updated.meta.update,
                 party_state_overridden: {},
-                party_privacy_type: this.config,
+                party_privacy_type: this.config.joinability,
                 party_type: this.config.type,
                 party_sub_type: this.config.sub_type,
                 max_number_of_members: this.config.max_size,
@@ -124,27 +123,33 @@ class Party implements PartyData {
                 created_at: this.created_at,
                 updated_at: this.updated_at
             }
-        );
+        )
+
+        await this.updateDB();
     }
 
 
-    updateMember(memberId: string, meta: metaUpdate) {
+    async updateMember(memberId: string, memberDn: string, meta: partyUpdate['meta']) {
         var member = this.members.find(x => x.account_id == memberId);
 
         if (!member) {
             throw errors.neoniteDev.party.memberNotFound.with(memberId);
         }
 
-        Object.assign(member.meta, meta);
-
         member.meta = Object.fromEntries(
-            Object.entries(member.meta).filter(([key, value]) => !meta.delete.includes(key))
+            Object.entries(
+                member.meta
+            ).filter(
+                ([key, value]) => !meta.delete.includes(key)
+            )
         )
 
+        Object.assign(member.meta, meta.update);
+
+        member.revision++;
         member.updated_at = new Date().toISOString();
-        this.updateDB();
-        xmppApi.sendMesageMulti(
-            this.members.flatMap(x => x.connections).map(x => x.id),
+
+        this.broadcastMessage(
             {
                 "sent": new Date(),
                 "type": "com.epicgames.social.party.notification.v0.MEMBER_STATE_UPDATED",
@@ -152,13 +157,15 @@ class Party implements PartyData {
                 "ns": "Fortnite",
                 "party_id": this.id,
                 "account_id": member.account_id,
-                "account_dn": Buffer.from(member.account_id, 'hex').toString(),
+                "account_dn": memberDn,
                 "member_state_removed": meta.delete || [],
                 "member_state_updated": meta.update || {},
                 "joined_at": member.joined_at,
                 "updated_at": member.updated_at
             }
         )
+
+        this.updateDB();
     }
 
     kick() {
@@ -167,7 +174,103 @@ class Party implements PartyData {
 
     promote() { }
 
-    removeMember() { }
+    async inviteUser(invitedId: string, inviterId: string, meta: Record<string, string>) {
+        const inviter = this.members.find(x => x.account_id == inviterId);
+
+        if (!inviter) {
+            throw new Error('inviter not found');
+        }
+
+        const invitedFriends = await Friends.getFriends(invitedId);
+
+        var invite = {
+            party_id: this.id,
+            sent_by: inviterId,
+            meta: meta,
+            sent_to: invitedId,
+            sent_at: new Date(),
+            updated_at: new Date(),
+            expires_at: new Date().addHours(1),
+            status: 'SENT'
+        };
+
+        this.invites.push(invite);
+        this.updateDB();
+
+        xmppApi.sendMesage(
+            `${invitedId}@xmpp.neonitedev.live`,
+            {
+                "sent": new Date(),
+                "type": "com.epicgames.social.party.notification.v0.INITIAL_INVITE",
+                "meta": meta,
+                "ns": "Fortnite",
+                "party_id": this.id,
+                "inviter_id": inviterId,
+                "inviter_dn": inviter['connections'][0].meta['urn:epic:member:dn_s'],
+                "invitee_id": invitedId,
+                "sent_at": invite.sent_at,
+                "updated_at": invite.updated_at,
+                "friends_ids": this.members.filter(member =>
+                    invitedFriends.find(friend => friend.accountId == member.account_id)
+                ).map(x => x.account_id),
+                "members_count": this.members.length
+            }
+        );
+    }
+
+    async cancellInvite(sent_to: string) {
+        var invite = this.invites.find(x => x.sent_to == sent_to);
+        var inviter = this.members.find(x => x.account_id == sent_to);
+
+        if (!invite) {
+            throw new Error('invation not found');
+        }
+
+        this.invites.remove(invite);
+        this.updateDB();
+
+        xmppApi.sendMesage(
+            `${sent_to}@xmpp.neonitedev.live`,
+            {
+                sent: new Date(),
+                type: 'com.epicgames.social.party.notification.v0.INVITE_CANCELLED',
+                meta: invite.meta,
+                ns: 'Fortnite',
+                party_id: this.id,
+                inviter_id: invite.sent_by,
+                inviter_dn: inviter ? inviter['connections'][0].meta['urn:epic:member:dn_s'] : '',
+                invitee_id: invite.sent_to,
+                sent_at: invite.sent_at,
+                updated_at: new Date(),
+                expires_at: invite.expires_at
+            }
+        );
+    }
+
+    async removeMember(memeberId: string) {
+        var memeber = this.members.find(x => x.account_id == memeberId);
+
+        if (!memeber) {
+            throw errors.neoniteDev.party.memberNotFound.with(memeberId);
+        }
+
+        this.members.remove(memeber);
+        this.revision++;
+
+        await this.updateDB();
+
+        this.broadcastMessage(
+            {
+                account_id: memeberId,
+                member_state_update: {},
+                ns: "Fortnite",
+                party_id: this.id,
+                revision: this.revision,
+                sent: new Date(),
+                type: "com.epicgames.social.party.notification.v0.MEMBER_LEFT"
+            }
+        )
+    }
 
     addMember(connection: party.JoinParty.Connection, accountId: string, meta?: Record<string, string>) {
         var member: partyMember = {
@@ -181,10 +284,10 @@ class Party implements PartyData {
         }
 
         this.members.push(member);
+        this.revision++;
         this.updateDB();
 
-        xmppApi.sendMesageMulti(
-            this.members.flatMap(x => x.connections).map(x => x.id),
+        this.broadcastMessage(
             {
                 sent: new Date(),
                 type: "com.epicgames.social.party.notification.v0.MEMBER_JOINED",
@@ -198,30 +301,20 @@ class Party implements PartyData {
                 joined_at: member.joined_at,
                 updated_at: member.updated_at
             }
-        )
-
-        /*
-        this.members.forEach(partyMember => {
-            partyMember.connections.forEach(connection => {
-                xmppApi.sendMesage(connection.id, {
-                    type: 'com.epicgames.social.interactions.notification.v2',
-                    interactions: [
-                        {
-                            _type: 'InteractionUpdateNotification',
-                            fromAccountId: member.account_id,
-                            toAccountId: partyMember.account_id,
-                            app: 'Chapter_3__Season_1',
-                            interactionType: 'PartyJoined',
-                            namespace: 'Fortnite',
-                            happenedAt: Date.now(),
-                            interactionScoreIncremental: { "total": -1, "count": -1 },
-                            isFriend: false
-                        }
-                    ]
-                })
-            });
-        })*/
+        );
     }
+
+    deleteParty() {
+        return parties.remove(this.id);
+    }
+
+    broadcastMessage(message: object) {
+        return xmppApi.sendMesageMulti(
+            this.members.flatMap(x => x.connections).map(x => x.id),
+            message
+        )
+    }
+
     private async updateDB() {
         this.updated_at = new Date().toISOString();
         parties.update(this.getData());

@@ -61,7 +61,15 @@ app.post('/api/v1/:deploymentId/parties', VerifyAuthorization, async (req, res, 
 
     const party = new Party();
 
-    party.addMember(body.join_info.connection, req.auth.account_id, body.meta)
+    party.addMember(
+        {
+            id: body.join_info.connection.id,
+            meta: body.meta || {},
+            yield_leadership: false
+        },
+        req.auth.account_id, body.meta
+    );
+
     res.json(party.getData());
 })
 
@@ -81,7 +89,7 @@ app.patch('/api/v1/:deploymentId/parties/:partyId', VerifyAuthorization, async (
         throw errors.neoniteDev.party.partyNotFound.with(req.params.partyId)
     }
 
-    const body: party.MetaUpdate.Root = req.body;
+    const body: party.update.Root = req.body;
 
     validateBody(body, updateSchema);
 
@@ -95,7 +103,14 @@ app.patch('/api/v1/:deploymentId/parties/:partyId', VerifyAuthorization, async (
         throw errors.neoniteDev.party.notLeader;
     }
 
-    party.update(body);
+    await party.update({
+        config: body.config || {},
+        meta: {
+            delete: body.meta?.delete || [],
+            update: body.meta?.update || {},
+        }
+    });
+
     res.status(204).send();
 })
 
@@ -133,9 +148,42 @@ app.patch('/api/v1/:deploymentId/parties/:partyId/members/:accountId/meta', Veri
         throw errors.neoniteDev.party.memberNotFound.with(req.params.accountId);
     }
 
-    party.updateMember(member.account_id, req.body);
+    party.updateMember(member.account_id, req.auth.displayName, req.body);
 
     res.status(204).send()
+})
+
+app.delete('/api/v1/Fortnite/parties/:partyId/members/:accountId', VerifyAuthorization, async (req, res) => {
+    const party = await getParty(req.params.partyId);
+
+    if (!party) {
+        throw errors.neoniteDev.party.partyNotFound.with(req.params.partyId);
+    }
+
+    var partyMember = party.members.find(x => x.account_id == req.params.accountId);
+
+    if (!partyMember) {
+        throw errors.neoniteDev.party.memberNotFound.with(req.params.accountId);
+    }
+
+    var partyLeader = party.members.find(x => x.role == 'CAPTAIN');
+
+    if (!partyLeader) {
+        throw errors.neoniteDev.internal.unknownError;
+    }
+
+    if (req.auth.account_id != req.params.accountId && partyLeader.account_id != req.params.accountId) {
+        throw errors.neoniteDev.party.notLeader;
+    }
+
+
+    if (party.members.length == 1) {
+        await party.deleteParty();
+    } else {
+        await party.removeMember(req.params.accountId);
+    }
+
+    res.status(204).end()
 })
 
 // get current user parties
@@ -153,6 +201,91 @@ app.get('/api/v1/:deploymentId/user/:accountId', VerifyAuthorization, async (req
         "pings": pings
     });
 });
+
+// invite a user to the party 
+app.post('/api/v1/Fortnite/parties/:partyId/invites/:accountId', VerifyAuthorization, async (req, res) => {
+    if (req.params.accountId == req.auth.account_id) {
+        throw errors.neoniteDev.party.selfInvite;
+    }
+
+    const party = await getParty(req.params.partyId);
+
+    if (!party) {
+        throw errors.neoniteDev.party.partyNotFound.with(req.params.partyId);
+    }
+
+    if (typeof req.body != 'object') {
+        throw errors.neoniteDev.basic.jsonMappingFailed;
+    }
+
+    party.inviteUser(req.params.accountId, req.auth.account_id, req.body);
+})
+
+// invite a user to the party 
+app.post('/api/v1/Fortnite/parties/:partyId/invites/:accountId', VerifyAuthorization, async (req, res) => {
+    if (req.params.accountId == req.auth.account_id) {
+        throw errors.neoniteDev.party.selfInvite;
+    }
+
+    const party = await getParty(req.params.partyId);
+
+    if (!party) {
+        throw errors.neoniteDev.party.partyNotFound.with(req.params.partyId);
+    }
+
+    if (typeof req.body != 'object') {
+        throw errors.neoniteDev.basic.jsonMappingFailed;
+    }
+
+    const meta = req.body != undefined ? mapObject<string>(req.body) : {};
+
+    var member = party.members.find(x => x.account_id == req.auth.account_id);
+
+    if (!member) {
+        throw errors.neoniteDev.party.memberNotFound.with(req.auth.account_id);
+    }
+
+    party.inviteUser(req.params.accountId, req.auth.account_id, meta);
+
+    if (req.query.sendPing === 'true') {
+        console.log('cheking pings')
+        const existingPings = await Pings.get(req.params.accountId, req.params.friendId);
+
+        if (existingPings.length > 0) {
+            await Pings.remove(req.params.accountId, req.params.friendId);
+        }
+        
+        const ping = {
+            sent_by: req.params.accountId,
+            sent_to: req.params.friendId,
+            sent_at: new Date(),
+            expires_at: new Date().addHours(1),
+            meta: meta
+        };
+    
+        console.log('created ping')
+        await Pings.create(ping);
+    
+        console.log('sending message')
+        xmppApi.sendMesage(
+            `${req.params.accountId}@xmpp.neonitedev.live`,
+            {
+                expires: ping.expires_at,
+                meta: meta,
+                ns: "Fortnite",
+                pinger_dn: req.auth.displayName,
+                pinger_id: ping.sent_by,
+                sent: ping.sent_at,
+                type: "com.epicgames.social.party.notification.v0.PING"
+            }
+        );
+
+        console.log('done sending message')
+    }
+
+    res.status(204).send();
+})
+
 
 // "ping" a user
 app.post('/api/v1/:deploymentId/user/:friendId/pings/:accountId', VerifyAuthorization, async (req, res) => {
@@ -176,9 +309,6 @@ app.post('/api/v1/:deploymentId/user/:friendId/pings/:accountId', VerifyAuthoriz
         throw errors.neoniteDev.party.userOffline.with(req.params.friendId);
     }
 
-    // todo urgent: database ping table
-
-
     const existingPings = await Pings.get(req.params.accountId, req.params.friendId);
 
     if (existingPings.length > 0) {
@@ -198,7 +328,7 @@ app.post('/api/v1/:deploymentId/user/:friendId/pings/:accountId', VerifyAuthoriz
     await Pings.create(ping);
 
     xmppApi.sendMesage(
-        `${req.params.friendId}@xmpp.neonitedev.live`,
+        targetSessions[0].sessionId,
         {
             expires: ping.expires_at,
             meta: meta,
@@ -345,7 +475,7 @@ function mapObject<T = any>(var1: Record<string, any>, objectPartent = []): Reco
     if (typeof var1 != 'object') {
         throw errors.neoniteDev.basic.jsonMappingFailed.with.apply(globalThis, objectPartent);
     }
-    return  Object.fromEntries(
+    return Object.fromEntries(
         Object.entries(var1).filter(x => x !== null).map(
             ([key, value]) => {
                 if (typeof value == 'number') {

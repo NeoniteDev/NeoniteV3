@@ -38,7 +38,7 @@ namespace Friends {
     // code varchar(32) not null, accountId varchar(32) not null, createdAt BIGINT not null, expireAt BIGINT not null
 
     export async function getFriendship(accountId: string, friendId: string): Promise<friendObject | undefined> {
-        const result = await query<friend>(`SELECT * FROM friends WHERE sentBy = ? AND sentTo = ?`, [accountId, friendId]);
+        const result = await query<friend>(`SELECT * FROM friends WHERE (sentBy = ? AND sentTo = ?) OR (sentBy = ? AND sentTo = ?)`, [accountId, friendId, friendId, accountId]);
 
         return mapResult(result, accountId)[0];
     }

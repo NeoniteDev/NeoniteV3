@@ -59,6 +59,15 @@ namespace parties {
             ]
         );
     }
+
+    export async function remove(id: string) {
+        await query(
+            `DELETE FROM parties where id = ?`,
+            [
+                id
+            ]
+        );
+    }
 }
 
 export default parties;

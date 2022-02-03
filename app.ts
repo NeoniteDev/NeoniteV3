@@ -16,9 +16,6 @@ const packageFile = require('./package.json');
 require('./src/structs/polyfill');
 dotenv.config();
 
-var key = fs.readFileSync('./resources/ssl/privateKey.key');
-var cert = fs.readFileSync('./resources/ssl/certificate.pem');
-
 const app = express();
 
 app.set('etag', false);

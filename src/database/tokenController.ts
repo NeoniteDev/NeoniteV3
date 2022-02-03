@@ -2,11 +2,11 @@ import { query } from "./mysqlManager";
 import * as types from '../structs/types';
 
 namespace tokens {
-    interface token extends types.tokenInfoClient {
+    interface token extends types.tokenInfo {
         refresh_token?: string;
     }
 
-    export async function add(params: token) {
+    export async function add(params: token | types.tokenInfoClient) {
         query(`DELETE FROM tokens WHERE expireAt < ?`, [Date.now()]);
 
         try {

@@ -675,7 +675,7 @@ app.get('/api/matchmaking/session/:sessionId', cookieParser(), VerifyAuthorizati
     });
 });
 
-app.get('/api/storefront/v2/keychain', VerifyAuthorization, async (req, res) => {
+app.get('/api/storefront/v2/keychain', VerifyAuthorization, () => {}, async (req, res) => {
     const keychain = await axios.get('https://api.nitestats.com/v1/epic/keychain', { timeout: 3000 }).catch(e => { return { data: [''] } });
 
     res.json(keychain.data);
@@ -710,6 +710,14 @@ app.post('/api/game/v2/chat/:accountId/recommendGeneralChatRooms/:type/:platform
 
     throw errors.neoniteDev.mcp.invalidChatRequest.withMessage('Recommendations no longer supported!');
 })
+
+app.get('/api/stats/accountId/:accountId/bulk/window/alltime', VerifyAuthorization, (req, res) => {
+    if (req.params.accountId != req.auth.account_id) {
+        throw neoniteDev.authentication.notYourAccount;
+    }
+
+    res.json([])
+});
 
 app.get('/api/game/v2/enabled_features', VerifyAuthorization, (req, res) => {
     res.json([])

@@ -70,27 +70,29 @@ export function sendMesageMulti(to: string[], message: object | string) {
     const fragment = xmlBuilder.fragment({
         message: {
             '@from': 'xmpp-admin@xmpp.neonitedev.live',
+            '@to': '{{$userName}}', // the plugin will handle
             body: {
                 '#': message instanceof Object ? JSON.stringify(message) : message
             }
         }
     })
 
-    return Promise.all(
-        to.map(user => {
-            // fragment.root().att('to', user);
-            var xml = fragment.end({ headless: true });
-            return client.post(
-                `https://xmpp.neonitedev.live:9091/plugins/restapi/v1/packets/user/${user}`,
-                fragment.end({ headless: true }),
-                {
-                    headers: {
-                        'Content-Type': 'application/xml',
-                    }
-                }
-            ).then(() => { })
-        })
-    );
+    var queryString = new URLSearchParams(
+        to.map(x => [
+            'userNames',
+            x
+        ])
+    ).toString()
+
+    return client.post(
+        `https://xmpp.neonitedev.live:9091/plugins/restapi/v1/packets/users/?${queryString}`,
+        fragment.end({ headless: true }),
+        {
+            headers: {
+                'Content-Type': 'application/xml'
+            }
+        }
+    ).then(() => { })
 }
 
 

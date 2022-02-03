@@ -200,6 +200,17 @@ export interface partyMember {
     role: "CAPTAIN" | "MEMBER"
 }
 
+export interface partyInvite {
+    party_id: string,
+    sent_by: string,
+    meta: Record<string, string>,
+    sent_to: string,
+    sent_at: Date,
+    updated_at: Date,
+    expires_at: Date,
+    status: string
+}
+
 export interface PartyData {
     id: string,
     created_at: string,

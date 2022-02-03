@@ -75,6 +75,7 @@ export const neoniteDev = {
         get notYourAccount() { return new ApiError('errors.com.neoniteDev.party.notYourAccount', "You are not allowed to make changes to other people's accounts", 51023, 403) },
         get userOffline() { return new ApiError('errors.com.neoniteDev.party.userOffline', 'User is offline.', 51024, 403) },
         get selfPing() { return new ApiError('errors.com.neoniteDev.party.selfPing', 'Self pings are not allowed.', 51028, 400) },
+        get selfInvite() { return new ApiError('errors.com.neoniteDev.party.selfInvite', 'Self invites are not allowed.', 51040, 400) },
     },
     cloudstorage: {
         get fileNotFound() { return new ApiError('errors.com.neoniteDev.cloudstorage.fileNotFound', 'Cannot find the file you requested.', 12004, 404) }
