@@ -46,9 +46,14 @@ namespace users {
         return query<User>(`SELECT * FROM Accounts WHERE displayName LIKE ? LIMIT 0, 100`, [`${searchValue}%`]);
     }
 
-    export function gets(userIds: string[]): Promise<User[]> {
+    export async function gets(userIds: string[]): Promise<User[]> {
         const validUsers = userIds.filter(x => x.length == 32 && x.match(/^[0-9a-f]{8}[0-9a-f]{4}[0-5][0-9a-f]{3}[089ab][0-9a-f]{3}[0-9a-f]{12}$/) != null);
-        return query<User>(`SELECT * FROM Accounts WHERE accountId IN (?)`, [validUsers]);
+        
+        if (validUsers.length == 0) {
+            return []
+        }
+
+        return await query<User>(`SELECT * FROM Accounts WHERE accountId IN (?)`, [validUsers]);
     }
 }
 

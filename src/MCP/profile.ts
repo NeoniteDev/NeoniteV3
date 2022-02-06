@@ -3,7 +3,6 @@ import { randomUUID } from 'crypto';
 import { profile as types } from '../structs/types';
 import * as fs from 'fs';
 import * as Path from 'path';
-import versions from './versions';
 import { mcpResponse } from './operations';
 import errors from '../structs/errors';
 import * as path from 'path';
@@ -24,16 +23,6 @@ export async function ensureProfileExist(profileId: string, accountId: string): 
 }
 
 const versionsDir = path.join(__dirname, './profileVersions');
-
-const profiles_versions = fs.readdirSync(
-    versionsDir
-).filter(
-    x => x.endsWith('.json')
-).map(x => {
-    const data = fs.readFileSync(path.join(versionsDir, x), 'utf-8');
-
-    return { profileId: x.replace(/[.]json$/, ''), version: JSON.parse(data) }
-})
 
 
 export class Profile implements Omit<types.Profile, 'items'> {
@@ -76,18 +65,6 @@ export class Profile implements Omit<types.Profile, 'items'> {
 
 
         
-    }
-
-    async verifyVersion() {
-        const versionUpdate = versions.find(x => x.profileId == this.profileId);
-
-        if (!versionUpdate || versionUpdate.data.version == this.version) {
-            return;
-        }
-
-        const fullProfile = await this.getFullProfile();
-
-        fullProfile.items = Object.fromEntries(versionUpdate.data.items)
     }
 
     getItem(itemId: string): Promise<types.ItemValue | undefined> {

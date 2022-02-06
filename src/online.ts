@@ -18,6 +18,7 @@ interface clientToken {
 var catalog: BRShop | undefined = undefined;
 var client_token: clientToken | undefined = undefined;
 var client_events: timeline.Calendar['channels']['client-events'] | undefined = undefined;
+var keychain: { expire: Date, data: string[] } = { data: [''], expire: new Date(0) };
 
 export async function getClientToken() {
     var isInvalid =
@@ -55,6 +56,22 @@ export async function getClientToken() {
     return client_token;
 }
 
+async function updateKeychain() {
+    const request = await axios.get<string[]>('https://api.nitestats.com/v1/epic/keychain', { validateStatus: undefined });
+    if (request.status != 200) {
+        return console.warn('Failed to update keychain');
+    }
+
+    keychain.data = request.
+}
+
+export async function getKeychain() {
+    if (!keychain || keychain.expire.getTime() <= Date.now()) {
+        
+    }
+
+    return catalog;
+}
 
 export async function getCatalog() {
     if (!catalog || new Date(catalog.expiration).getTime() <= Date.now()) {

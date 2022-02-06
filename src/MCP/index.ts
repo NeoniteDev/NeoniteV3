@@ -6,15 +6,16 @@ import errors from '../structs/errors';
 import * as operations from './operations';
 import { profileRevisions } from './operations';
 import { profile as types } from '../structs/types';
+import PromiseRouter from 'express-promise-router';
 
-const app = express.Router();
+const app = PromiseRouter();
 
 app.post('/api/game/v2/profile/:accountId/client/:command', VerifyAuthorization, async (req, res, next) => {
     try {
         if (!req.auth) {
             throw errors.neoniteDev.authentication.authenticationFailed;
         }
-        
+
         const accountId = req.params.accountId;
         const profileId = <types.ProfileID>(typeof req.query.profileId == 'string' ? req.query.profileId : 'common_core');
         const command = req.params.command;
@@ -62,6 +63,23 @@ app.post('/api/game/v2/profile/:accountId/client/:command', VerifyAuthorization,
     } catch (e) {
         next(e)
     }
+})
+
+app.post('/api/game/v2/profile/:accountId/public/:command', VerifyAuthorization, async (req, res, next) => {
+    if (!req.auth) {
+        throw errors.neoniteDev.authentication.authenticationFailed;
+    }
+
+    const accountId = req.params.accountId;
+    const profileId = <types.ProfileID>(typeof req.query.profileId == 'string' ? req.query.profileId : 'common_core');
+    const command = req.params.command;
+    const revision = typeof req.query.rvn == 'string' && !isNaN(parseInt(req.query.rvn)) ? parseInt(req.query.rvn) : -1;
+
+    if (accountId != req.auth.account_id) {
+        throw errors.neoniteDev.authentication.notYourAccount.with(`fortnite:profile:${accountId}:commands`, 'ALL')
+    }
+
+    throw errors.neoniteDev.mcp.operationForbidden.withMessage(`Operation ${command} not allowed via this route`).with(command);
 })
 
 app.use(validateMethod(app))

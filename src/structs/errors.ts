@@ -89,7 +89,8 @@ export const neoniteDev = {
         get itemNotFound() { return new ApiError("errors.com.neoniteDev.mcp.itemNotFound", "Locker item not found", 16006, 404) },
         get templateNotFound() { return new ApiError("errors.com.neoniteDev.mcp.templateNotFound", "Unable to find template configuration for profile", 12813, 404) },
         get invalidHeader() { return new ApiError("errors.com.neoniteDev.mcp.invalidHeader", "Parsing client revisions header failed.", 12831, 400) },
-        get operationNotFound() { return new ApiError("errors.com.neoniteDev.mcp.operationNotFound", "Operation not valid", 16035, 404) },
+        get operationNotFound() { return new ApiError("errors.com.neoniteDev.mcp.operationNotFound", "Operation not found", 16035, 404) },
+        get operationForbidden() { return new ApiError("errors.com.neoniteDev.mcp.operationForbidden", "Operation Forbidden", 12813, 403) },
         get invalidChatRequest() { return new ApiError("errors.com.neoniteDev.mcp.invalidChatRequest", "", 16090, 400) },
     },
     matchmaking: {

@@ -17,6 +17,8 @@ import profiles from '../mcp';
 import { HttpError } from 'http-errors'
 import Router from 'express-promise-router';
 import gameSessions from '../database/gameSessionsController';
+import * as xmppApi from '../xmppManager';
+import users from '../database/usersController';
 
 const app = Router();
 
@@ -104,7 +106,7 @@ app.get('/api/cloudstorage/system', CheckClientAuthorization, async (req, res) =
             'hash256': crypto.createHash('sha256').update(fileData).digest('hex'),
             'length': fileData.length,
             'contentType': 'text/plain',
-            'uploaded': fs.statSync(filePath).mtime.toUTCString(),
+            'uploaded': fs.statSync(filePath).mtime.toISOString(),
             'storageType': 'S3',
             'doNotCache': true
         });
@@ -322,7 +324,50 @@ app.get('/api/storefront/v2/catalog', VerifyAuthorization, async (req, res) => {
 })
 
 app.get('/api/game/v2/leaderboards/cohort/:accountId', VerifyAuthorization, async (req, res) => {
+    if (req.params.accountId != req.auth.account_id) {
+        throw neoniteDev.authentication.notYourAccount;
+    }
 
+    if (req.query.playlist && typeof req.query.playlist != 'string') {
+        throw errors.neoniteDev.basic.badRequest;
+    }
+
+
+    res.json(
+        {
+            accountId: req.params.accountId,
+            playlist: req.query.playlist || 'pc_m0_p2',
+            cohortAccounts: ['98748c9691494acc9b0a92dc73dca5fa'],
+            expiresAt: new Date().addDays(2)
+        }
+    )
+})
+
+app.post('/api/leaderboards/type/group/stat/:cohort/window/weekly', VerifyAuthorization, async (req, res) => {
+    if (req.params.accountId != req.auth.account_id) {
+        throw neoniteDev.authentication.notYourAccount;
+    }
+
+    if (
+        !(req.body instanceof Array)
+    ) {
+        throw errors.neoniteDev.basic.badRequest;
+    }
+
+    var accounts = await users.gets(req.body);
+
+    res.json(
+        accounts.map(
+            (user, index) => {
+                return {
+                    accountId: user.accountId,
+                    value: index * 20,
+                    rank: index,
+                    displayName: user.displayName
+                }
+            }
+        )
+    )
 })
 
 app.get('/api/storefront/v2/gift/check_eligibility/recipient/:recipient/offer/:offerId', VerifyAuthorization, async (req, res, next) => {
@@ -675,8 +720,19 @@ app.get('/api/matchmaking/session/:sessionId', cookieParser(), VerifyAuthorizati
     });
 });
 
-app.get('/api/storefront/v2/keychain', VerifyAuthorization, () => {}, async (req, res) => {
-    const keychain = await axios.get('https://api.nitestats.com/v1/epic/keychain', { timeout: 3000 }).catch(e => { return { data: [''] } });
+app.get('/api/storefront/v2/keychain', VerifyAuthorization, async (req, res) => {
+    const keychain = await axios.get('https://api.nitestats.com/v1/epic/keychain', {
+        timeout: 3000,
+        validateStatus: undefined
+    });
+
+    if (keychain.status != 200) {
+        res.json(
+            [
+                ''
+            ]
+        )
+    }
 
     res.json(keychain.data);
 })
@@ -708,7 +764,50 @@ app.post('/api/game/v2/chat/:accountId/recommendGeneralChatRooms/:type/:platform
         throw neoniteDev.authentication.notYourAccount;
     }
 
-    throw errors.neoniteDev.mcp.invalidChatRequest.withMessage('Recommendations no longer supported!');
+    var avalibleRooms = await xmppApi.getChatRooms();
+
+    var globalChatRooms = await Promise.all(
+        avalibleRooms.filter(x => x.publicRoom).map(
+            async x => {
+                var participants = await xmppApi.getRoomParticipants(x.roomName);
+                return {
+                    roomName: x.roomName,
+                    currentMembersCount: x.owner.length + x.admin.length + x.member.length + participants.length,
+                    maxMembersCount: x.maxUsers,
+                    publicFacingShardName: x.naturalName,
+                }
+            }
+        )
+    )
+
+    var notFullRooms = globalChatRooms.filter(x => x.maxMembersCount > x.currentMembersCount);
+
+    if (notFullRooms.length <= 0) {
+        var roomId = 'global-' + crypto.randomUUID().replaceAll('-', '');
+        var roomData = await xmppApi.createChatRoom(roomId, 'neonite global chat', 'global chat room.', 25, true);
+
+        globalChatRooms.push(
+            {
+                currentMembersCount: 0,
+                maxMembersCount: roomData.maxUsers,
+                publicFacingShardName: roomData.naturalName,
+                roomName: roomData.roomName
+            }
+        );
+    }
+
+    res.json(
+        {
+            globalChatRooms: globalChatRooms,
+            founderChatRooms: [],
+            bNeedsPaidAccessForGlobalChat: false,
+            bNeedsPaidAccessForFounderChat: false,
+            bIsGlobalChatDisabled: false,
+            bIsFounderChatDisabled: true,
+            bIsSubGameGlobalChatDisabled: false
+        }
+    );
+    //throw errors.neoniteDev.mcp.invalidChatRequest.withMessage('Recommendations no longer supported!');
 })
 
 app.get('/api/stats/accountId/:accountId/bulk/window/alltime', VerifyAuthorization, (req, res) => {
