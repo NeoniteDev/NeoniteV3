@@ -8,20 +8,18 @@ import { HttpError } from 'http-errors';
 const app = PromiseRouter();
 
 app.get("/api/pages/fortnite-game", async (req, res) => {
-    const language = 'en-US';
-
-    res.json();
+    res.json(buildContent());
 });
 
 
-function buildContent() {
+function buildContent(): Record<string, any> {
     const battleroyalenews = {
         news: {
             _type: "battleroyalenews",
             messages: [
                 {
                     body: "Made by BeatYT (@TheBeatYT_evil). If you are experiencing any bugs, you can join our Discord at https://discord.gg/DJ6VUmD",
-                    image: `http://${req.headers.host}/NeoniteWallpaper.png`,
+                    image: `https://cdn.neonitedev.live/NeoniteWallpaper.png`,
                     title: "Neonite V3",
                     _type: "CommonUI Simple Message Base",
                     messagetype: "normal",
@@ -32,8 +30,8 @@ function buildContent() {
             motds: [
                 {
                     body: "Made by BeatYT (@TheBeatYT_evil). If you are experiencing any bugs, you can join our Discord by clicking the button below.",
-                    image: `http://${req.headers.host}/NeoniteWallpaper.png`,
-                    tileImage: `http://${req.headers.host}/NeoniteMidLogo.png`,
+                    image: `https://cdn.neonitedev.live/NeoniteWallpaper.png`,
+                    tileImage: `https://cdn.neonitedev.live/NeoniteMidLogo.png`,
                     title: "Neonite V3",
                     _type: "CommonUI Simple Message MOTD",
                     websiteURL: "https://discord.gg/DJ6VUmD",
@@ -218,7 +216,7 @@ function buildContent() {
             itemsList: {
                 _type: "ShopCarouselItemList",
                 items: [{
-                    tileImage: `http://${req.headers.host}/NeoniteWallpaper.png`,
+                    tileImage: `https://cdn.neonitedev.live/NeoniteWallpaper.png`,
                     fullTitle: "Neonite",
                     hidden: false,
                     _type: "ShopCarouselItem",
@@ -233,27 +231,12 @@ function buildContent() {
             lastModified: "2020-12-05T23:52:44.269Z",
             _locale: 'en-US'
         },
-        dynamicbackgrounds: content?.dynamicbackgrounds || {
-            backgrounds: {
-                backgrounds: [
-                    {
-                        backgroundimage: `http://${req.headers.host}/NeoniteLobby.png`,
-                        stage: "defaultnotris",
-                        _type: "DynamicBackground",
-                        key: "lobby"
-                    }
-                ],
-                _type: "DynamicBackgroundList"
-            },
-            _activeDate: "2020-07-06T06:00:00.000Z",
-            lastModified: "2021-06-22T13:53:48.402Z",
-            _locale: 'en-US'
-        },
+        dynamicbackgrounds: content?.dynamicbackgrounds,
         shopSections: content?.shopSections,
         playlistinformation: content?.playlistinformation,
         _suggestedPrefetch: [
-            `http://${req.headers.host}/NeoniteWallpaper.png`,
-            `http://${req.headers.host}/NeoniteMidLogo.png`
+            `https://cdn.neonitedev.live/NeoniteWallpaper.png`,
+            `https://cdn.neonitedev.live/NeoniteMidLogo.png`
         ]
     }
 }

@@ -37,8 +37,10 @@ export async function getKeychain() {
             }
         );
 
-        cache.set('keychain', response.data, 120);
-        return response.data;
+        if (response.status == 200) {
+            cache.set('keychain', response.data, 120);
+            return response.data;
+        }
     }
 
     return result;
@@ -53,6 +55,26 @@ export async function getCatalog() {
             {
                 timeout: 2500,
                 validateStatus: undefined
+            }
+        );
+
+        if (response.status == 200) {
+            cache.set('catalog', response.data, Math.round(response.data.expiration.getTime() - Date.now()) / 1000);
+            return response.data;
+        }
+    }
+
+    return result;
+}
+
+export async function getContent() {
+    var result = cache.get<BRShop>('content');
+
+    if (!result) {
+        const response = await axios.get<BRShop>(
+            'https://fortnitecontent-website-prod.ak.epicgames.com/content/api/pages/fortnite-game',
+            {
+                timeout: 2500
             }
         );
 
@@ -91,36 +113,36 @@ export async function getLanguageIni() {
         if (!client_token) {
             return '';
         }
-    
+
         const config = {
             headers: { Authorization: `Bearer ${client_token.access_token}` },
             validateStatus: () => true
         }
-    
+
         // TODO: move to online.js
         const req_hotfixes = await axios.get('https://fortnite-public-service-prod11.ol.epicgames.com/fortnite/api/cloudstorage/system/', config);
-    
+
         if (req_hotfixes.status !== 200) {
             return '';
         }
-    
+
         const Hotfixes: CloudstorageFile[] = req_hotfixes.data;
-    
+
         const gamesInis = Hotfixes.filter(x => x.filename.toLowerCase().endsWith('defaultgame.ini') && x.length > 0);
         var result = [
             `[/Script/FortniteGame.FortTextHotfixConfig]`
         ]
-        
+
         Promise.all(
             gamesInis.map(async (file, index, array) => {
                 const ini_request = await axios.get(`https://fortnite-public-service-prod11.ol.epicgames.com/fortnite/api/cloudstorage/system/${file.uniqueFilename}`, config);
                 if (ini_request.status != 200) { return; }
-    
+
                 const parser = new iniparser();
                 parser.parse(ini_request.data);
-    
+
                 const bHaveSection = parser.isHaveSection('/Script/FortniteGame.FortTextHotfixConfig');
-    
+
                 if (bHaveSection) {
                     const items = parser.items('/Script/FortniteGame.FortTextHotfixConfig');
                     result = result.concat(items.map(([name, content]) => `${name}=${content}`))
