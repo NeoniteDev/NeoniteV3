@@ -1,104 +1,148 @@
-import { BRShop, timeline, pastSeasons } from './structs/types';
+import { BRShop, timeline, pastSeasons, CloudstorageFile } from './structs/types';
 import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
+import { newClientSession, session } from './structs/EpicSession';
+import CachedItem from './structs/cachedItem';
+import * as nodeCache from 'node-cache'
+import { ConfigIniParser as iniparser } from 'config-ini-parser';
 
+const cache = new nodeCache(
+    {
+        deleteOnExpire: true
+    }
+);
 
+export async function getClientSession() {
+    var result = cache.get<session>('client_session');
 
-interface clientToken {
-    access_token: string,
-    expires_in: number,
-    expires_at: Date,
-    token_type: string,
-    client_id: string,
-    internal_client: boolean,
-    client_service: string,
-}
+    if (!result || !result.isExpired()) {
+        var session = await newClientSession('ec684b8c687f479fadea3cb2ad83f5c6', 'e1f31c211f28413186262d37a13fc84d');
 
-var catalog: BRShop | undefined = undefined;
-var client_token: clientToken | undefined = undefined;
-var client_events: timeline.Calendar['channels']['client-events'] | undefined = undefined;
-var keychain: { expire: Date, data: string[] } = { data: [''], expire: new Date(0) };
-
-export async function getClientToken() {
-    var isInvalid =
-        !client_token ||
-        !client_token.access_token ||
-        new Date(client_token.expires_at).getTime() <= Date.now() ||
-        (await
-            axios.head(
-                'https://account-public-service-prod.ak.epicgames.com/account/api/oauth/verify',
-                {
-                    headers: {
-                        'authorization': `bearer ${client_token.access_token}`
-                    },
-                    validateStatus: undefined,
-                    timeout: 50000
-                }
-            )
-        ).status != 200
-
-
-    if (isInvalid) {
-        const request = await axios.post<clientToken>('https://account-public-service-prod.ak.epicgames.com/account/api/oauth/token', 'grant_type=client_credentials', {
-            auth: {
-                username: 'ec684b8c687f479fadea3cb2ad83f5c6',
-                password: 'e1f31c211f28413186262d37a13fc84d'
-            },
-            validateStatus: undefined
-        })
-
-        if (request.status === 200) {
-            client_token = request.data;
-        }
+        cache.set('client_session', session, Math.round(session.expires.getTime() - Date.now()) / 1000);
+        return session;
     }
 
-    return client_token;
-}
-
-async function updateKeychain() {
-    const request = await axios.get<string[]>('https://api.nitestats.com/v1/epic/keychain', { validateStatus: undefined });
-    if (request.status != 200) {
-        return console.warn('Failed to update keychain');
-    }
-
-    keychain.data = request.
-}
+    return result;
+};
 
 export async function getKeychain() {
-    if (!keychain || keychain.expire.getTime() <= Date.now()) {
-        
+    var result = cache.get<string[]>('keychain');
+
+    if (!result) {
+        const response = await axios.get<string[]>('https://api.nitestats.com/v1/epic/keychain',
+            {
+                timeout: 2500,
+                validateStatus: undefined
+            }
+        );
+
+        cache.set('keychain', response.data, 120);
+        return response.data;
     }
 
-    return catalog;
+    return result;
 }
 
 export async function getCatalog() {
-    if (!catalog || new Date(catalog.expiration).getTime() <= Date.now()) {
-        const request = await axios.get('https://api.nitestats.com/v1/epic/store', { validateStatus: undefined });
-        if (request.status == 200) {
-            catalog = request.data;
-        }
+    var result = cache.get<BRShop>('catalog');
+
+    if (!result) {
+        const response = await axios.get<BRShop>(
+            'https://api.nitestats.com/v1/epic/store',
+            {
+                timeout: 2500,
+                validateStatus: undefined
+            }
+        );
+
+        cache.set('catalog', response.data, Math.round(response.data.expiration.getTime() - Date.now()) / 1000);
+        return response.data;
     }
 
-    return catalog;
+    return result;
 }
 
-async function checkClientEvents() {
-    if (!client_events || new Date(client_events.cacheExpire).getTime() <= Date.now()) {
-        const request = await axios.get<timeline.Calendar>('https://api.nitestats.com/v1/epic/modes-smart', { validateStatus: undefined });
-        if (request.status == 200) {
-            client_events = request.data.channels['client-events'];
-        }
+export async function getTimeline() {
+    var result = cache.get<timeline.Calendar>('timeline');
+
+    if (!result) {
+        const response = await axios.get<timeline.Calendar>(
+            'https://api.nitestats.com/v1/epic/modes-smart',
+            {
+                timeout: 2500,
+                validateStatus: undefined
+            }
+        );
+
+        cache.set('timeline', response.data, response.data.cacheIntervalMins / 60);
+        return response.data;
     }
+
+    return result;
 }
 
-export async function getLastestSeason() {
-    await checkClientEvents();
-    return client_events?.states.find(x => x.state.seasonNumber != undefined)?.state.seasonNumber || 1;
+export async function getLanguageIni() {
+    var cached = cache.get<string>('langIni');
+
+    if (!cached) {
+        const client_token = await getClientSession();
+
+        if (!client_token) {
+            return '';
+        }
+    
+        const config = {
+            headers: { Authorization: `Bearer ${client_token.access_token}` },
+            validateStatus: () => true
+        }
+    
+        // TODO: move to online.js
+        const req_hotfixes = await axios.get('https://fortnite-public-service-prod11.ol.epicgames.com/fortnite/api/cloudstorage/system/', config);
+    
+        if (req_hotfixes.status !== 200) {
+            return '';
+        }
+    
+        const Hotfixes: CloudstorageFile[] = req_hotfixes.data;
+    
+        const gamesInis = Hotfixes.filter(x => x.filename.toLowerCase().endsWith('defaultgame.ini') && x.length > 0);
+        var result = [
+            `[/Script/FortniteGame.FortTextHotfixConfig]`
+        ]
+        
+        Promise.all(
+            gamesInis.map(async (file, index, array) => {
+                const ini_request = await axios.get(`https://fortnite-public-service-prod11.ol.epicgames.com/fortnite/api/cloudstorage/system/${file.uniqueFilename}`, config);
+                if (ini_request.status != 200) { return; }
+    
+                const parser = new iniparser();
+                parser.parse(ini_request.data);
+    
+                const bHaveSection = parser.isHaveSection('/Script/FortniteGame.FortTextHotfixConfig');
+    
+                if (bHaveSection) {
+                    const items = parser.items('/Script/FortniteGame.FortTextHotfixConfig');
+                    result = result.concat(items.map(([name, content]) => `${name}=${content}`))
+                }
+            })
+        );
+
+
+        var languageIni = result.join('\n');
+        cache.set('langIni', languageIni, 3600);
+        return languageIni;
+    }
+
+    return cached;
 }
 
-interface season {
+export async function getCurrentSeasonNum() {
+    const timeline = await getTimeline();
+    return timeline.channels['client-events'].states.find(x => x.state.seasonNumber)?.state.seasonNumber || 19;
+}
+
+export interface season {
     "season": number,
     "chapter": number,
     "seasonInChapter": number,
@@ -122,7 +166,7 @@ export async function getPastSeasons(season?: number) {
         const exist = past_seasons.find(x => x.season == season);
 
         if (!exist) {
-            var lastest = await getLastestSeason();
+            var lastest = await getCurrentSeasonNum();
 
             if (season > lastest) {
                 return past_seasons;

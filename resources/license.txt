@@ -1,0 +1,73 @@
+
+<EULA.Header>1. Terms</>
+
+By accessing this Website and using Neonite Private Server, you are agreeing to be
+bound by these
+Terms and Conditions of Use and agree that you are responsible for the agreement with any applicable
+local laws. If you disagree with any of these terms, you are prohibited from accessing this site.
+
+<EULA.Header>2. Use License</>
+
+Permission is granted to temporarily download one copy of the materials on Neonite's Website for personal,
+non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under
+this license you may not:
+
+
+	modify or copy the materials;
+	use the materials for any commercial purpose or for any public display;
+	attempt to reverse engineer any software contained on Neonite's Website or server;
+	remove any copyright or other proprietary notations from the materials;
+	transferring the materials to another person or "mirror" the materials on any other server'
+
+
+This will let Neonite to terminate upon violations of any of these restrictions. Upon termination, your
+viewing right will also be terminated and you should destroy any downloaded materials in your possession
+whether it is printed or electronic format.
+
+<EULA.Header>3. Disclaimer</>
+
+All the materials on Neonite’s Website are provided "as is". Neonite makes no warranties, may it be expressed
+or implied, therefore negates all other warranties. Furthermore, Neonite does not make any representations
+concerning the accuracy or reliability of the use of the materials on its Website or otherwise relating to
+such materials or any sites linked to this Website.
+
+<EULA.Header>4. Limitations</>
+
+Neonite or its suppliers will not be hold accountable for any damages that will arise with the use or
+inability to use the materials on Neonite’s Website, even if Neonite or an authorize representative of this
+Website has been notified, orally or written, of the possibility of such damage. Some jurisdiction does not
+allow limitations on implied warranties or limitations of liability for incidental damages, these
+limitations may not apply to you. Neonite are also not responsable to any damage on your Epic Games Inc / Fortnite account.
+
+<EULA.Header>5. Revisions and Errata</>
+
+The materials appearing on Neonite’s Website may include technical, typographical, or photographic errors.
+Neonite will not promise that any of the materials in this Website are accurate, complete, or current.
+Neonite may change the materials contained on its Website at any time without notice. Neonite does not make
+any commitment to update the materials.
+
+<EULA.Header>6. Links</>
+
+Neonite has not reviewed all of the sites linked to its Website and is not responsible for the contents of
+any such linked site. The presence of any link does not imply endorsement by Neonite of the site. The use of
+any linked website is at the user’s own risk.
+
+<EULA.Header>7. Site Terms of Use Modifications</>
+
+Neonite may revise these Terms of Use at any time without prior notice. By using this
+Private Server, you are agreeing to be bound by the current version of these Terms and Conditions of Use.
+
+<EULA.Header>8. Your Privacy</>
+
+Please read <a id="url" href="https://www.neonitedev.live/privacyPoliticy.html" style="EULA.Hyperlink">our Privacy Policy</>
+
+<EULA.Header>9. Governing Law</>
+
+Any claim related to Neonite's Website or Private Server shall be governed by the laws of Canada without regards to its conflict of law provisions.
+
+<EULA.Header>10. Epic games Terms Of Service</>
+Read <a id="url" href="https://www.neonitedev.live/privacyPoliticy.html" style="EULA.Hyperlink">Epic Games Terms Of Service</>
+
+If you are an epic games employee and you are willing to take down this server, please contact us by email at  <a id="url" href="mailto:infos@neonitedev.live" style="EULA.Hyperlink">infos@neonitedev.live</>
+
+

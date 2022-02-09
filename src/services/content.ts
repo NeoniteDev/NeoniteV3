@@ -1,39 +1,20 @@
-const express = require('express');
-const { Router } = express;
-const { default: axios } = require("axios")
-const { randomUUID: uuid } = require('crypto')
 
-const app = Router();
+import PromiseRouter from 'express-promise-router';
+import verifyAuthorization from '../middlewares/authorization';
+import { Request, Response, NextFunction } from 'express-serve-static-core';
+import errors, { ApiError } from '../structs/errors';
+import { HttpError } from 'http-errors';
 
-const api = Router();
+const app = PromiseRouter();
 
-var content = undefined;
+app.get("/api/pages/fortnite-game", async (req, res) => {
+    const language = 'en-US';
 
-api.get("/fortnite-game", async (req, res) => {
-    const language = req.query.lang || req.headers["accept-language"] || language;
+    res.json();
+});
 
-    if (!content || content.date.getTime() + 3600000 < Date.now()) {
-        content = (
-            await axios.get(
-                "https://fortnitecontent-website-prod07.ol.epicgames.com/content/api/pages/fortnite-game",
-                {
-                    timeout: 3000,
-                    headers:
-                    {
-                        "Accept-Language": language
-                    }
-                }
-            ).catch
-                (
-                    (err) => {
-                        return { data: undefined };
-                    }
-                )
-        ).data;
 
-        content.date = new Date();
-    }
-
+function buildContent() {
     const battleroyalenews = {
         news: {
             _type: "battleroyalenews",
@@ -58,7 +39,7 @@ api.get("/fortnite-game", async (req, res) => {
                     websiteURL: "https://discord.gg/DJ6VUmD",
                     websiteButtonText: "Join our discord",
                     entryType: "Website",
-                    id: "Neonite v3 news",
+                    id: "Neonite news",
                     sortingPriority: 0,
                     hidden: false,
                 }
@@ -67,7 +48,7 @@ api.get("/fortnite-game", async (req, res) => {
         _title: "battleroyalenews",
         _activeDate: "2020-01-21T14:00:00.000Z",
         lastModified: "2021-02-10T23:57:48.837Z",
-        _locale: language
+        _locale: 'en-US'
     }
 
     const emergencynotice = {
@@ -109,14 +90,15 @@ api.get("/fortnite-game", async (req, res) => {
         },
         _activeDate: "2018-08-06T19:00:26.217Z",
         lastModified: "2021-11-10T23:55:32.542Z",
-        _locale: language
+        _locale: 'en-US'
     }
 
-    res.json({
+    
+    return {
         _title: "Fortnite Game",
         _activeDate: "2017-07-24T22:24:02.300Z",
         lastModified: "2020-11-01T17:36:19.024Z",
-        _locale: language,
+        _locale: 'en-US',
         emergencynotice: emergencynotice,
         emergencynoticev2: emergencynotice,
         battleroyalenewsv2: battleroyalenews,
@@ -158,7 +140,7 @@ api.get("/fortnite-game", async (req, res) => {
             _title: 'SubgameInfo',
             _activeDate: "2017-07-24T22:24:02.300Z",
             lastModified: "2020-11-01T17:36:19.024Z",
-            _locale: language
+            _locale: 'en-US'
         },
         subgameselectdata: {
             saveTheWorldUnowned: {
@@ -216,7 +198,7 @@ api.get("/fortnite-game", async (req, res) => {
             _title: 'subgameselectdata',
             _activeDate: "2017-07-24T22:24:02.300Z",
             lastModified: "2020-11-01T17:36:19.024Z",
-            _locale: language
+            _locale: 'en-US'
         },
         loginmessage: {
             _title: 'LoginMessage',
@@ -249,7 +231,7 @@ api.get("/fortnite-game", async (req, res) => {
             _title: "shop-carousel",
             _activeDate: "2020-09-25T12:00:00.000Z",
             lastModified: "2020-12-05T23:52:44.269Z",
-            _locale: language
+            _locale: 'en-US'
         },
         dynamicbackgrounds: content?.dynamicbackgrounds || {
             backgrounds: {
@@ -265,7 +247,7 @@ api.get("/fortnite-game", async (req, res) => {
             },
             _activeDate: "2020-07-06T06:00:00.000Z",
             lastModified: "2021-06-22T13:53:48.402Z",
-            _locale: language
+            _locale: 'en-US'
         },
         shopSections: content?.shopSections,
         playlistinformation: content?.playlistinformation,
@@ -273,47 +255,32 @@ api.get("/fortnite-game", async (req, res) => {
             `http://${req.headers.host}/NeoniteWallpaper.png`,
             `http://${req.headers.host}/NeoniteMidLogo.png`
         ]
-    });
-});
+    }
+}
 
-api.use((req, res) => {
-    res.status(404).json({
-        "error": 404,
-        "message": "com.epicgames.common.404"
-    })
+app.use('/api/pages/', (req, res) => {
+    res.status(404).json(
+        {
+            "error": 404,
+            "message": "com.epicgames.common.404"
+        }
+    )
 })
 
-api.use(
-    /**
-    * @param {any} err
-    * @param {express.Request} req
-    * @param {express.Response} res
-    * @param {express.NextFunction} next
-    */
-    (err, req, res, next) => {
-        res.status(500).json({
-            "error": 500,
-            "message": "com.epicgames.common.500"
-        })
+app.use(
+    '/api/pages/',
+    (err: any, req: Request, res: Response, next: NextFunction) => {
+        res.status(500).json(
+            {
+                "error": 500,
+                "message": "com.epicgames.common.500"
+            }
+        )
     }
 )
-
-app.use('/api/pages/', api);
 
 app.use((req, res) => {
     res.status(302).redirect('/static/preview.html');
 })
-
-app.use(
-    /**
-    * @param {any} err
-    * @param {express.Request} req
-    * @param {express.Response} res
-    * @param {express.NextFunction} next
-    */
-    (err, req, res, next) => {
-        res.sendStatus(err.status || 500);
-    }
-)
 
 module.exports = app;

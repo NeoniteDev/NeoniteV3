@@ -7,8 +7,6 @@ namespace refresh_tokens {
     }
 
     export async function add(params: refresh) {
-        query(`DELETE FROM refresh_tokens WHERE expireAt < ?`, [Date.now()]);
-
         try {
             const entries = Object.entries(params);
             const columnsOrder = entries.flatMap(([key, value]) => key);
@@ -21,23 +19,26 @@ namespace refresh_tokens {
     }
 
     export async function check(token: string): Promise<boolean> {
-        query(`DELETE FROM refresh_tokens WHERE expireAt < ?`, [Date.now()]);
-
         const result = await query<number>(`SELECT EXISTS(SELECT * from refresh_tokens WHERE expireAt > ? AND token = ?)`, [Date.now(), token]);
         return Object.values(result[0])[0] == 1;
     }
 
     export async function get(token: string): Promise<refresh | undefined> {
-        query(`DELETE FROM refresh_tokens WHERE expireAt < ?`, [Date.now()]);
-
-
         const tokens = await query<refresh>(`SELECT * FROM refresh_tokens WHERE expireAt > ? AND token = ?`, [Date.now(), token]);
         return tokens[0];
     }
 
     export async function remove(token: string) {
         try {
-            await query(`DELETE FROM refresh_tokens WHERE expireAt < ? OR token = ?`, [Date.now(), token])
+            await query(`DELETE FROM refresh_tokens WHERE token = ?`, [token])
+        } catch (e) { console.log(e); return false; }
+
+        return true;
+    }
+
+    export async function removeByToken(token: string) {
+        try {
+            await query(`DELETE FROM refresh_tokens WHERE bearer_token = ?`, [token])
         } catch (e) { console.log(e); return false; }
 
         return true;

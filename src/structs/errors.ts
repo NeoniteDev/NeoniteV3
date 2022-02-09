@@ -1,12 +1,14 @@
 import { Response } from 'express-serve-static-core';
 
+// todo: param message builder
+
 interface ResponseBody {
     errorCode: string
     errorMessage: string
     messageVars?: string[]
     numericErrorCode: number | null
-    originatingService: 'neonite'
-    intent: 'unknown'
+    originatingService: 'Neonite'
+    intent: string
     validationFailures?: Record<string, Object>
 }
 
@@ -19,7 +21,7 @@ export class ApiError {
             errorMessage: message,
             messageVars: undefined,
             numericErrorCode: numeric,
-            originatingService: 'neonite',
+            originatingService: 'Neonite',
             intent: 'unknown'
         }
     }
@@ -42,9 +44,14 @@ export class ApiError {
         return this;
     }
 
+    appendMessage(message: string): typeof this {
+        this.response.errorMessage += message;
+        return this;
+    }
+
     apply(res: Response): typeof res {
         return res.status(this.statusCode)
-            .set("X-Epic-Error-Code", typeof this.response.numericErrorCode)
+            .set("X-Epic-Error-Code", typeof this.response.numericErrorCode || 1001)
             .set("X-Epic-Error-Name", typeof this.response.errorMessage)
             .json(this.response);
     }
@@ -63,6 +70,9 @@ export const neoniteDev = {
         get invalidRefresh() { return new ApiError('errors.com.neoniteDev.authentication.invalidRefresh', 'The refresh token you provided is invalid.', 18036, 400) },
         get invalidClient() { return new ApiError('errors.com.neoniteDev.authentication.invalidClient', 'The client credentials you are using are invalid.', 18033, 403) },
         get invalidExchange() { return new ApiError('errors.com.neoniteDev.authentication.invalidExchange', 'The exchange code you provided is invalid.', 18057, 400) },
+        get tooManySessions() { return new ApiError('errors.com.neoniteDev.authentication.tooManySessions', 'Sorry too many sessions have been issued for your account. Please try again later', 18048, 400) },
+        get notOwnSessionRemoval() { return new ApiError('errors.com.neoniteDev.authentication.notOwnSessionRemoval', 'Sorry you cannot remove the auth session. It was not issued to you.', 18040, 403) },
+        get unknownSession() { return new ApiError('errors.com.neoniteDev.authentication.unknownSession', 'Sorry we could not find the auth session', 18051, 404) },
     },
     party: {
         get partyNotFound() { return new ApiError('errors.com.neoniteDev.party.partyNotFound', 'Party does not exist.', 51002, 404) },
@@ -85,7 +95,7 @@ export const neoniteDev = {
         get accountNotFound() { return new ApiError('errors.com.neoniteDev.account.accountNotFound', "Sorry, we couldn't find an account for {displayName}", 18007, 404) },
     },
     mcp: {
-        get wrongCommand() { return new ApiError("errors.com.neoniteDev.mcp.wrongCommand", "Wrong command.", 12801, 404) },
+        get wrongCommand() { return new ApiError("errors.com.neoniteDev.mcp.wrongCommand", "Wrong command.", 12801, 400) },
         get itemNotFound() { return new ApiError("errors.com.neoniteDev.mcp.itemNotFound", "Locker item not found", 16006, 404) },
         get templateNotFound() { return new ApiError("errors.com.neoniteDev.mcp.templateNotFound", "Unable to find template configuration for profile", 12813, 404) },
         get invalidHeader() { return new ApiError("errors.com.neoniteDev.mcp.invalidHeader", "Parsing client revisions header failed.", 12831, 400) },

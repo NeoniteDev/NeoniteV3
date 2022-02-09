@@ -2,12 +2,12 @@ import Router from "express-promise-router";
 import errors, { ApiError } from "../../structs/errors";
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { HttpError } from 'http-errors';
-import VerifyAuthorization from '../../middlewares/authorization'
 import users from "../../database/usersController";
+import verifyAuthorization from "../../middlewares/authorization";
 
 const app = Router();
 
-app.get('/api/v1/search/:accountId', VerifyAuthorization, async (req, res) => {
+app.get('/api/v1/search/:accountId', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId !== req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }

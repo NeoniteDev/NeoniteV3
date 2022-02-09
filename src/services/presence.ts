@@ -2,7 +2,7 @@ import Router from "express-promise-router";
 import errors, { ApiError } from "../structs/errors";
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { HttpError } from 'http-errors';
-import VerifyAuthorization from "../middlewares/authorization";
+import verifyAuthorization from "../middlewares/authorization";
 import * as mysql from 'mysql';
 import Friends from "../database/friendsController";
 
@@ -25,7 +25,7 @@ interface DBvalue {
 
 const app = Router();
 
-app.get('/api/v1/_/:accountId/last-online', VerifyAuthorization, async (req, res, next) => {
+app.get('/api/v1/_/:accountId/last-online', verifyAuthorization(), async (req, res, next) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }

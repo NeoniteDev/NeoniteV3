@@ -11,17 +11,31 @@ import * as dotenv from 'dotenv'
 
 dotenv.config();
 
-const database = mysql.createConnection({
+var dbOptions = {
     database: process.env.DB_NAME,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT || '')
-})
+    port: parseInt(process.env.DB_PORT || ''),
+}
+
+
+function setupDB() {
+    database = mysql.createConnection(dbOptions);
+    database.connect();
+}
+
+var database = mysql.createConnection(dbOptions);
 
 database.connect();
 
-setInterval(() => database.ping(), 60000); // to avoid idle disconnection
+setInterval(() => {
+    if (database.state != 'authenticated' && database.state != 'connected') {
+        return setupDB();
+    };
+
+    database.ping()
+}, 30000); // to avoid idle disconnection
 
 type supportedProfiles = "common_public" | "athena" | "campaign";
 
@@ -102,9 +116,13 @@ database.query(
 
 
 export function query<T>(sql: string, values?: any): Promise<T[]> {
-    return new Promise((resolve, rejects) => {
+    if (database.state != 'authenticated' && database.state != 'connected') {
+        setupDB();
+    };
+
+    return new Promise((resolve, reject) => {
         database.query(sql, values, (err, result) => {
-            if (err) return rejects(err);
+            if (err) return reject(err);
             resolve(result);
         });
     })
@@ -121,4 +139,3 @@ purchaseToken VARCHAR(32) NOT NULL,
     accountId VARCHAR(32) NOT NULL,
     offers LONGTEXT NOT NULL);
  */
- 

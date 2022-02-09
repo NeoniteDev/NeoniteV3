@@ -1,17 +1,16 @@
 import errors, { ApiError } from '../structs/errors'
 import Router from 'express-promise-router';
-import VerifyAuthorization, { validateToken } from '../middlewares/authorization'
+import verifyAuthorization from '../middlewares/authorization'
 import validateMethod from '../middlewares/Method'
 import Friends from '../database/friendsController';
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { HttpError } from 'http-errors';
 import users from '../database/usersController';
 import * as xmppApi from '../xmppManager';
-import { FirstSeen } from '../structs/types';
 
 const app = Router();
 
-app.get('/api/v1/:accountId/blocklist', VerifyAuthorization, (req, res) => {
+app.get('/api/v1/:accountId/blocklist', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }
@@ -19,7 +18,7 @@ app.get('/api/v1/:accountId/blocklist', VerifyAuthorization, (req, res) => {
     res.json([])
 })
 
-app.get('/api/v1/:accountId/recent/fortnite', VerifyAuthorization, (req, res) => {
+app.get('/api/v1/:accountId/recent/fortnite', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }
@@ -27,7 +26,7 @@ app.get('/api/v1/:accountId/recent/fortnite', VerifyAuthorization, (req, res) =>
     res.json([])
 })
 
-app.get('/api/v1/:accountId/summary', VerifyAuthorization, async (req, res) => {
+app.get('/api/v1/:accountId/summary', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }
@@ -92,7 +91,7 @@ app.get('/api/v1/:accountId/summary', VerifyAuthorization, async (req, res) => {
 })
 
 
-app.post('/api/v1/:accountId/blocklist/:friendId', VerifyAuthorization, (req, res) => {
+app.post('/api/v1/:accountId/blocklist/:friendId', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }
@@ -101,7 +100,7 @@ app.post('/api/v1/:accountId/blocklist/:friendId', VerifyAuthorization, (req, re
 })
 
 
-app.get('/api/v1/:accountId/friends/', VerifyAuthorization, async (req, res) => {
+app.get('/api/v1/:accountId/friends/', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }
@@ -124,7 +123,7 @@ app.get('/api/v1/:accountId/friends/', VerifyAuthorization, async (req, res) => 
 })
 
 // get a friendship
-app.get('/api/v1/:accountId/friends/:friendId', VerifyAuthorization, async (req, res) => {
+app.get('/api/v1/:accountId/friends/:friendId', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }
@@ -151,7 +150,7 @@ app.get('/api/v1/:accountId/friends/:friendId', VerifyAuthorization, async (req,
 })
 
 // get mutual friends
-app.get('/api/v1/:accountId/friends/:friendId/mutual', VerifyAuthorization, async (req, res) => {
+app.get('/api/v1/:accountId/friends/:friendId/mutual', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }
@@ -162,7 +161,7 @@ app.get('/api/v1/:accountId/friends/:friendId/mutual', VerifyAuthorization, asyn
 })
 
 // add friend
-app.post('/api/v1/:accountId/friends/:friendId', VerifyAuthorization, async (req, res) => {
+app.post('/api/v1/:accountId/friends/:friendId', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }
@@ -200,7 +199,7 @@ app.post('/api/v1/:accountId/friends/:friendId', VerifyAuthorization, async (req
 // public api
 
 
-app.get('/api/public/friends/:accountId', VerifyAuthorization, async (req, res) => {
+app.get('/api/public/friends/:accountId', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }
@@ -221,7 +220,7 @@ app.get('/api/public/friends/:accountId', VerifyAuthorization, async (req, res) 
     );
 })
 
-app.post('/api/public/friends/:accountId/:friendId', VerifyAuthorization, async (req, res) => {
+app.post('/api/public/friends/:accountId/:friendId', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }

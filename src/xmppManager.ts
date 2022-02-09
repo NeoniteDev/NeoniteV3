@@ -11,15 +11,17 @@ if (!process.env.xmppAdminUser || !process.env.xmppAdminPassword) {
 const AdminUser = process.env.xmppAdminUser;
 const AdminPass = process.env.xmppAdminPassword;
 
-const client = axios.create({
-    auth: {
-        username: AdminUser,
-        password: AdminPass
-    },
-    headers: {
-        'Accept': 'application/json'
+const client = axios.create(
+    {
+        auth: {
+            username: AdminUser,
+            password: AdminPass
+        },
+        headers: {
+            'Accept': 'application/json'
+        }
     }
-})
+)
 
 export async function sendMesage(to: string, message: object | string) {
     const fragment = xmlBuilder.fragment({

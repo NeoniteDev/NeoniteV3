@@ -29,13 +29,7 @@ export namespace exchanges {
     }
 
     export async function remove(code: string) {
-        try {
-            await query(`DELETE FROM ExchangeCodes WHERE expireAt < ? OR code = ?`, [Date.now(), code]);
-        } catch {
-            return false;
-        }
-
-        return true;
+        await query(`DELETE FROM ExchangeCodes WHERE expireAt < ? OR code = ?`, [Date.now(), code]);
     }
 
     export async function get(code: string) {

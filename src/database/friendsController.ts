@@ -23,7 +23,6 @@ interface friend {
     friendAlias: string;
 }
 
-
 interface friendObject {
     accountId: string;
     alias: string;

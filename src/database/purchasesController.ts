@@ -62,9 +62,9 @@ namespace pendingPurchases {
         return purchases[0];
     }
 
-    export async function add(param: purchase) {
+    export async function add(param: Omit<purchase, 'receiptId'>) {
         try {
-            var purchase: dbpruchase = {
+            var purchase: Omit<dbpruchase, 'receiptId'> = {
                 ...param,
                 offers: JSON.stringify(param.offers)
             }

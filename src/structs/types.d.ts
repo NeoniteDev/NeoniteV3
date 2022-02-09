@@ -31,14 +31,14 @@ export interface oauth_Response {
 }
 
 export interface PartyConfig {
-    type:              string;
-    joinability:       string;
-    discoverability:   string;
-    sub_type:          string;
-    max_size:          number;
-    invite_ttl:        number;
+    type: string;
+    joinability: string;
+    discoverability: string;
+    sub_type: string;
+    max_size: number;
+    invite_ttl: number;
     join_confirmation: boolean;
-    intention_ttl:     number;
+    intention_ttl: number;
 }
 
 export interface Credentials {
@@ -65,7 +65,7 @@ export interface tokenInfo {
     deviceId?: string,
     clientId: string,
     displayName: string,
-    auth_method: string,
+    auth_method: 'exchange_code' | 'password' | 'refresh_token' | 'authorization_code' | 'device_auth' ,
     in_app_id: string,
     internal: boolean,
     expireAt: number,
@@ -74,12 +74,8 @@ export interface tokenInfo {
 
 export interface tokenInfoClient {
     token: string,
-    account_id?: string,
-    deviceId?: string,
     clientId: string,
-    displayName?: string,
-    auth_method: string,
-    in_app_id?: string,
+    auth_method: 'client_credentials',
     internal: boolean,
     expireAt: number,
     client_service: string;

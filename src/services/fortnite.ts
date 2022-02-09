@@ -4,11 +4,10 @@ import * as crypto from 'crypto';
 import * as Path from 'path';
 import * as fs from 'fs';
 import axios from 'axios';
-import { ConfigIniParser as iniparser } from 'config-ini-parser';
 import validateMethod from '../middlewares/Method';
 import * as cookieParser from 'cookie-parser';
 import * as multiparty from 'multiparty';
-import { VerifyAuthorization, CheckClientAuthorization } from '../middlewares/authorization';
+import verifyAuthorization from '../middlewares/authorization';
 import errors, { ApiError, neoniteDev } from '../structs/errors';
 import * as online from '../online';
 import { timeline, CloudstorageFile } from '../structs/types';
@@ -31,7 +30,7 @@ app.use(validateUa);
 app.use(profiles)
 
 
-app.get('/api/cloudstorage/system/config', CheckClientAuthorization, async (req, res) => {
+app.get('/api/cloudstorage/system/config', verifyAuthorization(true), async (req, res) => {
     res.json(
         {
             lastUpdated: '2022-01-19T01:20:39.963Z',
@@ -74,7 +73,7 @@ app.get('/api/cloudstorage/system/config', CheckClientAuthorization, async (req,
     );
 });
 
-app.get('/api/cloudstorage/system', CheckClientAuthorization, async (req, res) => {
+app.get('/api/cloudstorage/system', verifyAuthorization(true), async (req, res) => {
     const output = [
         {
             'uniqueFilename': 'LanguagePatches.ini',
@@ -115,62 +114,15 @@ app.get('/api/cloudstorage/system', CheckClientAuthorization, async (req, res) =
     res.json(output);
 });
 
-const sectionName = '/Script/FortniteGame.FortTextHotfixConfig';
-app.get('/api/cloudstorage/system/LanguagePatches.ini', CheckClientAuthorization, async (req, res) => {
 
-    const client_token = await online.getClientToken();
+app.get('/api/cloudstorage/system/LanguagePatches.ini', verifyAuthorization(true), async (req, res) => {
+    const languageIni = await online.getLanguageIni();
 
-    if (!client_token) {
-        return res.status(503)
-    }
-
-    const config = {
-        headers: { Authorization: `Bearer ${client_token.access_token}` },
-        validateStatus: () => true
-    }
-
-    // TODO: move to online.js
-    const req_hotfixes = await axios.get('https://fortnite-public-service-prod11.ol.epicgames.com/fortnite/api/cloudstorage/system/', config);
-
-    if (req_hotfixes.status !== 200) {
-        return res.status(502).end();
-    }
-
-    const Hotfixes: CloudstorageFile[] = req_hotfixes.data;
-
-    const gamesInis = Hotfixes.filter(x => x.filename.toLowerCase().endsWith('defaultgame.ini'));
-
-    var result = [
-        `[${sectionName}]`
-    ]
-
-    var proceeded = 0;
-
-    gamesInis.forEach(async (file, index, array) => {
-        const ini_request = await axios.get(`https://fortnite-public-service-prod11.ol.epicgames.com/fortnite/api/cloudstorage/system/${file.uniqueFilename}`, config);
-        if (ini_request.status != 200) { return; }
-
-        const parser = new iniparser();
-        parser.parse(ini_request.data);
-
-        const bHaveSection = parser.isHaveSection(sectionName);
-
-
-        if (bHaveSection) {
-            const items = parser.items(sectionName);
-            result = result.concat(items.map(([name, content]) => `${name}=${content}`))
-        }
-
-        proceeded++;
-
-        if (proceeded === array.length - 1) {
-            res.set('content-type', 'text/plain')
-            res.send(result);
-        }
-    })
+    res.set('content-type', 'text/plain')
+    res.send(languageIni);
 });
 
-app.get('/api/cloudstorage/system/:filename', CheckClientAuthorization, (req, res) => {
+app.get('/api/cloudstorage/system/:filename', verifyAuthorization(true), (req, res) => {
     const fileName = req.params.filename;
     const filePath = Path.join(hotfixPath, fileName);
 
@@ -190,7 +142,7 @@ app.get('/api/cloudstorage/system/:filename', CheckClientAuthorization, (req, re
 /**
  * Thanks to @link https://github.com/GMatrixGames for ClientSettings.Sav saving
  */
-app.get('/api/cloudstorage/user/:accountId', VerifyAuthorization, (req, res) => {
+app.get('/api/cloudstorage/user/:accountId', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
@@ -203,38 +155,33 @@ app.get('/api/cloudstorage/user/:accountId', VerifyAuthorization, (req, res) => 
 
     const files = fs.readdirSync(dirPath);
 
-    res.json(files
+    res.json(
+        files
         .filter(x => x.split('-').pop()?.replace('.Sav', '') == req.clientInfos.CL)
-        .map((file) => {
-            const fileName = file.split('-').shift() + '.Sav';
-            const filePath = Path.join(dirPath, file)
-            const fileData = fs.readFileSync(filePath);
+        .map(
+            (file) => {
+                const fileName = file.split('-').shift() + '.Sav';
+                const filePath = Path.join(dirPath, file)
+                const fileData = fs.readFileSync(filePath);
 
-            return {
-                uniqueFilename: fileName,
-                filename: fileName,
-                hash: crypto.createHash('sha1').update(fileData).digest('hex'),
-                hash256: crypto.createHash('sha256').update(fileData).digest('hex'),
-                length: fileData.length,
-                contentType: 'application/octet-stream',
-                uploaded: fs.statSync(filePath).mtime,
-                storageType: 'S3',
-                accountId: req.auth.account_id,
-                doNotCache: true
+                return {
+                    uniqueFilename: fileName,
+                    filename: fileName,
+                    hash: crypto.createHash('sha1').update(fileData).digest('hex'),
+                    hash256: crypto.createHash('sha256').update(fileData).digest('hex'),
+                    length: fileData.length,
+                    contentType: 'application/octet-stream',
+                    uploaded: fs.statSync(filePath).mtime,
+                    storageType: 'S3',
+                    accountId: req.auth.account_id,
+                    doNotCache: true
+                }
             }
-        })
+        )
     )
 });
 
-app.get('/api/game/v2/friendcodes/:accountId/epic', VerifyAuthorization, (req, res) => {
-    if (req.params.accountId != req.auth.in_app_id) {
-        throw neoniteDev.authentication.notYourAccount;
-    }
-
-    res.json([])
-})
-
-app.get('/api/cloudstorage/user/:accountId/:filename', VerifyAuthorization, (req, res) => {
+app.get('/api/cloudstorage/user/:accountId/:filename', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.in_app_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
@@ -259,13 +206,28 @@ app.get('/api/cloudstorage/user/:accountId/:filename', VerifyAuthorization, (req
     res.sendFile(filePath);
 });
 
-app.put('/api/cloudstorage/user/:accountId/:filename', VerifyAuthorization, (req, res) => {
+app.put('/api/cloudstorage/user/:accountId/:filename', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
 
-    var dirPath = Path.join(settingsPath, req.auth.account_id);
+    var dirPath = Path.join(settingsPath, req.auth.in_app_id)
+
+    if (Path.parse(dirPath).dir != settingsPath || !fs.existsSync(dirPath)) {
+        throw neoniteDev.cloudstorage.fileNotFound
+            .withMessage(`Sorry, we couldn't find a user file for ${req.params.filename}`)
+            .with(req.params.filename)
+    }
+
     var filePath = Path.join(dirPath, `${req.params.filename.split('.').shift()}-${req.clientInfos.CL}.Sav`);
+
+
+    if (Path.parse(filePath).dir !== dirPath || !fs.existsSync(filePath)) {
+        throw neoniteDev.cloudstorage.fileNotFound
+            .withMessage(`Sorry, we couldn't find a user file for ${req.params.filename}`)
+            .with(req.params.filename)
+    }
+
     const arrayBuffer: Array<any> = [];
 
     req.on('data', function (chunk) {
@@ -283,7 +245,16 @@ app.put('/api/cloudstorage/user/:accountId/:filename', VerifyAuthorization, (req
     });
 });
 
-app.post('/api/game/v2/creative/discovery/surface/:accountId', VerifyAuthorization, (req, res) => {
+app.get('/api/game/v2/friendcodes/:accountId/epic', verifyAuthorization(), (req, res) => {
+    if (req.params.accountId != req.auth.in_app_id) {
+        throw neoniteDev.authentication.notYourAccount;
+    }
+
+    res.json([]);
+})
+
+// todo
+app.post('/api/game/v2/creative/discovery/surface/:accountId', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
@@ -291,7 +262,7 @@ app.post('/api/game/v2/creative/discovery/surface/:accountId', VerifyAuthorizati
     res.json({});
 })
 
-app.get('/api/receipts/v1/account/:accountId/receipts', VerifyAuthorization, (req, res) => {
+app.get('/api/receipts/v1/account/:accountId/receipts', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
@@ -299,7 +270,7 @@ app.get('/api/receipts/v1/account/:accountId/receipts', VerifyAuthorization, (re
     res.json([]);
 });
 
-app.get('/api/storefront/v2/catalog', VerifyAuthorization, async (req, res) => {
+app.get('/api/storefront/v2/catalog', verifyAuthorization(), async (req, res) => {
     const catalog = await online.getCatalog();
 
     if (!catalog || req.clientInfos.season < 4) {
@@ -321,9 +292,10 @@ app.get('/api/storefront/v2/catalog', VerifyAuthorization, async (req, res) => {
     }
 
     res.json(catalog);
-})
+});
 
-app.get('/api/game/v2/leaderboards/cohort/:accountId', VerifyAuthorization, async (req, res) => {
+// leaderboard "cohort" accounts
+app.get('/api/game/v2/leaderboards/cohort/:accountId', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
@@ -343,7 +315,8 @@ app.get('/api/game/v2/leaderboards/cohort/:accountId', VerifyAuthorization, asyn
     )
 })
 
-app.post('/api/leaderboards/type/group/stat/:cohort/window/weekly', VerifyAuthorization, async (req, res) => {
+// get bulk stats
+app.post('/api/leaderboards/type/group/stat/:cohort/window/weekly', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
@@ -370,7 +343,7 @@ app.post('/api/leaderboards/type/group/stat/:cohort/window/weekly', VerifyAuthor
     )
 })
 
-app.get('/api/storefront/v2/gift/check_eligibility/recipient/:recipient/offer/:offerId', VerifyAuthorization, async (req, res, next) => {
+app.get('/api/storefront/v2/gift/check_eligibility/recipient/:recipient/offer/:offerId', verifyAuthorization(), async (req, res, next) => {
     const catalog = await online.getCatalog();
 
     if (!catalog) {
@@ -448,7 +421,7 @@ app.get('/api/storefront/v2/gift/check_eligibility/recipient/:recipient/offer/:o
 
 
 
-app.get('/api/calendar/v1/timeline', CheckClientAuthorization, async (req, res) => {
+app.get('/api/calendar/v1/timeline', verifyAuthorization(true), async (req, res) => {
     const offlineResponse = {
         channels: {
             'standalone-store': {},
@@ -536,17 +509,17 @@ app.get('/api/calendar/v1/timeline', CheckClientAuthorization, async (req, res) 
     res.json(offlineResponse);
 })
 
-app.get('/api/v2/versioncheck*', CheckClientAuthorization, (req, res) => {
+app.get('/api/v2/versioncheck*', verifyAuthorization(true), (req, res) => {
     res.json({ 'type': 'NO_UPDATE' })
 });
 
-app.get('/api/versioncheck*', CheckClientAuthorization, (req, res) => {
+app.get('/api/versioncheck*', verifyAuthorization(true), (req, res) => {
     res.json({ 'type': 'NO_UPDATE' })
 });
 
-app.get('/api/game/v2/world/info', CheckClientAuthorization, (req, res) => res.json({}))
+app.get('/api/game/v2/world/info', verifyAuthorization(true), (req, res) => res.json({}))
 
-app.get('/api/game/v2/br-inventory/account/:accountId', VerifyAuthorization, (req, res) => {
+app.get('/api/game/v2/br-inventory/account/:accountId', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
@@ -566,7 +539,7 @@ var validPlatforms = [
     'IOS'
 ]
 
-app.get('/api/game/v2/matchmakingservice/ticket/player/:accountId', cookieParser(), VerifyAuthorization, (req, res) => {
+app.get('/api/game/v2/matchmakingservice/ticket/player/:accountId', cookieParser(), verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.in_app_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
@@ -664,7 +637,7 @@ app.get('/api/game/v2/matchmakingservice/ticket/player/:accountId', cookieParser
     });
 })
 
-app.get('/api/game/v2/matchmaking/account/:accountId/session/:sessionId', VerifyAuthorization, (req, res) => {
+app.get('/api/game/v2/matchmaking/account/:accountId/session/:sessionId', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
@@ -676,9 +649,9 @@ app.get('/api/game/v2/matchmaking/account/:accountId/session/:sessionId', Verify
     })
 })
 
-app.post('/api/matchmaking/session/:SessionId/join', VerifyAuthorization, (req, res) => res.status(204).end())
+app.post('/api/matchmaking/session/:SessionId/join', verifyAuthorization(), (req, res) => res.status(204).end())
 
-app.get('/api/matchmaking/session/:sessionId', cookieParser(), VerifyAuthorization, (req, res) => {
+app.get('/api/matchmaking/session/:sessionId', cookieParser(), verifyAuthorization(), (req, res) => {
     var NetCL = req.cookies['NetCL'];
 
     if (!NetCL) {
@@ -720,28 +693,17 @@ app.get('/api/matchmaking/session/:sessionId', cookieParser(), VerifyAuthorizati
     });
 });
 
-app.get('/api/storefront/v2/keychain', VerifyAuthorization, async (req, res) => {
-    const keychain = await axios.get('https://api.nitestats.com/v1/epic/keychain', {
-        timeout: 3000,
-        validateStatus: undefined
-    });
+app.get('/api/storefront/v2/keychain', verifyAuthorization(), async (req, res) => {
+    const keychain = await online.getKeychain();
 
-    if (keychain.status != 200) {
-        res.json(
-            [
-                ''
-            ]
-        )
-    }
-
-    res.json(keychain.data);
+    res.json(keychain);
 })
 
-app.get('/api/matchmaking/session/findPlayer/:id', VerifyAuthorization, (req, res) => res.json([]));
+app.get('/api/matchmaking/session/findPlayer/:id', verifyAuthorization(), (req, res) => res.json([]));
 
-app.get('/api/statsv2/account/:accountId', VerifyAuthorization, (req, res) => { res.json([]) });
+app.get('/api/statsv2/account/:accountId', verifyAuthorization(), (req, res) => { res.json([]) });
 
-app.post('/api/storeaccess/v1/request_access/:accountId', VerifyAuthorization, (req, res) => {
+app.post('/api/storeaccess/v1/request_access/:accountId', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
@@ -749,7 +711,7 @@ app.post('/api/storeaccess/v1/request_access/:accountId', VerifyAuthorization, (
     throw neoniteDev.internal.notImplemented;
 })
 
-app.post('/api/game/v2/tryPlayOnPlatform/account/:accountId', VerifyAuthorization, (req, res) => {
+app.post('/api/game/v2/tryPlayOnPlatform/account/:accountId', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
@@ -759,7 +721,7 @@ app.post('/api/game/v2/tryPlayOnPlatform/account/:accountId', VerifyAuthorizatio
 });
 
 
-app.post('/api/game/v2/chat/:accountId/recommendGeneralChatRooms/:type/:platform', VerifyAuthorization, async (req, res) => {
+app.post('/api/game/v2/chat/:accountId/recommendGeneralChatRooms/:type/:platform', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
@@ -810,7 +772,7 @@ app.post('/api/game/v2/chat/:accountId/recommendGeneralChatRooms/:type/:platform
     //throw errors.neoniteDev.mcp.invalidChatRequest.withMessage('Recommendations no longer supported!');
 })
 
-app.get('/api/stats/accountId/:accountId/bulk/window/alltime', VerifyAuthorization, (req, res) => {
+app.get('/api/stats/accountId/:accountId/bulk/window/alltime', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
@@ -818,47 +780,27 @@ app.get('/api/stats/accountId/:accountId/bulk/window/alltime', VerifyAuthorizati
     res.json([])
 });
 
-app.get('/api/game/v2/enabled_features', VerifyAuthorization, (req, res) => {
+app.get('/api/game/v2/enabled_features', verifyAuthorization(), (req, res) => {
     res.json([])
 });
 
 const serverStart = new Date();
 
 app.get('/api/version', (req, res) => {
-    res.json({
-        app: 'neonite',
-        serverDate: new Date(),
-        overridePropertiesVersion: 'unknown',
-        cln: '00000000',
-        build: '000',
-        moduleName: 'Neonite',
-        buildDate: serverStart,
-        version: 'V3',
-        branch: 'master',
-        modules: {
-            'Epic-LightSwitch-AccessControlCore': {
-                cln: '00000000',
-                build: 'b01',
-                buildDate: '2021-01-01T00:00:00.000Z',
-                version: '1.0.0',
-                branch: 'master'
-            },
-            'epic-xmpp-api-v1-base': {
-                cln: '00000000',
-                build: 'b01',
-                buildDate: '2021-01-01T00:00:00.000Z',
-                version: '0.0.1',
-                branch: 'master'
-            },
-            'epic-common-core': {
-                cln: '00000000',
-                build: 'b01',
-                buildDate: '2021-01-01T00:00:00.000Z',
-                version: '3.0.0',
-                branch: 'master'
-            }
+    res.json(
+        {
+            app: 'neonite',
+            serverDate: new Date(),
+            overridePropertiesVersion: 'UNKNOWN',
+            cln: 'UNKNOWN',
+            build: 'UNKNOWN',
+            moduleName: 'Neonite-V3',
+            buildDate: serverStart,
+            version: req.clientInfos.friendlyVersion || 'UNKNOWN',
+            branch: 'main',
+            modules: {}
         }
-    })
+    )
 })
 
 app.post('/api/feedback/Bug', async (req, res) => {

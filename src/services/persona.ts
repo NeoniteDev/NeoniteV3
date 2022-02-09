@@ -3,11 +3,11 @@ import errors, { ApiError } from "../structs/errors";
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { HttpError } from 'http-errors';
 import Users, { User } from "../database/usersController";
-import VerifyAuthorization from "../middlewares/authorization";
+import verifyAuthorization from "../middlewares/authorization";
 
 const app = Router();
 
-app.get('/api/public/account/lookup', VerifyAuthorization, async (req, res, next) => {
+app.get('/api/public/account/lookup', verifyAuthorization(false), async (req, res, next) => {
     const searchQuery = req.query.q;
     if (searchQuery == undefined || typeof searchQuery != 'string') {
         throw errors.neoniteDev.basic.badRequest;
@@ -16,7 +16,7 @@ app.get('/api/public/account/lookup', VerifyAuthorization, async (req, res, next
     if (rEmail.test(searchQuery)) {
         var user: User | undefined = await Users.getByEmail(searchQuery);
     } else {
-        var user: User | undefined = (await Users.getByDiplayName(searchQuery))[0]
+        var user: User | undefined = await Users.getByDiplayName(searchQuery)
     }
 
     if (!user) {

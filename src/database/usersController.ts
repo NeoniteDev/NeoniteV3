@@ -1,5 +1,15 @@
 import { query } from "./mysqlManager";
 import * as types from '../structs/types';
+import * as nodeCache from 'node-cache';
+
+const cache = new nodeCache(
+    {
+        maxKeys: 15000,
+        checkperiod: 180
+    }
+);
+
+const rAccountId = /^[0-9a-f]{8}[0-9a-f]{4}[0-5][0-9a-f]{3}[089ab][0-9a-f]{3}[0-9a-f]{12}$/;
 
 export interface User {
     displayName: string;
@@ -7,7 +17,11 @@ export interface User {
     email: string;
     password: string;
     discord_account_id?: string,
-    google_account_id?: string
+    discord_user_name?: string,
+    google_display_name?: string,
+    google_account_id?: string,
+    createdAt: number,
+    modifiedAt?: number
 }
 
 namespace users {
@@ -19,7 +33,16 @@ namespace users {
     }
 
     export async function getById(value: string): Promise<User | undefined> {
+        if (cache.has(value)) {
+            cache.ttl(value, 120);
+            return cache.get<User>(value);
+        }
         const users = await query<User>('SELECT * FROM Accounts WHERE accountId = ?', [value]);
+        if (users[0]) {
+            try {
+                cache.set(users[0].accountId, users[0], 120)
+            } catch { }
+        }
         return users[0];
     }
 
@@ -38,8 +61,8 @@ namespace users {
         return users[0];
     }
 
-    export function getByDiplayName(value: string) {
-        return query<User>(`SELECT * FROM Accounts WHERE displayName = ? `, [value]);
+    export async function getByDiplayName(value: string) {
+        return (await query<User>(`SELECT * FROM Accounts WHERE displayName = ? `, [value]))[0];
     }
 
     export function search(searchValue: string) {
@@ -47,13 +70,25 @@ namespace users {
     }
 
     export async function gets(userIds: string[]): Promise<User[]> {
-        const validUsers = userIds.filter(x => x.length == 32 && x.match(/^[0-9a-f]{8}[0-9a-f]{4}[0-5][0-9a-f]{3}[089ab][0-9a-f]{3}[0-9a-f]{12}$/) != null);
-        
-        if (validUsers.length == 0) {
+        const validUsers = userIds.filter(x => x.length == 32 && rAccountId.test(x));
+
+        if (validUsers.length <= 0) {
             return []
         }
 
-        return await query<User>(`SELECT * FROM Accounts WHERE accountId IN (?)`, [validUsers]);
+        var cached = cache.mget<User>(userIds)
+
+        var missingUsers = validUsers.filter(x => cached[x] == undefined)
+
+        var result = Object.values(cached);
+
+        if (missingUsers.length > 0) {
+            result = result.concat(
+                await query<User>(`SELECT * FROM Accounts WHERE accountId IN (?)`, [missingUsers])
+            );
+        }
+
+        return result;
     }
 }
 
