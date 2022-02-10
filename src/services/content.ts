@@ -4,6 +4,7 @@ import verifyAuthorization from '../middlewares/authorization';
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import errors, { ApiError } from '../structs/errors';
 import { HttpError } from 'http-errors';
+import { getContent } from '../online';
 
 const app = PromiseRouter();
 
@@ -12,7 +13,9 @@ app.get("/api/pages/fortnite-game", async (req, res) => {
 });
 
 
-function buildContent(): Record<string, any> {
+async function buildContent(): Promise<Record<string, any>> {
+    const content = await getContent();
+
     const battleroyalenews = {
         news: {
             _type: "battleroyalenews",
@@ -85,6 +88,163 @@ function buildContent(): Record<string, any> {
                     spotlight: false
                 }
             ]
+        },
+        "playersurvey": {
+            "s": {
+                "s": [
+                    {
+                        "rt": false,
+                        "pr": {
+                            "_type": "Player Survey - Message"
+                        },
+                        "c": [
+                            {
+                                "cg": {
+                                    "_type": "Player Survey - Condition - Condition Group",
+                                    "id": "FNBR_IamBumb"
+                                },
+                                "_type": "Player Survey - Condition Container"
+                            }
+                        ],
+                        "hidden": false,
+                        "e": false,
+                        "_type": "Player Survey - Survey",
+                        "cm": {
+                            "_type": "Player Survey - Message"
+                        },
+                        "q": [
+                            {
+                                "mc": {
+                                    "s": "rating",
+                                    "c": [
+                                        {
+                                            "t": "Very Negative",
+                                            "_type": "Player Survey - Multiple Choice Question Choice"
+                                        },
+                                        {
+                                            "_type": "Player Survey - Multiple Choice Question Choice"
+                                        },
+                                        {
+                                            "_type": "Player Survey - Multiple Choice Question Choice"
+                                        },
+                                        {
+                                            "_type": "Player Survey - Multiple Choice Question Choice"
+                                        },
+                                        {
+                                            "t": "Very Positive",
+                                            "_type": "Player Survey - Multiple Choice Question Choice"
+                                        }
+                                    ],
+                                    "t": "Overall, how do you feel about <keyword>Supply Llamas</> in Fortnite Battle Royale?",
+                                    "_type": "Player Survey - Multiple Choice Question"
+                                },
+                                "_type": "Player Survey - Question Container"
+                            }
+                        ],
+                        "r": "rm",
+                        "sg": [
+                            "a"
+                        ],
+                        "t": "We want your feedback!",
+                        "id": "DoYouLikeItemShop",
+                        "po": {
+                            "_type": "Player Survey - Message"
+                        }
+                    },
+                    {
+                        "rt": false,
+                        "pr": {
+                            "_type": "Player Survey - Message"
+                        },
+                        "c": [
+                            {
+                                "_type": "Player Survey - Condition Container"
+                            }
+                        ],
+                        "hidden": false,
+                        "e": false,
+                        "_type": "Player Survey - Survey",
+                        "cm": {
+                            "_type": "Player Survey - Message"
+                        },
+                        "q": [
+                            {
+                                "mc": {
+                                    "s": "standard",
+                                    "c": [
+                                        {
+                                            "t": "Test1",
+                                            "_type": "Player Survey - Multiple Choice Question Choice"
+                                        },
+                                        {
+                                            "t": "Test2",
+                                            "_type": "Player Survey - Multiple Choice Question Choice"
+                                        },
+                                        {
+                                            "t": "Test3",
+                                            "_type": "Player Survey - Multiple Choice Question Choice"
+                                        }
+                                    ],
+                                    "t": "Test",
+                                    "_type": "Player Survey - Multiple Choice Question"
+                                },
+                                "_type": "Player Survey - Question Container"
+                            }
+                        ],
+                        "r": "rm",
+                        "sg": [
+                            "a"
+                        ],
+                        "t": "Test",
+                        "id": "200901_testsurvey_1",
+                        "po": {
+                            "_type": "Player Survey - Message"
+                        }
+                    }
+                ],
+                "cg": [
+                    {
+                        "c": [
+                            {
+                                "_type": "Player Survey - Condition Container",
+                                "pl": {
+                                    "p": [
+                                        "Windows",
+                                        "PS4",
+                                        "XboxOne",
+                                        "Switch",
+                                        "PS5",
+                                        "XSX"
+                                    ],
+                                    "_type": "Player Survey - Condition - Platform"
+                                }
+                            }
+                        ],
+                        "_type": "Player Survey - Condition Group",
+                        "id": "FNBR_NG_Switch"
+                    },
+                    {
+                        "c": [
+                            {
+                                "cg": {
+                                    "_type": "Player Survey - Condition - Condition Group",
+                                    "id": "FNBR_NG_Switch"
+                                },
+                                "_type": "Player Survey - Condition Container"
+                            }
+                        ],
+                        "_type": "Player Survey - Condition Group",
+                        "id": "FNBR_IamBumb"
+                    }
+                ],
+                "e": false,
+                "_type": "Player Survey - Survey Root"
+            },
+            "_title": "playersurvey",
+            "_noIndex": false,
+            "_activeDate": "2019-10-15T07:50:00.000Z",
+            "lastModified": "2022-02-09T23:34:04.354Z",
+            "_locale": "en-US"
         },
         _activeDate: "2018-08-06T19:00:26.217Z",
         lastModified: "2021-11-10T23:55:32.542Z",

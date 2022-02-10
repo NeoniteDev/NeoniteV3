@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express-serve-static-core';
 import * as crypto from 'crypto';
 import validateMethod from '../middlewares/Method';
 import Router from "express-promise-router";
-import { VerifyAuthorization, CheckClientAuthorization } from '../middlewares/authorization';
+import verifyAuthorization from '../middlewares/authorization';
 import errors, { ApiError, neoniteDev } from '../structs/errors';
 import { HttpError } from 'http-errors';
 import parties from '../database/partiesController';
@@ -28,7 +28,7 @@ const app = Router();
 app.use(express.json());
 
 // create party
-app.post('/api/v1/:deploymentId/parties', VerifyAuthorization, async (req, res, next) => {
+app.post('/api/v1/:deploymentId/parties', verifyAuthorization(), async (req, res, next) => {
     if (!req.is('application/json')) {
         throw errors.neoniteDev.internal.unsupportedMediaType;
     }
@@ -74,7 +74,7 @@ app.post('/api/v1/:deploymentId/parties', VerifyAuthorization, async (req, res, 
 })
 
 // update party
-app.patch('/api/v1/:deploymentId/parties/:partyId', VerifyAuthorization, async (req, res, next) => {
+app.patch('/api/v1/:deploymentId/parties/:partyId', verifyAuthorization(), async (req, res, next) => {
     if (!req.is('application/json')) {
         throw errors.neoniteDev.internal.unsupportedMediaType;
     }
@@ -115,7 +115,7 @@ app.patch('/api/v1/:deploymentId/parties/:partyId', VerifyAuthorization, async (
 })
 
 // get a party
-app.get('/api/v1/:deploymentId/parties/:partyId', VerifyAuthorization, async (req, res, next) => {
+app.get('/api/v1/:deploymentId/parties/:partyId', verifyAuthorization(), async (req, res, next) => {
     const party = await parties.getById(req.params.partyId)
 
     if (!party) {
@@ -127,7 +127,7 @@ app.get('/api/v1/:deploymentId/parties/:partyId', VerifyAuthorization, async (re
 
 
 // update party memeber
-app.patch('/api/v1/:deploymentId/parties/:partyId/members/:accountId/meta', VerifyAuthorization, async (req, res) => {
+app.patch('/api/v1/:deploymentId/parties/:partyId/members/:accountId/meta', verifyAuthorization(), async (req, res) => {
     if (!req.is('application/json')) {
         throw errors.neoniteDev.internal.unsupportedMediaType;
     }
@@ -153,7 +153,7 @@ app.patch('/api/v1/:deploymentId/parties/:partyId/members/:accountId/meta', Veri
     res.status(204).send()
 })
 
-app.delete('/api/v1/Fortnite/parties/:partyId/members/:accountId', VerifyAuthorization, async (req, res) => {
+app.delete('/api/v1/Fortnite/parties/:partyId/members/:accountId', verifyAuthorization(), async (req, res) => {
     const party = await getParty(req.params.partyId);
 
     if (!party) {
@@ -187,7 +187,7 @@ app.delete('/api/v1/Fortnite/parties/:partyId/members/:accountId', VerifyAuthori
 })
 
 // get current user parties
-app.get('/api/v1/:deploymentId/user/:accountId', VerifyAuthorization, async (req, res, next) => {
+app.get('/api/v1/:deploymentId/user/:accountId', verifyAuthorization(), async (req, res, next) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.party.notYourAccount.with(req.params.accountId, req.auth.account_id);
     }
@@ -203,7 +203,7 @@ app.get('/api/v1/:deploymentId/user/:accountId', VerifyAuthorization, async (req
 });
 
 // invite a user to the party 
-app.post('/api/v1/Fortnite/parties/:partyId/invites/:accountId', VerifyAuthorization, async (req, res) => {
+app.post('/api/v1/Fortnite/parties/:partyId/invites/:accountId', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId == req.auth.account_id) {
         throw errors.neoniteDev.party.selfInvite;
     }
@@ -222,7 +222,7 @@ app.post('/api/v1/Fortnite/parties/:partyId/invites/:accountId', VerifyAuthoriza
 })
 
 // invite a user to the party 
-app.post('/api/v1/Fortnite/parties/:partyId/invites/:accountId', VerifyAuthorization, async (req, res) => {
+app.post('/api/v1/Fortnite/parties/:partyId/invites/:accountId', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId == req.auth.account_id) {
         throw errors.neoniteDev.party.selfInvite;
     }
@@ -288,7 +288,7 @@ app.post('/api/v1/Fortnite/parties/:partyId/invites/:accountId', VerifyAuthoriza
 
 
 // "ping" a user
-app.post('/api/v1/:deploymentId/user/:friendId/pings/:accountId', VerifyAuthorization, async (req, res) => {
+app.post('/api/v1/:deploymentId/user/:friendId/pings/:accountId', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.party.notYourAccount.with(req.params.accountId, req.auth.account_id);
     }
@@ -344,7 +344,7 @@ app.post('/api/v1/:deploymentId/user/:friendId/pings/:accountId', VerifyAuthoriz
 })
 
 // remove a ping
-app.delete('/api/v1/:deploymentId/user/:accountId/pings/:pingerId', VerifyAuthorization, async (req, res) => {
+app.delete('/api/v1/:deploymentId/user/:accountId/pings/:pingerId', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.party.notYourAccount.with(req.params.accountId, req.auth.account_id);
     }
@@ -359,7 +359,7 @@ app.delete('/api/v1/:deploymentId/user/:accountId/pings/:pingerId', VerifyAuthor
 })
 
 // join a party from a ping
-app.post('/api/v1/:deploymentId/user/:accountId/pings/:pingerId/join', VerifyAuthorization, async (req, res) => {
+app.post('/api/v1/:deploymentId/user/:accountId/pings/:pingerId/join', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId !== req.auth.account_id) {
         throw errors.neoniteDev.party.notYourAccount.with(req.params.accountId, req.auth.account_id);
     }
@@ -395,7 +395,7 @@ app.post('/api/v1/:deploymentId/user/:accountId/pings/:pingerId/join', VerifyAut
 });
 
 // view an invited party
-app.get('/api/v1/:deploymentId/user/:accountId/pings/:pingerId/parties', VerifyAuthorization, async (req, res) => {
+app.get('/api/v1/:deploymentId/user/:accountId/pings/:pingerId/parties', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId !== req.auth.account_id) {
         throw errors.neoniteDev.party.notYourAccount.with(req.params.accountId, req.auth.account_id);
     }
@@ -411,7 +411,7 @@ app.get('/api/v1/:deploymentId/user/:accountId/pings/:pingerId/parties', VerifyA
     res.json(partyData);
 })
 
-app.post('/api/v1/Fortnite/parties/:partyId/members/:accountId/conferences/connection', VerifyAuthorization, async (req, res) => {
+app.post('/api/v1/Fortnite/parties/:partyId/members/:accountId/conferences/connection', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId !== req.auth.account_id) {
         throw errors.neoniteDev.party.notYourAccount.with(req.params.accountId, req.auth.account_id);
     }

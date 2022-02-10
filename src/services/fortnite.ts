@@ -720,6 +720,56 @@ app.post('/api/game/v2/tryPlayOnPlatform/account/:accountId', verifyAuthorizatio
     res.send(true);
 });
 
+app.post('/api/game/v2/chat/:accountId/reserveGeneralChatRooms/:type/:platform', verifyAuthorization(), async (req, res) => {
+    if (req.params.accountId != req.auth.account_id) {
+        throw neoniteDev.authentication.notYourAccount;
+    }
+
+    var avalibleRooms = await xmppApi.getChatRooms();
+
+    var globalChatRooms = await Promise.all(
+        avalibleRooms.filter(x => x.publicRoom).map(
+            async x => {
+                var participants = await xmppApi.getRoomParticipants(x.roomName);
+                return {
+                    roomName: x.roomName,
+                    currentMembersCount: x.owner.length + x.admin.length + x.member.length + participants.length,
+                    maxMembersCount: x.maxUsers,
+                    publicFacingShardName: x.naturalName,
+                }
+            }
+        )
+    )
+
+    var notFullRooms = globalChatRooms.filter(x => x.maxMembersCount > x.currentMembersCount);
+
+    if (notFullRooms.length <= 0) {
+        var roomId = 'global-' + crypto.randomUUID().replaceAll('-', '');
+        var roomData = await xmppApi.createChatRoom(roomId, 'neonite global chat', 'global chat room.', 25, true);
+
+        globalChatRooms.push(
+            {
+                currentMembersCount: 0,
+                maxMembersCount: roomData.maxUsers,
+                publicFacingShardName: roomData.naturalName,
+                roomName: roomData.roomName
+            }
+        );
+    }
+
+    res.json(
+        {
+            globalChatRooms: globalChatRooms,
+            founderChatRooms: [],
+            bNeedsPaidAccessForGlobalChat: false,
+            bNeedsPaidAccessForFounderChat: false,
+            bIsGlobalChatDisabled: false,
+            bIsFounderChatDisabled: true,
+            bIsSubGameGlobalChatDisabled: false
+        }
+    );
+    //throw errors.neoniteDev.mcp.invalidChatRequest.withMessage('Recommendations no longer supported!');
+})
 
 app.post('/api/game/v2/chat/:accountId/recommendGeneralChatRooms/:type/:platform', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {

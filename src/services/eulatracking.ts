@@ -13,7 +13,7 @@ var LicenseAgreementBody = readFileSync(
     Path.join(__dirname, '../../resources/license.txt'), 'utf-8'
 )
 
-app.get('/api/public/agreements/fn/account/:accountId', VerifyAuthorization, (req, res) => {
+app.get('/api/public/agreements/fn/account/:accountId', VerifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }

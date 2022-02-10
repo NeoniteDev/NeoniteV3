@@ -439,10 +439,11 @@ export namespace timeline {
 }
 
 
+
 export interface BRShop {
     refreshIntervalHrs: number;
     dailyPurchaseHrs: number;
-    expiration: Date;
+    expiration: string;
     storefronts: Storefront[];
 }
 

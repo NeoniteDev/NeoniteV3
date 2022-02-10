@@ -6,9 +6,9 @@ const axios = require('axios').default
 const app = express.Router();
 const errors = require('../structs/errors');
 
-const { VerifyAuthorization } = require('../middlewares/authorization');
+const { default: VerifyAuthorization } = require('../middlewares/authorization');
 
-app.get('/api/shared/bulk/offers', VerifyAuthorization, async (req, res) => {
+app.get('/api/shared/bulk/offers', VerifyAuthorization(true), async (req, res) => {
     const token = await online.getClientToken()
 
     const response = await axios.get(`https://catalog-public-service-prod06.ol.epicgames.com${req.originalUrl}`, {

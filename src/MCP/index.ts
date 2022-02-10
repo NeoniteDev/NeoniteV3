@@ -1,5 +1,4 @@
 import * as express from 'express'
-import { VerifyAuthorization } from '../middlewares/authorization'
 import validateMethod from '../middlewares/Method'
 import * as Path from 'path';
 import errors from '../structs/errors';
@@ -7,10 +6,11 @@ import * as operations from './operations';
 import { profileRevisions } from './operations';
 import { profile as types } from '../structs/types';
 import PromiseRouter from 'express-promise-router';
+import verifyAuthorization from '../middlewares/authorization';
 
 const app = PromiseRouter();
 
-app.post('/api/game/v2/profile/:accountId/client/:command', VerifyAuthorization, async (req, res, next) => {
+app.post('/api/game/v2/profile/:accountId/client/:command', verifyAuthorization(), async (req, res, next) => {
     try {
         if (!req.auth) {
             throw errors.neoniteDev.authentication.authenticationFailed;
@@ -65,7 +65,7 @@ app.post('/api/game/v2/profile/:accountId/client/:command', VerifyAuthorization,
     }
 })
 
-app.post('/api/game/v2/profile/:accountId/public/:command', VerifyAuthorization, async (req, res, next) => {
+app.post('/api/game/v2/profile/:accountId/public/:command', verifyAuthorization(), async (req, res, next) => {
     if (!req.auth) {
         throw errors.neoniteDev.authentication.authenticationFailed;
     }

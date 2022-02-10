@@ -6,6 +6,7 @@ import { newClientSession, session } from './structs/EpicSession';
 import CachedItem from './structs/cachedItem';
 import * as nodeCache from 'node-cache'
 import { ConfigIniParser as iniparser } from 'config-ini-parser';
+import { content } from './types/responses';
 
 const cache = new nodeCache(
     {
@@ -53,13 +54,16 @@ export async function getCatalog() {
         const response = await axios.get<BRShop>(
             'https://api.nitestats.com/v1/epic/store',
             {
-                timeout: 2500,
+                timeout: 4500,
                 validateStatus: undefined
             }
         );
 
+
+        console.log(response.data)
         if (response.status == 200) {
-            cache.set('catalog', response.data, Math.round(response.data.expiration.getTime() - Date.now()) / 1000);
+            var expiration = new Date(response.data.expiration)
+            cache.set('catalog', response.data, Math.round(expiration.getTime() - Date.now()) / 1000);
             return response.data;
         }
     }
@@ -67,19 +71,25 @@ export async function getCatalog() {
     return result;
 }
 
-export async function getContent() {
-    var result = cache.get<BRShop>('content');
+export async function getContent(): Promise<content.Root> {
+    var result = cache.get<content.Root>('content');
 
     if (!result) {
-        const response = await axios.get<BRShop>(
+        const response = await axios.get<content.Root>(
             'https://fortnitecontent-website-prod.ak.epicgames.com/content/api/pages/fortnite-game',
             {
-                timeout: 2500
+                timeout: 4500
             }
         );
 
-        cache.set('catalog', response.data, Math.round(response.data.expiration.getTime() - Date.now()) / 1000);
-        return response.data;
+        if (response.status == 200) {
+            cache.set('content', response.data, 86400);
+            return response.data;
+        } else {
+            return {
+                
+            }
+        }
     }
 
     return result;
@@ -152,7 +162,7 @@ export async function getLanguageIni() {
 
 
         var languageIni = result.join('\n');
-        cache.set('langIni', languageIni, 3600);
+        cache.set('langIni', languageIni, 3600); // 1h
         return languageIni;
     }
 

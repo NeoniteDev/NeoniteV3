@@ -46,25 +46,6 @@ app.get('/api/v1/search/:accountId', verifyAuthorization(), async (req, res) => 
             }
         })
     )
-})
-
-app.use(
-    (err: any, req: Request, res: Response, next: NextFunction) => {
-        if (err instanceof ApiError) {
-            err.apply(res);
-        }
-        else if (err instanceof HttpError && err.type == 'entity.parse.failed') {
-            errors.neoniteDev.internal.jsonParsingFailed.with(err.message).apply(res);
-        } else if (err instanceof HttpError) {
-            var error = errors.neoniteDev.internal.unknownError;
-            error.statusCode = err.statusCode;
-            error.withMessage(err.message).apply(res);
-        }
-        else {
-            console.error(err);
-            errors.neoniteDev.internal.serverError.apply(res);
-        }
-    }
-)
+});
 
 export default app;
