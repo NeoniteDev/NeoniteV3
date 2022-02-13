@@ -20,7 +20,8 @@ export async function validateToken(token: string, bAllowCache: boolean = true):
             return undefined;
         }
 
-        const exist = await tokens.check(decoded.jti, bAllowCache);
+        
+        const exist = await tokens.get(decoded.jti, bAllowCache);
 
         if (!exist) {
             return undefined;

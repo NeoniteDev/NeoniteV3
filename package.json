@@ -33,6 +33,7 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.1",
+    "express-rate-limit": "^6.2.1",
     "geoip-lite": "^1.4.3",
     "geonames.js": "^3.0.6",
     "iso-3166-2": "^1.0.0",

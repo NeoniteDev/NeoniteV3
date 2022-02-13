@@ -64,11 +64,21 @@ app.post('/api/v1/:deploymentId/parties', verifyAuthorization(), async (req, res
     party.addMember(
         {
             id: body.join_info.connection.id,
-            meta: body.meta || {},
+            meta: body.join_info.connection.meta || {},
             yield_leadership: false
         },
-        req.auth.account_id, body.meta
+        req.auth.account_id, body.join_info.meta
     );
+
+    party.update(
+        {
+            config: body.config,
+            meta: {
+                delete: [],
+                update: body.meta || {}
+            }
+        }
+    )
 
     res.json(party.getData());
 })
@@ -254,7 +264,7 @@ app.post('/api/v1/Fortnite/parties/:partyId/invites/:accountId', verifyAuthoriza
         if (existingPings.length > 0) {
             await Pings.remove(req.params.accountId, req.params.friendId);
         }
-        
+
         const ping = {
             sent_by: req.params.accountId,
             sent_to: req.params.friendId,
@@ -262,10 +272,10 @@ app.post('/api/v1/Fortnite/parties/:partyId/invites/:accountId', verifyAuthoriza
             expires_at: new Date().addHours(1),
             meta: meta
         };
-    
+
         console.log('created ping')
         await Pings.create(ping);
-    
+
         console.log('sending message')
         xmppApi.sendMesage(
             `${req.params.accountId}@xmpp.neonitedev.live`,

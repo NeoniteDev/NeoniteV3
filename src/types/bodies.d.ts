@@ -1,7 +1,7 @@
 export namespace party {
     export namespace CreateParty {
         export interface root {
-            config: Config;
+            config: Record<string, string>;
             join_info: JoinInfo;
             meta?: Record<string, string>;
         }
@@ -19,6 +19,7 @@ export namespace party {
 
         export interface JoinInfo {
             connection: Connection;
+            meta?: Record<string, string>
         }
 
         export interface Connection {

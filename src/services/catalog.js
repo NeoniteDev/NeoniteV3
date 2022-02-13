@@ -9,12 +9,12 @@ const errors = require('../structs/errors');
 const { default: VerifyAuthorization } = require('../middlewares/authorization');
 
 app.get('/api/shared/bulk/offers', VerifyAuthorization(true), async (req, res) => {
-    const token = await online.getClientToken()
+    const token = await online.getClientSession()
 
     const response = await axios.get(`https://catalog-public-service-prod06.ol.epicgames.com${req.originalUrl}`, {
         headers: {
             ...req.headers,
-            authorization: `bearer ${token.access_token}`,
+            authorization: `${token.data.token_type} ${token.access_token}`,
             host: 'catalog-public-service-prod06.ol.epicgames.com'
         },
         validateStatus: undefined,

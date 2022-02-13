@@ -2,6 +2,8 @@ import { query } from "./mysqlManager";
 import * as types from '../structs/types';
 import * as nodeCache from 'node-cache';
 
+// TODO: CHANGE TO DATABASE TIMESTAMP
+
 const cache = new nodeCache();
 
 namespace tokens {
@@ -22,7 +24,9 @@ namespace tokens {
     }
 
     export async function getUserTokensCount(id: string) {
-        const result = await query<number>(`SELECT COUNT(token) AS count FROM tokens WHERE expireAt > ? AND account_id = ?`, [Date.now(), id]);
+        var dateTime = Date.now();
+
+        const result = await query<number>(`SELECT COUNT(token) AS count FROM tokens WHERE expireAt > ? AND account_id = ?`, [dateTime, id], dateTime);
         return result[0];
     }
 
@@ -30,8 +34,9 @@ namespace tokens {
         if (cache.has(token) && bUseCache) {
             return true;
         }
-        
-        const result = await query<number>(`SELECT EXISTS(SELECT * from tokens WHERE expireAt > ? AND token = ?)`, [Date.now(), token]);
+        var dateTime = Date.now();
+
+        const result = await query<number>(`SELECT EXISTS(SELECT * from tokens WHERE expireAt > ? AND token = ?)`, [dateTime, token], dateTime);
         return Object.values(result[0])[0] == 1;
     }
 
@@ -40,7 +45,9 @@ namespace tokens {
             return cache.get<token>(token);
         }
 
-        const tokens = await query<token>(`SELECT * FROM tokens WHERE expireAt > ? AND token = ?`, [Date.now(), token]);
+        var dateTime = Date.now();
+
+        const tokens = await query<token>(`SELECT * FROM tokens WHERE expireAt > ? AND token = ?`, [dateTime, token], dateTime);
 
         if (tokens[0] && bUseCache) {
             cache.set<token>(token, tokens[0], 120);

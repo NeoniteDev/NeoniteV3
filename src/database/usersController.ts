@@ -75,7 +75,7 @@ namespace users {
         if (validUsers.length <= 0) {
             return []
         }
-
+        
         var cached = cache.mget<User>(userIds)
 
         var missingUsers = validUsers.filter(x => cached[x] == undefined)

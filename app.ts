@@ -3,24 +3,40 @@ import { Request, Response, NextFunction } from 'express-serve-static-core';
 import * as fs from 'fs';
 import errors, { ApiError } from './src/structs/errors';
 import * as statuses from 'statuses'
-import {} from './src/structs/types'
+import { } from './src/structs/types'
 import * as https from 'http'
 import * as dotenv from 'dotenv'
 import * as path from 'path'
 import websocketHandler from './src/websocket'
+import rateLimit from 'express-rate-limit'
 import { } from 'colors'
-require('colors');
 import { HttpError } from 'http-errors';
 
 const packageFile = require('./package.json');
 require('./src/structs/polyfill');
+require('colors');
+
 dotenv.config();
 
 const app = express();
 
+
 app.set('etag', false);
 app.disable('x-powered-by');
 
+const limiter = rateLimit(
+    {
+        windowMs: 60, // 15 minutes
+        max: 250,
+        standardHeaders: true,
+        legacyHeaders: true,
+        handler(req, res, next, optionsUsed) {
+            errors.neoniteDev.basic.throttled.withMessage(`Operation access is limited by throttling policy, please try again in ?? second(s)`).with('??').apply(res);
+        }
+    }
+)
+
+app.use(limiter)
 app.use(express.static('resources/public'));
 
 app.use((req, res, next) => {
@@ -46,7 +62,7 @@ app.use((req, res, next) => {
         }
     }
 
-    res.setTimeout(10000, function () {
+    res.setTimeout(20000, function () {
         errors.neoniteDev.internal.requestTimedOut.apply(res);
     })
 
@@ -98,8 +114,8 @@ app.use(
 )
 
 var server = https.createServer({
-   /* key,
-    cert*/
+    /* key,
+     cert*/
 }, app);
 
 server.listen(packageFile.config.port, function () {

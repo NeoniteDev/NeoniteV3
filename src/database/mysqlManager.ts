@@ -8,6 +8,8 @@ import { create } from 'domain';
 import { party } from '../types/bodies';
 import Party from '../structs/Party';
 import * as dotenv from 'dotenv'
+import * as nodeCache from 'node-cache';
+
 
 dotenv.config();
 
@@ -16,8 +18,15 @@ var dbOptions = {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT || ''),
+    port: parseInt(process.env.DB_PORT || '')
 }
+
+const sqlCache = new nodeCache(
+    {
+        checkperiod: 5,
+        maxKeys: 5000
+    }
+);
 
 
 function setupDB() {
@@ -36,23 +45,6 @@ setInterval(() => {
 
     database.ping()
 }, 30000); // to avoid idle disconnection
-
-type supportedProfiles = "common_public" | "athena" | "campaign";
-
-export interface profile {
-    "created": string,
-    "updated": string,
-    "rvn": number,
-    "wipeNumber": number,
-    "accountId": string,
-    "profileId": supportedProfiles,
-    "version"?: string,
-    "items": Record<string, any>,
-    "stats": {
-        "attributes": Record<string, any>
-    }
-}
-
 
 
 database.query(`
@@ -115,16 +107,42 @@ database.query(
 )
 
 
-export function query<T>(sql: string, values?: any): Promise<T[]> {
+export function query<T>(sql: string, values?: any[], ...cacheIgnore: any[]): Promise<T[]> | T[] {
     if (database.state != 'authenticated' && database.state != 'connected') {
         setupDB();
     };
 
+
+    var bIsSelectQuery = sql.toLowerCase().startsWith('select');
+    var sqlForCache = values ? mysql.format(sql, cacheIgnore ? values.filter(x => !cacheIgnore.includes(x)) : values) : sql;
+
+    if (bIsSelectQuery) {
+        if (sqlCache.has(sqlForCache)) {
+            var result = sqlCache.get<T[]>(sqlForCache);
+
+            if (result) {
+                return result;
+            }
+        }
+    }
+
     return new Promise((resolve, reject) => {
-        database.query(sql, values, (err, result) => {
-            if (err) return reject(err);
-            resolve(result);
-        });
+        database.query(
+            {
+                sql,
+                values,
+                timeout: 10000
+            },
+            (err, result) => {
+                if (err) return reject(err);
+                if (bIsSelectQuery) {
+                    try {
+                        sqlCache.set(sqlForCache, result, 5);
+                    } catch {}
+                }
+                resolve(result);
+            }
+        );
     })
 }
 

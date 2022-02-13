@@ -15,6 +15,7 @@ interface partyUpdate {
         delete: string[]
     },
     config: Record<string, string>
+
 }
 
 export async function getParty(id: string) {
