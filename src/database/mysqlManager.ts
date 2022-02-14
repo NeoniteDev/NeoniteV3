@@ -10,7 +10,6 @@ import Party from '../structs/Party';
 import * as dotenv from 'dotenv'
 import * as nodeCache from 'node-cache';
 
-
 dotenv.config();
 
 var dbOptions = {
@@ -81,6 +80,7 @@ database.query(`CREATE TABLE IF NOT EXISTS purchases (
     receiptId VARCHAR(32)
     );
 `)
+
 
 database.query(
     readFileSync(path.join(queriesDir, 'ensureProfilesExist.sql'), 'utf-8')

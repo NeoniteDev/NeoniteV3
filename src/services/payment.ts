@@ -129,7 +129,7 @@ app.use(
         if (err instanceof ApiError) {
             res.json(
                 {
-                    message: err.response.errorMessage
+                    message: err.getMessage()
                 }
             );
         }
@@ -137,7 +137,7 @@ app.use(
             const error = errors.neoniteDev.internal.jsonParsingFailed;
             res.json(
                 {
-                    message: error.response.errorMessage
+                    message: error.getMessage()
                 }
             );
         } else if (err instanceof HttpError) {

@@ -31,305 +31,294 @@ app.use(express.json());
  */
 
 app.post('/api/oauth/token', async (req, res, next) => {
-    try {
-        if (!req.is('application/x-www-form-urlencoded')) {
-            throw errors.neoniteDev.internal.unsupportedMediaType;
-        }
-
-        if (!req.headers.authorization || !req.headers.authorization.toLowerCase().startsWith('basic ')) {
-            throw errors.neoniteDev.authentication.invalidHeader;
-        }
-
-        const Authorization = req.headers.authorization.replace(/basic /i, '');
-
-        try {
-            const arr = Buffer.from(Authorization, 'base64').toString().split(':');
-
-            var credentials = {
-                username: arr[0],
-                password: arr[1]
-            }
-        } catch {
-            throw errors.neoniteDev.authentication.oauth.invalidClient;
-        }
-
-        if (credentials.username.length != 32) {
-            throw errors.neoniteDev.authentication.oauth.invalidClient;
-        }
-
-        var grant_type = req.body.grant_type;
-
-        /**
-         * @type {import('../database/mysqlManager').User}
-         */
-        var user = undefined;
-
-        switch (grant_type) {
-            case 'client_credentials':
-                {
-                    const token = crypto.randomUUID().replace(/-/g, '');
-                    var jwtToken: string | undefined = undefined;
-
-                    if ('token_type' in req.body && req.body.token_type == 'eg1') {
-                        jwtToken = 'eg1~' + jwt.sign(
-                            {
-                                'mver': false,
-                                'clid': credentials.username,
-                                'am': grant_type,
-                                'sia': '4e656f6e697465',
-                                'clsvc': 'fortnite',
-                                'ic': true,
-                                't': 's'
-                            },
-                            jwtSecret,
-                            {
-                                jwtid: token,
-                                expiresIn: '4h'
-                            }
-                        )
-                    }
-
-                    const expires = new Date().addHours(4);
-
-                    await tokens.add({
-                        auth_method: grant_type,
-                        clientId: credentials.username,
-                        client_service: 'fortnite',
-                        expireAt: expires.getTime(),
-                        internal: true,
-                        token: token
-                    })
-
-                    res.json({
-                        'access_token': jwtToken || token,
-                        'expires_in': 14400, // in seconds
-                        'expires_at': expires,
-                        'token_type': 'bearer',
-                        'client_id': credentials.username,
-                        'internal_client': true,
-                        'client_service': 'fortnite'
-                    })
-
-                    return;
-                }
-
-            case 'exchange_code':
-                {
-                    if (!req.body.exchange_code) {
-                        throw errors.neoniteDev.authentication.invalidRequest.withMessage('exchange_code is required.')
-                    }
-
-                    const code = await exchanges.get(req.body.exchange_code);
-
-                    if (!code) {
-                        throw errors.neoniteDev.authentication.oauth.invalidExchange;
-                    };
-
-                    var userPromise = users.getById(code.accountId);
-                    var originatingSessionPromise = tokens.get(code.sessionId, false);
-
-                    var originatingSession = await originatingSessionPromise;
-
-                    if (!originatingSession) {
-                        throw errors.neoniteDev.authentication.oauth.expiredExchangeCodeSession;
-                    }
-
-                    user = await userPromise;
-
-                    exchanges.remove(req.body.exchange_code);
-
-                    if (!user) {
-                        throw errors.neoniteDev.authentication.oauth.invalidExchange;
-                    }
-
-                    break;
-                }
-
-            case 'password':
-                {
-                    if ('username' in req.body == false) {
-                        throw errors.neoniteDev.authentication.invalidRequest.withMessage('username is required.')
-                    }
-
-                    if ('password' in req.body == false) {
-                        throw errors.neoniteDev.authentication.invalidRequest.withMessage('password is required.')
-                    }
-
-                    var hash_password = crypto.createHash("sha256").update(req.body.password).digest("hex")
-
-                    user = await users.getByEmail(req.body.username.toLowerCase());
-
-
-                    if (!user || user.password !== hash_password) {
-                        throw errors.neoniteDev.authentication.oauth.invalidGrant;
-                    }
-
-                    break;
-                }
-
-            case 'refresh_token':
-                {
-                    if ('refresh_token' in req.body == false) {
-                        throw errors.neoniteDev.authentication.invalidRequest.withMessage('refresh_token is required.')
-                    }
-
-                    /** @type {string} */
-                    const refresh = req.body.refresh_token;
-
-                    if (refresh.startsWith('eg1~')) {
-                        try {
-                            var decoded = jwt.verify(req.body.refresh_token.slice(4), jwtSecret);
-                        } catch { throw errors.neoniteDev.authentication.oauth.invalidRefresh; }
-
-                        if (typeof decoded != 'object' || !decoded.jti) {
-                            throw errors.neoniteDev.authentication.oauth.invalidRefresh;
-                        }
-
-                        var infos = await refresh_tokens.get(decoded.jti);
-
-                        if (!infos) {
-                            throw errors.neoniteDev.authentication.oauth.invalidRefresh;
-                        }
-                    } else if (refresh.length == 32) {
-                        var infos = await refresh_tokens.get(refresh);
-
-                        if (!infos) {
-                            throw errors.neoniteDev.authentication.oauth.invalidRefresh;
-                        }
-                    } else {
-                        throw errors.neoniteDev.authentication.oauth.invalidRefresh;
-                    }
-
-                    if (infos.clientId != credentials.username) {
-                        throw errors.neoniteDev.authentication.invalidHeader.withMessage(`invalid client ${credentials.username}`);
-                    }
-
-                    refresh_tokens.remove(infos.token);
-                    tokens.remove(infos.bearer_token);
-
-                    user = await users.getById(infos.account_id)
-
-                    if (!user) {
-                        throw errors.neoniteDev.authentication.oauth.invalidRefresh;
-                    }
-
-                    break;
-                }
-
-            default:
-                {
-                    throw errors.neoniteDev.authentication.grantNotImplemented;
-                }
-        }
-
-
-        var numTokens = await tokens.getUserTokensCount(user.accountId);
-
-        if (numTokens >= 75) {
-            throw errors.neoniteDev.authentication.oauth.tooManySessions;
-        }
-
-        var access_token = crypto.randomUUID().replace(/-/g, '');
-        var refresh_token = crypto.randomUUID().replace(/-/g, '');
-
-        const tokenExpires = new Date().addHours(8);
-        const refreshExpires = new Date().addHours(24);
-
-        const tokenAdd = tokens.add(
-            {
-                auth_method: grant_type,
-                clientId: credentials.username,
-                client_service: 'fortnite',
-                expireAt: tokenExpires.getTime(),
-                internal: true,
-                token: access_token,
-                account_id: user.accountId,
-                displayName: user.displayName,
-                in_app_id: user.accountId,
-                refresh_token: refresh_token
-            }
-        );
-
-        const refreshAdd = refresh_tokens.add(
-            {
-                auth_method: grant_type,
-                clientId: credentials.username,
-                client_service: 'fortnite',
-                expireAt: tokenExpires.getTime(),
-                internal: true,
-                token: refresh_token,
-                account_id: user.accountId,
-                displayName: user.displayName,
-                in_app_id: user.accountId,
-                bearer_token: access_token
-            }
-        );
-
-        if (!(await tokenAdd) || !(await refreshAdd)) {
-            throw errors.neoniteDev.internal.dataBaseError;
-        }
-
-        var jwt_token: string | undefined = undefined;
-        var jwt_refresh: string | undefined = undefined;
-
-        if (req.body.token_type == 'eg1') {
-            jwt_token = 'eg1~' + jwt.sign(
-                {
-                    'sub': user.accountId,
-                    'mver': false,
-                    'clid': credentials.username,
-                    'dn': user.displayName,
-                    'am': grant_type,
-                    'iai': user.accountId,
-                    'sia': '4e656f6e697465',
-                    'clsvc': 'fortnite',
-                    'ic': true,
-                    't': 's'
-                },
-                jwtSecret,
-                {
-                    expiresIn: tokenExpires.getTime(),
-                    jwtid: access_token
-                }
-            );
-
-            jwt_refresh = 'eg1~' + jwt.sign(
-                {
-                    'sub': user.accountId,
-                    't': 'r',
-                    'clid': credentials.username,
-                    'am': grant_type,
-                },
-                jwtSecret,
-                {
-                    expiresIn: refreshExpires.getTime(),
-                    jwtid: refresh_token
-                }
-            );
-        }
-
-        res.json(
-            {
-                'access_token': jwt_token || access_token,
-                'expires_in': Math.floor((tokenExpires.getTime() - Date.now()) / 1000),
-                'expires_at': tokenExpires,
-                'token_type': 'bearer',
-                'refresh_token': jwt_refresh || refresh_token,
-                'refresh_expires': Math.floor((refreshExpires.getTime() - Date.now()) / 1000),
-                'refresh_expires_at': refreshExpires,
-                'client_id': credentials.username,
-                'account_id': user.accountId,
-                'internal_client': true,
-                'client_service': 'fortnite',
-                'displayName': user.displayName,
-                'app': 'fortnite',
-                'in_app_id': user.accountId
-            }
-        );
-
-    } catch (error) {
-        next(error)
+    if (!req.is('application/x-www-form-urlencoded')) {
+        throw errors.neoniteDev.internal.unsupportedMediaType;
     }
+
+    if (!req.headers.authorization || !req.headers.authorization.toLowerCase().startsWith('basic ')) {
+        throw errors.neoniteDev.authentication.invalidHeader;
+    }
+
+    const Authorization = req.headers.authorization.replace(/basic /i, '');
+
+    try {
+        const arr = Buffer.from(Authorization, 'base64').toString().split(':');
+
+        var credentials = {
+            username: arr[0],
+            password: arr[1]
+        }
+    } catch {
+        throw errors.neoniteDev.authentication.oauth.invalidClient;
+    }
+
+    if (credentials.username.length != 32) {
+        throw errors.neoniteDev.authentication.oauth.invalidClient;
+    }
+
+    var grant_type = req.body.grant_type;
+
+    /**
+     * @type {import('../database/mysqlManager').User}
+     */
+    var user = undefined;
+
+    switch (grant_type) {
+        case 'client_credentials':
+            {
+                const token = crypto.randomUUID().replace(/-/g, '');
+                var jwtToken: string | undefined = undefined;
+
+                if ('token_type' in req.body && req.body.token_type == 'eg1') {
+                    jwtToken = 'eg1~' + jwt.sign(
+                        {
+                            'mver': false,
+                            'clid': credentials.username,
+                            'am': grant_type,
+                            'sia': '4e656f6e697465',
+                            'clsvc': 'fortnite',
+                            'ic': true,
+                            't': 's'
+                        },
+                        jwtSecret,
+                        {
+                            jwtid: token,
+                            expiresIn: '4h'
+                        }
+                    )
+                }
+
+                const expires = new Date().addHours(4);
+
+                await tokens.add({
+                    auth_method: grant_type,
+                    clientId: credentials.username,
+                    client_service: 'fortnite',
+                    expireAt: expires.getTime(),
+                    internal: true,
+                    token: token
+                })
+
+                res.json({
+                    'access_token': jwtToken || token,
+                    'expires_in': 14400, // in seconds
+                    'expires_at': expires,
+                    'token_type': 'bearer',
+                    'client_id': credentials.username,
+                    'internal_client': true,
+                    'client_service': 'fortnite'
+                })
+
+                return;
+            }
+
+        case 'exchange_code':
+            {
+                if (!req.body.exchange_code) {
+                    throw errors.neoniteDev.authentication.invalidRequest.withMessage('exchange_code is required.')
+                }
+
+                const code = await exchanges.get(req.body.exchange_code);
+
+                if (!code) {
+                    throw errors.neoniteDev.authentication.oauth.invalidExchange;
+                };
+
+                var userPromise = users.getById(code.accountId);
+                var originatingSessionPromise = tokens.get(code.sessionId, false);
+
+                var originatingSession = await originatingSessionPromise;
+
+                if (!originatingSession) {
+                    throw errors.neoniteDev.authentication.oauth.expiredExchangeCodeSession;
+                }
+
+                user = await userPromise;
+
+                exchanges.remove(req.body.exchange_code);
+
+                if (!user) {
+                    throw errors.neoniteDev.authentication.oauth.invalidExchange;
+                }
+
+                break;
+            }
+
+        case 'password':
+            {
+                if ('username' in req.body == false) {
+                    throw errors.neoniteDev.authentication.invalidRequest.withMessage('username is required.')
+                }
+
+                if ('password' in req.body == false) {
+                    throw errors.neoniteDev.authentication.invalidRequest.withMessage('password is required.')
+                }
+
+                var hash_password = crypto.createHash("sha256").update(req.body.password).digest("hex")
+
+                user = await users.getByEmail(req.body.username.toLowerCase());
+
+
+                if (!user || user.password !== hash_password) {
+                    throw errors.neoniteDev.authentication.oauth.invalidGrant;
+                }
+
+                break;
+            }
+
+        case 'refresh_token':
+            {
+                if ('refresh_token' in req.body == false) {
+                    throw errors.neoniteDev.authentication.invalidRequest.withMessage('refresh_token is required.')
+                }
+
+                /** @type {string} */
+                const refresh = req.body.refresh_token;
+
+                if (refresh.startsWith('eg1~')) {
+                    try {
+                        var decoded = jwt.verify(req.body.refresh_token.slice(4), jwtSecret);
+                    } catch { throw errors.neoniteDev.authentication.oauth.invalidRefresh; }
+
+                    if (typeof decoded != 'object' || !decoded.jti) {
+                        throw errors.neoniteDev.authentication.oauth.invalidRefresh;
+                    }
+
+                    var infos = await refresh_tokens.get(decoded.jti);
+
+                    if (!infos) {
+                        throw errors.neoniteDev.authentication.oauth.invalidRefresh;
+                    }
+                } else if (refresh.length == 32) {
+                    var infos = await refresh_tokens.get(refresh);
+
+                    if (!infos) {
+                        throw errors.neoniteDev.authentication.oauth.invalidRefresh;
+                    }
+                } else {
+                    throw errors.neoniteDev.authentication.oauth.invalidRefresh;
+                }
+
+                if (infos.clientId != credentials.username) {
+                    throw errors.neoniteDev.authentication.invalidHeader.withMessage(`invalid client ${credentials.username}`);
+                }
+
+                refresh_tokens.remove(infos.token);
+                tokens.remove(infos.bearer_token);
+
+                user = await users.getById(infos.account_id)
+
+                if (!user) {
+                    throw errors.neoniteDev.authentication.oauth.invalidRefresh;
+                }
+
+                break;
+            }
+
+        default:
+            {
+                throw errors.neoniteDev.authentication.oauth.grantNotImplemented.with(grant_type);
+            }
+    }
+
+    var numTokens = await tokens.getUserTokensCount(user.accountId);
+
+    if (numTokens >= 75) {
+        throw errors.neoniteDev.authentication.oauth.tooManySessions;
+    }
+
+    var access_token = crypto.randomUUID().replace(/-/g, '');
+    var refresh_token = crypto.randomUUID().replace(/-/g, '');
+
+    const tokenExpires = new Date().addHours(8);
+    const refreshExpires = new Date().addHours(24);
+
+    const tokenAdd = tokens.add(
+        {
+            auth_method: grant_type,
+            clientId: credentials.username,
+            client_service: 'neonite',
+            expireAt: tokenExpires.getTime(),
+            internal: true,
+            token: access_token,
+            account_id: user.accountId,
+            displayName: user.displayName,
+            in_app_id: user.accountId,
+            refresh_token: refresh_token
+        }
+    );
+
+    const refreshAdd = refresh_tokens.add(
+        {
+            auth_method: grant_type,
+            clientId: credentials.username,
+            client_service: 'neonite',
+            expireAt: tokenExpires.getTime(),
+            internal: true,
+            token: refresh_token,
+            account_id: user.accountId,
+            displayName: user.displayName,
+            in_app_id: user.accountId,
+            bearer_token: access_token
+        }
+    );
+
+    if (!(await tokenAdd) || !(await refreshAdd)) {
+        throw errors.neoniteDev.internal.dataBaseError;
+    }
+
+    var jwt_token = jwt.sign(
+        {
+            'sub': user.accountId,
+            'mver': false,
+            'clid': credentials.username,
+            'dn': user.displayName,
+            'am': grant_type,
+            'iai': user.accountId,
+            'sia': '4e656f6e697465',
+            'clsvc': 'neonite',
+            'ic': true,
+            't': 's',
+        },
+        jwtSecret,
+        {
+            expiresIn: tokenExpires.getTime(),
+            jwtid: access_token
+        }
+    );
+
+    var jwt_refresh = jwt.sign(
+        {
+            'sub': user.accountId,
+            't': 'r',
+            'clid': credentials.username,
+            'am': grant_type,
+        },
+        jwtSecret,
+        {
+            expiresIn: refreshExpires.getTime(),
+            jwtid: refresh_token
+        }
+    );
+
+    res.json(
+        {
+            'access_token': 'eg1~' + jwt_token,
+            'refresh_token': 'eg1~' + jwt_refresh,
+            'expires_in': Math.round((tokenExpires.getTime() - Date.now()) / 1000),
+            'expires_at': tokenExpires,
+            'refresh_expires': Math.round((refreshExpires.getTime() - Date.now()) / 1000),
+            'refresh_expires_at': refreshExpires,
+            'client_id': credentials.username,
+            'account_id': user.accountId,
+            'internal_client': true,
+            'displayName': user.displayName,
+            'in_app_id': user.accountId,
+            'token_type': 'bearer',
+            'client_service': 'neonite',
+            'app': 'neonite',
+        }
+    );
 });
 
 app.get('/api/oauth/verify', verifyAuthorization(true), (req: reqWithAuthMulti, res) => {
@@ -388,11 +377,13 @@ app.get('/api/oauth/exchange', verifyAuthorization(false, false), async (req: re
 
     await exchanges.add(exchangeCode, req.auth.account_id, req.auth.token, createdAt, expireAt);
 
-    res.json({
-        "expiresInSeconds": Math.floor((expireAt.getTime() - createdAt.getTime()) / 1000),
-        "code": exchangeCode,
-        "creatingClientId": req.auth.clientId
-    })
+    res.json(
+        {
+            expiresInSeconds: Math.round((expireAt.getTime() - createdAt.getTime()) / 1000),
+            code: exchangeCode,
+            creatingClientId: req.auth.clientId
+        }
+    )
 })
 
 // kill a token
@@ -400,12 +391,12 @@ app.delete('/api/oauth/sessions/kill/:token', verifyAuthorization(true, false), 
     var tokenToKill = await validateToken(req.params.token);
 
     if (!tokenToKill) {
-        throw errors.neoniteDev.authentication.unknownSession.appendMessage(` '${req.params.token}'`).with(req.params.token)
+        throw errors.neoniteDev.authentication.unknownSession.with(req.params.token)
     }
 
     if (req.auth.auth_method == 'client_credentials' || tokenToKill.auth_method == 'client_credentials') {
         if (req.auth.token != tokenToKill.token) {
-            throw errors.neoniteDev.authentication.notOwnSessionRemoval.appendMessage(` '${req.params.token}'`).with(req.params.token)
+            throw errors.neoniteDev.authentication.notOwnSessionRemoval.with(req.params.token)
         }
 
         await tokens.remove(tokenToKill.token);
@@ -413,7 +404,7 @@ app.delete('/api/oauth/sessions/kill/:token', verifyAuthorization(true, false), 
     }
 
     if (req.auth.account_id != tokenToKill.account_id) {
-        throw errors.neoniteDev.authentication.notOwnSessionRemoval.appendMessage(` '${req.params.token}'`).with(req.params.token)
+        throw errors.neoniteDev.authentication.notOwnSessionRemoval.with(req.params.token)
     }
 
     await refresh_tokens.removeByToken(tokenToKill.token);

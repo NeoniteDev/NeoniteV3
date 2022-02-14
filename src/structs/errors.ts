@@ -6,14 +6,14 @@ interface ResponseBody {
     errorCode: string
     errorMessage: string
     messageVars?: string[]
-    numericErrorCode: number | null
+    numericErrorCode: number
     originatingService: 'Neonite'
     intent: string
     validationFailures?: Record<string, Object>
 }
 
 export class ApiError {
-    constructor(code: string, message: string, numeric: number | null, statusCode: number) {
+    constructor(code: string, message: string, numeric: number, statusCode: number) {
         this.statusCode = statusCode;
 
         this.response = {
@@ -44,16 +44,33 @@ export class ApiError {
         return this;
     }
 
-    appendMessage(message: string): typeof this {
-        this.response.errorMessage += message;
-        return this;
+    apply(res: Response): typeof res {
+        this.response.messageVars?.forEach(
+            (msgVar, index) => {
+                this.response.errorMessage = this.response.errorMessage.replace(`{${index}}`, msgVar);
+            }
+        );
+
+        return res.status(this.statusCode)
+            .set("X-Epic-Error-Code", this.response.numericErrorCode.toString())
+            .set("X-Epic-Error-Name", this.response.errorCode)
+            .json(this.response);
     }
 
-    apply(res: Response): typeof res {
-        return res.status(this.statusCode)
-            .set("X-Epic-Error-Code", typeof this.response.numericErrorCode || 1001)
-            .set("X-Epic-Error-Name", typeof this.response.errorMessage)
-            .json(this.response);
+    /**
+     * generate an error message with message vars
+     * @returns the error message
+     */
+    getMessage(): string {
+        var message = this.response.errorMessage;
+
+        this.response.messageVars?.forEach(
+            (msgVar, index) => {
+                message = message.replace(`{${index}}`, msgVar);
+            }
+        );
+
+        return message;
     }
 }
 
@@ -61,14 +78,15 @@ export const neoniteDev = {
     authentication: {
         get invalidHeader() { return new ApiError('errors.com.neoniteDev.authentication.invalidHeader', 'It looks like your authorization header is invalid or missing, please verify that you are sending the correct headers.', 1011, 400) },
         get invalidRequest() { return new ApiError('errors.com.neoniteDev.authentication.invalidRequest', 'The request body you provided is either invalid or missing elements.', 1013, 400) },
-        get grantNotImplemented() { return new ApiError('errors.com.neoniteDev.authentication.grantNotImplemented', 'The grant_type you used is not supported by the server.', 1016, 501) },
+        get invalidToken() { return new ApiError('errors.com.neoniteDev.authentication.invalidToken', 'Invalid token {0}', 1014, 401) },
         get wrongGrantType() { return new ApiError('errors.com.neoniteDev.authentication.wrongGrantType', 'Sorry, your client does not have the proper grant_type for access.', 1016, 400) },
         get notYourAccount() { return new ApiError('errors.com.neoniteDev.authentication.notYourAccount', "You are not allowed to make changes to other people's accounts", 1023, 403) },
-        get validation_failed() { return new ApiError('errors.com.neoniteDev.authentication.validation_failed', "Sorry we couldn't validate your token. Please try with a new token.", 1031, 401) },
-        get authenticationFailed() { return new ApiError('errors.com.neoniteDev.authentication.authenticationFailed', "Authentication failed.", 1032, 401) },
-        get notOwnSessionRemoval() { return new ApiError('errors.com.neoniteDev.authentication.notOwnSessionRemoval', 'Sorry you cannot remove the auth session. It was not issued to you.', 18040, 403) },
-        get unknownSession() { return new ApiError('errors.com.neoniteDev.authentication.unknownSession', 'Sorry we could not find the auth session', 18051, 404) },
+        get validationFailed() { return new ApiError('errors.com.neoniteDev.authentication.validationFailed', "Sorry we couldn't validate your token {0}. Please try with a new token.", 1031, 401) },
+        get authenticationFailed() { return new ApiError('errors.com.neoniteDev.authentication.authenticationFailed', "Authentication failed for {0}", 1032, 401) },
+        get notOwnSessionRemoval() { return new ApiError('errors.com.neoniteDev.authentication.notOwnSessionRemoval', 'Sorry you cannot remove the auth session {0}. It was not issued to you.', 18040, 403) },
+        get unknownSession() { return new ApiError('errors.com.neoniteDev.authentication.unknownSession', 'Sorry we could not find the auth session {0}', 18051, 404) },
         oauth: {
+            get grantNotImplemented() { return new ApiError('errors.com.neoniteDev.authentication.grantNotImplemented', 'The grant_type {0} you used is not supported by the server.', 1016, 501) },
             get tooManySessions() { return new ApiError('errors.com.neoniteDev.authentication.oauth.tooManySessions', 'Sorry too many sessions have been issued for your account. Please try again later', 18048, 400) },
             get invalidGrant() { return new ApiError('errors.com.neoniteDev.authentication.oauth.invalidGrant', 'Invalid email or password.', 18031, 403) },
             get invalidRefresh() { return new ApiError('errors.com.neoniteDev.authentication.oauth.invalidRefresh', 'The refresh token you provided is invalid.', 18036, 400) },
@@ -78,10 +96,10 @@ export const neoniteDev = {
         }
     },
     party: {
-        get partyNotFound() { return new ApiError('errors.com.neoniteDev.party.partyNotFound', 'Party does not exist.', 51002, 404) },
-        get memberNotFound() { return new ApiError('errors.com.neoniteDev.party.memberNotFound', 'Party member does not exist.', 51004, 404) },
+        get partyNotFound() { return new ApiError('errors.com.neoniteDev.party.partyNotFound', 'Party {0} does not exist.', 51002, 404) },
+        get memberNotFound() { return new ApiError('errors.com.neoniteDev.party.memberNotFound', 'Party member {0} does not exist.', 51004, 404) },
         get alreadyInParty() { return new ApiError('errors.com.neoniteDev.party.alreadyInParty', 'Your already in a party.', 51012, 409) },
-        get userHasNoParty() { return new ApiError('errors.com.neoniteDev.party.userHasNoParty', 'User has no party to join.', 51019, 404) },
+        get userHasNoParty() { return new ApiError('errors.com.neoniteDev.party.userHasNoParty', 'User {0} has no party to join.', 51019, 404) },
         get notLeader() { return new ApiError('errors.com.neoniteDev.party.notLeader', 'You are not the party leader.', 51015, 403) },
         get pingNotFound() { return new ApiError('errors.com.neoniteDev.party.pingNotFound', "Sorry, we couldn't find a ping.", 51021, 404) },
         get pingForbidden() { return new ApiError('errors.com.neoniteDev.party.pingForbidden', 'User is not authorized to send pings the desired user', 51020, 403) },
@@ -108,7 +126,7 @@ export const neoniteDev = {
     },
     matchmaking: {
         get unknownSession() { return new ApiError('errors.com.neoniteDev.matchmaking.unknownSession', "unknown session id", 12101, 404) },
-        get missingCookie() { return new ApiError('errors.com.neoniteDev.matchmaking.missingCookie', "Missing NetCL cookie", null, 400) },
+        get missingCookie() { return new ApiError('errors.com.neoniteDev.matchmaking.missingCookie', "Missing custom NetCL cookie", 1001, 400) },
         get invalidBucketId() { return new ApiError('errors.com.neoniteDev.matchmaking.invalidBucketId', "blank or invalid bucketId", 16102, 400) },
         get invalidPartyPlayers() { return new ApiError('errors.com.neoniteDev.matchmaking.invalidPartyPlayers', "blank or invalid partyPlayerIds", 16103, 400) },
         get invalidPlatform() { return new ApiError('errors.com.neoniteDev.matchmaking.invalidPlatform', "invalid platform", 16104, 400) },
@@ -127,12 +145,12 @@ export const neoniteDev = {
         get invalidUserAgent() { return new ApiError('errors.com.neoniteDev.internal.invalidUserAgent', 'The user-agent header you provided does not mach a unreal engine formated user-agent', 16183, 400) },
         get serverError() { return new ApiError('errors.com.neoniteDev.internal.serverError', 'Sorry an error occurred and we were unable to resolve it.', 1000, 500) },
         get jsonParsingFailed() { return new ApiError('errors.com.neoniteDev.internal.jsonParsingFailed', 'Json parse failed.', 1020, 400) },
-        get requestTimedOut() { return new ApiError('errors.com.neoniteDev.internal.requestTimedOut', "Request timed out.", null, 408) },
+        get requestTimedOut() { return new ApiError('errors.com.neoniteDev.internal.requestTimedOut', "Request timed out.", 1001, 408) },
         get unsupportedMediaType() { return new ApiError('errors.com.neoniteDev.internal.unsupportedMediaType', "Sorry, your request could not be processed because you provide a type of media that we do not support.", 1006, 415) },
-        get notImplemented() { return new ApiError('errors.com.neoniteDev.internal.notImplemented', 'The resource you were trying to find is not yet implemented by the server.', null, 501) },
-        get dataBaseError() { return new ApiError('errors.com.neoniteDev.internal.dataBaseError', 'There was an error while interacting with the database. Please report this issue.', null, 500) },
-        get unknownError() { return new ApiError('errors.com.neoniteDev.internal.unknownError', 'Sorry an error occurred and we were unable to resolve it.', null, 500) },
-        get eosError() { return new ApiError('errors.com.neoniteDev.internal.EosError', 'Sorry an error occurred while communication with Epic Online Service Servers.', null, 500) },
+        get notImplemented() { return new ApiError('errors.com.neoniteDev.internal.notImplemented', 'The resource you were trying to find is not yet implemented by the server.', 1001, 501) },
+        get dataBaseError() { return new ApiError('errors.com.neoniteDev.internal.dataBaseError', 'There was an error while interacting with the database. Please report this issue.', 1001, 500) },
+        get unknownError() { return new ApiError('errors.com.neoniteDev.internal.unknownError', 'Sorry an error occurred and we were unable to resolve it.', 1001, 500) },
+        get eosError() { return new ApiError('errors.com.neoniteDev.internal.EosError', 'Sorry an error occurred while communication with Epic Online Service Servers.', 1001, 500) },
     },
     basic: {
         get badRequest() { return new ApiError('errors.com.neoniteDev.basic.badRequest', "Sorry but your request is invalid.", 1001, 400) },
@@ -140,7 +158,7 @@ export const neoniteDev = {
         get notAcceptable() { return new ApiError('errors.com.neoniteDev.basic.notAcceptable', 'Sorry your request could not be processed as you do not accept the response type generated by this resource. Please check your Accept header.', 1008, 406) },
         get methodNotAllowed() { return new ApiError('errors.com.neoniteDev.basic.methodNotAllowed', 'Sorry the resource you were trying to access cannot be accessed with the HTTP method you used.', 1009, 405) },
         get jsonMappingFailed() { return new ApiError('errors.com.neoniteDev.basic.jsonMappingFailed', 'Json mapping failed.', 1019, 400) },
-        get throttled() { return new ApiError('errors.com.neoniteDev.basic.jsonMappingFailed', 'Operation access is limited by throttling policy, please try again in 60 second(s)', 1041, 429) }
+        get throttled() { return new ApiError('errors.com.neoniteDev.basic.throttled', 'Operation access is limited by throttling policy.', 1041, 429) }
     }
 };
 

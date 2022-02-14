@@ -20,18 +20,19 @@ dotenv.config();
 
 const app = express();
 
-
 app.set('etag', false);
 app.disable('x-powered-by');
 
 const limiter = rateLimit(
     {
-        windowMs: 60, // 15 minutes
-        max: 250,
+        windowMs: 30000,
+        max: 75,
         standardHeaders: true,
-        legacyHeaders: true,
+        legacyHeaders: false,
         handler(req, res, next, optionsUsed) {
-            errors.neoniteDev.basic.throttled.withMessage(`Operation access is limited by throttling policy, please try again in ?? second(s)`).with('??').apply(res);
+            errors.neoniteDev.basic.throttled
+                .withMessage(`Operation access is limited by throttling policy, please try again in ${Math.round(optionsUsed.windowMs) / 1000} second(s)`)
+                .with(optionsUsed.windowMs.toString()).apply(res);
         }
     }
 )
@@ -40,6 +41,12 @@ app.use(limiter)
 app.use(express.static('resources/public'));
 
 app.use((req, res, next) => {
+    // restore cloudflare client ip
+    var cf_ip = req.get('cf-connecting-ip');
+    if (cf_ip) {
+        req.ip = cf_ip
+    }
+
     // URL Rewriting
     if (req.path == '/logout' && typeof req.query.path == 'string') {
         req.url = req.query.path;

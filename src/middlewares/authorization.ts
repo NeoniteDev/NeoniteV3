@@ -5,42 +5,44 @@ import errors, { neoniteDev } from '../structs/errors';
 import * as database from '../database/mysqlManager';
 import { fulltokenInfo, tokenInfo, tokenInfoClient } from '../structs/types';
 import tokens from '../database/tokenController';
+import * as flexRateLimit from 'rate-limiter-flexible';
 
+export async function validateToken(token: string): Promise<tokenInfo | tokenInfoClient | undefined> {
+    if (!token.startsWith('eg1~')) {
+        return undefined;
+    }
 
-
-export async function validateToken(token: string, bAllowCache: boolean = true): Promise<tokenInfo | tokenInfoClient | undefined> {
-    if (token.startsWith('eg1~')) {
-        try {
-            var decoded = <JWT.JwtPayload>(JWT.verify(token.slice(4), "ec0cd96e1c7d5832913b126786c441e20b2230c6"));
-        } catch (e) {
-            return undefined;
+    try {
+        var decoded = <JWT.JwtPayload>(JWT.verify(token.slice(4), "ec0cd96e1c7d5832913b126786c441e20b2230c6"));
+    } catch (e) {
+        if (e instanceof JsonWebTokenError) {
+            throw errors.neoniteDev.authentication.invalidToken.withMessage(e.message).with(token)
+        } else {
+            throw errors.neoniteDev.authentication.invalidToken.with(token);
         }
+    }
 
-        if (!decoded.jti || !decoded.exp) {
-            return undefined;
-        }
+    if (!decoded.jti || !decoded.exp) {
+        throw errors.neoniteDev.authentication.invalidToken.with(token);
+    }
 
-        
-        const exist = await tokens.get(decoded.jti, bAllowCache);
+    const exist = await tokens.check(decoded.jti);
 
-        if (!exist) {
-            return undefined;
-        }
+    if (!exist) {
+        return undefined;
+    }
 
-        return {
-            token: decoded.jti,
-            auth_method: decoded.am,
-            clientId: decoded.clid,
-            internal: decoded.ic,
-            expireAt: decoded.exp,
-            client_service: decoded.clsvc,
-            displayName: decoded.dn,
-            account_id: decoded.sub,
-            in_app_id: decoded.iai,
-            deviceId: decoded.dvid
-        }
-    } else if (token.length == 32) {
-        return await tokens.get(token, bAllowCache);
+    return {
+        token: decoded.jti,
+        auth_method: decoded.am,
+        clientId: decoded.clid,
+        internal: decoded.ic,
+        expireAt: decoded.exp,
+        client_service: decoded.clsvc,
+        displayName: decoded.dn,
+        account_id: decoded.sub,
+        in_app_id: decoded.iai,
+        deviceId: decoded.dvid
     }
 }
 
@@ -55,25 +57,29 @@ export interface reqWithAuthMulti extends Omit<Request, 'auth'> {
 }
 
 export default function verifyAuthorization(bAllowClient: boolean = false, bAllowCache: boolean = true) {
-    return async function(req: Request, res: Response, next: NextFunction) {
+    return async function (req: Request, res: Response, next: NextFunction) {
         if (!req.headers.authorization || req.headers.authorization.match(/^bearer /i) == null) {
             return next(neoniteDev.authentication.invalidHeader);
         }
-    
+
         const authorization = req.headers.authorization.slice(7);
-    
-        const auth = await validateToken(authorization, bAllowCache);
-    
+
+        if (!authorization.startsWith('eg1~')) {
+            throw errors.neoniteDev.authentication.authenticationFailed.with(req.path)
+        }
+
+        const auth = await validateToken(authorization);
+
         if (!auth) {
-            return next(neoniteDev.authentication.validation_failed.with(req.headers.authorization));
+            throw errors.neoniteDev.authentication.validationFailed.with(req.headers.authorization);
         }
-    
+
         if (!bAllowClient && auth.auth_method == 'client_credentials') {
-            return next(errors.neoniteDev.authentication.wrongGrantType);
+            throw errors.neoniteDev.authentication.wrongGrantType;
         }
-    
+
         req.auth = auth;
-    
+
         next();
     }
 }

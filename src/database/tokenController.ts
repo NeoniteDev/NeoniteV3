@@ -1,10 +1,15 @@
 import { query } from "./mysqlManager";
 import * as types from '../structs/types';
 import * as nodeCache from 'node-cache';
+import * as mysql from 'mysql';
+import * as path from 'path';
+import { readFileSync } from 'fs';
 
 // TODO: CHANGE TO DATABASE TIMESTAMP
 
 const cache = new nodeCache();
+
+const rToken = /\b[0-9a-f]{8}[0-9a-f]{4}[0-9a-f]{4}[0-9a-f]{4}[0-9a-f]{12}\b/
 
 namespace tokens {
     interface token extends types.tokenInfo {
@@ -41,6 +46,10 @@ namespace tokens {
     }
 
     export async function get(token: string, bUseCache = true): Promise<token | undefined> {
+        if (!rToken.test(token)) {
+            return undefined;
+        }
+        
         if (cache.has(token) && bUseCache) {
             return cache.get<token>(token);
         }
