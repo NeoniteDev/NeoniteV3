@@ -163,10 +163,10 @@ export namespace Middlewares {
         game?: string
 
         /** @example '++Fortnite+Release-18.00' */
-        version?: string
+        build: string
 
-        /** @example '16701187' */
-        CL?: string
+        /** @example 16701187 */
+        CL: number
 
         /** @example 'Windows' */
         platform?: string

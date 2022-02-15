@@ -87,7 +87,7 @@ export async function getContent(): Promise<content.Root> {
             return response.data;
         } else {
             return {
-                
+
             }
         }
     }
@@ -167,6 +167,33 @@ export async function getLanguageIni() {
     }
 
     return cached;
+}
+
+export async function getStwWorld() {
+    var cached = cache.get<any>('stwWorld');
+
+    if (!cached) {
+        const client_token = await getClientSession();
+
+        if (!client_token) {
+            return {};
+        }
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${client_token.access_token}`
+            }
+        }
+
+        // TODO: move to online.js
+        const response = await axios.get('https://fortnite-public-service-prod.ak.epicgames.com/fortnite/api/game/v2/world/info', config);
+
+        cache.set('stwWorld', response.data, 86400);
+
+        return response.data;
+    }
+
+    return cache.get('stwWorld')
 }
 
 export async function getCurrentSeasonNum() {

@@ -26,7 +26,7 @@ const settingsPath = Path.join(__dirname, '../../saved');
 
 app.use(express.json());
 
-app.use(validateUa);
+app.use(validateUa(true));
 app.use(profiles)
 
 
@@ -42,7 +42,7 @@ app.get('/api/cloudstorage/system/config', verifyAuthorization(true), async (req
                     name: 'McpProxyTransport',
                     type: 'ProxyStreamingFile',
                     appName: 'fortnite',
-                    isEnabled: true,
+                    isEnabled: false,
                     isRequired: false,
                     isPrimary: false,
                     timeoutSeconds: 10,
@@ -64,7 +64,7 @@ app.get('/api/cloudstorage/system/config', verifyAuthorization(true), async (req
                     appName: 'fortnite',
                     isEnabled: true,
                     isRequired: false,
-                    isPrimary: false,
+                    isPrimary: true,
                     timeoutSeconds: 10,
                     priority: 1
                 }
@@ -156,9 +156,13 @@ app.get('/api/cloudstorage/user/:accountId', verifyAuthorization(), (req, res) =
     const files = fs.readdirSync(dirPath);
 
     res.json(
-        files
-        .filter(x => x.split('-').pop()?.replace('.Sav', '') == req.clientInfos.CL)
-        .map(
+        files.filter(
+            x => {
+                var stringCL = x.split('-').pop()?.replace('.Sav', '');
+                if (!stringCL) { return false; }
+                return parseInt(stringCL) == req.clientInfos.CL
+            }
+        ).map(
             (file) => {
                 const fileName = file.split('-').shift() + '.Sav';
                 const filePath = Path.join(dirPath, file)
@@ -517,7 +521,13 @@ app.get('/api/versioncheck*', verifyAuthorization(true), (req, res) => {
     res.json({ 'type': 'NO_UPDATE' })
 });
 
-app.get('/api/game/v2/world/info', verifyAuthorization(true), (req, res) => res.json({}))
+app.get('/api/game/v2/world/info', verifyAuthorization(true),
+    async (req, res) => {
+        res.json(
+            await online.getStwWorld()
+        )
+    }
+)
 
 app.get('/api/game/v2/br-inventory/account/:accountId', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
@@ -539,103 +549,104 @@ var validPlatforms = [
     'IOS'
 ]
 
-app.get('/api/game/v2/matchmakingservice/ticket/player/:accountId', cookieParser(), verifyAuthorization(), (req, res) => {
-    if (req.params.accountId != req.auth.in_app_id) {
-        throw neoniteDev.authentication.notYourAccount;
-    }
+app.get('/api/game/v2/matchmakingservice/ticket/player/:accountId', cookieParser(), verifyAuthorization(),
+    async (req, res) => {
+        if (req.params.accountId != req.auth.in_app_id) {
+            throw neoniteDev.authentication.notYourAccount;
+        }
 
-    if (!req.headers['user-agent']) {
-        throw neoniteDev.internal.invalidUserAgent;
-    }
+        if (!req.headers['user-agent']) {
+            throw neoniteDev.internal.invalidUserAgent;
+        }
 
-    if (!req.query.bucketId || typeof req.query.bucketId != 'string') {
-        throw neoniteDev.matchmaking.invalidBucketId;
-    }
+        if (!req.query.bucketId || typeof req.query.bucketId != 'string') {
+            throw neoniteDev.matchmaking.invalidBucketId;
+        }
 
-    if (!req.query.partyPlayerIds || typeof req.query.partyPlayerIds != 'string') {
-        throw neoniteDev.matchmaking.invalidPartyPlayers;
-    }
+        if (!req.query.partyPlayerIds || typeof req.query.partyPlayerIds != 'string') {
+            throw neoniteDev.matchmaking.invalidPartyPlayers;
+        }
 
-    if (!req.query.partyPlayerIds || typeof req.query.partyPlayerIds != 'string') {
-        throw neoniteDev.matchmaking.invalidPartyPlayers;
-    }
+        if (!req.query.partyPlayerIds || typeof req.query.partyPlayerIds != 'string') {
+            throw neoniteDev.matchmaking.invalidPartyPlayers;
+        }
 
-    if (!req.query['player.platform'] ||
-        typeof req.query['player.platform'] != 'string' ||
-        !validPlatforms.includes(req.query['player.platform'])
-    ) {
-        var platformValue = typeof req.query['player.platform'] == 'string' ? req.query['player.platform'] : 'null';
-        throw neoniteDev.matchmaking.invalidPlatform.with(platformValue).withMessage(`Invalid platform: '${platformValue}'`);
-    }
+        if (!req.query['player.platform'] ||
+            typeof req.query['player.platform'] != 'string' ||
+            !validPlatforms.includes(req.query['player.platform'])
+        ) {
+            var platformValue = typeof req.query['player.platform'] == 'string' ? req.query['player.platform'] : 'null';
+            throw neoniteDev.matchmaking.invalidPlatform.with(platformValue).withMessage(`Invalid platform: '${platformValue}'`);
+        }
 
-    try {
-        var splitted = req.query.bucketId.split(':');
-        var NetCL = splitted[0];
-        var HotfixVerion = splitted[1];
-        var Region = splitted[2];
-        var Playlist = splitted[3];
-    }
-    catch {
-        throw neoniteDev.matchmaking.invalidBucketId;
-    }
+        try {
+            var splitted = req.query.bucketId.split(':');
+            var NetCL = splitted[0];
+            var HotfixVerion = splitted[1];
+            var Region = splitted[2];
+            var Playlist = splitted[3];
+        }
+        catch {
+            throw neoniteDev.matchmaking.invalidBucketId;
+        }
 
-    if (!NetCL || !Region || !Playlist || !Region) {
-        throw neoniteDev.matchmaking.invalidBucketId.with(req.query.bucketId)
-    }
+        if (!NetCL || !Region || !Playlist || !Region) {
+            throw neoniteDev.matchmaking.invalidBucketId.with(req.query.bucketId)
+        }
 
-    if ('NetCL' in req.cookies == false) {
-        res.cookie('NetCL', NetCL);
-    }
+        if ('NetCL' in req.cookies == false) {
+            res.cookie('NetCL', NetCL);
+        }
 
-    interface payload {
-        playerId: string,
-        partyPlayerIds: string[],
-        bucketId: string,
-        attributes: Record<string, string>,
-        expireAt: Date,
-        nonce: string
-    }
+        interface payload {
+            playerId: string,
+            partyPlayerIds: string[],
+            bucketId: string,
+            attributes: Record<string, string>,
+            expireAt: Date,
+            nonce: string
+        }
 
-    var data: payload = {
-        'playerId': req.params.accountId,
-        'partyPlayerIds': req.query.partyPlayerIds.split(',').filter(x => x != ''),
-        'bucketId': `Neonite:Live:${NetCL}:${HotfixVerion}:${Region}:${Playlist}:PC:public:1`,
-        'attributes': {
-            'player.userAgent': req.headers['user-agent'],
-            'player.preferredSubregion': 'None',
-            'player.option.spectator': 'false',
-            'player.inputTypes': 'KBM',
-            'playlist.revision': '1',
-            'player.teamFormat': 'fun'
-        },
-        'expireAt': new Date().addHours(1),
-        'nonce': crypto.randomUUID()
-    }
+        var data: payload = {
+            'playerId': req.params.accountId,
+            'partyPlayerIds': req.query.partyPlayerIds.split(',').filter(x => x != ''),
+            'bucketId': `Neonite:Live:${NetCL}:${HotfixVerion}:${Region}:${Playlist}:PC:public:1`,
+            'attributes': {
+                'player.userAgent': req.headers['user-agent'],
+                'player.preferredSubregion': 'None',
+                'player.option.spectator': 'false',
+                'player.inputTypes': 'KBM',
+                'playlist.revision': '1',
+                'player.teamFormat': 'fun'
+            },
+            'expireAt': new Date().addHours(1),
+            'nonce': crypto.randomUUID()
+        }
 
-    if (req.query['player.option.partyId'] && typeof req.query['player.option.partyId'] == 'string') {
-        data.attributes['player.option.partyId'] = req.query['player.option.partyId'];
-    }
+        if (req.query['player.option.partyId'] && typeof req.query['player.option.partyId'] == 'string') {
+            data.attributes['player.option.partyId'] = req.query['player.option.partyId'];
+        }
 
-    if (req.query['player.option.customKey'] && typeof req.query['player.option.customKey'] == 'string') {
-        data.attributes['player.option.customKey'] = req.query['player.option.customKey'];
-    }
+        if (req.query['player.option.customKey'] && typeof req.query['player.option.customKey'] == 'string') {
+            data.attributes['player.option.customKey'] = req.query['player.option.customKey'];
+        }
 
-    const payload = Buffer.from(JSON.stringify(data, null, 0)).toString('base64');
+        const payload = Buffer.from(JSON.stringify(data, null, 0)).toString('base64');
 
-    const header = Buffer.from(JSON.stringify({
-        'alg': 'HS256',
-        'typ': 'JWT'
-    }, null, 0)).toString('base64');
+        const header = Buffer.from(JSON.stringify({
+            'alg': 'HS256',
+            'typ': 'JWT'
+        }, null, 0)).toString('base64');
 
-    const signature = crypto.createHmac('sha1', ":]X/``TK&Rd?,N>e3NwxjE`aL=Sj468M?z'j(w+[").update(`${header}.${payload}`).digest().toString('base64')
+        const signature = crypto.createHmac('sha1', ":]X/``TK&Rd?,N>e3NwxjE`aL=Sj468M?z'j(w+[").update(`${header}.${payload}`).digest().toString('base64')
 
-    res.json({
-        'serviceUrl': `ws://${req.get('host') || 'api.neonitedev.live'}/matchmaking`,
-        'ticketType': 'mms-player',
-        'payload': payload,
-        'signature': signature
-    });
-})
+        res.json({
+            'serviceUrl': `ws://${req.get('host') || 'backend.neonitedev.live'}/matchmaking`,
+            'ticketType': 'mms-player',
+            'payload': payload,
+            'signature': signature
+        });
+    })
 
 app.get('/api/game/v2/matchmaking/account/:accountId/session/:sessionId', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
@@ -664,6 +675,8 @@ app.get('/api/matchmaking/session/:sessionId', cookieParser(), verifyAuthorizati
         throw errors.neoniteDev.basic.notFound.withMessage('Session not found');
     }
 
+    var buildUniqueId = parseInt(NetCL);
+
     res.json({
         "id": req.params.sessionId,
         "ownerId": "Hell0",
@@ -687,7 +700,7 @@ app.get('/api/matchmaking/session/:sessionId', cookieParser(), verifyAuthorizati
         "usesPresence": false,
         "allowJoinViaPresence": true,
         "allowJoinViaPresenceFriendsOnly": false,
-        "buildUniqueId": 4047718,
+        "buildUniqueId": buildUniqueId,
         "lastUpdated": new Date(),
         "started": false
     });
@@ -842,11 +855,11 @@ app.get('/api/version', (req, res) => {
             app: 'neonite',
             serverDate: new Date(),
             overridePropertiesVersion: 'UNKNOWN',
-            cln: 'UNKNOWN',
+            cln: req.clientInfos.CL.toString() || 'UNKNOWN',
             build: 'UNKNOWN',
             moduleName: 'Neonite-V3',
             buildDate: serverStart,
-            version: req.clientInfos.friendlyVersion || 'UNKNOWN',
+            version: req.clientInfos.friendlyVersion,
             branch: 'main',
             modules: {}
         }
@@ -863,7 +876,7 @@ app.post('/api/feedback/Bug', async (req, res) => {
             }
             resolve(fields)
         })
-    })
+    });
 
     console.log(fields)
 })

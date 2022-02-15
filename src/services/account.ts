@@ -12,6 +12,7 @@ import users from "../database/usersController";
 import refresh_tokens from "../database/refreshController";
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { HttpError } from "http-errors";
+import userAgentParse from "../middlewares/useragent";
 
 const app = Router();
 
@@ -67,47 +68,48 @@ app.post('/api/oauth/token', async (req, res, next) => {
         case 'client_credentials':
             {
                 const token = crypto.randomUUID().replace(/-/g, '');
-                var jwtToken: string | undefined = undefined;
 
-                if ('token_type' in req.body && req.body.token_type == 'eg1') {
-                    jwtToken = 'eg1~' + jwt.sign(
-                        {
-                            'mver': false,
-                            'clid': credentials.username,
-                            'am': grant_type,
-                            'sia': '4e656f6e697465',
-                            'clsvc': 'fortnite',
-                            'ic': true,
-                            't': 's'
-                        },
-                        jwtSecret,
-                        {
-                            jwtid: token,
-                            expiresIn: '4h'
-                        }
-                    )
-                }
+                const jwtToken = jwt.sign(
+                    {
+                        'mver': false,
+                        'clid': credentials.username,
+                        'am': grant_type,
+                        'sia': '4e656f6e697465',
+                        'clsvc': 'fortnite',
+                        'ic': true,
+                        't': 's'
+                    },
+                    jwtSecret,
+                    {
+                        jwtid: token,
+                        expiresIn: '4h'
+                    }
+                );
 
                 const expires = new Date().addHours(4);
 
-                await tokens.add({
-                    auth_method: grant_type,
-                    clientId: credentials.username,
-                    client_service: 'fortnite',
-                    expireAt: expires.getTime(),
-                    internal: true,
-                    token: token
-                })
+                await tokens.add(
+                    {
+                        auth_method: grant_type,
+                        clientId: credentials.username,
+                        client_service: 'fortnite',
+                        expireAt: expires.getTime(),
+                        internal: true,
+                        token: token
+                    }
+                );
 
-                res.json({
-                    'access_token': jwtToken || token,
-                    'expires_in': 14400, // in seconds
-                    'expires_at': expires,
-                    'token_type': 'bearer',
-                    'client_id': credentials.username,
-                    'internal_client': true,
-                    'client_service': 'fortnite'
-                })
+                res.json(
+                    {
+                        access_token: 'eg1~' + jwtToken,
+                        expires_in: 14400, // in seconds
+                        expires_at: expires,
+                        token_type: 'bearer',
+                        client_id: credentials.username,
+                        internal_client: true,
+                        client_service: 'fortnite'
+                    }
+                )
 
                 return;
             }
@@ -237,7 +239,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
         {
             auth_method: grant_type,
             clientId: credentials.username,
-            client_service: 'neonite',
+            client_service: 'fortnite',
             expireAt: tokenExpires.getTime(),
             internal: true,
             token: access_token,
@@ -252,7 +254,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
         {
             auth_method: grant_type,
             clientId: credentials.username,
-            client_service: 'neonite',
+            client_service: 'fortnite',
             expireAt: tokenExpires.getTime(),
             internal: true,
             token: refresh_token,
@@ -276,7 +278,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
             'am': grant_type,
             'iai': user.accountId,
             'sia': '4e656f6e697465',
-            'clsvc': 'neonite',
+            'clsvc': 'fortnite',
             'ic': true,
             't': 's',
         },
@@ -315,13 +317,13 @@ app.post('/api/oauth/token', async (req, res, next) => {
             'displayName': user.displayName,
             'in_app_id': user.accountId,
             'token_type': 'bearer',
-            'client_service': 'neonite',
+            'client_service': 'fortnite',
             'app': 'neonite',
         }
     );
 });
 
-app.get('/api/oauth/verify', verifyAuthorization(true), (req: reqWithAuthMulti, res) => {
+app.get('/api/oauth/verify', verifyAuthorization(true), userAgentParse(false), (req: reqWithAuthMulti, res) => {
     if (!req.headers.authorization) {
         return res.sendStatus(400);
     }
@@ -334,23 +336,22 @@ app.get('/api/oauth/verify', verifyAuthorization(true), (req: reqWithAuthMulti, 
     if (req.auth.auth_method == 'client_credentials') {
         return res.json(
             {
-                token: token,
+                token: req.clientInfos.season === 0 ? req.auth.token : token,
                 session_id: req.auth.token,
-                token_type: 'bearer',
+                token_type: "bearer",
                 client_id: req.auth.clientId,
-                internal_client: req.auth.internal,
+                internal_client: true,
                 client_service: req.auth.client_service,
-                expires_in: Math.floor(expire_in / 1000),
+                expires_in: expire_in,
                 expires_at: expires_date,
-                auth_method: req.auth.auth_method,
-                app: req.auth.client_service,
+                auth_method: "client_credentials"
             }
         );
     }
 
     res.json(
         {
-            token: token,
+            token:  req.clientInfos.season === 0 ? req.auth.token : token,
             session_id: req.auth.token,
             token_type: 'bearer',
             client_id: req.auth.clientId,
@@ -490,18 +491,18 @@ app.get('/api/public/account/:accountId/externalAuths', verifyAuthorization(fals
     if (user.discord_account_id) {
         externalAuths.push(
             {
-                "accountId": req.params.accountId,
-                "type": "discord",
-                "externalAuthId": user.discord_account_id,
-                "externalAuthIdType": "discord_user_id",
-                "externalDisplayName": user.discord_user_name,
-                "authIds": [
+                accountId: req.params.accountId,
+                type: "discord",
+                externalAuthId: user.discord_account_id,
+                externalAuthIdType: "discord_user_id",
+                externalDisplayName: user.discord_user_name,
+                authIds: [
                     {
-                        "id": user.discord_account_id,
-                        "type": "discord_user_id"
+                        id: user.discord_account_id,
+                        type: "discord_user_id"
                     }
                 ],
-                "dateAdded": "2020-01-01T00:00:00.000Z"
+                dateAdded: "2020-01-01T00:00:00.000Z"
             }
         )
     }
@@ -509,18 +510,18 @@ app.get('/api/public/account/:accountId/externalAuths', verifyAuthorization(fals
     if (user.google_account_id) {
         externalAuths.push(
             {
-                "accountId": req.params.accountId,
-                "type": "google",
-                "externalAuthId": user.google_account_id,
-                "externalAuthIdType": "google_user_id",
-                "externalDisplayName": user.google_display_name,
-                "authIds": [
+                accountId: req.params.accountId,
+                type: "google",
+                externalAuthId: user.google_account_id,
+                externalAuthIdType: "google_user_id",
+                externalDisplayName: user.google_display_name,
+                authIds: [
                     {
-                        "id": user.google_account_id,
-                        "type": "google_user_id"
+                        id: user.google_account_id,
+                        type: "google_user_id"
                     }
                 ],
-                "dateAdded": "2020-01-01T00:00:00.000Z"
+                dateAdded: "2020-01-01T00:00:00.000Z"
             }
         )
     }
