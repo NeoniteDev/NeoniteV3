@@ -68,6 +68,9 @@ app.post('/api/oauth/token', async (req, res, next) => {
         case 'client_credentials':
             {
                 const token = crypto.randomUUID().replace(/-/g, '');
+                const expires = new Date().addHours(4);
+                const expiteIn = expires.getTime() - Date.now();
+                const expireInSec = Math.floor(expiteIn / 1000);
 
                 const jwtToken = jwt.sign(
                     {
@@ -77,16 +80,14 @@ app.post('/api/oauth/token', async (req, res, next) => {
                         'sia': '4e656f6e697465',
                         'clsvc': 'fortnite',
                         'ic': true,
-                        't': 's'
+                        't': 's',
                     },
                     jwtSecret,
                     {
                         jwtid: token,
-                        expiresIn: '4h'
+                        expiresIn: expireInSec,
                     }
                 );
-
-                const expires = new Date().addHours(4);
 
                 await tokens.add(
                     {
@@ -95,14 +96,14 @@ app.post('/api/oauth/token', async (req, res, next) => {
                         client_service: 'fortnite',
                         expireAt: expires.getTime(),
                         internal: true,
-                        token: token
+                        token: token,
                     }
                 );
 
                 res.json(
                     {
                         access_token: 'eg1~' + jwtToken,
-                        expires_in: 14400, // in seconds
+                        expires_in: expireInSec,
                         expires_at: expires,
                         token_type: 'bearer',
                         client_id: credentials.username,
@@ -235,12 +236,16 @@ app.post('/api/oauth/token', async (req, res, next) => {
     const tokenExpires = new Date().addHours(8);
     const refreshExpires = new Date().addHours(24);
 
+    const expireIn = tokenExpires.getTime() - Date.now();
+    const refreshExpireIn = refreshExpires.getTime() - Date.now();
+
+
     const tokenAdd = tokens.add(
         {
             auth_method: grant_type,
             clientId: credentials.username,
             client_service: 'fortnite',
-            expireAt: tokenExpires.getTime(),
+            expireAt: ,
             internal: true,
             token: access_token,
             account_id: user.accountId,
