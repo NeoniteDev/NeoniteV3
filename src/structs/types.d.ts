@@ -205,6 +205,15 @@ export interface partyMember {
     role: "CAPTAIN" | "MEMBER"
 }
 
+interface MMSpayload {
+    playerId: string,
+    partyPlayerIds: string[],
+    bucketId: string,
+    attributes: Record<string, string>,
+    expireAt: Date,
+    nonce: string
+}
+
 export interface partyInvite {
     party_id: string,
     sent_by: string,

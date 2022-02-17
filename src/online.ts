@@ -103,8 +103,7 @@ export async function getTimeline() {
         const response = await axios.get<timeline.Calendar>(
             'https://api.nitestats.com/v1/epic/modes-smart',
             {
-                timeout: 2500,
-                validateStatus: undefined
+                timeout: 2500
             }
         );
 
@@ -227,7 +226,7 @@ export async function getLastest(): Promise<Middlewares.fortniteReq> {
             throw new Error('Failed to parse build ' + buildVersion);
         }
 
-        cache.set('lastest', parsedBuild);
+        cache.set('lastest', parsedBuild, 86400);
         return parsedBuild;
     }
 
@@ -243,13 +242,14 @@ export interface season {
     "endDate": string
 }
 
+const pastSeasonsPath = path.join(
+    __dirname,
+    '../resources/seasons.json'
+)
+
 var past_seasons: season[] = JSON.parse(
     fs.readFileSync(
-        path.join(
-            __dirname,
-            '../resources/seasons.json'
-        ),
-        'utf-8'
+        pastSeasonsPath, 'utf-8'
     )
 );
 
@@ -260,20 +260,33 @@ export async function getPastSeasons(season?: number) {
         if (!exist) {
             var lastest = await getLastest();
 
-            if (season > lastest.season) {
-                return past_seasons;
+            if (season <= lastest.season) {
+                const response = await axios.get<pastSeasons>('https://fortniteapi.io/v1/seasons/list?lang=en', {
+                    headers: {
+                        'authorization': process.env.fortniteApiIoKey
+                    },
+                    validateStatus: undefined
+                });
+
+                if (response.status == 200 && response.data.result) {
+                    past_seasons = response.data.seasons.map(x => {
+                        return {
+                            "season": x.season,
+                            "chapter": x.chapter,
+                            "seasonInChapter": x.seasonInChapter,
+                            "displayName": x.displayName,
+                            "startDate": new Date(x.startDate).toISOString(),
+                            "endDate": new Date(x.endDate).toISOString()
+                        }
+                    })
+
+                    fs.writeFile(pastSeasonsPath, JSON.stringify(past_seasons),
+                        (err) => {
+                            if (err) console.error(err)
+                        }
+                    );
+                }
             }
-        }
-
-        const response = await axios.get<pastSeasons>('https://fortniteapi.io/v1/seasons/list?lang=en', {
-            headers: {
-                'authorization': process.env.fortniteApiIoKey
-            },
-            validateStatus: undefined
-        });
-
-        if (response.data.result) {
-
         }
     }
 

@@ -10,7 +10,7 @@ import * as multiparty from 'multiparty';
 import verifyAuthorization from '../middlewares/authorization';
 import errors, { ApiError, neoniteDev } from '../structs/errors';
 import * as online from '../online';
-import { timeline, CloudstorageFile, TimelineSaved } from '../structs/types';
+import { MMSpayload, TimelineSaved } from '../structs/types';
 import validateUa from '../middlewares/useragent';
 import profiles from '../mcp';
 import { HttpError } from 'http-errors'
@@ -19,6 +19,7 @@ import gameSessions from '../database/gameSessionsController';
 import * as xmppApi from '../xmppManager';
 import users from '../database/usersController';
 import * as path from 'path';
+import * as jwt from 'jsonwebtoken';
 
 const app = Router();
 
@@ -439,7 +440,15 @@ app.get('/api/storefront/v2/gift/check_eligibility/recipient/:recipient/offer/:o
 })
 
 app.get('/api/calendar/v1/timeline', verifyAuthorization(true), async (req, res) => {
-    const response = await axios.get<timeline.Calendar>('https://api.nitestats.com/v1/epic/modes', { validateStatus: undefined, timeout: 5000 });
+    try {
+        const timeline = await online.getTimeline();
+
+        var state = timeline.channels['client-events'].states[0]
+
+        if (state.state.seasonNumber == req.clientInfos.season) {
+            return res.json(timeline);
+        }
+    } catch { }
 
     var seasonEvents = savedTimeline.filter(
         x => {
@@ -457,53 +466,99 @@ app.get('/api/calendar/v1/timeline', verifyAuthorization(true), async (req, res)
     ).map(
         x => {
             return {
+                eventType: x,
                 activeSince: new Date('2017'),
                 activeUntil: new Date().addYears(10),
-                eventType: x
             }
         }
     );
 
-    if (response.status == 200) {
-        var calandar = response.data;
+    var pastSeasons = await online.getPastSeasons(req.clientInfos.season);
+    const seasonTime = pastSeasons.find(x => x.season == req.clientInfos.season);
 
-        const states = response.data.channels['client-events'].states
-        const state = states.find(x => x.state.seasonTemplateId != undefined) || states[0];
-
-        if (state.state.seasonTemplateId.toLowerCase() != `AthenaSeason:athenaseason${req.clientInfos.season}`.toLowerCase()) {
-            try {
-
-                state.activeEvents.push(
-                    {
-                        activeSince: new Date('2017'),
-                        activeUntil: new Date().addYears(10),
-                        eventType: `EventFlag.Season${req.clientInfos.season}`
-                    },
-                    {
-                        activeSince: new Date('2017'),
-                        activeUntil: new Date().addYears(10),
-                        eventType: `EventFlag.LobbySeason${req.clientInfos.season}`
-                    }
-                );
-
-                state.activeEvents = state.activeEvents.concat(seasonEvents);
-                state.state.seasonTemplateId = `AthenaSeason:athenaseason${req.clientInfos.season}`
-                state.state.seasonNumber = req.clientInfos.season;
-            } catch { }
-        }
-
-        return res.json(calandar);
-    }
-
-    // occures when nitestats is down or no internet
     res.json(
         {
             channels: {
-                'standalone-store': {},
-                'client-matchmaking': {},
-                'tk': {},
-                'featured-islands': {},
-                'community-votes': {},
+                'standalone-store': {
+                    states: [
+                        {
+                            validFrom: new Date(),
+                            activeEvents: [],
+                            state: {
+                                activePurchaseLimitingEventIds: [],
+                                storefront: {},
+                                rmtPromotionConfig: [],
+                                storeEnd: "0001-01-01T00:00:00.000Z"
+                            }
+                        }
+                    ],
+                    cacheExpire: new Date().addHours(2)
+                },
+                'client-matchmaking': {
+                    states: [
+                        {
+                            validFrom: new Date(),
+                            activeEvents: [],
+                            state: {
+                                region: {
+                                    BR: {
+                                        eventFlagsForcedOff: [
+                                            "Playlist_DefaultDuo"
+                                        ]
+                                    },
+                                    OCE: {
+                                        eventFlagsForcedOff: [
+                                            "Playlist_DefaultDuo"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    cacheExpire: new Date().addHours(2)
+                },
+                'tk': {
+                    states: [
+                        {
+                            validFrom: new Date(),
+                            activeEvents: [],
+                            state: {
+                                k: []
+                            }
+                        }
+                    ],
+                    cacheExpire: new Date().addHours(2)
+                },
+                'featured-islands': {
+                    states: [
+                        {
+                            validFrom: new Date(),
+                            activeEvents: [],
+                            state: {
+                                islandCodes: [],
+                                playlistCuratedContent: {},
+                                playlistCuratedHub: {},
+                                islandTemplates: []
+                            }
+                        }
+                    ],
+                    cacheExpire: new Date().addHours(2)
+                },
+                'community-votes': {
+                    states: [
+                        {
+                            validFrom: new Date(),
+                            activeEvents: [],
+                            state: {
+                                electionId: "",
+                                candidates: [],
+                                electionEnds: new Date('999'),
+                                numWinners: 1
+                            }
+                        }
+                    ],
+                    cacheExpire: new Date().addHours(2)
+                },
                 'client-events': {
                     states: [
                         {
@@ -529,7 +584,7 @@ app.get('/api/calendar/v1/timeline', verifyAuthorization(true), async (req, res)
                                 seasonTemplateId: `AthenaSeason:athenaseason${req.clientInfos.season}`,
                                 matchXpBonusPoints: 0,
                                 eventPunchCardTemplateId: "",
-                                seasonBegin: new Date('9999'),
+                                seasonBegin: seasonTime?.startDate || new Date('2017'),
                                 seasonEnd: new Date('9999'),
                                 seasonDisplayedEnd: new Date('9999'),
                                 weeklyStoreEnd: new Date('9999'),
@@ -539,21 +594,21 @@ app.get('/api/calendar/v1/timeline', verifyAuthorization(true), async (req, res)
                             }
                         }
                     ],
-                    cacheExpire: new Date().addMinutes(2)
+                    cacheExpire: new Date().addHours(2)
                 }
             },
-            cacheIntervalMins: 10,
+            cacheIntervalMins: 15,
             currentTime: new Date()
         }
     );
 })
 
 app.get('/api/v2/versioncheck*', verifyAuthorization(true), (req, res) => {
-    res.json({ 'type': 'NO_UPDATE' })
+    res.json({ type: 'NO_UPDATE' })
 });
 
 app.get('/api/versioncheck*', verifyAuthorization(true), (req, res) => {
-    res.json({ 'type': 'NO_UPDATE' })
+    res.json({ type: 'NO_UPDATE' })
 });
 
 app.get('/api/game/v2/world/info', verifyAuthorization(true), async (req, res) => {
@@ -561,12 +616,7 @@ app.get('/api/game/v2/world/info', verifyAuthorization(true), async (req, res) =
 
     var lastest = await online.getLastest();
 
-    if (req.clientInfos.CL == 2870186) {
-        return res.end('{}');
-    }
-
     if (req.clientInfos.CL != lastest.CL) {
-        console.log('no last')
         return res.end(
             fs.readFileSync(path.join(__dirname, '../../resources/world_info.json'))
         )
@@ -584,7 +634,7 @@ app.get('/api/game/v2/br-inventory/account/:accountId', verifyAuthorization(), (
     }
 
     res.json({
-        'stash': {
+        stash: {
             'globalcash': 99999999
         }
     })
@@ -647,16 +697,7 @@ app.get('/api/game/v2/matchmakingservice/ticket/player/:accountId', cookieParser
             res.cookie('NetCL', NetCL);
         }
 
-        interface payload {
-            playerId: string,
-            partyPlayerIds: string[],
-            bucketId: string,
-            attributes: Record<string, string>,
-            expireAt: Date,
-            nonce: string
-        }
-
-        var data: payload = {
+        var data: MMSpayload = {
             'playerId': req.params.accountId,
             'partyPlayerIds': req.query.partyPlayerIds.split(',').filter(x => x != ''),
             'bucketId': `Neonite:Live:${NetCL}:${HotfixVerion}:${Region}:${Playlist}:PC:public:1`,
@@ -682,19 +723,16 @@ app.get('/api/game/v2/matchmakingservice/ticket/player/:accountId', cookieParser
 
         const payload = Buffer.from(JSON.stringify(data, null, 0)).toString('base64');
 
-        const header = Buffer.from(JSON.stringify({
-            'alg': 'HS256',
-            'typ': 'JWT'
-        }, null, 0)).toString('base64');
+        const signature = crypto.createHmac('sha256', ":]X/``TK&Rd?,N>e3NwxjE`aL=Sj468M?z'j(w+[").update(payload).digest().toString('base64')
 
-        const signature = crypto.createHmac('sha1', ":]X/``TK&Rd?,N>e3NwxjE`aL=Sj468M?z'j(w+[").update(`${header}.${payload}`).digest().toString('base64')
-
-        res.json({
-            'serviceUrl': `ws://${req.get('host') || 'backend.neonitedev.live'}/matchmaking`,
-            'ticketType': 'mms-player',
-            'payload': payload,
-            'signature': signature
-        });
+        res.json(
+            {
+                'serviceUrl': `ws://${req.get('host') || 'backend.neonitedev.live'}/matchmaking`,
+                'ticketType': 'mms-player',
+                'payload': payload,
+                'signature': signature
+            }
+        );
     })
 
 app.get('/api/game/v2/matchmaking/account/:accountId/session/:sessionId', verifyAuthorization(), (req, res) => {
@@ -705,7 +743,7 @@ app.get('/api/game/v2/matchmaking/account/:accountId/session/:sessionId', verify
     res.json({
         'accountId': req.params.accountId,
         'sessionId': req.params.sessionId,
-        'key': crypto.createHmac('sha1', 'neonite').update(req.params.sessionId).digest().toString('base64')
+        'key': crypto.createHmac('sha1', "neoniteOnTop").update(req.params.sessionId).digest().toString('base64')
     })
 })
 
@@ -728,9 +766,9 @@ app.get('/api/matchmaking/session/:sessionId', cookieParser(), verifyAuthorizati
 
     res.json({
         "id": req.params.sessionId,
-        "ownerId": "Hell0",
-        "ownerName": "Hell0",
-        "serverName": "Hell0",
+        "ownerId": "Neonite",
+        "ownerName": "Kemo",
+        "serverName": "Neonite",
         "serverAddress": "127.0.0.1",
         "serverPort": 7777,
         "totalPlayers": 0,
