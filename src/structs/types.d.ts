@@ -101,6 +101,15 @@ export interface Layer {
     path: string;
 }
 
+export interface TimelineSaved {
+    note:               string;
+    affectedSeason:     number;
+    EventFlags:         string[];
+    affectedVersion?:   string[];
+    dynamicBackground?: string;
+    excludedVersion?:   string[];
+}
+
 
 export interface Variant {
     channel: string;

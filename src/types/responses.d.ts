@@ -35,6 +35,39 @@ export namespace EOS {
     }
 }
 
+export namespace launcherService {
+    export namespace downloadInfosV2 {
+        export interface Metadata {
+            installationPoolId: string;
+        }
+
+        export interface QueryParam {
+            name: string;
+            value: string;
+        }
+
+        export interface Manifest {
+            uri: string;
+            queryParams: QueryParam[];
+        }
+
+        export interface Element {
+            appName: string;
+            labelName: string;
+            buildVersion: string;
+            hash: string;
+            metadata: Metadata;
+            manifests: Manifest[];
+        }
+
+        export interface RootObject {
+            elements: Element[];
+        }
+    }
+}
+
+
+
 export namespace XmppApi {
     export interface SessionResponse {
         sessions: Session[];

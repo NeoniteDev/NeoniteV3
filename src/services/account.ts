@@ -245,7 +245,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
             auth_method: grant_type,
             clientId: credentials.username,
             client_service: 'fortnite',
-            expireAt: ,
+            expireAt: tokenExpires.getTime(),
             internal: true,
             token: access_token,
             account_id: user.accountId,
@@ -260,7 +260,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
             auth_method: grant_type,
             clientId: credentials.username,
             client_service: 'fortnite',
-            expireAt: tokenExpires.getTime(),
+            expireAt: refreshExpires.getTime(),
             internal: true,
             token: refresh_token,
             account_id: user.accountId,
@@ -312,9 +312,9 @@ app.post('/api/oauth/token', async (req, res, next) => {
         {
             'access_token': 'eg1~' + jwt_token,
             'refresh_token': 'eg1~' + jwt_refresh,
-            'expires_in': Math.round((tokenExpires.getTime() - Date.now()) / 1000),
+            'expires_in': Math.round(expireIn / 1000),
             'expires_at': tokenExpires,
-            'refresh_expires': Math.round((refreshExpires.getTime() - Date.now()) / 1000),
+            'refresh_expires': Math.round(refreshExpireIn / 1000),
             'refresh_expires_at': refreshExpires,
             'client_id': credentials.username,
             'account_id': user.accountId,
@@ -334,20 +334,20 @@ app.get('/api/oauth/verify', verifyAuthorization(true), userAgentParse(false), (
     }
 
     const token = req.headers.authorization.replace(/^bearer /i, '');
-    const expires_date = new Date(req.auth.expireAt)
+    const expires_date = new Date(req.auth.expireAt * 1000);
     const expire_in = expires_date.getTime() - Date.now()
 
     // typescript...
     if (req.auth.auth_method == 'client_credentials') {
         return res.json(
             {
-                token: req.clientInfos.season === 0 ? req.auth.token : token,
+                token: token,
                 session_id: req.auth.token,
                 token_type: "bearer",
                 client_id: req.auth.clientId,
                 internal_client: true,
                 client_service: req.auth.client_service,
-                expires_in: expire_in,
+                expires_in: Math.floor(expire_in / 1000),
                 expires_at: expires_date,
                 auth_method: "client_credentials"
             }
@@ -356,7 +356,7 @@ app.get('/api/oauth/verify', verifyAuthorization(true), userAgentParse(false), (
 
     res.json(
         {
-            token:  req.clientInfos.season === 0 ? req.auth.token : token,
+            token: token,
             session_id: req.auth.token,
             token_type: 'bearer',
             client_id: req.auth.clientId,
@@ -413,14 +413,30 @@ app.delete('/api/oauth/sessions/kill/:token', verifyAuthorization(true, false), 
         throw errors.neoniteDev.authentication.notOwnSessionRemoval.with(req.params.token)
     }
 
-    await refresh_tokens.removeByToken(tokenToKill.token);
-    await tokens.remove(tokenToKill.token);
-    return res.status(204).end()
+    await Promise.all(
+        [
+            refresh_tokens.removeByToken(tokenToKill.token),
+            tokens.remove(tokenToKill.token)
+        ]
+    );
+
+    res.status(204).end()
 });
 
 // kill other tokens
-app.delete('/api/oauth/sessions/kill/', verifyAuthorization(true, false), (req: reqWithAuthMulti, res) => {
-    throw errors.neoniteDev.internal.notImplemented;
+app.delete('/api/oauth/sessions/kill/', verifyAuthorization(false, false), async (req: reqWithAuth, res) => {
+    if (req.query.killType != "OTHERS_ACCOUNT_CLIENT_SERVICE") {
+        throw errors.neoniteDev.authentication.invalidRequest.withMessage('a valid killType is required.')
+    }
+
+    await Promise.all(
+        [
+            tokens.removeOthers(req.auth.token, req.auth.account_id),
+            refresh_tokens.removeOthers(req.auth.token, req.auth.account_id)
+        ]
+    );
+
+    res.status(204).end()
 });
 
 

@@ -1,4 +1,5 @@
 import { Response } from 'express-serve-static-core';
+import { parseUA } from '../middlewares/useragent';
 
 // todo: param message builder
 
@@ -51,10 +52,17 @@ export class ApiError {
             }
         );
 
-        return res.status(this.statusCode)
+        //bypass express content type charset
+        res.setHeader('Content-Type', 'application/json');
+        res.status(this.statusCode)
             .set("X-Epic-Error-Code", this.response.numericErrorCode.toString())
             .set("X-Epic-Error-Name", this.response.errorCode)
-            .json(this.response);
+            .end(
+                //bypass express content type charset
+                JSON.stringify(this.response)
+            );
+
+        return res;
     }
 
     /**
@@ -147,7 +155,7 @@ export const neoniteDev = {
         get jsonParsingFailed() { return new ApiError('errors.com.neoniteDev.internal.jsonParsingFailed', 'Json parse failed.', 1020, 400) },
         get requestTimedOut() { return new ApiError('errors.com.neoniteDev.internal.requestTimedOut', "Request timed out.", 1001, 408) },
         get unsupportedMediaType() { return new ApiError('errors.com.neoniteDev.internal.unsupportedMediaType', "Sorry, your request could not be processed because you provide a type of media that we do not support.", 1006, 415) },
-        get notImplemented() { return new ApiError('errors.com.neoniteDev.internal.notImplemented', 'The resource you were trying to find is not yet implemented by the server.', 1001, 501) },
+        get notImplemented() { return new ApiError('errors.com.neoniteDev.internal.notImplemented', 'The resource you were trying to access is not yet implemented by the server.', 1001, 501) },
         get dataBaseError() { return new ApiError('errors.com.neoniteDev.internal.dataBaseError', 'There was an error while interacting with the database. Please report this issue.', 1001, 500) },
         get unknownError() { return new ApiError('errors.com.neoniteDev.internal.unknownError', 'Sorry an error occurred and we were unable to resolve it.', 1001, 500) },
         get eosError() { return new ApiError('errors.com.neoniteDev.internal.EosError', 'Sorry an error occurred while communication with Epic Online Service Servers.', 1001, 500) },

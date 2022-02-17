@@ -1,4 +1,4 @@
-import { BRShop, timeline, pastSeasons, CloudstorageFile } from './structs/types';
+import { BRShop, timeline, pastSeasons, CloudstorageFile, Middlewares } from './structs/types';
 import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -6,7 +6,8 @@ import { newClientSession, session } from './structs/EpicSession';
 import CachedItem from './structs/cachedItem';
 import * as nodeCache from 'node-cache'
 import { ConfigIniParser as iniparser } from 'config-ini-parser';
-import { content } from './types/responses';
+import { content, launcherService } from './types/responses';
+import { parseBuild } from './middlewares/useragent';
 
 const cache = new nodeCache(
     {
@@ -114,6 +115,7 @@ export async function getTimeline() {
     return result;
 }
 
+
 export async function getLanguageIni() {
     var cached = cache.get<string>('langIni');
 
@@ -196,9 +198,40 @@ export async function getStwWorld() {
     return cache.get('stwWorld')
 }
 
-export async function getCurrentSeasonNum() {
-    const timeline = await getTimeline();
-    return timeline.channels['client-events'].states.find(x => x.state.seasonNumber)?.state.seasonNumber || 19;
+export async function getBuildToken() {
+    var clientSession = await getClientSession();
+
+    const response = await axios.get<launcherService.downloadInfosV2.RootObject>(
+        'https://launcher-public-service-prod06.ol.epicgames.com/launcher/api/public/assets/v2/platform/Windows/namespace/fn/catalogItem/4fe75bbc5a674f4f9b356b5c90567da5/app/Fortnite/label/Live',
+        {
+            headers: {
+                Authorization: `${clientSession.data.token_type} ${clientSession.access_token}`
+            }
+        }
+    );
+
+    return response.data;
+}
+
+export async function getLastest(): Promise<Middlewares.fortniteReq> {
+    var cached = cache.get<Middlewares.fortniteReq>('lastest');
+
+    if (!cached) {
+        var downloadInfos = await getBuildToken();
+
+        var buildVersion = downloadInfos.elements[0].buildVersion;
+
+        var parsedBuild = parseBuild(buildVersion);
+
+        if (!parsedBuild) {
+            throw new Error('Failed to parse build ' + buildVersion);
+        }
+
+        cache.set('lastest', parsedBuild);
+        return parsedBuild;
+    }
+
+    return cached;
 }
 
 export interface season {
@@ -225,9 +258,9 @@ export async function getPastSeasons(season?: number) {
         const exist = past_seasons.find(x => x.season == season);
 
         if (!exist) {
-            var lastest = await getCurrentSeasonNum();
+            var lastest = await getLastest();
 
-            if (season > lastest) {
+            if (season > lastest.season) {
                 return past_seasons;
             }
         }

@@ -1,0 +1,340 @@
+[
+    {
+        "note": "Sprint Events For Season 3 builds",
+        "affectedSeason": 3,
+        "EventFlags": [
+            "EventFlag.Spring2018Phase1",
+            "EventFlag.Spring2018Phase2",
+            "EventFlag.Spring2018Phase3",
+            "EventFlag.Spring2018Phase4"
+        ]
+    },
+    {
+        "note": "",
+        "affectedSeason": 4,
+        "EventFlags": [
+            "EventFlag.Blockbuster2018",
+            "EventFlag.Blockbuster2018Phase1",
+            "EventFlag.Blockbuster2018Phase2",
+            "EventFlag.Blockbuster2018Phase3",
+            "EventFlag.Blockbuster2018Phase4"
+        ]
+    },
+    {
+        "note": "",
+        "affectedSeason": 5,
+        "EventFlags": [
+            "EventFlag.RoadTrip2018",
+            "EventFlag.Horde",
+            "EventFlag.LTM_Heist"
+        ]
+    },
+    {
+        "note": "Fortnite Birthday",
+        "affectedSeason": 5,
+        "affectedVersion": [
+            "5.10"
+        ],
+        "EventFlags": [
+            "EventFlag.BirthdayBattleBus"
+        ]
+    },
+    {
+        "note": "",
+        "affectedSeason": 6,
+        "EventFlags": [
+            "EventFlag.Fortnitemares",
+            "EventFlag.FortnitemaresPhase1",
+            "EventFlag.FortnitemaresPhase2",
+            "EventFlag.LTM_Fortnitemares",
+            "EventFlag.LTM_LilKevin"
+        ]
+    },
+    {
+        "note": "season 6 halloween",
+        "affectedSeason": 6,
+        "affectedVersion": [
+            "6.20"
+        ],
+        "EventFlags": [
+            "EventFlag.LobbySeason6Halloween",
+            "EventFlag.HalloweenBattleBus"
+        ]
+    },
+    {
+        "note": "season 7 winter",
+        "affectedSeason": 7,
+        "EventFlags": [
+            "EventFlag.LTM_14DaysOfFortnite",
+            "EventFlag.LTE_Festivus",
+            "EventFlag.LTE_S7_OverTime",
+            "EventFlag.LTM_WinterDeimos",
+            "EventFlag.Frostnite"
+        ]
+    },
+    {
+        "note": "",
+        "affectedSeason": 8,
+        "EventFlags": [
+            "EventFlag.Spring2019",
+            "EventFlag.Spring2019.Phase1",
+            "EventFlag.Spring2019.Phase2",
+            "EventFlag.LTM_Ashton",
+            "EventFlag.LTM_Goose",
+            "EventFlag.LTM_HighStakes",
+            "EventFlag.LTE_BootyBay"
+        ]
+    },
+    {
+        "note": "Worldcup!",
+        "affectedSeason": 9,
+        "EventFlags": [
+            "EventFlag.Season9.Phase1",
+            "EventFlag.Season9.Phase2",
+            "EventFlag.LTM_14DaysOfSummer",
+            "EventFlag.Anniversary2019_BR",
+            "EventFlag.WorldCupBattleBus",
+            "EventFlag.LTM_Wax",
+            "EventFlag.LTM_Mash"
+        ],
+        "dynamicBackground": "worldcup"
+    },
+    {
+        "note": "",
+        "affectedSeason": 10,
+        "EventFlags": [
+            "EventFlag.Season10.Phase1",
+            "EventFlag.Season10.Phase2",
+            "EventFlag.Season10.Phase3",
+            "EventFlag.S10_Oak",
+            "EventFlag.S10_Mystery"
+        ],
+        "dynamicBackground": "seasonx"
+    },
+    {
+        "note": "",
+        "affectedSeason": 11,
+        "EventFlags": [
+            "EventFlag.LTE_CoinCollectXP",
+            "EventFlag.LTE_Fortnitemares2019",
+            "EventFlag.LTE_WinterFest2019",
+            "EventFlag.LTE_Galileo_Feats",
+            "EventFlag.LTE_Galileo"
+        ],
+        "dynamicBackground": "season11"
+    },
+    {
+        "note": "star light event",
+        "affectedVersion": [
+            "11.20",
+            "11.21"
+        ],
+        "affectedSeason": 11,
+        "EventFlags": [
+            "EventFlag.Starlight"
+        ]
+    },
+    {
+        "note": "Fortnitemares",
+        "affectedVersion": [
+            "11.30",
+            "11.31"
+        ],
+        "affectedSeason": 11,
+        "EventFlags": [
+            "EventFlag.Season11.Fortnitemares.Quests.Phase1",
+            "EventFlag.Season11.Fortnitemares.Quests.Phase2",
+            "EventFlag.Season11.Fortnitemares.Quests.Phase3",
+            "EventFlag.Season11.Fortnitemares.Quests.Phase4",
+            "EventFlag.StormKing.Landmark"
+        ],
+        "dynamicBackground": "fortnitemares"
+    },
+    {
+        "note": "Winter 2019",
+        "excludedVersion": [
+            "11.30",
+            "11.31"
+        ],
+        "affectedSeason": 11,
+        "EventFlags": [
+            "EventFlag.LTE_WinterFest2019",
+            "EventFlag.LTE_WinterFest",
+            "EventFlag.Winterfest.Tree",
+            "EventFlag.HolidayDeco",
+            "EventFlag.Season11.Frostnite",
+            "EventFlag.Season11.WinterFest.Quests.Phase1",
+            "EventFlag.Season11.WinterFest.Quests.Phase2",
+            "EventFlag.Season11.WinterFest.Quests.Phase3"
+        ],
+        "dynamicBackground": "winter19"
+    },
+    {
+        "note": "",
+        "affectedSeason": 12,
+        "EventFlags": [
+            "EventFlag.LTE_SpyGames",
+            "EventFlag.LTE_JerkyChallenges",
+            "EventFlag.LTE_Oro",
+            "EventFlag.LTE_StormTheAgency"
+        ],
+        "dynamicBackground": "season12"
+    },
+    {
+        "note": "",
+        "affectedSeason": 13,
+        "EventFlags": [],
+        "dynamicBackground": "season13"
+    },
+    {
+        "note": "",
+        "affectedSeason": 14,
+        "EventFlags": [
+            "EventFlag.LTE_Fortnitemares_2020"
+        ],
+        "dynamicBackground": "season14"
+    },
+    {
+        "note": "",
+        "affectedSeason": 15,
+        "EventFlags": [
+            "EventFlag.Event_HiddenRole",
+            "EventFlag.Event_OperationSnowdown",
+            "EventFlag.Event_PlumRetro",
+            "EventFlag.LTQ_S15_Legendary_Week_01",
+            "EventFlag.LTQ_S15_Legendary_Week_02",
+            "EventFlag.LTQ_S15_Legendary_Week_03",
+            "EventFlag.LTQ_S15_Legendary_Week_04",
+            "EventFlag.LTQ_S15_Legendary_Week_05",
+            "EventFlag.LTQ_S15_Legendary_Week_06",
+            "EventFlag.LTQ_S15_Legendary_Week_07",
+            "EventFlag.LTQ_S15_Legendary_Week_08",
+            "EventFlag.LTQ_S15_Legendary_Week_09",
+            "EventFlag.LTQ_S15_Legendary_Week_10",
+            "EventFlag.LTQ_S15_Legendary_Week_11",
+            "EventFlag.LTQ_S15_Legendary_Week_12",
+            "EventFlag.LTQ_S15_Legendary_Week_13",
+            "EventFlag.LTQ_S15_Legendary_Week_14",
+            "EventFlag.LTQ_S15_Legendary_Week_15"
+        ],
+        "dynamicBackground": "season15"
+    },
+    {
+        "note": "",
+        "affectedSeason": 16,
+        "EventFlags": [
+            "EventFlag.Event_NBA_Challenges",
+            "EventFlag.Event_Spire_Challenges",
+            "EventFlag.LTQ_S16_Legendary_Week_01",
+            "EventFlag.LTQ_S16_Legendary_Week_02",
+            "EventFlag.LTQ_S16_Legendary_Week_03",
+            "EventFlag.LTQ_S16_Legendary_Week_04",
+            "EventFlag.LTQ_S16_Legendary_Week_05",
+            "EventFlag.LTQ_S16_Legendary_Week_06",
+            "EventFlag.LTQ_S16_Legendary_Week_07",
+            "EventFlag.LTQ_S16_Legendary_Week_08",
+            "EventFlag.LTQ_S16_Legendary_Week_09",
+            "EventFlag.LTQ_S16_Legendary_Week_10",
+            "EventFlag.LTQ_S16_Legendary_Week_11",
+            "EventFlag.LTQ_S16_Legendary_Week_12"
+        ],
+        "dynamicBackground": "season16"
+    },
+    {
+        "note": "",
+        "affectedSeason": 17,
+        "EventFlags": [
+            "EventFlag.Event_TheMarch",
+            "EventFlag.Event_O2_Challenges",
+            "EventFlag.LTE_Buffet_PreQuests",
+            "EventFlag.LTE_Buffet_Attend",
+            "EventFlag.LTE_Buffet_PostQuests",
+            "EventFlag.LTE_Buffet_Cosmetics",
+            "EventFlag.Event_CosmicSummer",
+            "EventFlag.Event_IslandGames",
+            "EventFlag.LTQ_S17_CB_Radio",
+            "EventFlag.LTQ_S17_Sneak_Week",
+            "EventFlag.LTQ_S17_Yeet_Week",
+            "EventFlag.LTQ_S17_Zap_Week",
+            "EventFlag.LTQ_S17_Bargain_Bin_Week",
+            "EventFlag.LTQ_S17_Legendary_Week_01",
+            "EventFlag.LTQ_S17_Legendary_Week_02",
+            "EventFlag.LTQ_S17_Legendary_Week_03",
+            "EventFlag.LTQ_S17_Legendary_Week_04",
+            "EventFlag.LTQ_S17_Legendary_Week_05",
+            "EventFlag.LTQ_S17_Legendary_Week_06",
+            "EventFlag.LTQ_S17_Legendary_Week_07",
+            "EventFlag.LTQ_S17_Legendary_Week_08",
+            "EventFlag.LTQ_S17_Legendary_Week_09",
+            "EventFlag.LTQ_S17_Legendary_Week_10",
+            "EventFlag.LTQ_S17_Legendary_Week_11",
+            "EventFlag.LTQ_S17_Legendary_Week_12",
+            "EventFlag.LTQ_S17_Legendary_Week_13",
+            "EventFlag.LTQ_S17_Legendary_Week_14"
+        ],
+        "dynamicBackground": "season17"
+    },
+    {
+        "note": "",
+        "affectedSeason": 18,
+        "EventFlags": [
+            "EventFlag.LTE_Season18_BirthdayQuests",
+            "EventFlag.Event_Fornitemares_2021",
+            "EventFlag.Event_HordeRush",
+            "EventFlag.Event_SoundWave",
+            "EventFlag.LTE_Season18_TextileQuests",
+            "EventFlag.S18_WildWeek_Shadows",
+            "EventFlag.S18_WildWeek_Bargain",
+            "EventFlag.LTQ_S18_Repeatable_Weekly",
+            "EventFlag.LTQ_S18_Repeatable_Weekly_01",
+            "EventFlag.LTQ_S18_Repeatable_Weekly_02",
+            "EventFlag.LTQ_S18_Repeatable_Weekly_03",
+            "EventFlag.LTQ_S18_Repeatable_Weekly_04",
+            "EventFlag.LTQ_S18_Repeatable_Weekly_05",
+            "EventFlag.LTQ_S18_Repeatable_Weekly_06",
+            "EventFlag.LTQ_S18_Repeatable_Weekly_07",
+            "EventFlag.LTQ_S18_Repeatable_Weekly_08",
+            "EventFlag.LTQ_S18_Repeatable_Weekly_09",
+            "EventFlag.LTQ_S18_Repeatable_Weekly_10",
+            "EventFlag.LTQ_S18_Repeatable_Weekly_11",
+            "EventFlag.LTQ_S18_Repeatable_Weekly_12"
+        ],
+        "dynamicBackground": "season18"
+    },
+    {
+        "note": "",
+        "affectedSeason": 19,
+        "EventFlags": [
+            "EventFlag.BBPromo.Quests",
+            "WL0",
+            "EventFlag.Event_TheMarch",
+            "EventFlag.PassiveIceStorms",
+            "EventFlag.PassiveFireStorms",
+            "EventFlag.PassiveLightningStorms",
+            "EventFlag.ActiveMiniBosses",
+            "EventFlag.MissionAlert.MegaAlert",
+            "EventFlag.MissionAlert.MegaAlertMiniboss",
+            "EventFlag.Season12.NoDancing.Quests",
+            "EventFlag.Phoenix.NewBeginnings",
+            "EventFlag.ElderGroupMissions",
+            "EventFlag.Phoenix.NewBeginnings.Quests",
+            "EventFlag.LoveStorm.EnableEnemyVariants",
+            "EventFlag.Wargames.Start",
+            "EventFlag.Outpost",
+            "EventFlag.Wargames.Phase2",
+            "EventFlag.Blockbuster2018",
+            "EventFlag.Blockbuster2018Phase1",
+            "EventFlag.Blockbuster2018Phase2",
+            "EventFlag.Blockbuster2018Phase3",
+            "EventFlag.Blockbuster2018Phase4",
+            "EventFlag.LobbyStW.Blockbuster",
+            "EventFlag.Wargames.Phase3",
+            "EventFlag.Event_S19_DeviceQuestsPart3",
+            "EventFlag.LTM_SG_Q",
+            "EventFlag.Wargames.Phase4",
+            "EventFlag.Event_MonarchLevelUpPack",
+            "EventFlag.Event_S19_Trey"
+        ],
+        "dynamicBackground": "season19"
+    }
+]

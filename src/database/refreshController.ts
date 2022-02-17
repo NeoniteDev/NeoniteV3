@@ -43,6 +43,10 @@ namespace refresh_tokens {
 
         return true;
     }
+
+    export function removeOthers(sessionId: string, account_id: string) {
+        return query(`DELETE FROM refresh_tokens WHERE bearer_token != ? AND account_id = ?`, [sessionId, account_id])
+    }
 }
 
 export default refresh_tokens;

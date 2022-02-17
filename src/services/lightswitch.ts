@@ -35,8 +35,8 @@ app.get('/api/service/bulk/status', VerifyAuthorization(true), (req: reqWithAuth
                     ] : [],
                     launcherInfoDTO: {
                         appName: x,
-                        catalogItemId: "00000000000000000000000000000000",
-                        namespace: "00000000000000000000000000000000"
+                        catalogItemId: "4fe75bbc5a674f4f9b356b5c90567da5",
+                        namespace: "fn"
                     }
                 }
             }
@@ -64,8 +64,8 @@ app.get("/api/service/:serviceId/status", VerifyAuthorization(true), (req: reqWi
             ] : [],
             launcherInfoDTO: {
                 appName: serviceId,
-                catalogItemId: "00000000000000000000000000000000",
-                namespace: "00000000000000000000000000000000"
+                catalogItemId: "4fe75bbc5a674f4f9b356b5c90567da5",
+                namespace: "fn"
             }
         }
     )

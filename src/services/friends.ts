@@ -254,6 +254,25 @@ app.post('/api/public/friends/:accountId/:friendId', verifyAuthorization(), asyn
     res.status(204).send();
 })
 
+app.get('/api/public/blocklist/:accountId/', verifyAuthorization(), async (req, res) => {
+    if (req.params.accountId != req.auth.account_id) {
+        throw errors.neoniteDev.authentication.notYourAccount;
+    }
+
+    res.json(
+        {
+            blockedUsers: []
+        }
+    )
+})
+
+app.get('/api/public/list/fortnite/:accountId/recentPlayers', verifyAuthorization(), async (req, res) => {
+    if (req.params.accountId != req.auth.account_id) {
+        throw errors.neoniteDev.authentication.notYourAccount;
+    }
+
+    res.json([]);
+})
 
 function sendFriendShipUpdate(from: string, to: string, status: string, created: Date) {
     xmppApi.sendMesageMulti(

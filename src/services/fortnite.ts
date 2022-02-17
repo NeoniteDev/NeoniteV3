@@ -10,7 +10,7 @@ import * as multiparty from 'multiparty';
 import verifyAuthorization from '../middlewares/authorization';
 import errors, { ApiError, neoniteDev } from '../structs/errors';
 import * as online from '../online';
-import { timeline, CloudstorageFile } from '../structs/types';
+import { timeline, CloudstorageFile, TimelineSaved } from '../structs/types';
 import validateUa from '../middlewares/useragent';
 import profiles from '../mcp';
 import { HttpError } from 'http-errors'
@@ -18,13 +18,28 @@ import Router from 'express-promise-router';
 import gameSessions from '../database/gameSessionsController';
 import * as xmppApi from '../xmppManager';
 import users from '../database/usersController';
+import * as path from 'path';
 
 const app = Router();
 
 const hotfixPath = Path.join(__dirname, '../../cloudstorage/system');
 const settingsPath = Path.join(__dirname, '../../saved');
 
+const savedTimeline: TimelineSaved[] = JSON.parse(
+    fs.readFileSync(
+        path.join(__dirname, '../../resources/timelineEvents.json'), 'utf-8'
+    )
+)
+
 app.use(express.json());
+
+app.use(
+    (req, res, next) => {
+        res.set('X-EpicGames-McpVersion', 'unknown main-3.0.0 build UNKNOWN cl UNKNOWN');
+        res.set('X-Epic-Correlation-ID', req.get('X-Epic-Correlation-ID') || crypto.randomUUID());
+        next();
+    }
+)
 
 app.use(validateUa(true));
 app.use(profiles)
@@ -423,94 +438,114 @@ app.get('/api/storefront/v2/gift/check_eligibility/recipient/:recipient/offer/:o
     }
 })
 
-
-
 app.get('/api/calendar/v1/timeline', verifyAuthorization(true), async (req, res) => {
-    const offlineResponse = {
-        channels: {
-            'standalone-store': {},
-            'client-matchmaking': {},
-            'tk': {},
-            'featured-islands': {},
-            'community-votes': {},
-            'client-events': {
-                states: [
-                    {
-                        validFrom: new Date(),
-                        activeEvents: [
-                            {
-                                eventType: `EventFlag.LobbySeason${req.clientInfos.season}`,
-                                activeUntil: new Date().addYears(10),
-                                activeSince: new Date('2017')
-                            },
-                            {
-                                eventType: `EventFlag.Season${req.clientInfos.season}`,
-                                activeUntil: new Date().addYears(10),
-                                activeSince: new Date('2017')
-                            }
-                        ],
-                        state: {
-                            activeStorefronts: [],
-                            eventNamedWeights: {},
-                            activeEvents: [],
-                            seasonNumber: req.clientInfos.season,
-                            seasonTemplateId: `AthenaSeason:athenaseason${req.clientInfos.season}`,
-                            matchXpBonusPoints: 0,
-                            eventPunchCardTemplateId: "",
-                            seasonBegin: "9999-12-31T23:59:59.999Z",
-                            seasonEnd: "9999-12-31T23:59:59.999Z",
-                            seasonDisplayedEnd: "9999-12-31T23:59:59.999Z",
-                            weeklyStoreEnd: "9999-12-31T23:59:59.999Z",
-                            stwEventStoreEnd: "9999-12-31T23:59:59.999Z",
-                            stwWeeklyStoreEnd: "9999-12-31T23:59:59.999Z",
-                            dailyStoreEnd: "9999-12-31T23:59:59.999Z"
-                        }
-                    }
-                ],
-                cacheExpire: new Date().addMinutes(10)
-            }
-        },
-        cacheIntervalMins: 10,
-        currentTime: new Date()
-    };
+    const response = await axios.get<timeline.Calendar>('https://api.nitestats.com/v1/epic/modes', { validateStatus: undefined, timeout: 5000 });
 
-    const response = await axios.get<timeline.Calendar>('https://api.nitestats.com/v1/epic/modes', { validateStatus: () => true, timeout: 5000 });
+    var seasonEvents = savedTimeline.filter(
+        x => {
+            if (x.affectedVersion) {
+                return x.affectedSeason == req.clientInfos.season
+                    && !x.excludedVersion?.includes(req.clientInfos.friendlyVersion)
+                    && x.affectedVersion.includes(req.clientInfos.friendlyVersion)
+            }
+
+            return x.affectedSeason == req.clientInfos.season
+                && !x.excludedVersion?.includes(req.clientInfos.friendlyVersion)
+        }
+    ).flatMap(
+        x => x.EventFlags
+    ).map(
+        x => {
+            return {
+                activeSince: new Date('2017'),
+                activeUntil: new Date().addYears(10),
+                eventType: x
+            }
+        }
+    );
 
     if (response.status == 200) {
         var calandar = response.data;
 
-        const states = calandar.channels['client-events'].states
+        const states = response.data.channels['client-events'].states
         const state = states.find(x => x.state.seasonTemplateId != undefined) || states[0];
 
         if (state.state.seasonTemplateId.toLowerCase() != `AthenaSeason:athenaseason${req.clientInfos.season}`.toLowerCase()) {
             try {
-                state.activeEvents.filter(x => {
-                    return !x.eventType.startsWith('EventFlag.Season') || x.eventType.startsWith('EventFlag.LobbySeason')
-                }).forEach(x => state.activeEvents.remove(x));
 
-                state.activeEvents.push({
-                    activeSince: new Date('2017'),
-                    activeUntil: new Date().addYears(10),
-                    eventType: `EventFlag.Season${req.clientInfos.season}`
-                });
+                state.activeEvents.push(
+                    {
+                        activeSince: new Date('2017'),
+                        activeUntil: new Date().addYears(10),
+                        eventType: `EventFlag.Season${req.clientInfos.season}`
+                    },
+                    {
+                        activeSince: new Date('2017'),
+                        activeUntil: new Date().addYears(10),
+                        eventType: `EventFlag.LobbySeason${req.clientInfos.season}`
+                    }
+                );
 
-                states[0].activeEvents.push({
-                    activeSince: new Date('2017'),
-                    activeUntil: new Date().addYears(10),
-                    eventType: `EventFlag.LobbySeason${req.clientInfos.season}`
-                });
-
-                states[0].state.seasonTemplateId = `AthenaSeason:athenaseason${req.clientInfos.season}`
-                states[0].state.seasonNumber = req.clientInfos.season;
-            } catch {
-                return res.json(offlineResponse);
-            }
+                state.activeEvents = state.activeEvents.concat(seasonEvents);
+                state.state.seasonTemplateId = `AthenaSeason:athenaseason${req.clientInfos.season}`
+                state.state.seasonNumber = req.clientInfos.season;
+            } catch { }
         }
 
         return res.json(calandar);
     }
 
-    res.json(offlineResponse);
+    // occures when nitestats is down or no internet
+    res.json(
+        {
+            channels: {
+                'standalone-store': {},
+                'client-matchmaking': {},
+                'tk': {},
+                'featured-islands': {},
+                'community-votes': {},
+                'client-events': {
+                    states: [
+                        {
+                            validFrom: new Date(),
+                            activeEvents: [
+                                {
+                                    eventType: `EventFlag.LobbySeason${req.clientInfos.season}`,
+                                    activeUntil: new Date().addYears(10),
+                                    activeSince: new Date('2017')
+                                },
+                                {
+                                    eventType: `EventFlag.Season${req.clientInfos.season}`,
+                                    activeUntil: new Date().addYears(10),
+                                    activeSince: new Date('2017')
+                                },
+                                ...seasonEvents
+                            ],
+                            state: {
+                                activeStorefronts: [],
+                                eventNamedWeights: {},
+                                activeEvents: [],
+                                seasonNumber: req.clientInfos.season,
+                                seasonTemplateId: `AthenaSeason:athenaseason${req.clientInfos.season}`,
+                                matchXpBonusPoints: 0,
+                                eventPunchCardTemplateId: "",
+                                seasonBegin: new Date('9999'),
+                                seasonEnd: new Date('9999'),
+                                seasonDisplayedEnd: new Date('9999'),
+                                weeklyStoreEnd: new Date('9999'),
+                                stwEventStoreEnd: new Date('9999'),
+                                stwWeeklyStoreEnd: new Date('9999'),
+                                dailyStoreEnd: new Date('9999')
+                            }
+                        }
+                    ],
+                    cacheExpire: new Date().addMinutes(2)
+                }
+            },
+            cacheIntervalMins: 10,
+            currentTime: new Date()
+        }
+    );
 })
 
 app.get('/api/v2/versioncheck*', verifyAuthorization(true), (req, res) => {
@@ -521,13 +556,27 @@ app.get('/api/versioncheck*', verifyAuthorization(true), (req, res) => {
     res.json({ 'type': 'NO_UPDATE' })
 });
 
-app.get('/api/game/v2/world/info', verifyAuthorization(true),
-    async (req, res) => {
-        res.json(
-            await online.getStwWorld()
+app.get('/api/game/v2/world/info', verifyAuthorization(true), async (req, res) => {
+    res.setHeader('content-type', 'application/json');
+
+    var lastest = await online.getLastest();
+
+    if (req.clientInfos.CL == 2870186) {
+        return res.end('{}');
+    }
+
+    if (req.clientInfos.CL != lastest.CL) {
+        console.log('no last')
+        return res.end(
+            fs.readFileSync(path.join(__dirname, '../../resources/world_info.json'))
+        )
+    } else {
+        res.end(
+            JSON.stringify(await online.getStwWorld())
         )
     }
-)
+
+});
 
 app.get('/api/game/v2/br-inventory/account/:accountId', verifyAuthorization(), (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
@@ -855,11 +904,11 @@ app.get('/api/version', (req, res) => {
             app: 'neonite',
             serverDate: new Date(),
             overridePropertiesVersion: 'UNKNOWN',
-            cln: req.clientInfos.CL.toString() || 'UNKNOWN',
+            cln: 'UNKNOWN',
             build: 'UNKNOWN',
             moduleName: 'Neonite-V3',
             buildDate: serverStart,
-            version: req.clientInfos.friendlyVersion,
+            version: '3.0.0',
             branch: 'main',
             modules: {}
         }

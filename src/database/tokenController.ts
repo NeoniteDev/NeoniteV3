@@ -72,6 +72,10 @@ namespace tokens {
 
         return await query(`DELETE FROM tokens WHERE token = ?`, [token]);
     }
+
+    export async function removeOthers(token: string, accountId: string) {
+        return await query(`DELETE FROM tokens WHERE token != ? AND account_id = ?`, [token, accountId]);
+    }
 }
 
 setInterval(() => {
