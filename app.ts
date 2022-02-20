@@ -29,6 +29,7 @@ const limiter = rateLimit(
         max: 75,
         standardHeaders: true,
         legacyHeaders: false,
+
         handler(req, res, next, optionsUsed) {
             errors.neoniteDev.basic.throttled
                 .withMessage(`Operation access is limited by throttling policy, please try again in ${Math.round(optionsUsed.windowMs) / 1000} second(s)`)
@@ -37,14 +38,17 @@ const limiter = rateLimit(
     }
 )
 
-app.use(limiter)
 app.use(express.static('resources/public'));
 
 app.use((req, res, next) => {
     // restore cloudflare client ip
     var cf_ip = req.get('cf-connecting-ip');
     if (cf_ip) {
-        req.ip = cf_ip
+        Object.defineProperty(req, 'ip', {
+            configurable: true,
+            enumerable: true,
+            get: function () { return this.get('cf-connecting-ip') }
+        })
     }
 
     // URL Rewriting
@@ -58,6 +62,9 @@ app.use((req, res, next) => {
 
     next();
 });
+
+app.use(limiter)
+
 
 fs.readdirSync('./src/services').forEach(filename => {
     if (!filename.endsWith('.js') && !filename.endsWith('.ts'))
