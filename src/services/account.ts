@@ -557,7 +557,16 @@ app.get('/api/public/account/', verifyAuthorization(), async (req, res) => {
         return res.json([])
     }
 
-    var Ids = <string[]>(new Array(req.query.accountId).filter(x => typeof x == 'string'));
+    var Ids = undefined;
+
+    if (!(req.query.accountId instanceof Array)) {
+        Ids = <string[]>(new Array(req.query.accountId))
+    }  else {
+        var preIds = <string[]>(req.query.accountId)
+        Ids = preIds.filter((x: string) => typeof x == 'string');
+    }
+
+
 
     if (Ids.length > 100 || Ids.length <= 0) {
         throw errors.neoniteDev.account.invalidAccountIdCount.with('100');
