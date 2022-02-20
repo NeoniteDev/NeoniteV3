@@ -51,12 +51,6 @@ app.use(
             this.send = oldSend;
             const content_type = this.get('content-type');
 
-            if (content_type.startsWith('application/json')) {
-                this.removeHeader('content-type');
-                this.setHeader('Content-Type', 'application/json')
-                
-            }
-
             if (
                 req.headers.accept &&
                 !req.headers.accept.includes('*/*') &&
@@ -65,8 +59,14 @@ app.use(
                 return this;
             }
 
-            this.end(data);
-            return this
+            if (content_type.startsWith('application/json')) {
+                this.removeHeader('content-type');
+                this.setHeader('Content-Type', 'application/json')
+                this.end(data);
+                return this
+            }
+
+            return this.send(data);
         }
 
         res.set('X-EpicGames-McpVersion', 'unknown main-3.0.0 build UNKNOWN cl UNKNOWN');
