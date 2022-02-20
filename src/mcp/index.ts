@@ -59,6 +59,7 @@ app.post('/api/game/v2/profile/:accountId/client/:command', verifyAuthorization(
             command: command,
         });
 
+        res.setHeader('Content-Type', 'application/json')
         res.json(response);
     } catch (e) {
         next(e)

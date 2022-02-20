@@ -6,7 +6,6 @@ import { Middlewares } from '../structs/types';
 const rUserAgent = new RegExp('(.*)/(.*)-CL-(\\d+) (\\w+)/.*');
 const rBuild = /(.*)-CL-(\d+)/;
 
-
 /* possible values 
     User-Agent: game=FortniteGame, engine=UE4, version=2870186
     User-Agent: game=Fortnite, engine=UE4, version=4.12.0-2870186+++Fortnite+Release-Live

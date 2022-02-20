@@ -662,6 +662,7 @@ export namespace profile {
         profileId: ProfileID;
         version?: string;
         items: { [key: string]: ItemValue };
+        
         stats: Stats;
         commandRevision: number;
     }

@@ -52,23 +52,6 @@ app.use((req, res, next) => {
         req.url = req.query.path;
     }
 
-    if (req.headers.accept && !req.headers.accept.includes('*/*')) {
-        let oldSend = res.send;
-
-        res.send = function (data) {
-            res.send = oldSend;
-
-            const content_type = this.get('content-type');
-
-            if (!req.accepts(content_type)) {
-                errors.neoniteDev.basic.notAcceptable.apply(res);
-                return this;
-            } else {
-                return res.send(data);
-            }
-        }
-    }
-
     res.setTimeout(20000, function () {
         errors.neoniteDev.internal.requestTimedOut.apply(res);
     })

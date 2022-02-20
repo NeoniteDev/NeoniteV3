@@ -25,6 +25,14 @@ const app = Router();
 
 const hotfixPath = Path.join(__dirname, '../../cloudstorage/system');
 const settingsPath = Path.join(__dirname, '../../saved');
+const worldInfoPath = path.join(__dirname, '../../resources/world_info.json');
+const validPlatforms = [
+    'Windows',
+    'Linux',
+    'Switch',
+    'Android',
+    'IOS'
+]
 
 const savedTimeline: TimelineSaved[] = JSON.parse(
     fs.readFileSync(
@@ -36,6 +44,31 @@ app.use(express.json());
 
 app.use(
     (req, res, next) => {
+        let oldSend = res.send;
+
+        // @ts-ignore remove charset for alpha support
+        res.send = function (data) {
+            this.send = oldSend;
+            const content_type = this.get('content-type');
+
+            if (content_type.startsWith('application/json')) {
+                this.removeHeader('content-type');
+                this.setHeader('Content-Type', 'application/json')
+                
+            }
+
+            if (
+                req.headers.accept &&
+                !req.headers.accept.includes('*/*') &&
+                !req.accepts(content_type)) {
+                errors.neoniteDev.basic.notAcceptable.apply(res);
+                return this;
+            }
+
+            this.end(data);
+            return this
+        }
+
         res.set('X-EpicGames-McpVersion', 'unknown main-3.0.0 build UNKNOWN cl UNKNOWN');
         res.set('X-Epic-Correlation-ID', req.get('X-Epic-Correlation-ID') || crypto.randomUUID());
         next();
@@ -279,7 +312,287 @@ app.post('/api/game/v2/creative/discovery/surface/:accountId', verifyAuthorizati
         throw neoniteDev.authentication.notYourAccount;
     }
 
-    res.json({});
+    res.json(
+        {
+            "Panels": [
+                {
+                    "PanelName": "ByEpicSTW",
+                    "Pages": [
+                        {
+                            "results": [
+                                {
+                                    "linkData": {
+                                        "mnemonic": "campaign",
+                                        "linkType": "SubGame",
+                                        "active": true,
+                                        "version": 5,
+                                        "moderationStatus": "Unmoderated",
+                                        "accountId": "epic",
+                                        "creatorName": "Epic",
+                                        "descriptionTags": [
+                                            "pve"
+                                        ],
+                                        "metadata": {
+                                            "ownership_token": "Token:campaignaccess",
+                                            "alt_title": {
+                                                "de": "Rette die Welt",
+                                                "ru": "Сражение с Бурей",
+                                                "ko": "세이브 더 월드",
+                                                "pt-BR": "Salve o Mundo",
+                                                "it": "Salva il mondo",
+                                                "fr": "Sauver le monde",
+                                                "zh-CN": "",
+                                                "es": "Salvar el mundo",
+                                                "es-MX": "Salva el mundo",
+                                                "zh": "",
+                                                "ar": "أنقِذ العالم",
+                                                "zh-Hant": "",
+                                                "ja": "世界を救え",
+                                                "pl": "Ratowanie Świata",
+                                                "es-419": "Salva el mundo",
+                                                "tr": "Dünyayı Kurtar"
+                                            },
+                                            "alt_tagline": {
+                                                "de": "Dränge die anstürmenden Monsterhorden zurück und erforsche eine weitläufige, zerstörbare Welt.  Baue riesige Festungen, stelle Waffen her, finde Beute und steige im Level auf!",
+                                                "ru": "Сдерживайте боем полчища монстров и исследуйте обширный разрушаемый мир.  Отстраивайте огромные форты, создавайте оружие, находите добычу и повышайте уровень.",
+                                                "ko": "몬스터 호드에 맞서 싸우고, 광활하고 파괴적인 세상을 탐험해 보세요. 거대한 요새를 짓고, 무기를 제작하고, 전리품을 찾으면서 레벨을 올리세요! ",
+                                                "pt-BR": "Lute para conter hordas de monstros e explorar um vasto mundo destrutível. Construa fortes enormes, crie armas, encontre saques e suba de nível.",
+                                                "it": "Lotta per respingere orde di mostri ed esplorare un vasto mondo distruttibile. Costruisci fortezze, crea armi, raccogli bottino e sali di livello.",
+                                                "fr": "Repoussez des hordes de monstres et explorez un immense terrain destructible. Bâtissez des forts énormes, fabriquez des armes, dénichez du butin et montez en niveau.",
+                                                "zh-CN": "",
+                                                "es": "Lucha para contener las hordas de monstruos y recorre un mundo inmenso y destructible.  Construye fuertes enormes, fabrica armas exóticas, busca botín y sube de nivel.",
+                                                "es-MX": "Lucha para contener las hordas de monstruos y explora un mundo vasto y destructible.  Construye fuertes enormes, fabrica armas, encuentra botín y sube de nivel.",
+                                                "zh": "",
+                                                "ar": "قاتل لكبح جماح الوحوش واستكشاف عالم شاسع قابل للتدمير. ابنِ حصونًا ضخمة واصنع الأسلحة واعثر على الغنائم وارتقِ بالمستوى.",
+                                                "zh-Hant": "",
+                                                "ja": "モンスターの群れを食い止め、壊すこともできる広大な世界を探索しよう。巨大な要塞を築き、武器をクラフトし、戦利品を見つけてレベルアップしよう。",
+                                                "pl": "Walcz, by powstrzymać hordy potworów i odkrywaj wielki świat podlegający destrukcji. Buduj olbrzymie forty, twórz broń, zbieraj łupy, awansuj.",
+                                                "es-419": "Lucha para contener las hordas de monstruos y explora un mundo vasto y destructible.  Construye fuertes enormes, fabrica armas, encuentra botín y sube de nivel.",
+                                                "tr": "Canavar sürüsünü geri püskürtmek için savaş ve yıkılabilir geniş bir dünyayı keşfet. Devasa kaleler inşa et, silahlar üret, ganimetleri topla ve seviye atla."
+                                            },
+                                            "image_url": "https://static-assets-prod.s3.amazonaws.com/fn/static/creative/Fortnite_STW.jpg",
+                                            "alt_introduction": {
+                                                "de": "Dränge die anstürmenden Monsterhorden zurück und erforsche eine weitläufige, zerstörbare Welt.  Baue riesige Festungen, stelle Waffen her, finde Beute und steige im Level auf!",
+                                                "ru": "Сдерживайте боем полчища монстров и исследуйте обширный разрушаемый мир.  Отстраивайте огромные форты, создавайте оружие, находите добычу и повышайте уровень.",
+                                                "ko": "몬스터 호드에 맞서 싸우고, 광활하고 파괴적인 세상을 탐험해 보세요. 거대한 요새를 짓고, 무기를 제작하고, 전리품을 찾으면서 레벨을 올리세요! ",
+                                                "pt-BR": "Lute para conter hordas de monstros e explorar um vasto mundo destrutível. Construa fortes enormes, crie armas, encontre saques e suba de nível.",
+                                                "it": "Lotta per respingere orde di mostri ed esplorare un vasto mondo distruttibile. Costruisci fortezze, crea armi, raccogli bottino e sali di livello.",
+                                                "fr": "Repoussez des hordes de monstres et explorez un immense terrain destructible. Bâtissez des forts énormes, fabriquez des armes, dénichez du butin et montez en niveau.",
+                                                "zh-CN": "",
+                                                "es": "Lucha para contener las hordas de monstruos y recorre un mundo inmenso y destructible.  Construye fuertes enormes, fabrica armas exóticas, busca botín y sube de nivel.",
+                                                "es-MX": "Lucha para contener las hordas de monstruos y explora un mundo vasto y destructible.  Construye fuertes enormes, fabrica armas, encuentra botín y sube de nivel.",
+                                                "zh": "",
+                                                "ar": "قاتل لكبح جماح الوحوش واستكشاف عالم شاسع قابل للتدمير. ابنِ حصونًا ضخمة واصنع الأسلحة واعثر على الغنائم وارتقِ بالمستوى.",
+                                                "zh-Hant": "",
+                                                "ja": "モンスターの群れを食い止め、壊すこともできる広大な世界を探索しよう。巨大な要塞を築き、武器をクラフトし、戦利品を見つてレベルアップしよう。",
+                                                "pl": "Walcz, by powstrzymać hordy potworów i odkrywaj wielki świat podlegający destrukcji. Buduj olbrzymie forty, twórz broń, zbieraj łupy, awansuj.",
+                                                "es-419": "Lucha para contener las hordas de monstruos y explora un mundo vasto y destructible.  Construye fuertes enormes, fabrica armas, encuentra botín y sube de nivel.",
+                                                "tr": "Canavar sürüsünü geri püskürtmek için savaş ve yıkılabilir geniş bir dünyayı keşfet. Devasa kaleler inşa et, silahlar üret, ganimetleri topla ve seviye atla."
+                                            },
+                                            "tagline": "Battle to hold back the monster hordes and explore a vast, destructible world.  Build huge forts, craft weapons, find loot and level up.",
+                                            "dynamicXp": {
+                                                "uniqueGameVersion": "5",
+                                                "calibrationPhase": "LiveXp"
+                                            },
+                                            "locale": "en",
+                                            "title": "Save The World",
+                                            "matchmaking": {
+                                                "joinInProgressType": "JoinImmediately",
+                                                "playersPerTeam": 4,
+                                                "maximumNumberOfPlayers": 4,
+                                                "override_Playlist": "",
+                                                "playerCount": 4,
+                                                "mmsType": "keep_full",
+                                                "mmsPrivacy": "Public",
+                                                "numberOfTeams": 1,
+                                                "bAllowJoinInProgress": true,
+                                                "minimumNumberOfPlayers": 1,
+                                                "joinInProgressTeam": 1
+                                            },
+                                            "introduction": "Battle to hold back the monster hordes and explore a vast, destructible world.  Build huge forts, craft weapons, find loot and level up.",
+                                            "disallowedPlatforms": [
+                                                "IOS",
+                                                "Android",
+                                                "Switch"
+                                            ]
+                                        }
+                                    },
+                                    "isFavorite": false
+                                },
+                                {
+                                    "lastVisited": "2021-11-20T22:53:04.178Z",
+                                    "linkData": {
+                                        "mnemonic": "playlist_playgroundv2",
+                                        "linkType": "BR:Playlist",
+                                        "active": true,
+                                        "version": 95,
+                                        "moderationStatus": "Unmoderated",
+                                        "accountId": "epic",
+                                        "creatorName": "Epic",
+                                        "descriptionTags": [],
+                                        "metadata": {
+                                            "matchmaking": {
+                                                "override_playlist": "playlist_playgroundv2"
+                                            }
+                                        }
+                                    },
+                                    "isFavorite": false
+                                },
+                                {
+                                    "linkData": {
+                                        "mnemonic": "playlist_solidgold_squads",
+                                        "linkType": "BR:Playlist",
+                                        "active": true,
+                                        "version": 95,
+                                        "moderationStatus": "Unmoderated",
+                                        "accountId": "epic",
+                                        "creatorName": "Epic",
+                                        "descriptionTags": [],
+                                        "metadata": {
+                                            "matchmaking": {
+                                                "override_playlist": "playlist_solidgold_squads"
+                                            }
+                                        }
+                                    },
+                                    "isFavorite": false
+                                },
+                                {
+                                    "linkData": {
+                                        "mnemonic": "playlist_defaultsolo",
+                                        "linkType": "BR:Playlist",
+                                        "active": true,
+                                        "version": 95,
+                                        "moderationStatus": "Unmoderated",
+                                        "accountId": "epic",
+                                        "creatorName": "Epic",
+                                        "descriptionTags": [],
+                                        "metadata": {
+                                            "matchmaking": {
+                                                "override_playlist": "playlist_defaultsolo"
+                                            }
+                                        }
+                                    },
+                                    "isFavorite": false
+                                },
+                                {
+                                    "linkData": {
+                                        "mnemonic": "playlist_defaultduo",
+                                        "linkType": "BR:Playlist",
+                                        "active": true,
+                                        "version": 95,
+                                        "moderationStatus": "Unmoderated",
+                                        "accountId": "epic",
+                                        "creatorName": "Epic",
+                                        "descriptionTags": [],
+                                        "metadata": {
+                                            "matchmaking": {
+                                                "override_playlist": "playlist_defaultduo"
+                                            }
+                                        }
+                                    },
+                                    "isFavorite": false
+                                },
+                                {
+                                    "linkData": {
+                                        "mnemonic": "playlist_trios",
+                                        "linkType": "BR:Playlist",
+                                        "active": true,
+                                        "version": 95,
+                                        "moderationStatus": "Unmoderated",
+                                        "accountId": "epic",
+                                        "creatorName": "Epic",
+                                        "descriptionTags": [],
+                                        "metadata": {
+                                            "matchmaking": {
+                                                "override_playlist": "playlist_trios"
+                                            }
+                                        }
+                                    },
+                                    "isFavorite": false
+                                },
+                                {
+                                    "linkData": {
+                                        "mnemonic": "playlist_defaultsquad",
+                                        "linkType": "BR:Playlist",
+                                        "active": true,
+                                        "version": 95,
+                                        "moderationStatus": "Unmoderated",
+                                        "accountId": "epic",
+                                        "creatorName": "Epic",
+                                        "descriptionTags": [],
+                                        "metadata": {
+                                            "matchmaking": {
+                                                "override_playlist": "playlist_defaultsquad"
+                                            }
+                                        }
+                                    },
+                                    "isFavorite": false
+                                },
+                                {
+                                    "linkData": {
+                                        "mnemonic": "playlist_mash_squads_legacy",
+                                        "linkType": "BR:Playlist",
+                                        "active": true,
+                                        "version": 95,
+                                        "moderationStatus": "Unmoderated",
+                                        "accountId": "epic",
+                                        "creatorName": "Epic",
+                                        "descriptionTags": [],
+                                        "metadata": {
+                                            "matchmaking": {
+                                                "override_playlist": "playlist_mash_squads_legacy"
+                                            }
+                                        }
+                                    },
+                                    "isFavorite": false
+                                },
+                                {
+                                    "linkData": {
+                                        "mnemonic": "playlist_close_squads",
+                                        "linkType": "BR:Playlist",
+                                        "active": true,
+                                        "version": 95,
+                                        "moderationStatus": "Unmoderated",
+                                        "accountId": "epic",
+                                        "creatorName": "Epic",
+                                        "descriptionTags": [],
+                                        "metadata": {
+                                            "matchmaking": {
+                                                "override_playlist": "playlist_close_squads"
+                                            }
+                                        }
+                                    },
+                                    "isFavorite": false
+                                },
+                                {
+                                    "linkData": {
+                                        "mnemonic": "playlist_respawn_24_alt",
+                                        "linkType": "BR:Playlist",
+                                        "active": true,
+                                        "version": 95,
+                                        "moderationStatus": "Unmoderated",
+                                        "accountId": "epic",
+                                        "creatorName": "Epic",
+                                        "descriptionTags": [],
+                                        "metadata": {
+                                            "matchmaking": {
+                                                "override_playlist": "playlist_respawn_24_alt"
+                                            }
+                                        }
+                                    },
+                                    "isFavorite": false
+                                }
+                            ],
+                            "hasMore": false
+                        }
+                    ]
+                }
+            ],
+            "TestCohorts": [
+                `V2-${req.clientInfos.friendlyVersion}_2/10/2022_PC_Epics_Picks`
+            ]
+        }
+    );
 })
 
 app.get('/api/receipts/v1/account/:accountId/receipts', verifyAuthorization(), (req, res) => {
@@ -293,22 +606,25 @@ app.get('/api/receipts/v1/account/:accountId/receipts', verifyAuthorization(), (
 app.get('/api/storefront/v2/catalog', verifyAuthorization(), async (req, res) => {
     const catalog = await online.getCatalog();
 
+
     if (!catalog || req.clientInfos.season < 4) {
-        return res.json({
-            'refreshIntervalHrs': 24,
-            'dailyPurchaseHrs': 24,
-            'expiration': new Date().addHours(24),
-            'storefronts': [
-                {
-                    'name': 'BRDailyStorefront',
-                    'catalogEntries': []
-                },
-                {
-                    'name': 'BRWeeklyStorefront',
-                    'catalogEntries': []
-                }
-            ]
-        });
+        return res.json(
+            {
+                'refreshIntervalHrs': 24,
+                'dailyPurchaseHrs': 24,
+                'expiration': new Date().addHours(24),
+                'storefronts': [
+                    {
+                        'name': 'BRDailyStorefront',
+                        'catalogEntries': []
+                    },
+                    {
+                        'name': 'BRWeeklyStorefront',
+                        'catalogEntries': []
+                    }
+                ]
+            }
+        );
     }
 
     res.json(catalog);
@@ -440,16 +756,6 @@ app.get('/api/storefront/v2/gift/check_eligibility/recipient/:recipient/offer/:o
 })
 
 app.get('/api/calendar/v1/timeline', verifyAuthorization(true), async (req, res) => {
-    try {
-        const timeline = await online.getTimeline();
-
-        var state = timeline.channels['client-events'].states[0]
-
-        if (state.state.seasonNumber == req.clientInfos.season) {
-            return res.json(timeline);
-        }
-    } catch { }
-
     var seasonEvents = savedTimeline.filter(
         x => {
             if (x.affectedVersion) {
@@ -476,131 +782,146 @@ app.get('/api/calendar/v1/timeline', verifyAuthorization(true), async (req, res)
     var pastSeasons = await online.getPastSeasons(req.clientInfos.season);
     const seasonTime = pastSeasons.find(x => x.season == req.clientInfos.season);
 
-    res.json(
-        {
-            channels: {
-                'standalone-store': {
-                    states: [
-                        {
-                            validFrom: new Date(),
-                            activeEvents: [],
-                            state: {
-                                activePurchaseLimitingEventIds: [],
-                                storefront: {},
-                                rmtPromotionConfig: [],
-                                storeEnd: "0001-01-01T00:00:00.000Z"
-                            }
+    const response = {
+        channels: {
+            'standalone-store': {
+                states: [
+                    {
+                        validFrom: new Date(),
+                        activeEvents: [],
+                        state: {
+                            activePurchaseLimitingEventIds: [],
+                            storefront: {},
+                            rmtPromotionConfig: [],
+                            storeEnd: "0001-01-01T00:00:00.000Z"
                         }
-                    ],
-                    cacheExpire: new Date().addHours(2)
-                },
-                'client-matchmaking': {
-                    states: [
-                        {
-                            validFrom: new Date(),
-                            activeEvents: [],
-                            state: {
-                                region: {
-                                    BR: {
-                                        eventFlagsForcedOff: [
-                                            "Playlist_DefaultDuo"
-                                        ]
-                                    },
-                                    OCE: {
-                                        eventFlagsForcedOff: [
-                                            "Playlist_DefaultDuo"
-                                        ]
-                                    }
+                    }
+                ],
+                cacheExpire: new Date().addHours(2)
+            },
+            'client-matchmaking': {
+                states: [
+                    {
+                        validFrom: new Date(),
+                        activeEvents: [],
+                        state: {
+                            region: {
+                                BR: {
+                                    eventFlagsForcedOff: [
+                                        "Playlist_DefaultDuo"
+                                    ]
+                                },
+                                OCE: {
+                                    eventFlagsForcedOff: [
+                                        "Playlist_DefaultDuo"
+                                    ]
                                 }
                             }
                         }
-                    ],
-                    cacheExpire: new Date().addHours(2)
-                },
-                'tk': {
-                    states: [
-                        {
-                            validFrom: new Date(),
-                            activeEvents: [],
-                            state: {
-                                k: []
-                            }
-                        }
-                    ],
-                    cacheExpire: new Date().addHours(2)
-                },
-                'featured-islands': {
-                    states: [
-                        {
-                            validFrom: new Date(),
-                            activeEvents: [],
-                            state: {
-                                islandCodes: [],
-                                playlistCuratedContent: {},
-                                playlistCuratedHub: {},
-                                islandTemplates: []
-                            }
-                        }
-                    ],
-                    cacheExpire: new Date().addHours(2)
-                },
-                'community-votes': {
-                    states: [
-                        {
-                            validFrom: new Date(),
-                            activeEvents: [],
-                            state: {
-                                electionId: "",
-                                candidates: [],
-                                electionEnds: new Date('999'),
-                                numWinners: 1
-                            }
-                        }
-                    ],
-                    cacheExpire: new Date().addHours(2)
-                },
-                'client-events': {
-                    states: [
-                        {
-                            validFrom: new Date(),
-                            activeEvents: [
-                                {
-                                    eventType: `EventFlag.LobbySeason${req.clientInfos.season}`,
-                                    activeUntil: new Date().addYears(10),
-                                    activeSince: new Date('2017')
-                                },
-                                {
-                                    eventType: `EventFlag.Season${req.clientInfos.season}`,
-                                    activeUntil: new Date().addYears(10),
-                                    activeSince: new Date('2017')
-                                },
-                                ...seasonEvents
-                            ],
-                            state: {
-                                activeStorefronts: [],
-                                eventNamedWeights: {},
-                                activeEvents: [],
-                                seasonNumber: req.clientInfos.season,
-                                seasonTemplateId: `AthenaSeason:athenaseason${req.clientInfos.season}`,
-                                matchXpBonusPoints: 0,
-                                eventPunchCardTemplateId: "",
-                                seasonBegin: seasonTime?.startDate || new Date('2017'),
-                                seasonEnd: new Date('9999'),
-                                seasonDisplayedEnd: new Date('9999'),
-                                weeklyStoreEnd: new Date('9999'),
-                                stwEventStoreEnd: new Date('9999'),
-                                stwWeeklyStoreEnd: new Date('9999'),
-                                dailyStoreEnd: new Date('9999')
-                            }
-                        }
-                    ],
-                    cacheExpire: new Date().addHours(2)
-                }
+                    }
+                ],
+                cacheExpire: new Date().addHours(2)
             },
-            cacheIntervalMins: 15,
-            currentTime: new Date()
+            'tk': {
+                states: [
+                    {
+                        validFrom: new Date(),
+                        activeEvents: [],
+                        state: {
+                            k: []
+                        }
+                    }
+                ],
+                cacheExpire: new Date().addHours(2)
+            },
+            'featured-islands': {
+                states: [
+                    {
+                        validFrom: new Date(),
+                        activeEvents: [],
+                        state: {
+                            islandCodes: [],
+                            playlistCuratedContent: {},
+                            playlistCuratedHub: {},
+                            islandTemplates: []
+                        }
+                    }
+                ],
+                cacheExpire: new Date().addHours(2)
+            },
+            'community-votes': {
+                states: [
+                    {
+                        validFrom: new Date(),
+                        activeEvents: [],
+                        state: {
+                            electionId: "",
+                            candidates: [],
+                            electionEnds: new Date('999'),
+                            numWinners: 1
+                        }
+                    }
+                ],
+                cacheExpire: new Date().addHours(2)
+            },
+            'client-events': {
+                states: [
+                    {
+                        validFrom: new Date(),
+                        activeEvents: [
+                            {
+                                eventType: `EventFlag.LobbySeason${req.clientInfos.season}`,
+                                activeUntil: new Date().addYears(10),
+                                activeSince: new Date('2017')
+                            },
+                            {
+                                eventType: `EventFlag.Season${req.clientInfos.season}`,
+                                activeUntil: new Date().addYears(10),
+                                activeSince: new Date('2017')
+                            }
+                        ],
+                        state: {
+                            activeStorefronts: [],
+                            eventNamedWeights: {},
+                            activeEvents: [],
+                            seasonNumber: req.clientInfos.season,
+                            seasonTemplateId: `AthenaSeason:athenaseason${req.clientInfos.season}`,
+                            matchXpBonusPoints: 0,
+                            eventPunchCardTemplateId: "",
+                            seasonBegin: seasonTime || new Date('2017'),
+                            seasonEnd: new Date('9999'),
+                            seasonDisplayedEnd: new Date('9999'),
+                            weeklyStoreEnd: new Date('9999'),
+                            stwEventStoreEnd: new Date('9999'),
+                            stwWeeklyStoreEnd: new Date('9999'),
+                            dailyStoreEnd: new Date('9999')
+                        }
+                    }
+                ],
+                cacheExpire: new Date().addHours(2)
+
+            }
+        },
+        cacheIntervalMins: 15,
+        currentTime: new Date()
+    };
+
+    try {
+        const timeline = await online.getTimeline();
+
+        var state = timeline.channels['client-events'].states[0];
+
+        if (state.state.seasonNumber == req.clientInfos.season) {
+            // @ts-ignore
+            response.channels['client-events'] = timeline.channels['client-events'];
+
+            return res.json(
+                response
+            );
         }
-    );
+    } catch { }
+
+    res.json(response);
 })
 
 app.get('/api/v2/versioncheck*', verifyAuthorization(true), (req, res) => {
@@ -612,17 +933,18 @@ app.get('/api/versioncheck*', verifyAuthorization(true), (req, res) => {
 });
 
 app.get('/api/game/v2/world/info', verifyAuthorization(true), async (req, res) => {
-    res.setHeader('content-type', 'application/json');
 
     var lastest = await online.getLastest();
 
     if (req.clientInfos.CL != lastest.CL) {
-        return res.end(
-            fs.readFileSync(path.join(__dirname, '../../resources/world_info.json'))
+        return res.json(
+            JSON.parse(
+                fs.readFileSync(worldInfoPath, 'utf-8')
+            )
         )
     } else {
-        res.end(
-            JSON.stringify(await online.getStwWorld())
+        res.json(
+            await online.getStwWorld()
         )
     }
 
@@ -633,20 +955,14 @@ app.get('/api/game/v2/br-inventory/account/:accountId', verifyAuthorization(), (
         throw neoniteDev.authentication.notYourAccount;
     }
 
-    res.json({
-        stash: {
-            'globalcash': 99999999
+    res.json(
+        {
+            stash: {
+                globalcash: 99999999
+            }
         }
-    })
+    )
 })
-
-var validPlatforms = [
-    'Windows',
-    'Linux',
-    'Switch',
-    'Android',
-    'IOS'
-]
 
 app.get('/api/game/v2/matchmakingservice/ticket/player/:accountId', cookieParser(), verifyAuthorization(),
     async (req, res) => {
@@ -967,6 +1283,7 @@ app.post('/api/feedback/Bug', async (req, res) => {
 
     console.log(fields)
 })
+
 
 app.use(validateMethod(app));
 
