@@ -529,22 +529,21 @@ app.get('/api/public/account/:accountId/externalAuths', verifyAuthorization(fals
     }
 
     if (user.google_account_id) {
-        externalAuths.push(
-            {
-                accountId: req.params.accountId,
-                type: "google",
-                externalAuthId: user.google_account_id,
-                externalAuthIdType: "google_user_id",
-                externalDisplayName: user.google_display_name,
-                authIds: [
-                    {
-                        id: user.google_account_id,
-                        type: "google_user_id"
-                    }
-                ],
-                dateAdded: "2020-01-01T00:00:00.000Z"
-            }
-        )
+        externalAuths.google = {
+            accountId: req.params.accountId,
+            type: "google",
+            externalAuthId: user.google_account_id,
+            externalAuthIdType: "google_user_id",
+            externalDisplayName: user.google_display_name,
+            authIds: [
+                {
+                    id: user.google_account_id,
+                    type: "google_user_id"
+                }
+            ],
+            dateAdded: "2020-01-01T00:00:00.000Z"
+        }
+
     }
 
     res.json(
