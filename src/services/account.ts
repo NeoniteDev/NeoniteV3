@@ -289,7 +289,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
         },
         jwtSecret,
         {
-            expiresIn: tokenExpires.getTime(),
+            expiresIn: expireIn,
             jwtid: access_token
         }
     );
@@ -303,7 +303,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
         },
         jwtSecret,
         {
-            expiresIn: refreshExpires.getTime(),
+            expiresIn: refreshExpireIn,
             jwtid: refresh_token
         }
     );
@@ -454,13 +454,21 @@ app.get('/api/epicdomains/ssodomains', (req, res) => {
 
 
 app.get('/api/public/account/:accountId', verifyAuthorization(false, false), async (req: reqWithAuth, res) => {
+    var account = await users.getById(req.params.accountId);
+
+
+    if (!account) {
+        throw errors.neoniteDev.account.accountNotFound.with(req.params.accountId);
+    }
+
+
     if (req.auth.account_id === req.params.accountId) {
         return res.json(
             {
                 id: req.params.accountId,
                 displayName: req.auth.displayName,
                 name: req.auth.displayName,
-                email: `${req.params.accountId}@neonite.com`,
+                email: account.email,
                 failedLoginAttempts: 0,
                 lastLogin: new Date(),
                 numberOfDisplayNameChanges: 0,
@@ -469,7 +477,7 @@ app.get('/api/public/account/:accountId', verifyAuthorization(false, false), asy
                 country: "UNKNOWN",
                 lastName: "",
                 preferredLanguage: "en",
-                passwordResetRequired: true,
+                passwordResetRequired: false,
                 lastDisplayNameChange: "2017-01-01T00:00:00.000Z",
                 canUpdateDisplayName: true,
                 tfaEnabled: false,
@@ -480,13 +488,6 @@ app.get('/api/public/account/:accountId', verifyAuthorization(false, false), asy
             }
         );
     }
-
-    var account = await users.getById(req.params.accountId);
-
-    if (!account) {
-        throw errors.neoniteDev.account.accountNotFound.with(req.params.accountId);
-    }
-
     res.json(
         {
             id: req.params.accountId,
@@ -507,25 +508,24 @@ app.get('/api/public/account/:accountId/externalAuths', verifyAuthorization(fals
         throw errors.neoniteDev.account.accountNotFound.with(req.params.accountId);
     }
 
-    var externalAuths = [];
+    var externalAuths: Record<string, Object> = {};
 
     if (user.discord_account_id) {
-        externalAuths.push(
-            {
-                accountId: req.params.accountId,
-                type: "discord",
-                externalAuthId: user.discord_account_id,
-                externalAuthIdType: "discord_user_id",
-                externalDisplayName: user.discord_user_name,
-                authIds: [
-                    {
-                        id: user.discord_account_id,
-                        type: "discord_user_id"
-                    }
-                ],
-                dateAdded: "2020-01-01T00:00:00.000Z"
-            }
-        )
+        externalAuths.discord = {
+            accountId: req.params.accountId,
+            type: "discord",
+            externalAuthId: user.discord_account_id,
+            externalAuthIdType: "discord_user_id",
+            externalDisplayName: user.discord_user_name,
+            authIds: [
+                {
+                    id: user.discord_account_id,
+                    type: "discord_user_id"
+                }
+            ],
+            dateAdded: "2020-01-01T00:00:00.000Z"
+        }
+
     }
 
     if (user.google_account_id) {
@@ -561,7 +561,7 @@ app.get('/api/public/account/', verifyAuthorization(), async (req, res) => {
 
     if (!(req.query.accountId instanceof Array)) {
         Ids = <string[]>(new Array(req.query.accountId))
-    }  else {
+    } else {
         var preIds = <string[]>(req.query.accountId)
         Ids = preIds.filter((x: string) => typeof x == 'string');
     }
