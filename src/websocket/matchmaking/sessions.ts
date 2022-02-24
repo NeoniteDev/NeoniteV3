@@ -1,4 +1,3 @@
-import { xml } from "@xmpp/client";
 import { randomUUID } from "crypto";
 import matchmakingClient, { states } from ".";
 import gameSessions, { availability, Session } from "../../database/gameSessionsController";
