@@ -115,7 +115,7 @@ var server = https.createServer({
      cert*/
 }, app);
 
-server.listen(packageFile.config.port, function () {
+server.listen(process.env.PORT || packageFile.config.port, function () {
     console.log(`[${`API`.cyan}]`, 'Listening on port', packageFile.config.port);
 })
 
