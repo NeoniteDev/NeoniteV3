@@ -84,7 +84,7 @@ fs.readdirSync('./src/services').forEach(filename => {
 app.use('/', require('./src/services/Uncategorized/index'));
 
 app.use((req, res) => {
-    res.status(404).send(`<h1>HTTP ERROR ${res.statusCode}</h1>&emsp;<pre>Not Found</pre>`);
+    res.status(404).send(`<style>body { font-family: Arial, Helvetica, sans-serif; }</style><h1>HTTP ERROR ${res.statusCode}</h1>&emsp;<pre>Not Found</pre>`);
 })
 
 app.use(
@@ -104,6 +104,7 @@ app.use(
         }
 
         res.status(500).send(`
+            <style>body { font-family: Arial, Helvetica, sans-serif; }</style>
             <h1>HTTP ERROR ${res.statusCode}</h1>
             &emsp;<pre>${statuses.message[res.statusCode]}</pre>
         `)

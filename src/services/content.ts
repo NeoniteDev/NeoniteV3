@@ -9,7 +9,7 @@ import { getContent } from '../online';
 const app = PromiseRouter();
 
 app.get("/api/pages/fortnite-game", async (req, res) => {
-    res.json(buildContent());
+    res.json(await buildContent());
 });
 
 

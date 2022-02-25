@@ -26,6 +26,8 @@ const app = Router();
 const hotfixPath = Path.join(__dirname, '../../cloudstorage/system');
 const settingsPath = Path.join(__dirname, '../../saved');
 const worldInfoPath = path.join(__dirname, '../../resources/world_info.json');
+const defaultCatalogPath = path.join(__dirname, '../../resources/storeFront.json');
+
 const validPlatforms = [
     'Windows',
     'Linux',
@@ -80,6 +82,7 @@ app.use(profiles)
 
 
 app.get('/api/cloudstorage/system/config', verifyAuthorization(true), async (req, res) => {
+    return res.status(404).send();
     res.json(
         {
             lastUpdated: '2022-01-19T01:20:39.963Z',
@@ -608,23 +611,7 @@ app.get('/api/storefront/v2/catalog', verifyAuthorization(), async (req, res) =>
 
 
     if (!catalog || req.clientInfos.season < 4) {
-        return res.json(
-            {
-                'refreshIntervalHrs': 24,
-                'dailyPurchaseHrs': 24,
-                'expiration': new Date().addHours(24),
-                'storefronts': [
-                    {
-                        'name': 'BRDailyStorefront',
-                        'catalogEntries': []
-                    },
-                    {
-                        'name': 'BRWeeklyStorefront',
-                        'catalogEntries': []
-                    }
-                ]
-            }
-        );
+        return res.sendFile(defaultCatalogPath);
     }
 
     res.json(catalog);

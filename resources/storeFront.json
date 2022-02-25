@@ -1,335 +1,1369 @@
 {
-    "refreshIntervalHrs": 24,
-    "dailyPurchaseHrs": 24,
-    "expiration": "9999-12-31T23:59:59.999Z",
-    "storefronts": [
-      {
-        "name": "CardPackStorePromo",
-        "catalogEntries": [
-          {
-            "offerId": "C060A6539A1743CA94C35D132EA91F4D",
-            "devName": "Bonus.WeaponsPack.02",
-            "offerType": "StaticPrice",
-            "prices": [
-              {
-                "currencyType": "MtxCurrency",
-                "currencySubType": "",
-                "regularPrice": 200,
-                "finalPrice": 200,
-                "saleExpiration": "9999-12-31T23:59:59.999Z",
-                "basePrice": 200
-              }
-            ],
-            "categories": [],
-            "dailyLimit": 3,
-            "weeklyLimit": -1,
-            "monthlyLimit": -1,
-            "appStoreId": [
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              ""
-            ],
-            "requirements": [],
-            "metaInfo": [
-              {
-                "key": "RequiredTag",
-                "value": "Account.Buff.BonusStoreOffer"
-              }
-            ],
-            "metaAssetInfo": {
-              "structName": "FortCatalogMeta",
-              "payload": {
-                "chaseItems": [
-                  "FortHeroType'/Game/Heroes/Class_Commando.Class_Commando'",
-                  "FortWorkerType'/Game/Items/Workers/Managers/ManagerDoctor_T01.ManagerDoctor_T01'",
-                  "FortSchematicItemDefinition'/Game/Loot/Schematics/Ranged/Assault_Auto_T04.Assault_Auto_T04'"
-                ],
-                "packDefinition": "FortCardPackItemDefinition'/Game/Loot/CardPacks/CardPack_Bronze_Weapons.CardPack_Bronze_Weapons'"
-              }
+  "refreshIntervalHrs": 24,
+  "dailyPurchaseHrs": 24,
+  "expiration": "9999-12-31T23:59:59.999Z",
+  "storefronts": [
+    {
+      "name": "CardPackStorePromo",
+      "catalogEntries": [
+        {
+          "offerId": "C060A6539A1743CA94C35D132EA91F4D",
+          "devName": "Bonus.WeaponsPack.02",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "MtxCurrency",
+              "currencySubType": "",
+              "regularPrice": 200,
+              "finalPrice": 200,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 200
+            }
+          ],
+          "categories": [],
+          "dailyLimit": 3,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "appStoreId": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "requirements": [],
+          "metaInfo": [
+            {
+              "key": "RequiredTag",
+              "value": "Account.Buff.BonusStoreOffer"
+            }
+          ],
+          "metaAssetInfo": {
+            "structName": "FortCatalogMeta",
+            "payload": {
+              "chaseItems": [
+                "FortHeroType'/Game/Heroes/Class_Commando.Class_Commando'",
+                "FortWorkerType'/Game/Items/Workers/Managers/ManagerDoctor_T01.ManagerDoctor_T01'",
+                "FortSchematicItemDefinition'/Game/Loot/Schematics/Ranged/Assault_Auto_T04.Assault_Auto_T04'"
+              ],
+              "packDefinition": "FortCardPackItemDefinition'/Game/Loot/CardPacks/CardPack_Bronze_Weapons.CardPack_Bronze_Weapons'"
+            }
+          },
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 0,
+          "title": "Upgrade Llama",
+          "shortDescription": "",
+          "description": "Upgrade Llama",
+          "displayAssetPath": "",
+          "itemGrants": [
+            {
+              "templateId": "CardPack:CardPack_Bronze_Weapons",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "offerId": "C060A6539A1743CA94C35D132EA91F4D",
+          "devName": "Bonus.WeaponsPack.02",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "MtxCurrency",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": 3,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "appStoreId": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "requirements": [],
+          "metaInfo": [
+            {
+              "key": "RequiredTag",
+              "value": "Account.Buff.BonusStoreOffer"
+            }
+          ],
+          "metaAssetInfo": {
+            "structName": "FortCatalogMeta",
+            "payload": {
+              "chaseItems": [
+                "FortSchematicItemDefinition'/Game/Loot/Schematics/Ranged/Assault_Auto_T10.Assault_Auto_T10'",
+                "FortSchematicItemDefinition'/Game/Loot/Schematics/Ranged/Assault_Hydra_T09.Assault_Hydra_T09'",
+                "FortSchematicItemDefinition'/Game/Loot/Schematics/Ranged/Assault_Raygun_Auto_T08.Assault_Raygun_Auto_T08'"
+              ],
+              "packDefinition": "FortCardPackItemDefinition'/Game/Loot/CardPacks/CardPack_Jackpot.CardPack_Jackpot'"
+            }
+          },
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 0,
+          "title": "Free Llama",
+          "shortDescription": "",
+          "description": "Free",
+          "displayAssetPath": "",
+          "itemGrants": [
+            {
+              "templateId": "CardPack:CardPack_Jackpot",
+              "quantity": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CurrencyStorefront",
+      "catalogEntries": [
+        {
+          "offerId": "A094F1D14BAE8DA77114DAAE76AFCA83",
+          "devName": "Medium Currency Pack",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 1999,
+              "finalPrice": 1999,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 1999
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "appStoreId": [
+            "",
+            "559f2ba95f874ec987d0ebfd2cc9c70a",
+            "ios_vbucks_medium",
+            "10200",
+            "google_vbucks_medium",
+            "",
+            "MTX03K0000000000",
+            "cee19aa0-5238-4656-9e52-c8bd0765eb53",
+            "c-virtualcurrency0-MTX2800"
+          ],
+          "requirements": [],
+          "metaInfo": [
+            {
+              "key": "MtxQuantity",
+              "value": "2800"
             },
-            "catalogGroup": "",
-            "catalogGroupPriority": 0,
-            "sortPriority": 0,
-            "title": "Upgrade Llama",
-            "shortDescription": "",
-            "description": "Upgrade Llama",
-            "displayAssetPath": "",
-            "itemGrants": [
-              {
-                "templateId": "CardPack:CardPack_Bronze_Weapons",
-                "quantity": 1
-              }
-            ]
-          },
-          {
-            "offerId": "C060A6539A1743CA94C35D132EA91F4D",
-            "devName": "Bonus.WeaponsPack.02",
-            "offerType": "StaticPrice",
-            "prices": [
-              {
-                "currencyType": "MtxCurrency",
-                "currencySubType": "",
-                "regularPrice": 0,
-                "finalPrice": 0,
-                "saleExpiration": "9999-12-31T23:59:59.999Z",
-                "basePrice": 0
-              }
-            ],
-            "categories": [],
-            "dailyLimit": 3,
-            "weeklyLimit": -1,
-            "monthlyLimit": -1,
-            "appStoreId": [
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              ""
-            ],
-            "requirements": [],
-            "metaInfo": [
-              {
-                "key": "RequiredTag",
-                "value": "Account.Buff.BonusStoreOffer"
-              }
-            ],
-            "metaAssetInfo": {
-              "structName": "FortCatalogMeta",
-              "payload": {
-                "chaseItems": [
-                  "FortSchematicItemDefinition'/Game/Loot/Schematics/Ranged/Assault_Auto_T10.Assault_Auto_T10'",
-                  "FortSchematicItemDefinition'/Game/Loot/Schematics/Ranged/Assault_Hydra_T09.Assault_Hydra_T09'",
-                  "FortSchematicItemDefinition'/Game/Loot/Schematics/Ranged/Assault_Raygun_Auto_T08.Assault_Raygun_Auto_T08'"
-                ],
-                "packDefinition": "FortCardPackItemDefinition'/Game/Loot/CardPacks/CardPack_Jackpot.CardPack_Jackpot'"
-              }
+            {
+              "key": "MtxBonus",
+              "value": "300"
+            }
+          ],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 2,
+          "title": "Medium Currency Pack",
+          "shortDescription": "",
+          "description": "This in-game currency can be used to purchase new customization items for your Hero, glider, or pickaxe.",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_MtxPack2800.DA_MtxPack2800",
+          "itemGrants": []
+        },
+        {
+          "offerId": "E2BD4F70498AF13ADAA071B04F885292",
+          "devName": "Small Currency Pack",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 799,
+              "finalPrice": 799,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 799
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "appStoreId": [
+            "",
+            "ede05b3c97e9475a8d9be91da65750f0",
+            "ios_vbucks_small",
+            "10100",
+            "google_vbucks_small",
+            "",
+            "MTX01K0000000000",
+            "6caed040-72dc-499a-9337-a165f1ec0a26",
+            "c-virtualcurrency0-MTX1000"
+          ],
+          "requirements": [],
+          "metaInfo": [
+            {
+              "key": "MtxQuantity",
+              "value": "1000"
             },
-            "catalogGroup": "",
-            "catalogGroupPriority": 0,
-            "sortPriority": 0,
-            "title": "Free Llama",
-            "shortDescription": "",
-            "description": "Free",
-            "displayAssetPath": "",
-            "itemGrants": [
-              {
-                "templateId": "CardPack:CardPack_Jackpot",
-                "quantity": 1
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "CurrencyStorefront",
-        "catalogEntries": [
-          {
-            "offerId": "A094F1D14BAE8DA77114DAAE76AFCA83",
-            "devName": "Medium Currency Pack",
-            "offerType": "StaticPrice",
-            "prices": [
-              {
-                "currencyType": "RealMoney",
-                "currencySubType": "",
-                "regularPrice": 1999,
-                "finalPrice": 1999,
-                "saleExpiration": "9999-12-31T23:59:59.999Z",
-                "basePrice": 1999
-              }
-            ],
-            "categories": [],
-            "dailyLimit": -1,
-            "weeklyLimit": -1,
-            "monthlyLimit": -1,
-            "appStoreId": [
-              "",
-              "559f2ba95f874ec987d0ebfd2cc9c70a",
-              "ios_vbucks_medium",
-              "10200",
-              "google_vbucks_medium",
-              "",
-              "MTX03K0000000000",
-              "cee19aa0-5238-4656-9e52-c8bd0765eb53",
-              "c-virtualcurrency0-MTX2800"
-            ],
-            "requirements": [],
-            "metaInfo": [
-              {
-                "key": "MtxQuantity",
-                "value": "2800"
-              },
-              {
-                "key": "MtxBonus",
-                "value": "300"
-              }
-            ],
-            "catalogGroup": "",
-            "catalogGroupPriority": 0,
-            "sortPriority": 2,
-            "title": "Medium Currency Pack",
-            "shortDescription": "",
-            "description": "This in-game currency can be used to purchase new customization items for your Hero, glider, or pickaxe.",
-            "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_MtxPack2800.DA_MtxPack2800",
-            "itemGrants": []
-          },
-          {
-            "offerId": "E2BD4F70498AF13ADAA071B04F885292",
-            "devName": "Small Currency Pack",
-            "offerType": "StaticPrice",
-            "prices": [
-              {
-                "currencyType": "RealMoney",
-                "currencySubType": "",
-                "regularPrice": 799,
-                "finalPrice": 799,
-                "saleExpiration": "9999-12-31T23:59:59.999Z",
-                "basePrice": 799
-              }
-            ],
-            "categories": [],
-            "dailyLimit": -1,
-            "weeklyLimit": -1,
-            "monthlyLimit": -1,
-            "appStoreId": [
-              "",
-              "ede05b3c97e9475a8d9be91da65750f0",
-              "ios_vbucks_small",
-              "10100",
-              "google_vbucks_small",
-              "",
-              "MTX01K0000000000",
-              "6caed040-72dc-499a-9337-a165f1ec0a26",
-              "c-virtualcurrency0-MTX1000"
-            ],
-            "requirements": [],
-            "metaInfo": [
-              {
-                "key": "MtxQuantity",
-                "value": "1000"
-              },
-              {
-                "key": "MtxBonus",
-                "value": "0"
-              }
-            ],
-            "catalogGroup": "",
-            "catalogGroupPriority": 0,
-            "sortPriority": 3,
-            "title": "Small Currency Pack",
-            "shortDescription": "",
-            "description": "This in-game currency can be used to purchase new customization items for your Hero, glider, or pickaxe.",
-            "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_MtxPack1000.DA_MtxPack1000",
-            "itemGrants": []
-          },
-          {
-            "offerId": "425FDD804D9D61AC2530CE8F31398BCD",
-            "devName": "Large Currency Pack",
-            "offerType": "StaticPrice",
-            "prices": [
-              {
-                "currencyType": "RealMoney",
-                "currencySubType": "",
-                "regularPrice": 4999,
-                "finalPrice": 4999,
-                "saleExpiration": "9999-12-31T23:59:59.999Z",
-                "basePrice": 4999
-              }
-            ],
-            "categories": [],
-            "dailyLimit": -1,
-            "weeklyLimit": -1,
-            "monthlyLimit": -1,
-            "appStoreId": [
-              "",
-              "3b4c5df9efa5415b941cf74262865e4e",
-              "ios_vbucks_large",
-              "10300",
-              "google_vbucks_large",
-              "",
-              "MTX08K0000000000",
-              "d299e00d-811e-4b57-85c1-ec06cbc40074",
-              "c-virtualcurrency0-MTX7500"
-            ],
-            "requirements": [],
-            "metaInfo": [
-              {
-                "key": "MtxQuantity",
-                "value": "7500"
-              },
-              {
-                "key": "MtxBonus",
-                "value": "1500"
-              }
-            ],
-            "catalogGroup": "",
-            "catalogGroupPriority": 0,
-            "sortPriority": 1,
-            "title": "Large Currency Pack",
-            "shortDescription": "",
-            "description": "This in-game currency can be used to purchase new customization items for your Hero, glider, or pickaxe.",
-            "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_MtxPack7500.DA_MtxPack7500",
-            "itemGrants": []
-          },
-          {
-            "offerId": "50DC69A74BC4B8D10AF8D5B17A4BF8D4",
-            "devName": "Jumbo Currency Pack",
-            "offerType": "StaticPrice",
-            "prices": [
-              {
-                "currencyType": "RealMoney",
-                "currencySubType": "",
-                "regularPrice": 7999,
-                "finalPrice": 7999,
-                "saleExpiration": "9999-12-31T23:59:59.999Z",
-                "basePrice": 7999
-              }
-            ],
-            "categories": [],
-            "dailyLimit": -1,
-            "weeklyLimit": -1,
-            "monthlyLimit": -1,
-            "appStoreId": [
-              "",
-              "4daadb392f1c4ee2b5a3af443e614d2a",
-              "ios_vbucks_jumbo",
-              "10400",
-              "google_vbucks_jumbo",
-              "",
-              "MTX14K0000000000",
-              "d15248c0-acf6-48b7-9632-c9638cba4b37",
-              "c-virtualcurrency0-MTX13500"
-            ],
-            "requirements": [],
-            "metaInfo": [
-              {
-                "key": "MtxQuantity",
-                "value": "13500"
-              },
-              {
-                "key": "MtxBonus",
-                "value": "3500"
-              }
-            ],
-            "catalogGroup": "",
-            "catalogGroupPriority": 0,
-            "sortPriority": 4,
-            "title": "Jumbo Currency Pack",
-            "shortDescription": "",
-            "description": "This in-game currency can be used to purchase new customization items for your Hero, glider, or pickaxe.",
-            "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_MtxPack13500.DA_MtxPack13500",
-            "itemGrants": []
-          }
-        ]
-      }
-    ]
-  }
+            {
+              "key": "MtxBonus",
+              "value": "0"
+            }
+          ],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 3,
+          "title": "Small Currency Pack",
+          "shortDescription": "",
+          "description": "This in-game currency can be used to purchase new customization items for your Hero, glider, or pickaxe.",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_MtxPack1000.DA_MtxPack1000",
+          "itemGrants": []
+        },
+        {
+          "offerId": "425FDD804D9D61AC2530CE8F31398BCD",
+          "devName": "Large Currency Pack",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 4999,
+              "finalPrice": 4999,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 4999
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "appStoreId": [
+            "",
+            "3b4c5df9efa5415b941cf74262865e4e",
+            "ios_vbucks_large",
+            "10300",
+            "google_vbucks_large",
+            "",
+            "MTX08K0000000000",
+            "d299e00d-811e-4b57-85c1-ec06cbc40074",
+            "c-virtualcurrency0-MTX7500"
+          ],
+          "requirements": [],
+          "metaInfo": [
+            {
+              "key": "MtxQuantity",
+              "value": "7500"
+            },
+            {
+              "key": "MtxBonus",
+              "value": "1500"
+            }
+          ],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 1,
+          "title": "Large Currency Pack",
+          "shortDescription": "",
+          "description": "This in-game currency can be used to purchase new customization items for your Hero, glider, or pickaxe.",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_MtxPack7500.DA_MtxPack7500",
+          "itemGrants": []
+        },
+        {
+          "offerId": "50DC69A74BC4B8D10AF8D5B17A4BF8D4",
+          "devName": "Jumbo Currency Pack",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 7999,
+              "finalPrice": 7999,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 7999
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "appStoreId": [
+            "",
+            "4daadb392f1c4ee2b5a3af443e614d2a",
+            "ios_vbucks_jumbo",
+            "10400",
+            "google_vbucks_jumbo",
+            "",
+            "MTX14K0000000000",
+            "d15248c0-acf6-48b7-9632-c9638cba4b37",
+            "c-virtualcurrency0-MTX13500"
+          ],
+          "requirements": [],
+          "metaInfo": [
+            {
+              "key": "MtxQuantity",
+              "value": "13500"
+            },
+            {
+              "key": "MtxBonus",
+              "value": "3500"
+            }
+          ],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 4,
+          "title": "Jumbo Currency Pack",
+          "shortDescription": "",
+          "description": "This in-game currency can be used to purchase new customization items for your Hero, glider, or pickaxe.",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_MtxPack13500.DA_MtxPack13500",
+          "itemGrants": []
+        }
+      ]
+    },
+    {
+      "name": "FoundersPack",
+      "catalogEntries": [
+        {
+          "offerId": "295CC29541839D33661FA691B3DE95FB",
+          "devName": "FoundersUpgrade_1_3",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "f5c0e8ab6c9a4530999041e89e9b6934",
+            "",
+            "",
+            "",
+            "",
+            "FNDR130000000000",
+            "f3fa9d49-0efa-4189-9ed5-a72b8af8caa4",
+            "",
+            "",
+            "BQQGTHMP8KZV",
+            ""
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_3",
+              "minQuantity": 1
+            },
+            {
+              "requirementType": "RequireItemOwnership",
+              "requiredId": "Token:founderspack_1",
+              "minQuantity": 1
+            },
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_2",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 4,
+          "title": "Super Deluxe",
+          "shortDescription": "",
+          "description": "",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_1_3.DA_FoundersPack_1_3",
+          "itemGrants": []
+        },
+        {
+          "offerId": "EBF511584B4405C031087C99148BB2D8",
+          "devName": "FoundersUpgrade_1_2",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "9aa9f44cd8c24652953a1b204755b193",
+            "",
+            "",
+            "",
+            "",
+            "FNDR120000000000",
+            "c4f3c99f-b7e0-4e21-ab01-131d4b20d720",
+            "",
+            "",
+            "C19S7QTMVWTQ",
+            ""
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_2",
+              "minQuantity": 1
+            },
+            {
+              "requirementType": "RequireItemOwnership",
+              "requiredId": "Token:founderspack_1",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 5,
+          "title": "Deluxe Upgrade",
+          "shortDescription": "",
+          "description": "",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_1_2.DA_FoundersPack_1_2",
+          "itemGrants": []
+        },
+        {
+          "offerId": "48DC9478462A5DCD3D93EBB81D4488AB",
+          "devName": "FoundersPack_1",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "e2f25dae43604a839dd6f2c21b675d5e",
+            "",
+            "",
+            "",
+            "",
+            "FNDR010000000001",
+            "b0e02cfe-8d1e-4aa0-a02b-e64fa7263617",
+            "",
+            "",
+            "BXWNX8ST04JS",
+            ""
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_1",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 1,
+          "title": "Standard Founder's Pack",
+          "shortDescription": "",
+          "description": "Purchase the Standard Founder's Pack",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_1.DA_FoundersPack_1",
+          "itemGrants": []
+        },
+        {
+          "offerId": "F46E931F4851F1CFB0E50C805957205A",
+          "devName": "FoundersUpgrade_2_4",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "d2da86026c71429a9cf5e76dfd89a1d3",
+            "",
+            "",
+            "",
+            "",
+            "FNDR240000000000",
+            "6ba13aad-2515-4e51-b8d8-72540863a8bc",
+            "",
+            "",
+            "C4DP169TMQK7",
+            ""
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_4",
+              "minQuantity": 1
+            },
+            {
+              "requirementType": "RequireItemOwnership",
+              "requiredId": "Token:founderspack_2",
+              "minQuantity": 1
+            },
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_3",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 4,
+          "title": "Limited Upgrade",
+          "shortDescription": "",
+          "description": "",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_2_4.DA_FoundersPack_2_4",
+          "itemGrants": []
+        },
+        {
+          "offerId": "AD38CA234B2FA67C83BFD888EA1D2E8D",
+          "devName": "FoundersUpgrade_4_5",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "e852b1940299435884365cec7dc3a608",
+            "",
+            "",
+            "",
+            "",
+            "FNDR450000000000",
+            "b4e5f231-418f-4937-b3e5-f0e014d42ffe",
+            "",
+            "",
+            "BZ0D9FZH5WH3",
+            ""
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_5",
+              "minQuantity": 1
+            },
+            {
+              "requirementType": "RequireItemOwnership",
+              "requiredId": "Token:founderspack_4",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 5,
+          "title": "Ultimate Upgrade",
+          "shortDescription": "",
+          "description": "",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_4_5.DA_FoundersPack_4_5",
+          "itemGrants": []
+        },
+        {
+          "offerId": "141F04624351F025DC67E1929B282B50",
+          "devName": "FoundersUpgrade_2_3",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "35759d71512b47e5b2825669f1d9166a",
+            "",
+            "",
+            "",
+            "",
+            "FNDR230000000000",
+            "46c22707-e058-45dd-8d83-fc45b82d65cd",
+            "",
+            "",
+            "C50KV04716HT",
+            ""
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_3",
+              "minQuantity": 1
+            },
+            {
+              "requirementType": "RequireItemOwnership",
+              "requiredId": "Token:founderspack_2",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 5,
+          "title": "Super Deluxe Upgrade",
+          "shortDescription": "",
+          "description": "",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_2_3.DA_FoundersPack_2_3",
+          "itemGrants": []
+        },
+        {
+          "offerId": "E86A50A14891B241DBA126BE8FCD0C42",
+          "devName": "FoundersPack_3",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "c8319a037f9840e8b7549de480efb9c7",
+            "",
+            "",
+            "",
+            "",
+            "FNDR030000000001",
+            "8b2e873d-4dba-4367-9bb9-0c2b0951918a",
+            "",
+            "",
+            "BWWG58N9HFKF",
+            ""
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_1",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 3,
+          "title": "Super Deluxe Founder's Pack",
+          "shortDescription": "",
+          "description": "Purchase the Super Deluxe Founder's Pack",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_3.DA_FoundersPack_3",
+          "itemGrants": []
+        },
+        {
+          "offerId": "906D1C4D4F79D2ECE314E8AA70CDAFE4",
+          "devName": "FoundersUpgrade_3_4",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "f05c43f7c1d24f5fbb1a6fa5a5a60edb",
+            "",
+            "",
+            "",
+            "",
+            "FNDR340000000000",
+            "489759a7-8a97-49bf-90e1-e8a338fdfaf5",
+            "",
+            "",
+            "BS949M2S2S75",
+            ""
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_4",
+              "minQuantity": 1
+            },
+            {
+              "requirementType": "RequireItemOwnership",
+              "requiredId": "Token:founderspack_3",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 5,
+          "title": "Limited Upgrade",
+          "shortDescription": "",
+          "description": "",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_3_4.DA_FoundersPack_3_4",
+          "itemGrants": []
+        },
+        {
+          "offerId": "B8ACCCB94D87EC3B4979858FFC3A09E6",
+          "devName": "StW_SHK_ST3",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "eb7332137e56427ea8847ee46a0562ce",
+            "",
+            "",
+            "",
+            "",
+            "STWSHK0000000000",
+            "50355039-3236-3030-c030-44364b4ce700",
+            "",
+            "",
+            "9P5P6200D6KL",
+            "STWSHK0000000000"
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnFulfillment",
+              "requiredId": "2FDB26FD40468AC1FAF4718D2E6B8EED",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 5,
+          "title": "Powerhouse Pack",
+          "shortDescription": "",
+          "description": "Charge up and shock your enemies with the Powerhouse Pack",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_VindertechSoldierPack.DA_Featured_VindertechSoldierPack",
+          "itemGrants": []
+        },
+        {
+          "offerId": "2A26520F414EC95C944F80A596A284B0",
+          "devName": "FoundersUpgrade_1_4",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "57f0419c4e4a4ea4858b2f37a98d5315",
+            "",
+            "",
+            "",
+            "",
+            "FNDR140000000000",
+            "65691cca-42bb-4528-9065-3926c0057cac",
+            "",
+            "",
+            "C3K7QVDRT2XV",
+            ""
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_4",
+              "minQuantity": 1
+            },
+            {
+              "requirementType": "RequireItemOwnership",
+              "requiredId": "Token:founderspack_1",
+              "minQuantity": 1
+            },
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_2",
+              "minQuantity": 1
+            },
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_3",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 3,
+          "title": "Limited Upgrade",
+          "shortDescription": "",
+          "description": "",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_1_4.DA_FoundersPack_1_4",
+          "itemGrants": []
+        },
+        {
+          "offerId": "8F9E54194FBF331A9CCC4BB6FDFB8FC2",
+          "devName": "FoundersPack_2",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "41134f4ff35a45a4923604cbb15e487d",
+            "",
+            "",
+            "",
+            "",
+            "FNDR020000000001",
+            "369267a1-3e63-4b6e-82be-286d741d7370",
+            "",
+            "",
+            "BRD01SWKX9WS",
+            ""
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_1",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 4,
+          "title": "Deluxe Founder's Pack",
+          "shortDescription": "",
+          "description": "Purchase the Deluxe Founder's Pack",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_2.DA_FoundersPack_2",
+          "itemGrants": []
+        },
+        {
+          "offerId": "4FF523B44A6D6CF76599A6AE06B42CA3",
+          "devName": "StW_LAR_ST7",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "411a9188ef584588b935b2d4f43a2325",
+            "",
+            "",
+            "",
+            "",
+            "STWLARS000000000",
+            "4d304e39-5639-3042-c047-343731510900",
+            "",
+            "",
+            "9N0M9VBG471Q",
+            "STWLARS000000000"
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnFulfillment",
+              "requiredId": "8DF06CAE465B5DC8142A72A7B2D595BA",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 5,
+          "title": "Lars",
+          "shortDescription": "",
+          "description": "Peace, love, and Steel Wool.",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_LarsBundle.DA_Featured_LarsBundle",
+          "itemGrants": []
+        },
+        {
+          "offerId": "A847C3744EA4243E629A12AC4027FFA6",
+          "devName": "StW_MCH_ST4",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "992ba7f52f3b40d49a4411fbade69b33",
+            "",
+            "",
+            "",
+            "",
+            "STWMCH0000000000",
+            "47445039-3534-3057-c042-513343351200",
+            "",
+            "",
+            "9PDG45WBQ3C5",
+            "STWMCH0000000000"
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnFulfillment",
+              "requiredId": "EC0B6E6A4C7E05C3CC66C69DC4B24F57",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 5,
+          "title": "Machinist Mina",
+          "shortDescription": "",
+          "description": "Build enemies up to tear them down with the Machinist Mina Pack!",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_MechaConstructorBundle.DA_Featured_MechaConstructorBundle",
+          "itemGrants": []
+        },
+        {
+          "offerId": "E2994D164ACA01D4EB9ED585EB1CE5BD",
+          "devName": "StW_MTL_ST1",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "ae230025ab0f4b578d605569746233e5",
+            "",
+            "",
+            "",
+            "",
+            "STWBEA0000000000",
+            "514e5039-5147-3046-c04e-4a3452385c00",
+            "",
+            "",
+            "9PNQGQFNJ4R8",
+            ""
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnFulfillment",
+              "requiredId": "67E05F60412ADCCBE49B50918CFEABDD",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 5,
+          "title": "Metal Team Leader Pack",
+          "shortDescription": "",
+          "description": "Cold steel, warm heart!",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_FuzzyBearTeddyBundle.DA_Featured_FuzzyBearTeddyBundle",
+          "itemGrants": []
+        },
+        {
+          "offerId": "102C71DF437A25006C2EEF8ABAB75485",
+          "devName": "StW_ASR_ST5",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "b587eca883944eda861a4542e1d4fb6a",
+            "",
+            "",
+            "",
+            "",
+            "STWASR0000000000",
+            "53335039-4a5a-3043-c032-385844423e00",
+            "",
+            "",
+            "9P3SZJC28XDB",
+            "STWASR0000000000"
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnFulfillment",
+              "requiredId": "569CCD6549EF24CBBC7B809EA4365FDF",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 5,
+          "title": "Robo-Ray",
+          "shortDescription": "",
+          "description": "Everything's fine, she has a plan, and she's gonna fix this!",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_Assembler_Bundle.DA_Featured_Assembler_Bundle",
+          "itemGrants": []
+        },
+        {
+          "offerId": "3FD5BF6045E78DABD1543FB181E3A138",
+          "devName": "StW_ASK_ST8",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "48e7be9d5a834f498da5799749db5836",
+            "",
+            "",
+            "",
+            "",
+            "STWASK0000000000",
+            "304e4e39-3636-304b-c042-5636384b0d00",
+            "",
+            "",
+            "9NN066KBV68K",
+            "STWASK0000000000"
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnFulfillment",
+              "requiredId": "9B506B7A4AEF74EC8DBCE78E5CE590CD",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [
+            {
+              "key": "ViolatorTag",
+              "value": "IncludesSTW"
+            }
+          ],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 5,
+          "title": "Robo-Kevin Pack",
+          "shortDescription": "",
+          "description": "Everyone's favorite triangular bot is here to upgrade your spirits.",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_AssembleKBundle.DA_Featured_AssembleKBundle",
+          "itemGrants": []
+        },
+        {
+          "offerId": "BA4237DE44B7C83B55BEC8A8D9C2241C",
+          "devName": "StW_JNK_ST2",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "6d28ba7c952b412d82120efcdcc9c233",
+            "",
+            "",
+            "",
+            "",
+            "STWSAM0000000000",
+            "34514e39-445a-3056-c042-385a584a7600",
+            "",
+            "",
+            "9NQ4ZDVB8ZXJ",
+            ""
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnFulfillment",
+              "requiredId": "18CCCDF24D751CF4E7B834A08B6D9CE9",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 5,
+          "title": "Samurai Scrapper Pack",
+          "shortDescription": "",
+          "description": "One person's trash is another person's armor!",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_JunkSamuraiBundle.DA_Featured_JunkSamuraiBundle",
+          "itemGrants": []
+        },
+        {
+          "offerId": "645825F944BA03CB7841CAA83CACA126",
+          "devName": "StW_ASL_ST6",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "",
+            "3c552303884b4d69b9bcd4c410ee0130",
+            "",
+            "",
+            "",
+            "",
+            "STWASL0000000000",
+            "57354e39-5244-3031-c05a-3248345a3c00",
+            "",
+            "",
+            "9N5WDR1Z2H4Z",
+            "STWASL0000000000"
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnFulfillment",
+              "requiredId": "14E1838F4DD7AB817DA5DD87C7381B73",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 5,
+          "title": "Lok-Bot",
+          "shortDescription": "",
+          "description": "Imagine, if you will, an oven bot and the places he will go.",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_AssembleL_Bundle.DA_Featured_AssembleL_Bundle",
+          "itemGrants": []
+        },
+        {
+          "offerId": "17B3F0D54574684E0B9185A10910E324",
+          "devName": "FoundersPack_4",
+          "offerType": "StaticPrice",
+          "prices": [
+            {
+              "currencyType": "RealMoney",
+              "currencySubType": "",
+              "regularPrice": 0,
+              "dynamicRegularPrice": -1,
+              "finalPrice": 0,
+              "saleExpiration": "9999-12-31T23:59:59.999Z",
+              "basePrice": 0
+            }
+          ],
+          "categories": [],
+          "dailyLimit": -1,
+          "weeklyLimit": -1,
+          "monthlyLimit": -1,
+          "refundable": false,
+          "appStoreId": [
+            "85125898f3914946a9443bcce4667660",
+            "85125898f3914946a9443bcce4667660",
+            "",
+            "",
+            "",
+            "",
+            "FNDR040000000001",
+            "e3c292c9-9337-41e8-ba90-e96b85002f68",
+            "",
+            "",
+            "BTC5H6VZBHPF",
+            ""
+          ],
+          "requirements": [
+            {
+              "requirementType": "DenyOnItemOwnership",
+              "requiredId": "Token:founderspack_1",
+              "minQuantity": 1
+            }
+          ],
+          "metaInfo": [],
+          "catalogGroup": "",
+          "catalogGroupPriority": 0,
+          "sortPriority": 2,
+          "title": "Limited Founder's Pack",
+          "shortDescription": "",
+          "description": "Purchase the Limited Founder's Pack",
+          "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_4.DA_FoundersPack_4",
+          "itemGrants": []
+        }
+      ]
+    }
+  ]
+}

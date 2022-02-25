@@ -474,7 +474,7 @@ app.get('/api/public/account/:accountId', verifyAuthorization(false, false), asy
                 numberOfDisplayNameChanges: 0,
                 ageGroup: "UNKNOWN",
                 headless: false,
-                country: "UNKNOWN",
+                country: "us",
                 lastName: "",
                 preferredLanguage: "en",
                 passwordResetRequired: false,
