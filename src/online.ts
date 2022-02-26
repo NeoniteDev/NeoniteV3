@@ -61,7 +61,6 @@ export async function getCatalog() {
         );
 
 
-        console.log(response.data)
         if (response.status == 200) {
             var expiration = new Date(response.data.expiration)
             cache.set('catalog', response.data, Math.round(expiration.getTime() - Date.now()) / 1000);

@@ -4,7 +4,7 @@ import errors, { ApiError } from "../structs/errors";
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { HttpError } from 'http-errors';
 import Users, { User } from "../database/usersController";
-import verifyAuthorization from "../middlewares/authorization";
+import verifyAuthorization, { reqWithAuth } from "../middlewares/authorization";
 import * as Path from 'path';
 import * as crypto from 'crypto';
 import pendingPurchases from "../database/purchasesController";
@@ -12,37 +12,27 @@ const app = Router();
 
 app.use(express.json());
 
-app.post('/v1/purchaseToken', verifyAuthorization(), async (req, res) => {
+app.post('/v1/purchaseToken', verifyAuthorization(), async (req: reqWithAuth, res) => {
     const ip = req.get('cf-connecting-ip') || req.ip;
-    const ipMd5 = crypto.createHash('md5').update(ip).digest("hex");
+    const ipMd5 = crypto.createHash('sha256').update(ip).digest("hex");
 
     const purchaseToken = crypto.randomUUID().replaceAll('-', '');
+    
+    const offersArr = req.body.offers;
 
-    const success = await pendingPurchases.add(
-        {
-            accountId: req.auth.account_id,
-            ip_hash: ipMd5,
-            offers: req.body.offers,
-            purchaseToken: purchaseToken
-        }
-    )
-
-    if (!success) {
-        throw errors.neoniteDev.internal.dataBaseError;
+    if (!(offersArr instanceof Array)) {
+        throw errors.neoniteDev.basic.badRequest;
     }
 
-    res.cookie('x-neonite-purchaseToken', purchaseToken, {
-        sameSite: 'none',
-        secure: false,
-        domain: req.hostname
-    });
+    const offers = offersArr.filter(x => typeof x == 'string');
 
-    res.cookie('x-neonite-accountId', req.auth.account_id);
-    res.cookie('x-neonite-offers', JSON.stringify(req.body.offers, undefined, 0));
+    await pendingPurchases.add(req.auth.account_id, ipMd5, offers, purchaseToken);
 
-    res.json({
-        purchaseToken: purchaseToken
-    });
+    res.json(
+        {
+            purchaseToken: purchaseToken
+        }
+    );
 })
 
 const html = Path.join(__dirname, '../../resources/html/purchase.html');
@@ -71,49 +61,6 @@ app.get('/v1/purchase', async (req, res) => {
 
 // custom api
 
-app.post('/neoniteWeb/purchaseItem', async (req, res) => {
-    if (!req.is('json')) {
-        return res.json(
-            {
-                message: 'Your purchase request is invalid, please reopen the page to try again.'
-            }
-        );
-    }
-
-    var purchaseToken: any = req.body.purchaseToken;
-
-    if (!purchaseToken ||
-        typeof (purchaseToken) != 'string'
-    ) {
-        return res.json(
-            {
-                message: 'Your purchase request is invalid, please reopen the page to try again.'
-            }
-        );
-    }
-
-    const purchase = pendingPurchases.get({
-        purchaseToken: purchaseToken
-    })
-
-    if (!purchase) {
-        return res.json(
-            {
-                message: 'Your purchase request is invalid, please reopen the page to try again.'
-            }
-        );
-    }
-
-    const receiptId = crypto.randomUUID().replaceAll('-', '');
-
-    await pendingPurchases.setReceiptId(req.body.purchaseToken, receiptId);
-
-    res.json(
-        {
-            receiptId: receiptId
-        }
-    )
-})
 
 app.use((req, res) => {
     res.json(
@@ -127,34 +74,14 @@ app.use(
     (err: any, req: Request, res: Response, next: NextFunction) => {
 
         if (err instanceof ApiError) {
-            res.json(
-                {
-                    message: err.getMessage()
-                }
-            );
+            err.apply(res);
         }
         else if (err instanceof HttpError && err.type == 'entity.parse.failed') {
-            const error = errors.neoniteDev.internal.jsonParsingFailed;
-            res.json(
-                {
-                    message: error.getMessage()
-                }
-            );
-        } else if (err instanceof HttpError) {
-            res.json(
-                {
-                    message: err.expose ? err.message : 'Sorry an error occurred and we were unable to resolve it.'
-                }
-            );
+            errors.neoniteDev.internal.jsonParsingFailed.apply(res);
         }
         else {
             console.error(err)
-            const error = errors.neoniteDev.internal.serverError;
-            res.json(
-                {
-                    "message": error.response.errorMessage
-                }
-            )
+            errors.neoniteDev.internal.serverError.apply(res);
         }
     }
 )

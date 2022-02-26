@@ -1,1 +1,1 @@
-web: npm i && npx ts-node .
+web: npm start

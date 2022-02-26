@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express-serve-static-core';
 import * as crypto from 'crypto';
 import validateMethod from '../middlewares/Method';
 import Router from "express-promise-router";
-import verifyAuthorization from '../middlewares/authorization';
+import verifyAuthorization, { reqWithAuth } from '../middlewares/authorization';
 import errors, { ApiError, neoniteDev } from '../structs/errors';
 import { HttpError } from 'http-errors';
 import parties from '../database/partiesController';
@@ -421,7 +421,7 @@ app.get('/api/v1/:deploymentId/user/:accountId/pings/:pingerId/parties', verifyA
     res.json(partyData);
 })
 
-app.post('/api/v1/Fortnite/parties/:partyId/members/:accountId/conferences/connection', verifyAuthorization(), async (req, res) => {
+app.post('/api/v1/Fortnite/parties/:partyId/members/:accountId/conferences/connection', verifyAuthorization(), async (req: reqWithAuth, res) => {
     if (req.params.accountId !== req.auth.account_id) {
         throw errors.neoniteDev.party.notYourAccount.with(req.params.accountId, req.auth.account_id);
     }
@@ -438,9 +438,9 @@ app.post('/api/v1/Fortnite/parties/:partyId/members/:accountId/conferences/conne
         throw errors.neoniteDev.party.memberNotFound.with(req.params.accountId);
     }
 
-    const joinToken = await generateJoinToken(partyData.id);
+    const joinToken = await generateJoinToken(partyData.id, req.auth.account_id);
 
-    const participant = joinToken.participants.find(x => x.puid == process.env.eosProductId);
+    const participant = joinToken.participants[0];
 
     if (!participant) {
         throw errors.neoniteDev.internal.eosError;

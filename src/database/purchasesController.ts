@@ -62,34 +62,19 @@ namespace pendingPurchases {
         return purchases[0];
     }
 
-    export async function add(param: Omit<purchase, 'receiptId'>) {
-        try {
-            var purchase: Omit<dbpruchase, 'receiptId'> = {
-                ...param,
-                offers: JSON.stringify(param.offers)
-            }
-
-            const entries = Object.entries(purchase);
-
-            if (entries.length != 4) {
-                return false;
-            }
-
-            if (!purchase.accountId || !purchase.ip_hash || !purchase.offers || !purchase.purchaseToken) {
-                return false;
-            }
-
-            if (typeof purchase.accountId != 'string' ||
-                typeof purchase.ip_hash != 'string' ||
-                typeof purchase.offers != 'object' ||
-                typeof purchase.purchaseToken != 'string') {
-                return false;
-            }
-
-            const columnsOrder = entries.flatMap(x => x.at(0)).join(', ');
-            const values = entries.flatMap(x => x.at(1));
-            const result = await query(`INSERT INTO purchases (${columnsOrder}) VALUES (?)`, [values])
-        } catch (e) { console.error(e); return false; }
+    /*{
+        purchaseToken: string,
+        offers: string[],
+        accountId: string,
+        ip_hash: string,
+        receiptId: string
+    }*/
+    export async function add(accountId: string, ip_hash: string, offers: string[], purchaseToken: string) {
+        const offersStrings = offers.join(',');
+        await query(
+            `INSERT INTO purchases (purchaseToken, offers, accountId, ip_hash) VALUES (?)`,
+            [[purchaseToken, offersStrings, accountId, ip_hash]]
+        )
     }
 
     export function setReceiptId(purchaseToken: string, receiptId: string) {

@@ -33,7 +33,7 @@ const axiosClient = axios.create({
     validateStatus: undefined
 })
 
-export default async function generateJoinToken(partyId: string): Promise<EOS.room> {
+export default async function generateJoinToken(partyId: string, accountId: string): Promise<EOS.room> {
     const authorization = await getAuthorization();
 
     const response = await axiosClient.post<never, apiRequest<EOS.room, 200>>(
@@ -41,7 +41,7 @@ export default async function generateJoinToken(partyId: string): Promise<EOS.ro
         {
             participants: [
                 {
-                    puid: productId,
+                    puid: accountId,
                     hardMuted: false
                 }
             ]
@@ -54,6 +54,7 @@ export default async function generateJoinToken(partyId: string): Promise<EOS.ro
     )
 
     if (response.status != 200) {
+        console.log( authorization.token_type + ' ' + authorization.access_token)
         throw new EosApiError(response);
     }
 
