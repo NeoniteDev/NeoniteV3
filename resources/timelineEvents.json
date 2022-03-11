@@ -1,5 +1,7 @@
 [
     {
+        "CL_Greater": 0,
+        "CL_Less": 0,
         "note": "Sprint Events For Season 3 builds",
         "affectedSeason": 3,
         "EventFlags": [

@@ -1,0 +1,85 @@
+{
+    "$id": "http://example.com/example.json",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "default": {},
+    "description": "The root schema comprises the entire JSON document.",
+    "examples": [
+        {
+            "offerId": "v2:/4524dab8202c40108e10058b851ac9cf6943670a092fc20be10fc9b0bb3df8e0",
+            "purchaseQuantity": 1,
+            "currency": "MtxCurrency",
+            "currencySubType": "",
+            "expectedTotalPrice": 0,
+            "gameContext": "GameContext: Frontend.CatabaScreen, PositionInSection: 3, OfferGroupId: 10, ColumnNumber: 3, InnerRowNumber: 1, SectionNumber: 0"
+        }
+    ],
+    "required": [
+        "offerId",
+        "currencySubType"
+    ],
+    "title": "The root schema",
+    "type": "object",
+    "properties": {
+        "offerId": {
+            "$id": "#/properties/offerId",
+            "type": "string",
+            "title": "The offerId schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "v2:/4524dab8202c40108e10058b851ac9cf6943670a092fc20be10fc9b0bb3df8e0"
+            ]
+        },
+        "purchaseQuantity": {
+            "$id": "#/properties/purchaseQuantity",
+            "type": "integer",
+            "title": "The purchaseQuantity schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                1
+            ]
+        },
+        "currency": {
+            "$id": "#/properties/currency",
+            "type": "string",
+            "title": "The currency schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "MtxCurrency"
+            ]
+        },
+        "currencySubType": {
+            "$id": "#/properties/currencySubType",
+            "type": "string",
+            "title": "The currencySubType schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                ""
+            ]
+        },
+        "expectedTotalPrice": {
+            "$id": "#/properties/expectedTotalPrice",
+            "type": "integer",
+            "title": "The expectedTotalPrice schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                0
+            ]
+        },
+        "gameContext": {
+            "$id": "#/properties/gameContext",
+            "type": "string",
+            "title": "The gameContext schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "GameContext: Frontend.CatabaScreen, PositionInSection: 3, OfferGroupId: 10, ColumnNumber: 3, InnerRowNumber: 1, SectionNumber: 0"
+            ]
+        }
+    },
+    "additionalProperties": true
+}

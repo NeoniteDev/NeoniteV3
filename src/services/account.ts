@@ -608,6 +608,24 @@ app.post('/api/public/account/:accountId/deviceAuth', verifyAuthorization(), (re
     throw errors.neoniteDev.authentication.wrongGrantType;
 });
 
+const serverStart = new Date();
+app.get('/api/version', (req, res) => {
+    res.json(
+        {
+            app: 'neonite',
+            serverDate: new Date(),
+            overridePropertiesVersion: 'UNKNOWN',
+            cln: 'UNKNOWN',
+            build: 'UNKNOWN',
+            moduleName: 'Neonite-V3',
+            buildDate: serverStart,
+            version: '3.0.0',
+            branch: 'main',
+            modules: {}
+        }
+    )
+})
+
 app.use(validateMethod(app));
 
 app.use(() => {

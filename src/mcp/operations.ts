@@ -40,7 +40,7 @@ export interface CatalogPurchase {
     "type": "CatalogPurchase",
     "primary": boolean,
     "lootResult": {
-        "tierGroupName": string,
+        "tierGroupName"?: string,
         "items":{
             "itemType": string,
             "itemGuid": string,
@@ -72,13 +72,13 @@ export interface profileRevisions {
     clientCommandRevision: number
 }
 
-export interface Handleparams<T = any> {
+export interface Handleparams<T = (any | undefined)> {
     profileId: profile.ProfileID;
     /** the rvn query */
     revision: number;
     accountId: string;
     revisions?: profileRevisions[]
-    body?: T;
+    body: T;
     command: string;
 }
 

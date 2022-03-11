@@ -58,7 +58,6 @@ export class ApiError {
             .set("X-Epic-Error-Code", this.response.numericErrorCode.toString())
             .set("X-Epic-Error-Name", this.response.errorCode)
             .end(
-                //bypass express content type charset
                 JSON.stringify(this.response)
             );
 
@@ -124,6 +123,7 @@ export const neoniteDev = {
         get accountNotFound() { return new ApiError('errors.com.neoniteDev.account.accountNotFound', "Sorry, we couldn't find an account for {displayName}", 18007, 404) },
     },
     mcp: {
+        get notEnoughMtx() { return new ApiError("errors.com.neoniteDev.mcp.notEnoughMtx", "Purchase: {0}: Required {1} MTX but account balance is only {2}.", 12720, 400) },
         get wrongCommand() { return new ApiError("errors.com.neoniteDev.mcp.wrongCommand", "Wrong command.", 12801, 400) },
         get itemNotFound() { return new ApiError("errors.com.neoniteDev.mcp.itemNotFound", "Locker item not found", 16006, 404) },
         get templateNotFound() { return new ApiError("errors.com.neoniteDev.mcp.templateNotFound", "Unable to find template configuration for profile", 12813, 404) },
@@ -131,6 +131,9 @@ export const neoniteDev = {
         get operationNotFound() { return new ApiError("errors.com.neoniteDev.mcp.operationNotFound", "Operation not found", 16035, 404) },
         get operationForbidden() { return new ApiError("errors.com.neoniteDev.mcp.operationForbidden", "Operation Forbidden", 12813, 403) },
         get invalidChatRequest() { return new ApiError("errors.com.neoniteDev.mcp.invalidChatRequest", "", 16090, 400) },
+        get invalidParameter() { return new ApiError("errors.com.neoniteDev.mcp.invalidParameter", "PurchaseCatalogEntry cannot be used for RealMoney prices. Use VerifyRealMoneyPurchase flow instead.", 28000, 400) },
+        get catalogOutOfDate() { return new ApiError("errors.com.neoniteDev.mcp.catalogOutOfDate", "Sorry but your version of the catalog is either invalid or expired.", 28001, 400) },
+        get invalidPayload() { return new ApiError("errors.com.neoniteDev.mcp.invalidPayload", "Unable to parse command", 12806, 400) },
     },
     matchmaking: {
         get unknownSession() { return new ApiError('errors.com.neoniteDev.matchmaking.unknownSession', "unknown session id", 12101, 404) },

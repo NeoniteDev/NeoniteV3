@@ -16,6 +16,7 @@ import Party, { getParty } from '../structs/Party';
 import Friends from '../database/friendsController';
 import Pings from '../database/pingsController';
 import generateJoinToken from '../structs/EOSvoiceChat';
+import { vxGenerateToken } from '../structs/vivox';
 
 
 const createSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../resources/schemas/party/json/create.json'), 'utf-8'))
@@ -47,6 +48,7 @@ app.post('/api/v1/:deploymentId/parties', verifyAuthorization(), async (req, res
 
     const sessions = await xmppApi.getUserSessions(req.auth.account_id);
 
+    console.log(sessions, body.join_info.connection.id)
     if (
         !sessions.find(x => x.sessionId == body.join_info.connection.id)
     ) {
@@ -438,23 +440,72 @@ app.post('/api/v1/Fortnite/parties/:partyId/members/:accountId/conferences/conne
         throw errors.neoniteDev.party.memberNotFound.with(req.params.accountId);
     }
 
-    const joinToken = await generateJoinToken(partyData.id, req.auth.account_id);
 
-    const participant = joinToken.participants[0];
+    const providers: Record<string, Object> = {
 
-    if (!participant) {
-        throw errors.neoniteDev.internal.eosError;
+    };
+
+    const bIsRtcp = typeof req.body.providers == 'object' && typeof req.body.providers.rtcp == 'object';
+
+    const bIsVixox = (
+        (
+            typeof req.body.providers == 'object' &&
+            typeof req.body.providers.vivox == 'object'
+        ) || !bIsRtcp
+    );
+
+
+    if (bIsRtcp) {
+        const joinToken = await generateJoinToken(partyData.id, req.auth.account_id);
+
+        const participant = joinToken.participants[0];
+
+        if (!participant) {
+            throw errors.neoniteDev.internal.eosError;
+        }
+
+        providers.rtcp = {
+            participant_token: participant.token,
+            client_base_url: joinToken.clientBaseUrl,
+            room_name: joinToken.roomId
+        }
     }
 
-    res.json({
-        "providers": {
-            "rtcp": {
-                "participant_token": participant.token,
-                "client_base_url": joinToken.clientBaseUrl,
-                "room_name": joinToken.roomId
-            }
+
+    if (bIsVixox &&
+        process.env.vivoxDomain != undefined &&
+        process.env.vivoxAppName != undefined &&
+        process.env.vivoxSecret != undefined
+    ) {
+        const channel_uri = `sip:confctl-g-${process.env.vivoxAppName}.p-${partyData.id}@${process.env.vivoxDomain}`;
+        const user_uri = `sip:.${process.env.vivoxAppName}.${req.auth.account_id}.@${process.env.vivoxDomain}`;
+
+        const vivoxClaims = {
+            "iss": process.env.vivoxAppName,
+            "exp": Math.floor(new Date().addHours(2).getTime() / 1000),
+            "vxa": "join",
+            "f": user_uri,
+            "t": channel_uri
+        };
+
+        const token = vxGenerateToken(process.env.vivoxSecret, vivoxClaims);
+
+        providers.vivox = {
+            "authorization_token": token,
+            "channel_uri": channel_uri,
+            "user_uri": user_uri
         }
-    })
+    }
+
+    if (!bIsRtcp || !bIsVixox) {
+        throw errors.neoniteDev.internal.serverError;
+    }
+
+    res.json(
+        {
+            "providers": providers
+        }
+    );
 })
 
 

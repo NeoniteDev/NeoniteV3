@@ -256,7 +256,6 @@ class Party implements PartyData {
         }
 
         this.members.remove(memeber);
-        this.revision++;
 
         await this.updateDB();
 
@@ -285,7 +284,6 @@ class Party implements PartyData {
         }
 
         this.members.push(member);
-        this.revision++;
         this.updateDB();
 
         this.broadcastMessage(

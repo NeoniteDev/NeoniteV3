@@ -61,7 +61,7 @@ app.use(
                 return this;
             }
 
-            if (content_type.startsWith('application/json')) {
+            if (content_type && content_type.startsWith('application/json')) {
                 this.removeHeader('content-type');
                 this.setHeader('Content-Type', 'application/json')
                 this.end(data);

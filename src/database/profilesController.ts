@@ -188,3 +188,5 @@ export namespace profiles {
         return true;
     }
 }
+
+export default profiles;
