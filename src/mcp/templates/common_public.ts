@@ -1,3 +1,4 @@
+
 import { randomUUID } from 'crypto';
 import { profile as types } from '../../structs/types';
 
