@@ -116,7 +116,8 @@ export const neoniteDev = {
         get selfInvite() { return new ApiError('errors.com.neoniteDev.party.selfInvite', 'Self invites are not allowed.', 51040, 400) },
     },
     cloudstorage: {
-        get fileNotFound() { return new ApiError('errors.com.neoniteDev.cloudstorage.fileNotFound', 'Cannot find the file you requested.', 12004, 404) }
+        get fileNotFound() { return new ApiError('errors.com.neoniteDev.cloudstorage.fileNotFound', 'Cannot find the file you requested.', 12004, 404) },
+        get fileTooLarge() { return new ApiError('errors.com.neoniteDev.cloudstorage.fileTooLarge', 'The file you are trying to upload is too large', 12004, 413) }
     },
     account: {
         get invalidAccountIdCount() { return new ApiError('errors.com.neoniteDev.account.invalidAccountIdCount', "Sorry, the number of account id should be at least one and not more than 100.", 18066, 400) },
@@ -134,6 +135,9 @@ export const neoniteDev = {
         get invalidParameter() { return new ApiError("errors.com.neoniteDev.mcp.invalidParameter", "PurchaseCatalogEntry cannot be used for RealMoney prices. Use VerifyRealMoneyPurchase flow instead.", 28000, 400) },
         get catalogOutOfDate() { return new ApiError("errors.com.neoniteDev.mcp.catalogOutOfDate", "Sorry but your version of the catalog is either invalid or expired.", 28001, 400) },
         get invalidPayload() { return new ApiError("errors.com.neoniteDev.mcp.invalidPayload", "Unable to parse command", 12806, 400) },
+        get missingPermission() { return new ApiError("errors.com.neoniteDev.mcp.missingPermission", "Sorry your login does not posses the permissions '{0} {1}' needed to perform the requested operation", 12806, 403) },
+        get InvalidLockerSlotIndex() { return new ApiError("errors.com.neoniteDev.mcp.InvalidLockerSlotIndex", "Invalid loadout index {0}, slot is empty", 16173, 400) },
+        get outOfBounds() { return new ApiError("errors.com.neoniteDev.mcp.outOfBounds", "Invalid loadout index (source: {0}, target: {1})", 16026, 400) },
     },
     matchmaking: {
         get unknownSession() { return new ApiError('errors.com.neoniteDev.matchmaking.unknownSession', "unknown session id", 12101, 404) },

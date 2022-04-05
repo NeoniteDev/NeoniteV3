@@ -4,21 +4,17 @@ import * as dotenv from 'dotenv'
 import { XmppApi } from './types/responses';
 
 
-if (!process.env.xmppAdminUser || !process.env.xmppAdminPassword) {
+if (!process.env.xmppToken) {
     throw new Error('Missing xmppAdminUser or/and xmppAdminPassword in the env');
 }
 
-const AdminUser = process.env.xmppAdminUser;
-const AdminPass = process.env.xmppAdminPassword;
+const XmppApiToken = process.env.xmppToken;
 
 const client = axios.create(
     {
-        auth: {
-            username: AdminUser,
-            password: AdminPass
-        },
         headers: {
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Authorization': XmppApiToken
         }
     }
 )

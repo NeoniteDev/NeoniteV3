@@ -68,7 +68,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
         case 'client_credentials':
             {
                 const token = crypto.randomUUID().replace(/-/g, '');
-                const expires = new Date().addHours(4);
+                const expires = new Date().addHours(1); // only one hours since we don't support killing them.
                 const expiteIn = expires.getTime() - Date.now();
                 const expireInSec = Math.floor(expiteIn / 1000);
 
@@ -89,6 +89,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
                     }
                 );
 
+                /* who cares about revoking client tokens....
                 await tokens.add(
                     {
                         auth_method: grant_type,
@@ -98,7 +99,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
                         internal: true,
                         token: token,
                     }
-                );
+                );*/
 
                 res.json(
                     {
@@ -110,7 +111,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
                         internal_client: true,
                         client_service: 'fortnite'
                     }
-                )
+                );
 
                 return;
             }
@@ -289,7 +290,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
         },
         jwtSecret,
         {
-            expiresIn: expireIn,
+            expiresIn: Math.floor(expireIn / 1000),
             jwtid: access_token
         }
     );
@@ -303,7 +304,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
         },
         jwtSecret,
         {
-            expiresIn: refreshExpireIn,
+            expiresIn: Math.floor(refreshExpireIn / 1000),
             jwtid: refresh_token
         }
     );

@@ -1,0 +1,93 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "itemIds": [
+                "1c71f661-0d49-4322-aafe-b03a7b2b5652"
+            ],
+            "itemFavStatus": [
+                true,
+                "true"
+            ]
+        }
+    ],
+    "required": [
+        "itemIds",
+        "itemFavStatus"
+    ],
+    "properties": {
+        "itemIds": {
+            "$id": "#/properties/itemIds",
+            "type": "array",
+            "title": "The itemIds schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    "1c71f661-0d49-4322-aafe-b03a7b2b5652"
+                ]
+            ],
+            "additionalItems": true,
+            "items": {
+                "$id": "#/properties/itemIds/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/itemIds/items/anyOf/0",
+                        "type": "string",
+                        "title": "The first anyOf schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": "",
+                        "examples": [
+                            "1c71f661-0d49-4322-aafe-b03a7b2b5652"
+                        ]
+                    }
+                ]
+            }
+        },
+        "itemFavStatus": {
+            "$id": "#/properties/itemFavStatus",
+            "type": "array",
+            "title": "The itemFavStatus schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    true,
+                    "true"
+                ]
+            ],
+            "additionalItems": true,
+            "items": {
+                "$id": "#/properties/itemFavStatus/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/itemFavStatus/items/anyOf/0",
+                        "type": "boolean",
+                        "title": "The first anyOf schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": false,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    {
+                        "$id": "#/properties/itemFavStatus/items/anyOf/1",
+                        "type": "string",
+                        "title": "The second anyOf schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": "",
+                        "examples": [
+                            "true"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "additionalProperties": true
+}

@@ -69,6 +69,8 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
     const baseRevision = useCommandRevision ? profile.commandRevision : profile.rvn;
     const clientRevision = useCommandRevision ? clientCmdRvn : config.revision;
 
+    console.log(useCommandRevision, baseRevision, clientRevision)
+
     const bIsUpToDate = baseRevision == clientRevision;
 
     const response: mcpResponse = {
@@ -102,7 +104,7 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
     }
 
 
-    const slotIndex = config.body.slotIndex != undefined ? config.body.slotIndex : 0;
+    const slotIndex = config.body.slotIndex !== undefined ? config.body.slotIndex : 0;
     const itemToSlot = config.body.itemToSlot || null;
 
     var slot: types.Category | undefined = lockerItem.attributes.locker_slots_data.slots[config.body.category];
@@ -117,9 +119,13 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
             }
         }
 
-        slot.items[slotIndex] = config.body.itemToSlot || null;
+        if (slotIndex === -1) {
+            slot.items.fill(config.body.itemToSlot || null);
+        } else {
+            slot.items[slotIndex] = config.body.itemToSlot || null;
+        }
+
         await profile.setItemAttribute(config.body.lockerItem, 'locker_slots_data', lockerItem.attributes.locker_slots_data);
-        await profile.bumpRvn(response);
 
         response.profileChanges.push(
             {
@@ -129,6 +135,10 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
                 attributeValue: lockerItem.attributes.locker_slots_data
             }
         )
+    }
+    
+    if (response.profileChanges.length > 0) {
+        await profile.bumpRvn(response);
     }
 
 

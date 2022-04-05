@@ -712,9 +712,7 @@ export namespace profile {
 
     export interface ItemValue {
         templateId: string;
-        attributes: {
-            [key: string]: any
-        };
+        attributes: ItemAttributes;
         quantity: number;
     }
 
@@ -946,7 +944,7 @@ export namespace profile {
         completion_s18_complete_wrath_escapedtenant_q01_obj0?: number;
         completion_s18_complete_pitstop_stunttraining_q03_obj0?: number;
         completion_s18_complete_dusk_vampirecombat_q01_obj0?: number;
-        locker_slots_data?: LockerSlotsData;
+        locker_slots_data?: any;
         use_count?: number;
         banner_icon_template?: string;
         banner_color_template?: string;
@@ -1205,6 +1203,7 @@ export namespace profile {
         completion_s18_complete_shadowops_impromptutactical_q02_obj0?: number;
         completion_s18_complete_bigmouth_toothache_q03_obj0?: number;
         completion_s18_complete_darkjonesy_spookystory_q03_obj0?: number;
+        [key: string]: any
     }
 
     export type ProfileID =
@@ -1219,7 +1218,7 @@ export namespace profile {
         "metadata" |
         "collection_book_schematics0" |
         "theater0" |
-        "collection_book_people0"
+        "collection_book_people0" | 'collections'
 
     export type Bucket =
         "BR" |
@@ -1236,8 +1235,8 @@ export namespace profile {
         eventName: string;
         eventStart: string;
         eventEnd: string;
-        startActions: StartActions;
-        endActions: EndActions;
+        startActions: any;
+        endActions: any;
         metaData: CompetitiveIdentity;
     }
 
@@ -1246,6 +1245,7 @@ export namespace profile {
         conversions: any[];
         itemsToRemove: ItemsTo[];
         questsToPause: any[];
+
     }
 
     export interface ItemsTo {
@@ -1261,6 +1261,7 @@ export namespace profile {
         conversions: any[];
         itemsToGrant: ItemsTo[];
         questsToUnpause: any[];
+        eventCurrencyToSet: any
     }
 
     export type ItemSeen = boolean | number;
@@ -1343,9 +1344,7 @@ export namespace profile {
 
     export interface Stats {
         templateId?: string;
-        attributes: {
-            [key: string]: any
-        };
+        attributes: Partial<StatsAttributes>
     }
 
     export interface StatsAttributes {
@@ -1388,6 +1387,7 @@ export namespace profile {
         last_match_end_datetime: string;
         last_stw_accolade_transfer_datetime: string;
         active_loadout_index: number;
+        [key: string]: any
     }
 
     export interface CreativeDynamicXP {

@@ -6,6 +6,7 @@ import * as database from '../database/mysqlManager';
 import { fulltokenInfo, tokenInfo, tokenInfoClient } from '../structs/types';
 import tokens from '../database/tokenController';
 import * as flexRateLimit from 'rate-limiter-flexible';
+import { tokenCache } from '../structs/globals';
 
 export async function validateToken(token: string): Promise<tokenInfo | tokenInfoClient | undefined> {
     if (!token.startsWith('eg1~')) {
@@ -26,13 +27,7 @@ export async function validateToken(token: string): Promise<tokenInfo | tokenInf
         throw errors.neoniteDev.authentication.invalidToken.with(token);
     }
 
-    const exist = await tokens.check(decoded.jti);
-
-    if (!exist) {
-        return undefined;
-    }
-
-    return {
+    const token_data: tokenInfo | tokenInfoClient = {
         token: decoded.jti,
         auth_method: decoded.am,
         clientId: decoded.clid,
@@ -43,7 +38,27 @@ export async function validateToken(token: string): Promise<tokenInfo | tokenInf
         account_id: decoded.sub,
         in_app_id: decoded.iai,
         deviceId: decoded.dvid
+    };
+
+    // we don't care about verifing client tokens.
+    if (token_data.auth_method == 'client_credentials') {
+        return token_data;
     }
+    const bIsInCache = tokenCache.has(decoded.jti);
+
+    const exist = bIsInCache || await tokens.check(decoded.jti);
+
+    if (!exist) {
+        return undefined;
+    }
+
+    const cache_ttl = Math.floor(((new Date(token_data.expireAt * 1000).getTime() - Date.now()) / 1000) / 4);
+
+    if (!bIsInCache) {
+        tokenCache.set(decoded.jti, 1, cache_ttl)
+    }
+
+    return token_data;
 }
 
 export interface reqWithAuth extends Omit<Request, 'auth'> {

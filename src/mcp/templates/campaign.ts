@@ -75,7 +75,7 @@ export function handle(accountId: string): types.Profile {
             [randomUUID()]: {
                 templateId: "Quest:achievement_protectthesurvivors",
                 attributes: {
-                    creation_time: new Date(),
+                    creation_time: new Date().toISOString(),
                     level: -1,
                     item_seen: false,
                     playlists: [],
@@ -87,7 +87,7 @@ export function handle(accountId: string): types.Profile {
                     quest_pool: "",
                     quest_state: "Active",
                     bucket: "",
-                    last_state_change_time: new Date(),
+                    last_state_change_time: new Date().toISOString(),
                     challenge_linked_quest_parent: "",
                     max_level_bonus: 0,
                     xp: 0,
@@ -151,7 +151,7 @@ export function handle(accountId: string): types.Profile {
             [randomUUID()]: {
                 templateId: "Quest:homebaseonboarding",
                 attributes: {
-                    creation_time: new Date(),
+                    creation_time: new Date().toISOString(),
                     level: -1,
                     completion_hbonboarding_completezone: 0,
                     item_seen: false,
@@ -163,7 +163,7 @@ export function handle(accountId: string): types.Profile {
                     quest_pool: "",
                     quest_state: "Active",
                     bucket: "",
-                    last_state_change_time: new Date(),
+                    last_state_change_time: new Date().toISOString(),
                     challenge_linked_quest_parent: "",
                     max_level_bonus: 0,
                     completion_hbonboarding_namehomebase: 0,
@@ -177,7 +177,7 @@ export function handle(accountId: string): types.Profile {
             [randomUUID()]: {
                 templateId: "Quest:achievement_craftfirstweapon",
                 attributes: {
-                    creation_time: new Date(),
+                    creation_time: new Date().toISOString(),
                     completion_custom_craftfirstweapon: 0,
                     level: -1,
                     item_seen: false,
@@ -189,7 +189,7 @@ export function handle(accountId: string): types.Profile {
                     quest_pool: "",
                     quest_state: "Active",
                     bucket: "",
-                    last_state_change_time: new Date(),
+                    last_state_change_time: new Date().toISOString(),
                     challenge_linked_quest_parent: "",
                     max_level_bonus: 0,
                     xp: 0,
@@ -300,7 +300,10 @@ export function handle(accountId: string): types.Profile {
                 ],
                 collection_book: {},
                 mfa_reward_claimed: false,
-                quest_manager: {},
+                quest_manager: {
+                    dailyLoginInterval: new Date().toISOString(),
+                    dailyQuestRerolls: 0
+                },
                 legacy_research_points_spent: 0,
                 gameplay_stats: [],
                 permissions: [],
@@ -319,7 +322,8 @@ export function handle(accountId: string): types.Profile {
                 daily_rewards: {},
                 xp: 0,
                 packs_granted: 0,
-                active_loadout_index: 0
+                active_loadout_index: 0,
+                
             }
         },
         commandRevision: 3

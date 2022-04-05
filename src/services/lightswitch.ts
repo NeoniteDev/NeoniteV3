@@ -5,16 +5,19 @@ import { HttpError } from 'http-errors';
 import Users, { User } from "../database/usersController";
 import VerifyAuthorization, { reqWithAuth, reqWithAuthMulti } from "../middlewares/authorization";
 import verifyMethod from '../middlewares/Method'
+import { isOperational } from "../database/mysqlManager";
 
 const app = Router();
 
 
-app.get('/api/service/bulk/status', VerifyAuthorization(true), (req: reqWithAuthMulti, res) => {
+app.get('/api/service/bulk/status', VerifyAuthorization(true), async (req: reqWithAuthMulti, res) => {
     //adds serviceId based on what the game feeds it, if undefined defaults to fortnite
 
     const services = new Array(req.query.serviceId);
 
     var bIsAccount = req.auth.auth_method != 'client_credentials';
+
+    const bDatabaseOperational = await isOperational();
 
     res.json(
         services.filter(x => typeof x == 'string').map(
@@ -22,8 +25,8 @@ app.get('/api/service/bulk/status', VerifyAuthorization(true), (req: reqWithAuth
             (x: String) => {
                 return {
                     serviceInstanceId: x,
-                    status: "UP",
-                    message: "Neonite is UP",
+                    status: bDatabaseOperational ? "UP" : "DOWN",
+                    message: `Neonite is ${bDatabaseOperational ? "UP" : "down due to database problem"}`,
                     maintenanceUri: "https://dsc.gg/neonite",
                     overrideCatalogIds: x.toLowerCase() == "fortnite" ? [
                         "a7f138b2e51945ffbfdacc1af0541053"
@@ -44,15 +47,17 @@ app.get('/api/service/bulk/status', VerifyAuthorization(true), (req: reqWithAuth
     );
 });
 
-app.get("/api/service/:serviceId/status", VerifyAuthorization(true), (req: reqWithAuthMulti, res) => {
+app.get("/api/service/:serviceId/status", VerifyAuthorization(true), async (req: reqWithAuthMulti, res) => {
     const serviceId = req.params.serviceId.toLowerCase();
     var bIsAccount = req.auth.auth_method != 'client_credentials';
+
+    const bDatabaseOperational = await isOperational();
 
     res.json(
         {
             serviceInstanceId: serviceId,
-            status: "UP",
-            message: "Neonite is UP",
+            status: bDatabaseOperational ? "UP" : "DOWN",
+            message: `Neonite is ${bDatabaseOperational ? "UP" : "down due to database problem"}`,
             maintenanceUri: "https://dsc.gg/neonite",
             overrideCatalogIds: serviceId == "fortnite" ? [
                 "a7f138b2e51945ffbfdacc1af0541053"

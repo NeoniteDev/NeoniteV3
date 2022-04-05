@@ -1,4 +1,4 @@
-import { mcpResponse, Handleparams, CatalogPurchase } from '../operations'
+import { mcpResponse, Handleparams, CatalogPurchase, multiUpdate } from '../operations'
 import { Profile, ensureProfileExist } from '../profile'
 import errors from '../../structs/errors'
 import * as Path from 'path';
@@ -6,6 +6,8 @@ import { validate, ValidationError } from 'jsonschema';
 import * as fs from 'fs'
 import { getCatalog } from '../../online';
 import pendingPurchases from '../../database/purchasesController';
+import { profile } from '../../structs/types';
+import * as crypto from 'crypto';
 
 const schemaPath = Path.join(__dirname, '../../../resources/schemas/mcp/json/VerifyRealMoneyPurchase.json');
 
@@ -18,13 +20,13 @@ export const supportedProfiles = [
 
 interface body {
     appStore: "EpicPurchasingService",
-    appStoreId: symbol,
-    "receiptId": "EntitlementId",
-    "receiptInfo": symbol,
-    "purchaseCorrelationId": "E9158CCB4A589A32F55581B80C8825BB"
+    appStoreId: string,
+    receiptId: string,
+    receiptInfo: string,
+    "purchaseCorrelationId": string
 }
 
-export async function handle(config: Handleparams): Promise<mcpResponse> {
+export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
     const existOrCreated = await ensureProfileExist(config.profileId, config.accountId);
 
     if (!existOrCreated) {
@@ -68,30 +70,187 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
         throw errors.neoniteDev.internal.validationFailed.withMessage(`Validation Failed. Invalid fields were [${invalidFields}]`).with(`[${invalidFields}]`)
     }
 
-    const pendingPurchase = await pendingPurchases.getAll({ accountId: config.accountId });
-
     const catalog = await getCatalog();
 
-    if (catalog) {
-       /* const Flatcatalog = catalog.storefronts.flatMap((x) => x.catalogEntries)
+    if (!catalog) {
+        if (!bIsUpToDate) {
+            response.profileChanges = [
+                {
+                    changeType: 'fullProfileUpdate',
+                    profile: await profile.getFullProfile()
+                }
+            ]
+        }
 
-        const purchases = pendingPurchase.map((x) => {
-            var catalogItems = x.offers.map(offId =>
-                Flatcatalog.find(y => y.appStoreId.includes(offId))
-            );
-    
-            const fulfillmentIds = catalogItems
-                .filter(x => x.requirements.length == 1 && x.requirements[0].requirementType == 'DenyOnFulfillment')
-                .map(x => {
-                    return x.requirements[0].requiredId;
-                });
-    
-            return {
-                fulfillments: fulfillmentIds,
-                receipt: x.receiptId,
-                catalogItems: catalogItems
-            };
-        })*/
+        return response;
+    }
+
+
+    const catalogToOffer = catalog.storefronts.find(catalog => catalog.catalogEntries.find(x => x.appStoreId.includes(config.body.appStoreId)));
+
+    if (!catalogToOffer) {
+        throw errors.neoniteDev.mcp.catalogOutOfDate.with(config.body.appStoreId);
+    }
+
+    const offer = catalogToOffer.catalogEntries.find(x => x.appStoreId.includes(config.body.appStoreId));
+
+    if (!offer) {
+        throw errors.neoniteDev.mcp.catalogOutOfDate.with(config.body.appStoreId);
+    }
+
+
+    const athenaProfile = new Profile('athena', config.accountId);
+    await athenaProfile.init();
+
+    const athenaResponse: multiUpdate = {
+        "profileRevision": profile.rvn,
+        "profileId": config.profileId,
+        "profileChangesBaseRevision": profile.rvn,
+        "profileChanges": [],
+        "notifications": [],
+        "profileCommandRevision": profile.commandRevision
+    }
+
+    if (catalogToOffer.name == 'CurrencyStorefront') {
+        if (!offer.metaInfo) {
+            throw errors.neoniteDev.mcp.catalogOutOfDate;
+        }
+
+        const MtxQuantity = offer.metaInfo.find(x => x.key == 'MtxQuantity')?.value;
+        const MtxBonus = offer.metaInfo.find(x => x.key == 'MtxBonus')?.value;
+
+        if (!MtxQuantity) {
+            throw errors.neoniteDev.mcp.catalogOutOfDate;
+        }
+
+
+        let MtxTotal = parseInt(MtxQuantity)
+
+        if (isNaN(MtxTotal)) {
+            throw errors.neoniteDev.mcp.catalogOutOfDate;
+        }
+
+        if (MtxBonus) {
+            let NanPossibleMtxBonus = parseInt(MtxBonus);
+
+            if (!isNaN(NanPossibleMtxBonus)) {
+                MtxTotal += NanPossibleMtxBonus;
+            }
+        }
+
+        const itemId = crypto.randomUUID();
+        const itemValue = {
+            attributes: {
+                platform: "EpicPC"
+            },
+            quantity: MtxTotal,
+            templateId: "Currency:MtxPurchased"
+        };
+
+        profile.addItem(
+            itemId,
+            itemValue
+        );
+
+        response.profileChanges.push(
+            {
+                changeType: 'itemAdded',
+                item: itemValue,
+                itemId
+            }
+        );
+
+        response.notifications = [
+            {
+                primary: true,
+                type: 'CatalogPurchase',
+                lootResult: {
+                    items: [
+                        {
+                            itemGuid: itemId,
+                            itemProfile: 'common_core',
+                            itemType: "Currency:MtxPurchased",
+                            quantity: MtxTotal
+                        }
+                    ]
+                }
+            }
+        ];
+    } else {
+        response.notifications = [
+            {
+                primary: true,
+                type: 'CatalogPurchase',
+                lootResult: {
+                    items: offer.itemGrants.map(item => {
+                        const profileId = item.templateId.startsWith('Athena') ? 'athena' : 'common_core';
+                        const itemId = crypto.randomUUID();
+
+                        if (profileId == 'athena') {
+                            const itemData = {
+                                attributes: {
+                                    level: 1,
+                                    item_seen: false,
+                                    rnd_sel_cnt: 0,
+                                    favorite: false,
+                                    creation_time: new Date().toISOString(),
+                                    ...item.attributes
+                                },
+                                quantity: item.quantity,
+                                templateId: item.templateId
+                            };
+
+                            athenaProfile.addItem(itemId, itemData);
+                            athenaResponse.profileChanges.push(
+                                {
+                                    changeType: 'itemAdded',
+                                    item: itemData,
+                                    itemId: itemId
+                                }
+                            );
+                        } else {
+                            const itemData = {
+                                attributes: {
+                                    level: 1,
+                                    item_seen: false,
+                                    rnd_sel_cnt: 0,
+                                    favorite: false,
+                                    creation_time: new Date().toISOString(),
+                                    ...item.attributes
+                                },
+                                quantity: item.quantity,
+                                templateId: item.templateId
+                            };
+
+                            profile.addItem(itemId, itemData);
+                            response.profileChanges.push(
+                                {
+                                    changeType: 'itemAdded',
+                                    item: itemData,
+                                    itemId: itemId
+                                }
+                            );
+                        }
+
+                        return {
+                            itemGuid: itemId,
+                            itemProfile: profileId,
+                            itemType: item.templateId,
+                            quantity: item.quantity
+                        }
+                    })
+                }
+            }
+        ];
+    }
+
+    if (response.profileChanges.length > 0) {
+        await profile.bumpRvn(response);
+    }
+
+    if (athenaResponse.profileChanges.length > 0) {
+        await athenaProfile.bumpRvn(athenaResponse);
+        response.multiUpdate = [ athenaResponse ];
     }
 
     if (!bIsUpToDate) {

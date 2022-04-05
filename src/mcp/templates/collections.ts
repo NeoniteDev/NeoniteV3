@@ -10,7 +10,7 @@ export function handle(accountId: string): types.Profile {
         rvn: 1,
         wipeNumber: 1,
         accountId: accountId,
-        profileId: 'creative',
+        profileId: 'collections',
         version: 'fix_empty_users_again_july_2019',
         items: {},
         stats: {

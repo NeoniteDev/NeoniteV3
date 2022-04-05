@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Profiles (
-    accountId varchar(32),
+    accountId varchar(32) PRIMARY KEY,
     athena LONGTEXT,
     campaign LONGTEXT,
     collections LONGTEXT,

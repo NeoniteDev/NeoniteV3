@@ -1,4 +1,4 @@
-import { mcpResponse, Handleparams } from '../operations'
+import { mcpResponse, Handleparams, multiUpdate } from '../operations'
 import { Profile, ensureProfileExist } from '../profile'
 import { profile as types } from '../../structs/types';
 import errors from '../../structs/errors'
@@ -70,8 +70,6 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
         throw errors.neoniteDev.internal.validationFailed.withMessage(`Validation Failed. Invalid fields were [${invalidFields}]`).with(`[${invalidFields}]`)
     }
 
-    const itemId = randomUUID();
-
     const catalog = await getCatalog();
 
     if (!catalog) {
@@ -100,6 +98,18 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
             .with(`mcp.operations.${config.command}.ts`, `[${validCurrencyType.join(', ')}]`);
     };
 
+    const athenaProfile = new Profile('athena', config.accountId);
+    await athenaProfile.init();
+
+    const athenaResponse: multiUpdate = {
+        "profileRevision": profile.rvn,
+        "profileId": config.profileId,
+        "profileChangesBaseRevision": profile.rvn,
+        "profileChanges": [],
+        "notifications": [],
+        "profileCommandRevision": profile.commandRevision
+    }
+
 
     if (config.body.currency == 'RealMoney') {
         throw errors.neoniteDev.mcp.invalidParameter.withMessage('PurchaseCatalogEntry cannot be used for RealMoney prices. Use VerifyRealMoneyPurchase flow instead.');
@@ -122,26 +132,14 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
             .with(config.body.expectedTotalPrice.toString(), price.finalPrice.toString());
     }
 
-
-    const fullProfile = await profile.getFullProfile();
-    const currencyItems = Object.values(fullProfile.items).filter(x => x.templateId.toLowerCase().startsWith('currency'));
-    const totalCurrency = currencyItems.map(x => x.quantity).reduce((a, b) => a + b, 0);
-
-    if (totalCurrency < price.finalPrice) {
-        throw errors.neoniteDev.mcp.notEnoughMtx.with(item.devName, price.finalPrice.toString(), totalCurrency.toString());
-    }
-/* TODO: remove vbucks
-    if (price.finalPrice > 0) {
-        currencyItems.reduce()
-    }*/
-
     const lootResultItems = item.itemGrants.map(x => {
+        const profileId = x.templateId.startsWith('Athena') ? 'athena' : 'common_core';
         const id = randomUUID();
 
-        fullProfile.items[id] = {
+        const item = {
             templateId: x.templateId,
             attributes: {
-                creation_time: new Date(),
+                creation_time: new Date().toISOString(),
                 max_level_bonus: 0,
                 level: 1,
                 item_seen: false,
@@ -153,11 +151,39 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
             },
             quantity: x.quantity
         }
-        
+
+        if (profileId == 'athena') {
+            athenaResponse.profileChanges.push(
+                {
+                    changeType: 'itemAdded',
+                    item: item,
+                    itemId: id
+                }
+            );
+
+            athenaProfile.addItem(
+                id,
+                item
+            );
+        } else {
+            response.profileChanges.push(
+                {
+                    changeType: 'itemAdded',
+                    item: item,
+                    itemId: id
+                }
+            );
+
+            profile.addItem(
+                id,
+                item
+            );
+        }
+
         return {
             itemType: x.templateId,
             itemGuid: id,
-            itemProfile: x.templateId.startsWith('HomebaseBanner') ? 'common_core' : 'athena',
+            itemProfile: profileId,
             quantity: x.quantity
         }
     });
@@ -167,20 +193,26 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
             type: 'CatalogPurchase',
             primary: true,
             lootResult: {
-                items: lootResultItems 
+                items: lootResultItems
             }
         }
     ];
 
 
+   // if (response.profileChanges.length > 0) {
+        await profile.bumpRvn(response);
+    //}
 
-    await profiles.set(config.profileId, config.accountId, fullProfile);
+    if (athenaResponse.profileChanges.length > 0) {
+        await athenaProfile.bumpRvn(athenaResponse);
+        response.multiUpdate = [athenaResponse];
+    }
 
     if (!bIsUpToDate) {
         response.profileChanges = [
             {
                 changeType: 'fullProfileUpdate',
-                profile: fullProfile
+                profile: await profile.getFullProfile()
             }
         ]
     }

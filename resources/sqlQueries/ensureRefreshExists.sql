@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS refresh_tokens (
-    token varchar(32) not null , 
+    token varchar(32) not null PRIMARY KEY, 
     clientId varchar(32) not null,
     auth_method varchar(50) not null,
     internal INT not null,

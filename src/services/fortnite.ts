@@ -7,7 +7,7 @@ import axios from 'axios';
 import validateMethod from '../middlewares/Method';
 import * as cookieParser from 'cookie-parser';
 import * as multiparty from 'multiparty';
-import verifyAuthorization from '../middlewares/authorization';
+import verifyAuthorization, { reqWithAuth } from '../middlewares/authorization';
 import errors, { ApiError, neoniteDev } from '../structs/errors';
 import * as online from '../online';
 import { MMSpayload, TimelineSaved } from '../structs/types';
@@ -20,6 +20,7 @@ import * as xmppApi from '../xmppManager';
 import users from '../database/usersController';
 import * as path from 'path';
 import * as jwt from 'jsonwebtoken';
+import SavedSettings from '../database/saveGameController';
 
 const app = Router();
 
@@ -82,7 +83,8 @@ app.use(profiles)
 
 
 app.get('/api/cloudstorage/system/config', verifyAuthorization(true), async (req, res) => {
-    return res.status(404).send();
+    return res.status(404).end();
+
     res.json(
         {
             lastUpdated: '2022-01-19T01:20:39.963Z',
@@ -191,97 +193,125 @@ app.get('/api/cloudstorage/system/:filename', verifyAuthorization(true), (req, r
     }
 });
 
+app.get('/api/cloudstorage/user/config', verifyAuthorization(true), async (req, res) => {
+    return res.status(404).end();
+    res.json(
+        {
+            lastUpdated: '2022-01-19T01:20:39.963Z',
+            disableV2: false,
+            isAuthenticated: req.auth.in_app_id != undefined,
+            enumerateFilesPath: '/api/cloudstorage/system',
+            transports: {
+                McpProxyTransport: {
+                    name: 'McpProxyTransport',
+                    type: 'ProxyStreamingFile',
+                    appName: 'fortnite',
+                    isEnabled: false,
+                    isRequired: false,
+                    isPrimary: false,
+                    timeoutSeconds: 10,
+                    priority: 20
+                },
+                McpSignatoryTransport: {
+                    name: 'McpSignatoryTransport',
+                    type: 'ProxySignatory',
+                    appName: 'fortnite',
+                    isEnabled: false,
+                    isRequired: false,
+                    isPrimary: false,
+                    timeoutSeconds: 10,
+                    priority: 10
+                },
+                DssDirectTransport: {
+                    name: 'DssDirectTransport',
+                    type: 'DirectDss',
+                    appName: 'fortnite',
+                    isEnabled: true,
+                    isRequired: false,
+                    isPrimary: true,
+                    timeoutSeconds: 10,
+                    priority: 1
+                }
+            }
+        }
+    );
+});
+
 /**
  * Thanks to @link https://github.com/GMatrixGames for ClientSettings.Sav saving
  */
-app.get('/api/cloudstorage/user/:accountId', verifyAuthorization(), (req, res) => {
+app.get('/api/cloudstorage/user/:accountId', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
 
-    const dirPath = Path.join(settingsPath, req.auth.account_id)
-
-    if (!fs.existsSync(dirPath)) {
-        return res.json([])
-    }
-
-    const files = fs.readdirSync(dirPath);
+    const files = await SavedSettings.getFilesNames(req.params.accountId);
 
     res.json(
-        files.filter(
-            x => {
-                var stringCL = x.split('-').pop()?.replace('.Sav', '');
-                if (!stringCL) { return false; }
-                return parseInt(stringCL) == req.clientInfos.CL
-            }
-        ).map(
+        files.map(
             (file) => {
-                const fileName = file.split('-').shift() + '.Sav';
-                const filePath = Path.join(dirPath, file)
-                const fileData = fs.readFileSync(filePath);
-
                 return {
-                    uniqueFilename: fileName,
-                    filename: fileName,
-                    hash: crypto.createHash('sha1').update(fileData).digest('hex'),
-                    hash256: crypto.createHash('sha256').update(fileData).digest('hex'),
-                    length: fileData.length,
+                    uniqueFilename: file.fileName,
+                    filename: file.fileName,
+                    hash: file.sha1,
+                    hash256: file.sha256,
+                    length: file.length,
                     contentType: 'application/octet-stream',
-                    uploaded: fs.statSync(filePath).mtime,
+                    uploaded: file.uploaded,
                     storageType: 'S3',
                     accountId: req.auth.account_id,
                     doNotCache: true
                 }
             }
         )
-    )
+    );
 });
 
-app.get('/api/cloudstorage/user/:accountId/:filename', verifyAuthorization(), (req, res) => {
+const allowedSaveFileNames = [
+    'ClientSettingsXboxOne.Sav',
+    'ClientSettingsMac.Sav',
+    'ClientSettingsIOS.Sav',
+    'ClientSettingsPS4.Sav',
+    'ClientSettingsLinux.Sav',
+    'ClientSettingsAndroid.Sav',
+    'ClientSettings.Sav'
+];
+
+app.get('/api/cloudstorage/user/:accountId/:filename', verifyAuthorization(), async (req: reqWithAuth, res) => {
     if (req.params.accountId != req.auth.in_app_id) {
-        throw neoniteDev.authentication.notYourAccount;
+        throw errors.neoniteDev.authentication.notYourAccount;
     }
 
-    var dirPath = Path.join(settingsPath, req.auth.in_app_id)
-
-    if (Path.parse(dirPath).dir != settingsPath || !fs.existsSync(dirPath)) {
-        throw neoniteDev.cloudstorage.fileNotFound
-            .withMessage(`Sorry, we couldn't find a user file for ${req.params.filename}`)
-            .with(req.params.filename)
+    if (!allowedSaveFileNames.includes(req.params.filename)) {
+        throw errors.neoniteDev.cloudstorage.fileNotFound
+            .withMessage(`Sorry, we couldn't find a file ${req.params.filename} for account ${req.params.accountId}`)
+            .with(req.params.filename, req.params.accountId)
     }
 
-    var filePath = Path.join(dirPath, `${req.params.filename.replace(/.Sav$/i, '')}-${req.clientInfos.CL}.Sav`)
+    const file = await SavedSettings.get(req.params.accountId, req.params.filename);
 
-    if (Path.parse(filePath).dir !== dirPath || !fs.existsSync(filePath)) {
-        throw neoniteDev.cloudstorage.fileNotFound
-            .withMessage(`Sorry, we couldn't find a user file for ${req.params.filename}`)
-            .with(req.params.filename)
-    }
+    if (!file) {
+        throw errors.neoniteDev.cloudstorage.fileNotFound
+            .withMessage(`Sorry, we couldn't find a file ${req.params.filename} for account ${req.params.accountId}`)
+            .with(req.params.filename, req.params.accountId)
+    };
 
     res.set('content-type', 'application/octet-stream')
-    res.sendFile(filePath);
+    res.send(Buffer.from(file.content, 'base64'));
 });
 
-app.put('/api/cloudstorage/user/:accountId/:filename', verifyAuthorization(), (req, res) => {
+app.put('/api/cloudstorage/user/:accountId/:filename', verifyAuthorization(), async (req: reqWithAuth, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
 
-    var dirPath = Path.join(settingsPath, req.auth.in_app_id)
+    if (!allowedSaveFileNames.includes(req.params.filename)) {
+        throw errors.neoniteDev.mcp.missingPermission
+            .with(`fortnite:cloudstorage:user:${req.params.accountId}:${req.params.filename}`, 'UPDATE')
+    };
 
-    if (Path.parse(dirPath).dir != settingsPath || !fs.existsSync(dirPath)) {
-        throw neoniteDev.cloudstorage.fileNotFound
-            .withMessage(`Sorry, we couldn't find a user file for ${req.params.filename}`)
-            .with(req.params.filename)
-    }
-
-    var filePath = Path.join(dirPath, `${req.params.filename.split('.').shift()}-${req.clientInfos.CL}.Sav`);
-
-
-    if (Path.parse(filePath).dir !== dirPath || !fs.existsSync(filePath)) {
-        throw neoniteDev.cloudstorage.fileNotFound
-            .withMessage(`Sorry, we couldn't find a user file for ${req.params.filename}`)
-            .with(req.params.filename)
+    if (parseInt(req.get('Content-Length') || '') > 256000) {
+        throw errors.neoniteDev.cloudstorage.fileTooLarge;
     }
 
     const arrayBuffer: Array<any> = [];
@@ -290,15 +320,51 @@ app.put('/api/cloudstorage/user/:accountId/:filename', verifyAuthorization(), (r
         arrayBuffer.push(Buffer.from(chunk, 'binary'))
     })
 
-    req.on('end', function () {
-        if (!fs.existsSync(dirPath)) {
-            fs.mkdirSync(dirPath)
+    req.on('end', async function () {
+        const data = Buffer.concat(arrayBuffer);
+
+        const file = await SavedSettings.get(req.params.accountId, req.params.filename);
+
+        if (data.length > 256000) {
+            throw errors.neoniteDev.cloudstorage.fileTooLarge;
         }
 
-        fs.writeFileSync(filePath, Buffer.concat(arrayBuffer), 'binary');
+        if (!file) {
+            await SavedSettings.add(
+                req.params.accountId, req.params.filename,
+                data.toString('base64'),
+                crypto.createHash('sha256').update(data).digest('hex'),
+                crypto.createHash('sha1').update(data).digest('hex'),
+                data.length
+            )
 
-        res.status(204).end();
+            res.send(req.params.filename);
+        } else {
+            await SavedSettings.set(
+                req.params.accountId, req.params.filename,
+                data.toString('base64'),
+                crypto.createHash('sha256').update(data).digest('hex'),
+                crypto.createHash('sha1').update(data).digest('hex'),
+                data.length
+            )
+
+            res.status(204).end();
+        }
     });
+});
+
+app.delete('/api/cloudstorage/user/:accountId/:filename', verifyAuthorization(), async (req: reqWithAuth, res) => {
+    if (req.params.accountId != req.auth.account_id) {
+        throw neoniteDev.authentication.notYourAccount;
+    }
+
+    if (!allowedSaveFileNames.includes(req.params.filename)) {
+        throw errors.neoniteDev.mcp.missingPermission
+            .with(`fortnite:cloudstorage:user:${req.params.accountId}:${req.params.filename}`, 'DELETE')
+    };
+
+    await SavedSettings.remove(req.params.accountId, req.params.filename);
+    res.status(204).end();
 });
 
 app.get('/api/game/v2/friendcodes/:accountId/epic', verifyAuthorization(), (req, res) => {
@@ -1223,6 +1289,91 @@ app.post('/api/game/v2/chat/:accountId/recommendGeneralChatRooms/:type/:platform
         }
     );
     //throw errors.neoniteDev.mcp.invalidChatRequest.withMessage('Recommendations no longer supported!');
+})
+
+app.get('/api/game/v2/homebase/allowed-name-chars', verifyAuthorization(true), (req, res) => {
+    res.json(
+        {
+            "ranges": [
+                48,
+                57,
+                65,
+                90,
+                97,
+                122,
+                192,
+                255,
+                260,
+                265,
+                280,
+                281,
+                286,
+                287,
+                304,
+                305,
+                321,
+                324,
+                346,
+                347,
+                350,
+                351,
+                377,
+                380,
+                1024,
+                1279,
+                1536,
+                1791,
+                4352,
+                4607,
+                11904,
+                12031,
+                12288,
+                12351,
+                12352,
+                12543,
+                12592,
+                12687,
+                12800,
+                13055,
+                13056,
+                13311,
+                13312,
+                19903,
+                19968,
+                40959,
+                43360,
+                43391,
+                44032,
+                55215,
+                55216,
+                55295,
+                63744,
+                64255,
+                65072,
+                65103,
+                65281,
+                65470,
+                131072,
+                173791,
+                194560,
+                195103
+            ],
+            "singlePoints": [
+                32,
+                39,
+                45,
+                46,
+                95,
+                126
+            ],
+            "excludedPoints": [
+                208,
+                215,
+                222,
+                247
+            ]
+        }
+    );
 })
 
 app.get('/api/stats/accountId/:accountId/bulk/window/alltime', verifyAuthorization(), (req, res) => {

@@ -110,7 +110,7 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
             const rewardItem = {
                 templateId: NodeRewardTemplateId,
                 attributes: {
-                    "creation_time": new Date(),
+                    "creation_time": new Date().toISOString(),
                     "max_level_bonus": 0,
                     "level": 1,
                     "item_seen": false,
@@ -125,7 +125,7 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
             if (isCommonCoreReward) {
                 const common_core = new Profile('common_core', config.accountId);
 
-                Element
+                
                 const common_core_response: multiUpdate = {
                     "profileRevision": common_core.rvn,
                     "profileId": "common_core",

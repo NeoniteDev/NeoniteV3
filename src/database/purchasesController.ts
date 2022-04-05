@@ -1,11 +1,12 @@
 import { query } from "./mysqlManager";
 import * as types from '../structs/types';
 import { escape } from 'mysql';
+import { xml } from "@xmpp/client";
 
 namespace pendingPurchases {
     interface purchase {
         purchaseToken: string,
-        offers: string[],
+        offers: string,
         accountId: string,
         ip_hash: string,
         receiptId: string
@@ -13,45 +14,15 @@ namespace pendingPurchases {
 
     const allowed = ['purchaseToken', 'offers', 'accountId', 'ip_hash', 'receiptId']
 
-    type dbpruchase = Omit<purchase, 'offers'> & { offers: string };
+    type dbpruchase = purchase;
 
-    export async function getAll(value: Partial<Omit<purchase, 'offers'>>): Promise<purchase[]> {
-        const entries = Object.entries(value);
-
-        // @ts-ignore
-        if (value.offers) {
-            return [];
-        }
-
-        if (entries.length <= 0) {
-            return [];
-        }
-
-        if (entries.map(x => x[0]).find(x => !allowed.includes(x))) {
-            return [];
-        }
-
-        if ('accountId' in value && typeof value.accountId != 'string' ||
-            'ip_hash' in value && typeof value.ip_hash != 'string' ||
-            'purchaseToken' in value && typeof value.purchaseToken != 'string' ||
-            'receiptId' in value && typeof value.receiptId != 'string'
-        ) {
-            return [];
-        }
+    export async function getAll(accountId: string): Promise<purchase[]> {
+        const purchases = await query<dbpruchase>(`SELECT * FROM purchases WHERE accountId = ?`, [ accountId ]);
 
 
-        const contions = entries.map(([key, value]) => `\`${key}\` = ${escape(value)}`).join(' AND ');
-
-        const purchases = await query<dbpruchase>(`SELECT * FROM purchases WHERE ${contions}`);
-
-
-        return purchases.map((x) => {
-            return {
-                ...x,
-                offers: JSON.parse(x.offers)
-            }
-        });
+        return purchases;
     }
+    /*
     export async function get(value: Partial<Omit<purchase, 'offers'>>): Promise<purchase | undefined> {
         // @ts-ignore
         if (value.offers) {
@@ -60,7 +31,7 @@ namespace pendingPurchases {
 
         const purchases = await getAll(value);
         return purchases[0];
-    }
+    }*/
 
     /*{
         purchaseToken: string,

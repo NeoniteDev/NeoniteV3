@@ -9,7 +9,7 @@ import * as path from 'path';
 import { profiles } from '../database/profilesController';
 
 export async function ensureProfileExist(profileId: string, accountId: string): Promise<boolean> {
-    var hasProfile = await profiles.has(profileId, accountId);
+    let hasProfile = await profiles.has(profileId, accountId);
 
     if (!hasProfile) {
         const success = await createProfile(profileId, accountId);
@@ -23,7 +23,18 @@ export async function ensureProfileExist(profileId: string, accountId: string): 
 }
 
 const versionsDir = path.join(__dirname, './profileVersions');
+const injectionDir = path.join(__dirname, './injects');
 
+const injections: Record<string, Record<string, types.ItemValue>> = Object.fromEntries(
+    fs.readdirSync(injectionDir).filter(x => x.endsWith('.json')).map(fileName => {
+
+        const data: types.ItemValue[] = JSON.parse(fs.readFileSync(path.join(injectionDir, fileName)));
+        return [
+            fileName.split('.').shift(),
+            Object.fromEntries(data.map(x => [x.templateId, x]))
+        ]
+    })
+);
 
 export class Profile implements Omit<types.Profile, 'items'> {
     constructor(profileId: types.ProfileID, accountId: string) {
@@ -45,8 +56,6 @@ export class Profile implements Omit<types.Profile, 'items'> {
     wipeNumber: number;
     baseRvn: number;
 
-
-
     async init() {
         const infos = await profiles.getInfos(this.profileId, this.accountId);
         if (!infos) {
@@ -61,14 +70,21 @@ export class Profile implements Omit<types.Profile, 'items'> {
         this.updated = infos.updated;
         this.version = infos.version;
         this.wipeNumber = infos.wipeNumber;
-
-
-
-        
     }
 
     getItem(itemId: string): Promise<types.ItemValue | undefined> {
         return profiles.getItem(itemId, this.profileId, this.accountId);
+    }
+
+    async getItems(itemIds: string[]): Promise<Record<string, types.ItemValue>> {
+        if (injections[this.profileId]) {
+            let items = await profiles.getItems(itemIds, this.profileId, this.accountId);
+            const wanted = Object.fromEntries(Object.entries(injections[this.profileId]).filter(x => itemIds.includes(x)));
+            items = mergeDeep(wanted, items);
+            return items;
+        } else {
+            return await profiles.getItems(requested, this.profileId, this.accountId);
+        }
     }
 
     addItem(itemId: string, itemValue: types.ItemValue) {
@@ -83,8 +99,26 @@ export class Profile implements Omit<types.Profile, 'items'> {
         return profiles.setItemAttr(itemId, attributeName, attributeValue, this.profileId, this.accountId);
     }
 
-    getFullProfile(): Promise<types.Profile> {
-        return profiles.get(this.profileId, this.accountId);
+    setMutliItemAttribute(values: { itemId: string, attributeName: string, attributeValue: any }[]) {
+        return profiles.setMutliItemAttr(this.profileId, this.accountId, values);
+    }
+
+    async getFullProfile(): Promise<types.Profile> {
+        const profileData = await profiles.get(this.profileId, this.accountId);
+
+        if (!profileData) {
+            return undefined
+        };
+
+        if (injections[this.profileId]) {
+            profileData.items = mergeDeep(injections[this.profileId], profileData.items)
+        }
+
+        return profileData;
+    }
+
+    setStat(name:string, value:any): Promise<types.Stats> {
+        return profiles.setStat(this.profileId, this.accountId, name, value);
     }
 
     bumpRvn(respone: mcpResponse | mcpResponse['multiUpdate'][0], command = true) {
@@ -92,10 +126,11 @@ export class Profile implements Omit<types.Profile, 'items'> {
         if (command) {
             this.commandRevision++;
         }
+
         respone.profileRevision = this.rvn;
         respone.profileCommandRevision = this.commandRevision;
 
-        return profiles.setRevision(this.rvn, this.profileId, this.accountId);
+        return profiles.setRevision(this.rvn, this.commandRevision, this.profileId, this.accountId);
     }
 }
 
@@ -162,4 +197,26 @@ export async function createProfile(profileId: string, accountId: string) {
     profiles.set(profileId, accountId, profile);
 
     return true;
+}
+
+function isObject(item) {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+function mergeDeep(target, ...sources) {
+    if (!sources.length) return target;
+    const source = sources.shift();
+
+    if (isObject(target) && isObject(source)) {
+        for (const key in source) {
+            if (isObject(source[key])) {
+                if (!target[key]) Object.assign(target, { [key]: {} });
+                mergeDeep(target[key], source[key]);
+            } else {
+                Object.assign(target, { [key]: source[key] });
+            }
+        }
+    }
+
+    return mergeDeep(target, ...sources);
 }

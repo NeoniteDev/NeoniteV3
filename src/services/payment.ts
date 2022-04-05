@@ -28,6 +28,12 @@ app.post('/v1/purchaseToken', verifyAuthorization(), async (req: reqWithAuth, re
 
     await pendingPurchases.add(req.auth.account_id, ipMd5, offers, purchaseToken);
 
+    res.cookie('EPIC_SESSION_PAYMENT_INSTANCE', "_test", {
+        secure: true,
+        httpOnly: true,
+        maxAge: 1800
+    })
+
     res.json(
         {
             purchaseToken: purchaseToken
@@ -38,26 +44,6 @@ app.post('/v1/purchaseToken', verifyAuthorization(), async (req: reqWithAuth, re
 const html = Path.join(__dirname, '../../resources/html/purchase.html');
 const FailureHtml = Path.join(__dirname, '../../resources/html/purchaseFailed.html');
 
-
-app.get('/v1/purchase', async (req, res) => {
-    const ip = req.get('cf-connecting-ip') || req.ip;
-    const md5Ip = crypto.createHash('md5').update(ip).digest("hex");
-
-    const purchase = await pendingPurchases.get({
-        ip_hash: md5Ip
-    })
-
-    if (!purchase) {
-        return res.status(404).sendFile(FailureHtml);
-    }
-
-    res.cookie('x-neonite-purchaseToken', purchase.purchaseToken);
-    res.cookie('x-neonite-accountId', purchase.accountId);
-    res.cookie('x-neonite-offers', JSON.stringify(purchase.offers, undefined, 0));
-
-    res.set('X-Frame-Options', 'SAMEORIGIN')
-    res.sendFile(html);
-})
 
 // custom api
 

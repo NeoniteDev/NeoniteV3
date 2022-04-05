@@ -1,0 +1,52 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "sourceIndex": 0,
+            "targetIndex": 1,
+            "optNewNameForTarget": "PRESET 1"
+        }
+    ],
+    "required": [
+        "sourceIndex",
+        "targetIndex"
+    ],
+    "properties": {
+        "sourceIndex": {
+            "$id": "#/properties/sourceIndex",
+            "type": "integer",
+            "title": "The sourceIndex schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                0
+            ]
+        },
+        "targetIndex": {
+            "$id": "#/properties/targetIndex",
+            "type": "integer",
+            "title": "The targetIndex schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                1
+            ]
+        },
+        "optNewNameForTarget": {
+            "$id": "#/properties/optNewNameForTarget",
+            "type": "string",
+            "title": "The optNewNameForTarget schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "PRESET 1"
+            ]
+        }
+    },
+    "additionalProperties": true
+}

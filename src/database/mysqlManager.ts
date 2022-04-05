@@ -28,18 +28,20 @@ const sqlCache = new nodeCache(
 );
 
 
-function setupDB() {
+async function setupDB() {
     database = mysql.createConnection(dbOptions);
-    database.connect();
+    return await new Promise((resolve, reject) => {
+        database.connect((err?) => err ? reject(err) : resolve(true));
+    })
 }
 
 var database = mysql.createConnection(dbOptions);
 
 database.connect();
 
-setInterval(() => {
+setInterval(async () => {
     if (database.state != 'authenticated' && database.state != 'connected') {
-        return setupDB();
+        await setupDB();
     };
 
     database.ping()
@@ -106,10 +108,14 @@ database.query(
     readFileSync(path.join(queriesDir, 'ensureGameSessionsExist.sql'), 'utf-8')
 )
 
+database.query(
+    readFileSync(path.join(queriesDir, 'ensureSaveGamesExist.sql'), 'utf-8')
+)
 
-export function query<T>(sql: string, values?: any[], ...cacheIgnore: any[]): Promise<T[]> | T[] {
+
+export async function query<T>(sql: string, values?: any[], ...cacheIgnore: any[]): Promise<T[]> {
     if (database.state != 'authenticated' && database.state != 'connected') {
-        setupDB();
+        await setupDB();
     };
 
 
@@ -126,7 +132,7 @@ export function query<T>(sql: string, values?: any[], ...cacheIgnore: any[]): Pr
         }
     }
 
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
         database.query(
             {
                 sql,
@@ -138,11 +144,30 @@ export function query<T>(sql: string, values?: any[], ...cacheIgnore: any[]): Pr
                 if (bIsSelectQuery) {
                     try {
                         sqlCache.set(sqlForCache, result, 5);
-                    } catch {}
+                    } catch { }
                 }
                 resolve(result);
             }
         );
+    })
+}
+
+export async function isOperational(bPing: boolean = false): Promise<boolean> {
+    if (database.state != 'authenticated') {
+        return false;
+    } 
+    else if (!bPing)  {
+        return true;
+    }
+
+    return await new Promise((resolve) => {
+        database.ping((err?) => {
+            if (err) {
+                return resolve(false)
+            }
+
+            return resolve(true);
+        })
     })
 }
 
