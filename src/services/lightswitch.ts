@@ -22,9 +22,9 @@ app.get('/api/service/bulk/status', VerifyAuthorization(true), (req: reqWithAuth
             (x: String) => {
                 return {
                     serviceInstanceId: x,
-                    status: "UP",
-                    message: "Neonite is UP",
-                    maintenanceUri: "https://dsc.gg/neonite",
+                    status: "DOWN",
+                    message: "The beta of neontie v3 has ended, sorry. Me, the project owner, no longer have motivation to work on it. Thanks for participating to the beta! -Beat",
+                    maintenanceUri: "https://www.youtube.com/watch?v=xvFZjo5PgG0",
                     overrideCatalogIds: x.toLowerCase() == "fortnite" ? [
                         "a7f138b2e51945ffbfdacc1af0541053"
                     ] : undefined,
@@ -51,9 +51,9 @@ app.get("/api/service/:serviceId/status", VerifyAuthorization(true), (req: reqWi
     res.json(
         {
             serviceInstanceId: serviceId,
-            status: "UP",
-            message: "Neonite is UP",
-            maintenanceUri: "https://dsc.gg/neonite",
+            status: "DOWN",
+            message: "The beta of neontie v3 has ended, sorry. Me, the project owner, no longer have motivation to work on it. Thanks for participating to the beta! -Beat",
+            maintenanceUri: "https://www.youtube.com/watch?v=xvFZjo5PgG0",
             overrideCatalogIds: serviceId == "fortnite" ? [
                 "a7f138b2e51945ffbfdacc1af0541053"
             ] : [],
