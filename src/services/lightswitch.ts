@@ -54,9 +54,9 @@ app.get("/api/service/:serviceId/status", VerifyAuthorization(true), async (req:
     res.json(
         {
             serviceInstanceId: serviceId,
-            status: bDatabaseOperational ? "UP" : "DOWN",
-            message: `Neonite is ${bDatabaseOperational ? "UP" : "down due to database problem"}`,
-            maintenanceUri: "https://dsc.gg/neonite",
+            status: "UP",
+            message: "Neonite IS UP what did you think",
+            maintenanceUri: "https://www.youtube.com/watch?v=xvFZjo5PgG0",
             overrideCatalogIds: serviceId == "fortnite" ? [
                 "a7f138b2e51945ffbfdacc1af0541053"
             ] : [],
