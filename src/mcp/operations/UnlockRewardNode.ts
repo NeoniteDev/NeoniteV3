@@ -53,29 +53,6 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
     const profile = new Profile(config.profileId, config.accountId);
     await profile.init();
 
-    // since the header is optional
-    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
-        x.profileId == config.profileId
-    )?.clientCommandRevision;
-
-    const useCommandRevision = clientCmdRvn != undefined;
-
-    const baseRevision = useCommandRevision ? profile.commandRevision : profile.rvn;
-    const clientRevision = useCommandRevision ? clientCmdRvn : config.revision;
-
-    const bIsUpToDate = baseRevision == clientRevision;
-
-    const response: mcpResponse = {
-        "profileRevision": profile.rvn,
-        "profileId": config.profileId,
-        "profileChangesBaseRevision": profile.rvn,
-        "profileChanges": [],
-        "serverTime": new Date(),
-        "profileCommandRevision": profile.commandRevision,
-        "responseVersion": 1,
-        "command": config.command,
-    }
-
     const id = config.body.nodeId.split('.');
 
     const result = validate(config.body, schema);
@@ -85,6 +62,8 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
         const invalidFields = validationErrors.map(x => x.argument).join(', ');
         throw errors.neoniteDev.internal.validationFailed.withMessage(`Validation Failed. Invalid fields were [${invalidFields}]`).with(`[${invalidFields}]`)
     }
+
+    const multiUpdates: Profile[] = [];
 
     if (
         typeof config.body.nodeId == 'string' &&
@@ -98,6 +77,7 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
         const rewardGraphId: string = config.body.rewardGraphId;
 
         const RewardGraphItem = await profile.getItem(rewardGraphId);
+
 
         if (
             NodeRewardTemplateId &&
@@ -124,41 +104,10 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
 
             if (isCommonCoreReward) {
                 const common_core = new Profile('common_core', config.accountId);
-
-                
-                const common_core_response: multiUpdate = {
-                    "profileRevision": common_core.rvn,
-                    "profileId": "common_core",
-                    "profileChangesBaseRevision": common_core.rvn,
-                    "profileChanges": [],
-                    "profileCommandRevision": common_core.commandRevision
-                };
-
                 common_core.addItem(rewardUUID, rewardItem);
-
-                common_core_response.profileChanges.push(
-                    {
-                        changeType: 'itemAdded',
-                        item: rewardItem,
-                        itemId: rewardUUID
-                    }
-                )
-
-
-                profile.bumpRvn(common_core_response);
-
-                response.multiUpdate = [];
-                response.multiUpdate.push(common_core_response);
+                multiUpdates.push(common_core);
             } else {
                 profile.addItem(rewardUUID, rewardItem);
-
-                response.profileChanges.push(
-                    {
-                        changeType: 'itemAdded',
-                        item: rewardItem,
-                        itemId: rewardUUID
-                    }
-                )
             }
 
             const giftBotItemId = randomUUID();
@@ -192,47 +141,28 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
                 quantity: 1
             };
 
-            profile.addItem(giftBotItemId, giftBoxItem);
 
             RewardGraphItem.attributes.reward_nodes_claimed.push(nodeId);
             RewardGraphItem.attributes.reward_keys[0].unlock_keys_used++;
 
-            response.profileChanges.push(
-                {
-                    changeType: 'itemAdded',
-                    item:  giftBoxItem,
-                    itemId: giftBotItemId
-                },
-                {
-                    changeType: 'itemAttrChanged',
-                    itemId: rewardGraphId,
-                    attributeName: 'reward_nodes_claimed',
-                    attributeValue: RewardGraphItem.attributes.reward_nodes_claimed
-                },
-                {
-                    changeType: 'itemAttrChanged',
-                    itemId: rewardGraphId,
-                    attributeName: 'reward_keys',
-                    attributeValue: RewardGraphItem.attributes.reward_keys
-                }
-            )
-
-            profile.bumpRvn(response);
+            profile.addItem(giftBotItemId, giftBoxItem);
+            profile.setMutliItemAttribute(
+                [
+                    {
+                        itemId: rewardGraphId,
+                        attributeName: 'reward_nodes_claimed',
+                        attributeValue: RewardGraphItem.attributes.reward_nodes_claimed
+                    },
+                    {
+                        itemId: rewardGraphId,
+                        attributeName: 'reward_keys',
+                        attributeValue: RewardGraphItem.attributes.reward_keys
+                    }
+                ]
+            );
         } else { console.log('Nope', NodeRewardTemplateId, RewardGraphItem) }
     }
 
 
-    if (!bIsUpToDate) {
-        response.profileChanges = [
-            {
-                changeType: 'fullProfileUpdate',
-                profile: await profile.getFullProfile()
-            }
-        ]
-    }
-
-    response.profileRevision = profile.rvn;
-    response.profileCommandRevision = profile.commandRevision;
-
-    return response;
+    return profile.generateResponse(config, undefined, ...multiUpdates)
 }

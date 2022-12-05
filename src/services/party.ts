@@ -6,15 +6,15 @@ import Router from "express-promise-router";
 import verifyAuthorization, { reqWithAuth } from '../middlewares/authorization';
 import errors, { ApiError, neoniteDev } from '../structs/errors';
 import { HttpError } from 'http-errors';
-import parties from '../database/partiesController';
+//import parties from '../database/local/partiesController';
 import * as xmppApi from '../xmppManager';
 import * as Path from 'path';
 import { validate } from 'jsonschema';
 import * as fs from 'fs'
 import { party } from '../types/bodies';
-import Party, { getParty } from '../structs/Party';
-import Friends from '../database/friendsController';
-import Pings from '../database/pingsController';
+import Party, { getParty, localParties } from '../structs/Party';
+import Friends from '../database/local/friendsController';
+import Pings from '../database/local/pingsController';
 import generateJoinToken from '../structs/EOSvoiceChat';
 import { vxGenerateToken } from '../structs/vivox';
 
@@ -55,7 +55,7 @@ app.post('/api/v1/:deploymentId/parties', verifyAuthorization(), async (req, res
         throw errors.neoniteDev.party.userOffline.with(req.auth.account_id);
     }
 
-    const existingParty = await parties.getByMember(req.auth.account_id);
+    const existingParty = localParties.filter(x => x.members.find(mem => mem.account_id == req.auth.account_id))
 
     if (existingParty.length > 0) {
         throw errors.neoniteDev.party.alreadyInParty.with(req.auth.account_id, 'Fortnite')
@@ -128,13 +128,13 @@ app.patch('/api/v1/:deploymentId/parties/:partyId', verifyAuthorization(), async
 
 // get a party
 app.get('/api/v1/:deploymentId/parties/:partyId', verifyAuthorization(), async (req, res, next) => {
-    const party = await parties.getById(req.params.partyId)
+    const party = localParties.find(x => x.id == req.params.partyId);
 
     if (!party) {
         throw errors.neoniteDev.party.partyNotFound.with(req.params.partyId)
     }
 
-    res.json(party);
+    res.json(party.getData());
 })
 
 
@@ -163,6 +163,47 @@ app.patch('/api/v1/:deploymentId/parties/:partyId/members/:accountId/meta', veri
     party.updateMember(member.account_id, req.auth.displayName, req.body);
 
     res.status(204).send()
+})
+
+// join party by id
+app.post('/api/v1/Fortnite/parties/:partyId/members/:accountId/join', verifyAuthorization(), async (req, res) => {
+    if (req.params.accountId != req.auth.account_id) {
+        throw errors.neoniteDev.party.notYourAccount.with(req.params.accountId, req.auth.account_id);
+    }
+
+    const party = await getParty(req.params.partyId);
+
+    if (!party) {
+        throw errors.neoniteDev.party.partyNotFound.with(req.params.partyId);
+    }
+
+    // URGENT TODO: Check if the the user has permission to join.
+
+    const body: party.JoinParty.Root = req.body;
+
+    validateBody(body, joinSchema);
+
+    const existing = party.members.find(x => x.account_id == req.params.accountId);
+
+    if (existing) {
+        party.reconnect(body.connection, req.params.accountId);
+
+        return res.json(
+            {
+                status: "JOINED",
+                party_id: party.id
+            }
+        );
+    }
+
+    party.addMember(body.connection, req.params.accountId);
+
+    res.json(
+        {
+            status: "JOINED",
+            party_id: party.id
+        }
+    );
 })
 
 app.delete('/api/v1/Fortnite/parties/:partyId/members/:accountId', verifyAuthorization(), async (req, res) => {
@@ -207,7 +248,7 @@ app.get('/api/v1/:deploymentId/user/:accountId', verifyAuthorization(), async (r
     const pings = await Pings.getUserPings(req.params.accountId);
 
     res.json({
-        "current": await parties.getByMember(req.params.accountId),
+        "current": localParties.filter(x => x.members.find(mem => mem.account_id == req.auth.account_id)).map(x => x.getData()),
         "pending": [],
         "invites": [],
         "pings": pings
@@ -215,7 +256,7 @@ app.get('/api/v1/:deploymentId/user/:accountId', verifyAuthorization(), async (r
 });
 
 // invite a user to the party 
-app.post('/api/v1/Fortnite/parties/:partyId/invites/:accountId', verifyAuthorization(), async (req, res) => {
+app.post('/api/v1/:deploymentId/parties/:partyId/invites/:accountId', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId == req.auth.account_id) {
         throw errors.neoniteDev.party.selfInvite;
     }
@@ -234,7 +275,7 @@ app.post('/api/v1/Fortnite/parties/:partyId/invites/:accountId', verifyAuthoriza
 })
 
 // invite a user to the party 
-app.post('/api/v1/Fortnite/parties/:partyId/invites/:accountId', verifyAuthorization(), async (req, res) => {
+app.post('/api/v1/:deploymentId/parties/:partyId/invites/:accountId', verifyAuthorization(), async (req, res) => {
     if (req.params.accountId == req.auth.account_id) {
         throw errors.neoniteDev.party.selfInvite;
     }
@@ -261,9 +302,9 @@ app.post('/api/v1/Fortnite/parties/:partyId/invites/:accountId', verifyAuthoriza
 
     if (req.query.sendPing === 'true') {
         console.log('cheking pings')
-        const existingPings = await Pings.get(req.params.accountId, req.params.friendId);
+        const existingPing = await Pings.get(req.params.accountId, req.params.friendId);
 
-        if (existingPings.length > 0) {
+        if (existingPing) {
             await Pings.remove(req.params.accountId, req.params.friendId);
         }
 
@@ -323,7 +364,7 @@ app.post('/api/v1/:deploymentId/user/:friendId/pings/:accountId', verifyAuthoriz
 
     const existingPings = await Pings.get(req.params.accountId, req.params.friendId);
 
-    if (existingPings.length > 0) {
+    if (existingPings) {
         await Pings.remove(req.params.accountId, req.params.friendId);
     }
 
@@ -384,15 +425,15 @@ app.post('/api/v1/:deploymentId/user/:accountId/pings/:pingerId/join', verifyAut
 
     validateBody(body, joinSchema);
 
-    const partyData = (await parties.getByMember(req.params.pingerId))[0];
+    const partyData = localParties.find(x => x.members.findIndex(mem => mem.account_id == req.params.pingerId) != -1)
 
     if (!partyData) {
         throw errors.neoniteDev.party.userHasNoParty.with(req.params.pingerId);
     }
 
-    const pings = await Pings.get(req.params.pingerId, req.params.accountId);
+    const partyPing = await Pings.get(req.params.pingerId, req.params.accountId);
 
-    if (pings.length <= 0) {
+    if (partyPing) {
         throw errors.neoniteDev.party.pingNotFound.withMessage(`Ping from [${req.params.pingerId}] to [${req.params.accountId}] does not exist.`)
     }
 
@@ -412,13 +453,13 @@ app.get('/api/v1/:deploymentId/user/:accountId/pings/:pingerId/parties', verifyA
         throw errors.neoniteDev.party.notYourAccount.with(req.params.accountId, req.auth.account_id);
     }
 
-    const pings = await Pings.get(req.params.pingerId, req.params.accountId);
+    const partyPing = await Pings.get(req.params.pingerId, req.params.accountId);
 
-    if (pings.length <= 0) {
+    if (!partyPing) {
         throw errors.neoniteDev.party.pingNotFound.withMessage(`Ping from [${req.params.pingerId}] to [${req.params.accountId}] does not exist.`);
     }
 
-    const partyData = await parties.getByMember(req.params.pingerId);
+    const partyData = localParties.find(x => x.members.findIndex(mem => mem.account_id == req.params.pingerId) != -1);
 
     res.json(partyData);
 })
@@ -428,22 +469,20 @@ app.post('/api/v1/Fortnite/parties/:partyId/members/:accountId/conferences/conne
         throw errors.neoniteDev.party.notYourAccount.with(req.params.accountId, req.auth.account_id);
     }
 
-    const partyData = await parties.getById(req.params.partyId);
+    const party = localParties.find(x => x.id == req.params.partyId)
 
-    if (!partyData) {
-        throw errors.neoniteDev.party.userHasNoParty.with(req.params.pingerId);
+    if (!party) {
+        throw errors.neoniteDev.party.partyNotFound.with(req.params.partyId);
     }
 
-    const partyMemeber = partyData.members.find(x => x.account_id == req.params.accountId);
+    const partyMemeber = party.members.find(x => x.account_id == req.params.accountId);
 
     if (!partyMemeber) {
         throw errors.neoniteDev.party.memberNotFound.with(req.params.accountId);
     }
 
 
-    const providers: Record<string, Object> = {
-
-    };
+    const providers: Record<string, Object> = {};
 
     const bIsRtcp = typeof req.body.providers == 'object' && typeof req.body.providers.rtcp == 'object';
 
@@ -456,7 +495,7 @@ app.post('/api/v1/Fortnite/parties/:partyId/members/:accountId/conferences/conne
 
 
     if (bIsRtcp) {
-        const joinToken = await generateJoinToken(partyData.id, req.auth.account_id);
+        const joinToken = await generateJoinToken(party.id, req.auth.account_id);
 
         const participant = joinToken.participants[0];
 
@@ -477,7 +516,7 @@ app.post('/api/v1/Fortnite/parties/:partyId/members/:accountId/conferences/conne
         process.env.vivoxAppName != undefined &&
         process.env.vivoxSecret != undefined
     ) {
-        const channel_uri = `sip:confctl-g-${process.env.vivoxAppName}.p-${partyData.id}@${process.env.vivoxDomain}`;
+        const channel_uri = `sip:confctl-g-${process.env.vivoxAppName}.p-${party.id}@${process.env.vivoxDomain}`;
         const user_uri = `sip:.${process.env.vivoxAppName}.${req.auth.account_id}.@${process.env.vivoxDomain}`;
 
         const vivoxClaims = {

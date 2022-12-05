@@ -50,63 +50,65 @@ export function parseUA(userAgent: string): Middlewares.fortniteReq | undefined 
     const isNewUA = rUserAgent.test(userAgent);
     const oldMath = rOldUserAgent.test(userAgent);
 
-    if (isNewUA) {
-        var userAgentData = rUserAgent.exec(userAgent);
-        if (!userAgentData || !userAgentData.at(3)) {
-            throw errors.neoniteDev.internal.invalidUserAgent.with(userAgent, rUserAgent.source);
+    try {
+        if (isNewUA) {
+            var userAgentData = rUserAgent.exec(userAgent);
+            if (!userAgentData || !userAgentData.at(3)) {
+                throw errors.neoniteDev.internal.invalidUserAgent.with(userAgent, rUserAgent.source);
+            }
+
+            let friendlyVersion = <string>(userAgentData[2].split('-').pop());
+            let seasonStr = friendlyVersion.split('.').shift();
+
+            let season = seasonStr ? parseInt(seasonStr) : 1
+            let cl = parseInt(userAgentData[3]);
+
+            if (isNaN(season) || isNaN(cl)) {
+                throw errors.neoniteDev.internal.invalidUserAgent.with(userAgent, rUserAgent.source);
+            }
+
+            return {
+                game: userAgentData[1],
+                build: userAgentData[2],
+                CL: cl,
+                season: season,
+                friendlyVersion: friendlyVersion,
+                platform: userAgentData[4],
+            }
+        } else if (oldMath) {
+            var userAgentData = rOldUserAgent.exec(userAgent);
+
+            if (!userAgentData) {
+                throw errors.neoniteDev.internal.invalidUserAgent.with(userAgent, rOldUserAgent.source);
+            }
+
+            var build = userAgentData[2];
+            var aCL = rNetCL.exec(build);
+
+            if (!aCL) {
+                throw errors.neoniteDev.internal.invalidUserAgent.with(userAgent, rOldUserAgent.source);
+            }
+
+            let CL = parseInt(aCL[1]);
+
+            if (isNaN(CL)) {
+                throw errors.neoniteDev.internal.invalidUserAgent.with(userAgent, rOldUserAgent.source);
+            }
+
+            var result: Middlewares.fortniteReq = knownBuilds.find(x => x.CL == CL) || {
+                game: userAgentData.at(1),
+                build: build,
+                CL: CL,
+                platform: userAgent.includes('android') ? 'Android' : "Windows",
+                friendlyVersion: (CL < 3724489 ? 0 : CL > 3790078 ? 2 : 1).toString(),
+                season: CL < 3724489 ? 0 : CL > 3790078 ? 2 : 1
+            }
+
+            return result;
         }
-
-        let friendlyVersion = <string>(userAgentData[2].split('-').pop());
-        let seasonStr = friendlyVersion.split('.').shift();
-
-        let season = seasonStr ? parseInt(seasonStr) : 1
-        let cl = parseInt(userAgentData[3]);
-
-        if (isNaN(season) || isNaN(cl)) {
-            throw errors.neoniteDev.internal.invalidUserAgent.with(userAgent, rUserAgent.source);
-        }
-
-        return {
-            game: userAgentData[1],
-            build: userAgentData[2],
-            CL: cl,
-            season: season,
-            friendlyVersion: friendlyVersion,
-            platform: userAgentData[4],
-        }
-    } else if (oldMath) {
-        var userAgentData = rOldUserAgent.exec(userAgent);
-
-        if (!userAgentData) {
-            throw errors.neoniteDev.internal.invalidUserAgent.with(userAgent, rOldUserAgent.source);
-        }
-
-        var build = userAgentData[2];
-        var aCL = rNetCL.exec(build);
-
-        if (!aCL) {
-            throw errors.neoniteDev.internal.invalidUserAgent.with(userAgent, rOldUserAgent.source);
-        }
-
-        let CL = parseInt(aCL[1]);
-
-        if (isNaN(CL)) {
-            throw errors.neoniteDev.internal.invalidUserAgent.with(userAgent, rOldUserAgent.source);
-        }
-
-        var result: Middlewares.fortniteReq = knownBuilds.find(x => x.CL == CL) || {
-            game: userAgentData.at(1),
-            build: build,
-            CL: CL,
-            platform: "Windows",
-            friendlyVersion: (CL < 3724489 ? 0 : CL > 3790078 ? 2 : 1).toString(),
-            season: CL < 3724489 ? 0 : CL > 3790078 ? 2 : 1
-        }
-
-        return result;
-    } else {
-        return undefined;
-    }
+    } catch {  }
+    
+    return undefined;
 }
 
 export default function userAgentParse(bRequired: boolean) {
@@ -137,6 +139,8 @@ export default function userAgentParse(bRequired: boolean) {
         next();
     }
 }
+
+
 
 var knownBuilds: Middlewares.fortniteReq[] = [
     {

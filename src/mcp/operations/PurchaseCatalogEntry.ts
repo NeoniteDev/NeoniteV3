@@ -1,4 +1,4 @@
-import { mcpResponse, Handleparams, multiUpdate } from '../operations'
+import { mcpResponse, Handleparams, multiUpdate, notification } from '../operations'
 import { Profile, ensureProfileExist } from '../profile'
 import { profile as types } from '../../structs/types';
 import errors from '../../structs/errors'
@@ -7,7 +7,7 @@ import { validate, ValidationError } from 'jsonschema';
 import * as fs from 'fs';
 import { randomUUID } from 'crypto';
 import { getCatalog } from '../../online';
-import profiles from '../../database/profilesController';
+import profiles from '../../database/local/profilesController';
 
 const schemaPath = Path.join(__dirname, '../../../resources/schemas/mcp/json/PurchaseCatalogEntry.json');
 const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'))
@@ -39,31 +39,8 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
     const profile = new Profile(config.profileId, config.accountId);
     await profile.init();
 
-    // since the header is optional
-    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
-        x.profileId == config.profileId
-    )?.clientCommandRevision;
-
-    const useCommandRevision = clientCmdRvn != undefined;
-
-    const baseRevision = useCommandRevision ? profile.commandRevision : profile.rvn;
-    const clientRevision = useCommandRevision ? clientCmdRvn : config.revision;
-
-    const bIsUpToDate = baseRevision == clientRevision;
-
-    const response: mcpResponse = {
-        "profileRevision": profile.rvn,
-        "profileId": config.profileId,
-        "profileChangesBaseRevision": profile.rvn,
-        "profileChanges": [],
-        "serverTime": new Date(),
-        "profileCommandRevision": profile.commandRevision,
-        "responseVersion": 1,
-        "command": config.command,
-    }
-
+    //#region Checkings
     const result = validate(config.body, schema);
-
     if (!result.valid) {
         const validationErrors = result.errors.filter(x => x instanceof ValidationError)
         const invalidFields = validationErrors.map(x => x.argument).join(', ');
@@ -98,18 +75,9 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
             .with(`mcp.operations.${config.command}.ts`, `[${validCurrencyType.join(', ')}]`);
     };
 
+
     const athenaProfile = new Profile('athena', config.accountId);
     await athenaProfile.init();
-
-    const athenaResponse: multiUpdate = {
-        "profileRevision": profile.rvn,
-        "profileId": config.profileId,
-        "profileChangesBaseRevision": profile.rvn,
-        "profileChanges": [],
-        "notifications": [],
-        "profileCommandRevision": profile.commandRevision
-    }
-
 
     if (config.body.currency == 'RealMoney') {
         throw errors.neoniteDev.mcp.invalidParameter.withMessage('PurchaseCatalogEntry cannot be used for RealMoney prices. Use VerifyRealMoneyPurchase flow instead.');
@@ -132,6 +100,8 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
             .with(config.body.expectedTotalPrice.toString(), price.finalPrice.toString());
     }
 
+    //#endregion checking
+
     const lootResultItems = item.itemGrants.map(x => {
         const profileId = x.templateId.startsWith('Athena') ? 'athena' : 'common_core';
         const id = randomUUID();
@@ -153,27 +123,11 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
         }
 
         if (profileId == 'athena') {
-            athenaResponse.profileChanges.push(
-                {
-                    changeType: 'itemAdded',
-                    item: item,
-                    itemId: id
-                }
-            );
-
             athenaProfile.addItem(
                 id,
                 item
             );
         } else {
-            response.profileChanges.push(
-                {
-                    changeType: 'itemAdded',
-                    item: item,
-                    itemId: id
-                }
-            );
-
             profile.addItem(
                 id,
                 item
@@ -188,7 +142,7 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
         }
     });
 
-    response.notifications = [
+    const notifications: notification[] = [
         {
             type: 'CatalogPurchase',
             primary: true,
@@ -198,24 +152,5 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
         }
     ];
 
-
-   // if (response.profileChanges.length > 0) {
-        await profile.bumpRvn(response);
-    //}
-
-    if (athenaResponse.profileChanges.length > 0) {
-        await athenaProfile.bumpRvn(athenaResponse);
-        response.multiUpdate = [athenaResponse];
-    }
-
-    if (!bIsUpToDate) {
-        response.profileChanges = [
-            {
-                changeType: 'fullProfileUpdate',
-                profile: await profile.getFullProfile()
-            }
-        ]
-    }
-
-    return response;
+    return profile.generateResponse(config, notifications, athenaProfile);
 }

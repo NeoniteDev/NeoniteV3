@@ -59,31 +59,6 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
     const profile = new Profile(config.profileId, config.accountId);
     await profile.init();
 
-    // since the header is optional
-    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
-        x.profileId == config.profileId
-    )?.clientCommandRevision;
-
-    const useCommandRevision = clientCmdRvn != undefined;
-
-    const baseRevision = useCommandRevision ? profile.commandRevision : profile.rvn;
-    const clientRevision = useCommandRevision ? clientCmdRvn : config.revision;
-
-    console.log(useCommandRevision, baseRevision, clientRevision)
-
-    const bIsUpToDate = baseRevision == clientRevision;
-
-    const response: mcpResponse = {
-        "profileRevision": profile.rvn,
-        "profileId": config.profileId,
-        "profileChangesBaseRevision": profile.rvn,
-        "profileChanges": [],
-        "serverTime": new Date(),
-        "profileCommandRevision": profile.commandRevision,
-        "responseVersion": 1,
-        "command": config.command,
-    }
-
     const result = validate(config.body, schema);
 
     if (!result.valid || !validateBody(config.body, result)) {
@@ -126,30 +101,8 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
         }
 
         await profile.setItemAttribute(config.body.lockerItem, 'locker_slots_data', lockerItem.attributes.locker_slots_data);
-
-        response.profileChanges.push(
-            {
-                changeType: "itemAttrChanged",
-                itemId: config.body.lockerItem,
-                attributeName: 'locker_slots_data',
-                attributeValue: lockerItem.attributes.locker_slots_data
-            }
-        )
     }
     
-    if (response.profileChanges.length > 0) {
-        await profile.bumpRvn(response);
-    }
 
-
-    if (!bIsUpToDate) {
-        response.profileChanges = [
-            {
-                changeType: 'fullProfileUpdate',
-                profile: await profile.getFullProfile()
-            }
-        ]
-    }
-
-    return response;
+    return profile.generateResponse(config);
 }

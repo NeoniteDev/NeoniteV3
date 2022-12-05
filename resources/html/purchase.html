@@ -4,9 +4,9 @@
 <head>
 
   <!-- Import -->
-  <link rel="stylesheet2" type="text/css" href="https://www.neonitedev.live/css/custom.css">
-  <link rel="stylesheet" type="text/css" href="https://www.neonitedev.live/css/style.css">
-  <link rel="stylesheet" href="https://www.neonitedev.live/css/animate.css">
+  <link rel="stylesheet2" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <link rel="stylesheet" href="/css/animate.css">
   <script src="https://kit.fontawesome.com/d32350101e.js" crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
   <meta property="og:title" content="Neonite" />
@@ -15,7 +15,7 @@
   <meta property="og:image" content="https://preview.daneric.dev/neonite/images/LogoTransparent.png" />
   <meta property="og:description" content="Made by kemo (@xkem0x on twitter)" />
   <meta name="theme-color" content="#a74fff">
-  <link rel="shortcut icon" href="https://www.neonitedev.live/images/Neonite2.png" />
+  <link rel="shortcut icon" href="/Neonite2.png" />
   <meta charset="utf-8">
   <title>Home - Neonite</title>
 </head>
@@ -25,7 +25,7 @@
     <div class="tommy">
       <main>
         <div class="intro">
-          <h1 class="intro-header"><img class="neonite-header" src="https://www.neonitedev.live/images/neonite.png" />
+          <h1 class="intro-header"><img class="neonite-header" src="/neonite.png" />
           </h1>
           <h2>
             <a id='title' class="intro-description">Thanks for using neonite!</a>
@@ -59,83 +59,110 @@
 </body>
 
 <script>
-  const discordMessage = `\nPlease report this in <a href="https://dsc.gg/neonite">our discord</a>`
-  // Hey, its not easy to write JS in an HTML tag. can't even use return.
-  if (!self.ue) {
-    document.getElementById("title").innerText = `Whoops`;
-    document.getElementById("message").innerHTML = 'Missing self.ue' + discordMessage;
-  } else if (!self.ue.purchaseflow) {
-    document.getElementById("title").innerText = `Whoops`;
-    document.getElementById("message").innerHTML = 'Missing self.ue.purchaseflow' + discordMessage;
-  }
-  else if (!self.ue.purchaseflow.receipt) {
-    document.getElementById("title").innerText = `Whoops`;
-    document.getElementById("message").innerHTML = 'Missing self.ue.purchaseflow.receipt' + discordMessage;
-  } else if (!self.ue.purchaseflow.requestclose) {
-    document.getElementById("title").innerText = `Whoops`;
-    document.getElementById("message").innerHTML = 'Missing self.ue.purchaseflow.requestclose' + discordMessage;
-  }
-  else {
-    try {
-      function getCookie(name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-          var c = ca[i];
-          while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-          if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-        }
-        return null;
+  try {
+    function getCookie(name) {
+      var nameEQ = name + "=";
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
       }
-
-
-      const accountId = getCookie('x-neonite-accountId');
-      const s_encoded_offers = getCookie('x-neonite-offers');
-      const offers = s_encoded_offers ? JSON.parse(decodeURIComponent(s_encoded_offers)) : undefined
-      const purchaseToken = getCookie('x-neonite-purchaseToken');
-
-      if (!offers) {
-        document.getElementById("title").innerText = `Whoops`;
-        document.getElementById("message").innerHTML = 'Missing x-neonite-offers' + discordMessage;
-      } else if (!accountId) {
-        document.getElementById("title").innerText = `Whoops`;
-        document.getElementById("message").innerHTML = 'Missing x-neonite-accountId' + discordMessage;
-      } else if (!purchaseToken) {
-        document.getElementById("title").innerText = `Whoops`;
-        document.getElementById("message").innerHTML = 'Missing x-neonite-purchaseToken' + discordMessage;
-      }
-      else {
-
-        setTimeout(() => {
-          var recipt = {
-            "TransactionId": "TransactionId",
-            "TransactionState": "Purchased",
-            "Offers": offers.map(x => {
-              return {
-                "OfferNamespace": "fortnite",
-                "OfferId": x,
-                "Items": [
-                  {
-                    "ItemId":  x,
-                    "ItemNamespace": "ItemNamespace",
-                    "EntitlementId": "EntitlementId",
-                    "EntitlementName": "EntitlementName"
-                  }
-                ]
-              }
-            }),
-            "grantedVoucher": {}
-          };
-
-          self.ue.purchaseflow.receipt(recipt);
-          self.ue.purchaseflow.requestclose();
-        }, 2500)
-      }
-    } catch (e) {
-      document.getElementById("title").innerText = `Whoops`;
-      document.getElementById("message").innerText = e;
+      return null;
     }
+
+    const discordMessage = `\nPlease report this in <a href="https://dsc.gg/neonite">our discord</a>`
+    // Hey, its not easy to write JS in an HTML tag. can't even use return.
+
+
+    if (!self.ue) {
+      document.getElementById("title").innerText = `Whoops`;
+      document.getElementById("message").innerHTML = 'Missing self.ue' + discordMessage;
+      throw "Missing self.ue";
+    }
+    const purchaseFlow = self.ue.purchaseflow || self.ue.PurchaseFlow || self.ue.purchaseFlow;
+
+    if (!purchaseFlow) {
+      document.getElementById("title").innerText = `Whoops`;
+      document.getElementById("message").innerHTML = `Missing self.ue.purchaseflow (ue: ${JSON.stringify(self.ue)})` + discordMessage
+      throw "Missing purchaseFlow";
+    }
+    else if (!purchaseFlow.receipt) {
+      document.getElementById("title").innerText = `Whoops`;
+      document.getElementById("message").innerHTML = 'Missing purchaseflow.receipt' + discordMessage;
+      throw "Missing purchaseflow.receipt";
+    } else if (!purchaseFlow.requestclose) {
+      document.getElementById("title").innerText = `Whoops`;
+      document.getElementById("message").innerHTML = 'Missing purchaseflow.requestclose' + discordMessage;
+      throw "Missing purchaseflow.requestclose";
+    }
+
+
+    // http://127.0.0.1/purchase?namespace=fn&offers=ede05b3c97e9475a8d9be91da65750f0&analyticsSessionId=%7B4A5577BA-418A-E4A5-D1DC-4D94A34C8D3B%7D
+
+    const params = (new URL(document.location.toString())).search;
+    const searchParams = new URLSearchParams(params);
+
+    const offers = searchParams.get('offers').split(',')
+
+
+    /*const accountId = getCookie('x-neonite-accountId');
+    const s_encoded_offers = getCookie('x-neonite-offers');
+    const offers = s_encoded_offers ? JSON.parse(decodeURIComponent(s_encoded_offers)) : undefined
+    const purchaseToken = getCookie('x-neonite-purchaseToken');
+
+    if (!offers) {
+      document.getElementById("title").innerText = `Whoops`;
+      document.getElementById("message").innerHTML = 'Missing x-neonite-offers' + discordMessage;
+
+      throw "Missing x-neonite-offers";
+    } else if (!accountId) {
+      document.getElementById("title").innerText = `Whoops`;
+      document.getElementById("message").innerHTML = 'Missing x-neonite-accountId' + discordMessage;
+      throw "Missing Missing x-neonite-accountId";
+    } else if (!purchaseToken) {
+      document.getElementById("title").innerText = `Whoops`;
+      document.getElementById("message").innerHTML = 'Missing x-neonite-purchaseToken' + discordMessage;
+      throw "Missing Missing x-neonite-purchaseToken";
+    }*/
+
+    setTimeout(() => {
+      try {
+        var recipt = {
+          "TransactionId": "TransactionId",
+          "TransactionState": "Purchased",
+          "Offers": offers.map(x => {
+            return {
+              "OfferNamespace": "fortnite",
+              "OfferId": x,
+              "Items": [
+                {
+                  "ItemId": x,
+                  "ItemNamespace": "ItemNamespace",
+                  "EntitlementId": "EntitlementId",
+                  "EntitlementName": "EntitlementName"
+                }
+              ]
+            }
+          }),
+          "grantedVoucher": {}
+        };
+
+        purchaseFlow.receipt(recipt);
+        purchaseFlow.requestclose();
+      } catch (e) {
+        document.getElementById("title").innerText = `Whoops`;
+        document.getElementById("message").innerText = e;
+        throw e;
+      }
+    }, 2500)
+  } catch (e) {
+    document.getElementById("title").innerText = `Whoops`;
+    document.getElementById("message").innerText = e;
+    throw e;
   }
+
+
 </script>
 
 </html>

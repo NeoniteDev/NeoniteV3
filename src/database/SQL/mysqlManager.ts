@@ -1,12 +1,15 @@
+// used for SQL database since neonite v3 was designed to be hosted and not a local server
+// If want to loose your time you might be able to bring this back to work
+
 import * as mysql from 'mysql';
 import * as crypto from 'crypto';
 
-import { tokenInfo, profile as profileTypes, partyMember, PartyData } from '../structs/types';
+import { tokenInfo, profile as profileTypes, partyMember, PartyData } from '../../structs/types';
 import * as path from 'path';
 import { readFileSync } from 'fs';
 import { create } from 'domain';
-import { party } from '../types/bodies';
-import Party from '../structs/Party';
+import { party } from '../../types/bodies';
+import Party from '../../structs/Party';
 import * as dotenv from 'dotenv'
 import * as nodeCache from 'node-cache';
 

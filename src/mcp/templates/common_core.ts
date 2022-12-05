@@ -7,7 +7,7 @@ export function handle(accountId: string): types.Profile {
     return {
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
-        rvn: 0,
+        rvn: 1,
         wipeNumber: 1,
         accountId: accountId,
         profileId: 'common_core',

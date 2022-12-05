@@ -8,7 +8,7 @@ export function handle(accountId: string): types.Profile {
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
         rvn: 1,
-        wipeNumber: 9,
+        wipeNumber: 1,
         accountId: accountId,
         profileId: "collection_book_schematics0",
         version: "fix_worker_portrait_name_full_february_2021",

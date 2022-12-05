@@ -4,11 +4,11 @@ import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { HttpError } from 'http-errors';
 import verifyAuthorization from "../middlewares/authorization";
 import * as mysql from 'mysql';
-import Friends from "../database/friendsController";
+import Friends from "../database/local/friendsController";
 
-
+/*
 const connection = mysql.createConnection({
-    database: 'tim02',
+    database: '',
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     host: process.env.DB_HOST,
@@ -21,7 +21,7 @@ interface DBvalue {
     username: string,
     offlinePresence: string,
     offlineDate: string
-}
+}*/
 
 const app = Router();
 
@@ -29,7 +29,7 @@ app.get('/api/v1/_/:accountId/last-online', verifyAuthorization(), async (req, r
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }
-
+    /*
     const friends = (await Friends.getFriends(req.params.accountId)).map(x => (
         {
             accountId: x.accountId,
@@ -60,7 +60,9 @@ app.get('/api/v1/_/:accountId/last-online', verifyAuthorization(), async (req, r
                 )
             );
         }
-    )
+    )*/
+
+    res.json({});
 })
 
 module.exports = app;

@@ -10,7 +10,7 @@ export function handle(accountId: string): types.Profile {
     return {
         created: "2020-12-07T22:34:20.080Z",
         updated: "2021-12-19T01:05:31.755Z",
-        rvn: 0,
+        rvn: 1,
         wipeNumber: 1,
         accountId: accountId,
         profileId: "campaign",
@@ -323,9 +323,24 @@ export function handle(accountId: string): types.Profile {
                 xp: 0,
                 packs_granted: 0,
                 active_loadout_index: 0,
-                
+                favorite_musicpack: "",
+                favorite_glider: "",
+                favorite_pickaxe: "",
+                favorite_skydivecontrail: "",
+                favorite_backpack: "",
+                favorite_dance: [
+                  "",
+                  "",
+                  "",
+                  "",
+                  "",
+                  ""
+                ],
+                favorite_itemwraps: [],
+                favorite_character: "",
+                favorite_loadingscreen: ""
             }
         },
-        commandRevision: 3
+        commandRevision: 0
     }
 }

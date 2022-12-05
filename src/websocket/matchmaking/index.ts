@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { IncomingMessage } from "http";
 import { WebSocketServer, VerifyClientCallbackAsync } from "ws";
-import GameSessions, { availability } from '../../database/gameSessionsController';
+import GameSessions, { availability } from '../../database/local/gameSessionsController';
 import * as crypto from 'crypto';
 import GameSession, { groupState } from "./sessions";
 
@@ -117,6 +117,8 @@ export default class matchmakingClient {
                         this.ws.close(4210, 'player.bucket_termination.210');
                     }
                 }
+                
+                return;
             }
         }
     };
@@ -140,7 +142,7 @@ export default class matchmakingClient {
 
             case states.Connecting: {
                 if (this.payload.attributes['player.option.customKey']) {
-                    if (!allowedToStartMatches.includes(this.payload.playerId)) {
+                    /*if (!allowedToStartMatches.includes(this.payload.playerId)) {
                         /*this.ws.send(
                             JSON.stringify(
                                 {
@@ -151,29 +153,28 @@ export default class matchmakingClient {
                                     }
                                 }
                             )
-                        );*/
+                        );*//*
 
-                        this.ws.close(4401, 'match.custom_key_not_supported.401');
-                        return;
-                    } else {
-                        this.ws.send(
-                            JSON.stringify(
-                                {
-                                    payload: {
-                                        state: "Waiting",
-                                        totalPlayers: 1,
-                                        connectedPlayers: 0
-                                    },
-                                    name: "StatusUpdate"
-                                }
-                            )
-                        );
+                    this.ws.close(4401, 'match.custom_key_not_supported.401');
+                    return; } */
 
-                        var session = new GameSession(this);
-                        this.session = session;
-                        LocalGameSessions.push(session);
-                        break;
-                    }
+                    this.ws.send(
+                        JSON.stringify(
+                            {
+                                payload: {
+                                    state: "Waiting",
+                                    totalPlayers: 1,
+                                    connectedPlayers: 0
+                                },
+                                name: "StatusUpdate"
+                            }
+                        )
+                    );
+
+                    var session = new GameSession(this);
+                    this.session = session;
+                    LocalGameSessions.push(session);
+                    break;
                 }
 
                 if (QueuedClients.length > 100) {
@@ -189,7 +190,7 @@ export default class matchmakingClient {
                     );
 
                     this.state = states.QueueFull;
-                    setTimeout(() => this.advance(), 2500)
+                    setTimeout(() => this.advance(), 5000)
                     break;
                 }
 
@@ -293,7 +294,7 @@ export default class matchmakingClient {
 }
 
 async function updateQueue() {
-    var sortedClients = QueuedClients.sort(
+    const sortedClients = QueuedClients.sort(
         (a, b) => a.queuedSince && b.queuedSince ? a.queuedSince.getDate() - b.queuedSince.getDate() : -1
     );
 
@@ -319,12 +320,12 @@ function processQueueLoop() {
         return;
     }
 
-    const sessions = LocalGameSessions.filter(x => x.QueuedClients.length + 1 < x.sessionData.maxPlayers && x.state == groupState.Queued);
+    const sessions = LocalGameSessions.filter(x => x.QueuedClients.length + 1 < x.sessionData.maxPrivatePlayers && x.state == groupState.Queued);
 
     sessions.forEach((session) => {
         var clientsToSession = QueuedClients.sort(
             (a, b) => a.queuedSince && b.queuedSince ? a.queuedSince?.getDate() - b.queuedSince?.getDate() : -1
-        ).slice(0, session.sessionData.maxPlayers - 1);
+        ).slice(0, session.sessionData.maxPrivatePlayers - 1);
 
         QueuedClients = QueuedClients.filter(x => !clientsToSession.includes(x));
 
@@ -360,12 +361,11 @@ export async function verifyClient(info: Parameters<VerifyClientCallbackAsync>['
         return callback(false, 401);
     }
 
-    const header = Buffer.from(JSON.stringify({
-        'alg': 'HS256',
-        'typ': 'JWT'
-    }, null, 0)).toString('base64');
+    if (!process.env.mms_key) {
+        return callback(false, 500);
+    }
 
-    const genSignature = crypto.createHmac('sha1', ":]X/``TK&Rd?,N>e3NwxjE`aL=Sj468M?z'j(w+[").update(`${header}.${payload}`).digest().toString('base64')
+    const genSignature = crypto.createHmac('sha256', process.env.mms_key).update(payload).digest().toString('base64')
 
     if (genSignature != signature) {
         return callback(false, 401);

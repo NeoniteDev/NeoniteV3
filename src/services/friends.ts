@@ -2,10 +2,10 @@ import errors, { ApiError } from '../structs/errors'
 import Router from 'express-promise-router';
 import verifyAuthorization from '../middlewares/authorization'
 import validateMethod from '../middlewares/Method'
-import Friends from '../database/friendsController';
+import Friends from '../database/local/friendsController';
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { HttpError } from 'http-errors';
-import users from '../database/usersController';
+import users from '../database/local/usersController';
 import * as xmppApi from '../xmppManager';
 
 const app = Router();
@@ -161,22 +161,20 @@ app.get('/api/v1/:accountId/friends/:friendId/mutual', verifyAuthorization(), as
 })
 
 // add friend
-app.post('/api/v1/:accountId/friends/:friendId', verifyAuthorization(), async (req, res) => {
+app.post(['/api/v1/:accountId/friends/:friendId', '/api/public/friends/:accountId/:friendId'], verifyAuthorization(), async (req, res) => {
     if (req.params.accountId != req.auth.account_id) {
         throw errors.neoniteDev.authentication.notYourAccount;
     }
 
     const existingRequest = await Friends.getRequest(req.params.accountId, req.params.friendId);
 
-    if (existingRequest.length > 0) {
-        var incomming = existingRequest.find(x => x.direction == 'INCOMING');
-        
-        if (incomming) {
+    if (existingRequest) {
+        if (existingRequest.direction == 'INCOMING') {
             await Friends.acceptRequest(req.params.accountId, req.params.friendId);
 
-            sendFriendShipUpdate(req.params.accountId, req.params.friendId, 'ACCEPTED', incomming.created);
+            sendFriendShipUpdate(req.params.accountId, req.params.friendId, 'ACCEPTED', existingRequest.created);
             return res.status(204);
-        }
+        } 
 
         throw errors.neoniteDev.friends.requestAlreadySent
             .withMessage(`Friendship request has already been sent to ${req.params.friendId}`)
@@ -218,40 +216,6 @@ app.get('/api/public/friends/:accountId', verifyAuthorization(), async (req, res
             }
         })
     );
-})
-
-app.post('/api/public/friends/:accountId/:friendId', verifyAuthorization(), async (req, res) => {
-    if (req.params.accountId != req.auth.account_id) {
-        throw errors.neoniteDev.authentication.notYourAccount;
-    }
-
-    const existingRequest = await Friends.getRequest(req.params.accountId, req.params.friendId);
-
-    if (existingRequest.length > 0) {
-        var incomming = existingRequest.find(x => x.direction == 'INCOMING');
-
-        if (incomming) {
-            await Friends.acceptRequest(req.params.accountId, req.params.friendId);
-
-            sendFriendShipUpdate(req.params.accountId, req.params.friendId, 'ACCEPTED', incomming.created);
-            return res.status(204);
-        }
-
-        throw errors.neoniteDev.friends.requestAlreadySent
-            .withMessage(`Friendship request has already been sent to ${req.params.friendId}`)
-            .with(req.params.friendId);
-    } else {
-        const friendUser = await users.getById(req.params.friendId);
-
-        if (!friendUser) {
-            throw errors.neoniteDev.friends.accountNotFound.withMessage(`Account ${req.params.friendId} does not exist`).with(req.params.friendId)
-        }
-
-        await Friends.addRequest(req.params.accountId, req.params.friendId);
-        sendFriendShipUpdate(req.params.accountId, req.params.friendId, 'PENDING', new Date());
-    }
-
-    res.status(204).send();
 })
 
 app.get('/api/public/blocklist/:accountId/', verifyAuthorization(), async (req, res) => {

@@ -2,22 +2,20 @@ import Router from "express-promise-router";
 import errors, { ApiError } from "../structs/errors";
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { HttpError } from 'http-errors';
-import Users, { User } from "../database/usersController";
+import Users, { User } from "../database/local/usersController";
 import VerifyAuthorization, { reqWithAuth, reqWithAuthMulti } from "../middlewares/authorization";
 import verifyMethod from '../middlewares/Method'
-import { isOperational } from "../database/mysqlManager";
+//import { isOperational } from "../database/mysqlManager";
 
 const app = Router();
 
 
 app.get('/api/service/bulk/status', VerifyAuthorization(true), async (req: reqWithAuthMulti, res) => {
     //adds serviceId based on what the game feeds it, if undefined defaults to fortnite
-
     const services = new Array(req.query.serviceId);
+    const bIsAccount = req.auth.auth_method != 'client_credentials';
 
-    var bIsAccount = req.auth.auth_method != 'client_credentials';
-
-    const bDatabaseOperational = await isOperational();
+    const bDatabaseOperational = true; // await isOperational();
 
     res.json(
         services.filter(x => typeof x == 'string').map(
@@ -49,9 +47,9 @@ app.get('/api/service/bulk/status', VerifyAuthorization(true), async (req: reqWi
 
 app.get("/api/service/:serviceId/status", VerifyAuthorization(true), async (req: reqWithAuthMulti, res) => {
     const serviceId = req.params.serviceId.toLowerCase();
-    var bIsAccount = req.auth.auth_method != 'client_credentials';
+    const bIsAccount = req.auth.auth_method != 'client_credentials';
 
-    const bDatabaseOperational = await isOperational();
+    const bDatabaseOperational = true; // await isOperational();
 
     res.json(
         {

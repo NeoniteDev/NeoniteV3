@@ -22,30 +22,6 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
 
     const profile = new Profile(config.profileId, config.accountId);
     await profile.init();
-
-    // since the header is optional
-    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
-        x.profileId == config.profileId
-    )?.clientCommandRevision;
-
-    const useCommandRevision = clientCmdRvn != undefined;
-
-    const baseRevision = useCommandRevision ? profile.commandRevision : profile.rvn;
-    const clientRevision = useCommandRevision ? clientCmdRvn : config.revision;
-
-    const bIsUpToDate = baseRevision == clientRevision;
-
-    const response: mcpResponse = {
-        "profileRevision": profile.rvn,
-        "profileId": config.profileId,
-        "profileChangesBaseRevision": profile.rvn,
-        "profileChanges": [],
-        "serverTime": new Date(),
-        "profileCommandRevision": profile.commandRevision,
-        "responseVersion": 1,
-        "command": config.command,
-    }
-
     const result = validate(config.body, schema);
 
     if (!result.valid) {
@@ -70,32 +46,11 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
             if (isGiftBox) {
                 var promise = profile.removeItem(giftBoxItemId);
                 removePromises.push(promise);
-
-                response.profileChanges.push(
-                    {
-                        changeType: 'itemRemoved',
-                        itemId: giftBoxItemId
-                    }
-                )
             }
         }
 
         await Promise.all(removePromises);
-
-        profile.bumpRvn(response);
     }
 
-    if (!bIsUpToDate) {
-        response.profileChanges = [
-            {
-                changeType: 'fullProfileUpdate',
-                profile: await profile.getFullProfile()
-            }
-        ]
-    }
-
-    response.profileRevision = profile.rvn;
-    response.profileCommandRevision = profile.commandRevision;
-
-    return response;
+    return profile.generateResponse(config);
 }

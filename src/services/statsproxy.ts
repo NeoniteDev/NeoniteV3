@@ -12,8 +12,7 @@ app.get('/api/statsv2/account/:accountId', verifyAuthorization(), (req, res) => 
         {
             "startTime": 0,
             "endTime": 9223372036854775807,
-            "stats": {
-            },
+            "stats": {},
             "accountId": req.params.accountId
         }
     );

@@ -15,12 +15,13 @@ import validateUa from '../middlewares/useragent';
 import profiles from '../mcp';
 import { HttpError } from 'http-errors'
 import Router from 'express-promise-router';
-import gameSessions from '../database/gameSessionsController';
+import gameSessions from '../database/local/gameSessionsController';
 import * as xmppApi from '../xmppManager';
-import users from '../database/usersController';
+import users from '../database/local/usersController';
 import * as path from 'path';
 import * as jwt from 'jsonwebtoken';
-import SavedSettings from '../database/saveGameController';
+//import SavedSettings from '../database/local/saveGameController';
+import * as UserCloudStorage from '../structs/UserCloudStorage';
 
 const app = Router();
 
@@ -81,7 +82,6 @@ app.use(
 app.use(validateUa(true));
 app.use(profiles)
 
-
 app.get('/api/cloudstorage/system/config', verifyAuthorization(true), async (req, res) => {
     return res.status(404).end();
 
@@ -129,17 +129,17 @@ app.get('/api/cloudstorage/system/config', verifyAuthorization(true), async (req
 
 app.get('/api/cloudstorage/system', verifyAuthorization(true), async (req, res) => {
     const output = [
-        {
-            'uniqueFilename': 'LanguagePatches.ini',
-            'filename': 'DefaultGame.ini',
-            'hash': 'test',
-            'hash256': 'test',
-            'length': 1,
-            'contentType': 'text/plain',
-            'uploaded': '2021-06-25T20:21:22.001Z',
-            'storageType': 'S3',
-            'doNotCache': true
-        }
+        /* {
+             'uniqueFilename': 'LanguagePatches.ini',
+             'filename': 'DefaultGame.ini',
+             'hash': 'test',
+             'hash256': 'test',
+             'length': 1,
+             'contentType': 'text/plain',
+             'uploaded': '2021-06-25T20:21:22.001Z',
+             'storageType': 'S3',
+             'doNotCache': true
+         }*/
     ];
 
     const dir = await fs.promises.opendir(hotfixPath);
@@ -152,22 +152,25 @@ app.get('/api/cloudstorage/system', verifyAuthorization(true), async (req, res) 
             return;
         }
 
-        output.push({
-            'uniqueFilename': fileName,
-            'filename': fileName,
-            'hash': crypto.createHash('sha1').update(fileData).digest('hex'),
-            'hash256': crypto.createHash('sha256').update(fileData).digest('hex'),
-            'length': fileData.length,
-            'contentType': 'text/plain',
-            'uploaded': fs.statSync(filePath).mtime.toISOString(),
-            'storageType': 'S3',
-            'doNotCache': true
-        });
+        output.push(
+            {
+                'uniqueFilename': fileName,
+                'filename': fileName,
+                'hash': crypto.createHash('sha1').update(fileData).digest('hex'),
+                'hash256': crypto.createHash('sha256').update(fileData).digest('hex'),
+                'length': fileData.length,
+                'contentType': 'text/plain',
+                'uploaded': fs.statSync(filePath).mtime.toISOString(),
+                'storageType': 'S3',
+                'doNotCache': true
+            }
+        );
     }
 
     res.json(output);
 });
 
+/*
 
 app.get('/api/cloudstorage/system/LanguagePatches.ini', verifyAuthorization(true), async (req, res) => {
     const languageIni = await online.getLanguageIni();
@@ -175,6 +178,8 @@ app.get('/api/cloudstorage/system/LanguagePatches.ini', verifyAuthorization(true
     res.set('content-type', 'text/plain')
     res.send(languageIni);
 });
+
+*/
 
 app.get('/api/cloudstorage/system/:filename', verifyAuthorization(true), (req, res) => {
     const fileName = req.params.filename;
@@ -245,26 +250,29 @@ app.get('/api/cloudstorage/user/:accountId', verifyAuthorization(), async (req, 
         throw neoniteDev.authentication.notYourAccount;
     }
 
-    const files = await SavedSettings.getFilesNames(req.params.accountId);
+    const fileName = `ClientSettings-${req.clientInfos.CL}.Sav`;
 
-    res.json(
-        files.map(
-            (file) => {
-                return {
-                    uniqueFilename: file.fileName,
-                    filename: file.fileName,
-                    hash: file.sha1,
-                    hash256: file.sha256,
-                    length: file.length,
+
+    if (UserCloudStorage.exist(req.params.accountId, fileName)) {
+        return res.json(
+            [
+                {
+                    uniqueFilename: fileName,
+                    filename: 'ClientSettings.Sav',
+                    hash: 'test',
+                    hash256: 'test',
+                    length: 1,
                     contentType: 'application/octet-stream',
-                    uploaded: file.uploaded,
+                    uploaded: new Date(),
                     storageType: 'S3',
                     accountId: req.auth.account_id,
                     doNotCache: true
                 }
-            }
-        )
-    );
+            ]
+        );
+    }
+    
+    return res.json([]);
 });
 
 const allowedSaveFileNames = [
@@ -282,22 +290,22 @@ app.get('/api/cloudstorage/user/:accountId/:filename', verifyAuthorization(), as
         throw errors.neoniteDev.authentication.notYourAccount;
     }
 
-    if (!allowedSaveFileNames.includes(req.params.filename)) {
+    if (!req.params.filename.startsWith('ClientSettings-') && !allowedSaveFileNames.includes(req.params.filename)) {
         throw errors.neoniteDev.cloudstorage.fileNotFound
-            .withMessage(`Sorry, we couldn't find a file ${req.params.filename} for account ${req.params.accountId}`)
+            .withMessage(`Sorry, we couldn't find the file ${req.params.filename} for account ${req.params.accountId}`)
             .with(req.params.filename, req.params.accountId)
     }
 
-    const file = await SavedSettings.get(req.params.accountId, req.params.filename);
+    const content = await UserCloudStorage.getFile(req.params.accountId, `ClientSettings-${req.clientInfos.CL}.Sav`);
 
-    if (!file) {
+    if (!content) {
         throw errors.neoniteDev.cloudstorage.fileNotFound
-            .withMessage(`Sorry, we couldn't find a file ${req.params.filename} for account ${req.params.accountId}`)
+            .withMessage(`Sorry, we couldn't find the file ClientSettings-${req.clientInfos.CL}.Sav for account ${req.params.accountId}`)
             .with(req.params.filename, req.params.accountId)
     };
 
-    res.set('content-type', 'application/octet-stream')
-    res.send(Buffer.from(file.content, 'base64'));
+    res.set('content-type', 'application/octet-stream');
+    res.send(Buffer.from(content, 'base64'));
 });
 
 app.put('/api/cloudstorage/user/:accountId/:filename', verifyAuthorization(), async (req: reqWithAuth, res) => {
@@ -305,12 +313,15 @@ app.put('/api/cloudstorage/user/:accountId/:filename', verifyAuthorization(), as
         throw neoniteDev.authentication.notYourAccount;
     }
 
-    if (!allowedSaveFileNames.includes(req.params.filename)) {
+    const fileName = `ClientSettings-${req.clientInfos.CL}.Sav`;
+
+
+    if (!req.params.filename.startsWith('ClientSettings-') && !allowedSaveFileNames.includes(req.params.filename)) {
         throw errors.neoniteDev.mcp.missingPermission
             .with(`fortnite:cloudstorage:user:${req.params.accountId}:${req.params.filename}`, 'UPDATE')
     };
 
-    if (parseInt(req.get('Content-Length') || '') > 256000) {
+    if (parseInt(req.get('Content-Length') || '256002') > 256000) {
         throw errors.neoniteDev.cloudstorage.fileTooLarge;
     }
 
@@ -323,47 +334,34 @@ app.put('/api/cloudstorage/user/:accountId/:filename', verifyAuthorization(), as
     req.on('end', async function () {
         const data = Buffer.concat(arrayBuffer);
 
-        const file = await SavedSettings.get(req.params.accountId, req.params.filename);
-
+        const fileExist = UserCloudStorage.exist(req.params.accountId, fileName)
         if (data.length > 256000) {
             throw errors.neoniteDev.cloudstorage.fileTooLarge;
         }
 
-        if (!file) {
-            await SavedSettings.add(
-                req.params.accountId, req.params.filename,
-                data.toString('base64'),
-                crypto.createHash('sha256').update(data).digest('hex'),
-                crypto.createHash('sha1').update(data).digest('hex'),
-                data.length
-            )
+        UserCloudStorage.saveFile(req.params.accountId, fileName, data);
 
+        if (!fileExist) {
             res.send(req.params.filename);
         } else {
-            await SavedSettings.set(
-                req.params.accountId, req.params.filename,
-                data.toString('base64'),
-                crypto.createHash('sha256').update(data).digest('hex'),
-                crypto.createHash('sha1').update(data).digest('hex'),
-                data.length
-            )
-
-            res.status(204).end();
+            res.status(204).send();
         }
     });
 });
 
 app.delete('/api/cloudstorage/user/:accountId/:filename', verifyAuthorization(), async (req: reqWithAuth, res) => {
+    const fileName = `ClientSettings-${req.clientInfos.CL}.Sav`;
+
     if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
     }
 
-    if (!allowedSaveFileNames.includes(req.params.filename)) {
+    if (!req.params.filename.startsWith('ClientSettings-') && !allowedSaveFileNames.includes(req.params.filename)) {
         throw errors.neoniteDev.mcp.missingPermission
             .with(`fortnite:cloudstorage:user:${req.params.accountId}:${req.params.filename}`, 'DELETE')
     };
 
-    await SavedSettings.remove(req.params.accountId, req.params.filename);
+    await UserCloudStorage.deleteFile(req.params.accountId, fileName);
     res.status(204).end();
 });
 
@@ -698,7 +696,7 @@ app.get('/api/game/v2/leaderboards/cohort/:accountId', verifyAuthorization(), as
         {
             accountId: req.params.accountId,
             playlist: req.query.playlist || 'pc_m0_p2',
-            cohortAccounts: ['98748c9691494acc9b0a92dc73dca5fa'],
+            cohortAccounts: ['f1bac684f6284b74883e5ef843f17c96'],
             expiresAt: new Date().addDays(2)
         }
     )
@@ -706,9 +704,9 @@ app.get('/api/game/v2/leaderboards/cohort/:accountId', verifyAuthorization(), as
 
 // get bulk stats
 app.post('/api/leaderboards/type/group/stat/:cohort/window/weekly', verifyAuthorization(), async (req, res) => {
-    if (req.params.accountId != req.auth.account_id) {
+    /*if (req.params.accountId != req.auth.account_id) {
         throw neoniteDev.authentication.notYourAccount;
-    }
+    }*/
 
     if (
         !(req.body instanceof Array)
@@ -791,7 +789,7 @@ app.get('/api/storefront/v2/gift/check_eligibility/recipient/:recipient/offer/:o
                         price:
                             offer.prices.find(x => x.currencyType == 'MtxCurrency') ||
                                 offer.prices.at(0) ?
-                                Object.assign(offer.prices.at(0), { finalPrice: 0 }) :
+                                Object.assign(offer.prices[0], { finalPrice: 0 }) :
                                 {
                                     currencyType: 'MtxCurrency',
                                     currencySubType: '',
@@ -1092,7 +1090,11 @@ app.get('/api/game/v2/matchmakingservice/ticket/player/:accountId', cookieParser
 
         const payload = Buffer.from(JSON.stringify(data, null, 0)).toString('base64');
 
-        const signature = crypto.createHmac('sha256', ":]X/``TK&Rd?,N>e3NwxjE`aL=Sj468M?z'j(w+[").update(payload).digest().toString('base64')
+        if (!process.env.mms_key) {
+            throw errors.neoniteDev.internal.serverError;
+        }
+
+        const signature = crypto.createHmac('sha256', process.env.mms_key).update(payload).digest().toString('base64')
 
         res.json(
             {
@@ -1194,6 +1196,7 @@ app.post('/api/game/v2/chat/:accountId/reserveGeneralChatRooms/:type/:platform',
         throw neoniteDev.authentication.notYourAccount;
     }
 
+    /*
     var avalibleRooms = await xmppApi.getChatRooms();
 
     var globalChatRooms = await Promise.all(
@@ -1224,7 +1227,16 @@ app.post('/api/game/v2/chat/:accountId/reserveGeneralChatRooms/:type/:platform',
                 roomName: roomData.roomName
             }
         );
-    }
+    }*/
+
+    var globalChatRooms = [
+        {
+            roomName: 'fortnite',
+            currentMembersCount: 0,
+            maxMembersCount: 9999,
+            publicFacingShardName: "Neonite Global",
+        }
+    ]
 
     res.json(
         {
@@ -1237,7 +1249,6 @@ app.post('/api/game/v2/chat/:accountId/reserveGeneralChatRooms/:type/:platform',
             bIsSubGameGlobalChatDisabled: false
         }
     );
-    //throw errors.neoniteDev.mcp.invalidChatRequest.withMessage('Recommendations no longer supported!');
 })
 
 app.post('/api/game/v2/chat/:accountId/recommendGeneralChatRooms/:type/:platform', verifyAuthorization(), async (req, res) => {
@@ -1245,37 +1256,14 @@ app.post('/api/game/v2/chat/:accountId/recommendGeneralChatRooms/:type/:platform
         throw neoniteDev.authentication.notYourAccount;
     }
 
-    var avalibleRooms = await xmppApi.getChatRooms();
-
-    var globalChatRooms = await Promise.all(
-        avalibleRooms.filter(x => x.publicRoom).map(
-            async x => {
-                var participants = await xmppApi.getRoomParticipants(x.roomName);
-                return {
-                    roomName: x.roomName,
-                    currentMembersCount: x.owner.length + x.admin.length + x.member.length + participants.length,
-                    maxMembersCount: x.maxUsers,
-                    publicFacingShardName: x.naturalName,
-                }
-            }
-        )
-    )
-
-    var notFullRooms = globalChatRooms.filter(x => x.maxMembersCount > x.currentMembersCount);
-
-    if (notFullRooms.length <= 0) {
-        var roomId = 'global-' + crypto.randomUUID().replaceAll('-', '');
-        var roomData = await xmppApi.createChatRoom(roomId, 'neonite global chat', 'global chat room.', 25, true);
-
-        globalChatRooms.push(
-            {
-                currentMembersCount: 0,
-                maxMembersCount: roomData.maxUsers,
-                publicFacingShardName: roomData.naturalName,
-                roomName: roomData.roomName
-            }
-        );
-    }
+    var globalChatRooms = [
+        {
+            roomName: 'fortnite',
+            currentMembersCount: 0,
+            maxMembersCount: 9999,
+            publicFacingShardName: "Neonite Global",
+        }
+    ]
 
     res.json(
         {
@@ -1431,18 +1419,20 @@ app.use(() => {
 
 app.use(
     (err: any, req: Request, res: Response, next: NextFunction) => {
+        
         if (err instanceof ApiError) {
             err.apply(res);
         }
-        else if (err instanceof HttpError && err.type == 'entity.parse.failed') {
+        else if (err.type == 'entity.parse.failed') {
             neoniteDev.internal.jsonParsingFailed.with(err.message).apply(res);
         } else if (err instanceof HttpError) {
             var error = neoniteDev.internal.unknownError;
             error.statusCode = err.statusCode;
             error.withMessage(err.message).apply(res);
+            error.response.intent = "neo-fortnite"
         }
         else {
-            console.error(err)
+            console.error(err);
             neoniteDev.internal.serverError.apply(res);
         }
     }

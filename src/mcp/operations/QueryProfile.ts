@@ -17,38 +17,6 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
     const profile = new Profile(config.profileId, config.accountId);
     await profile.init();
 
-    // since the header is optional
-    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
-        x.profileId == config.profileId
-    )?.clientCommandRevision;
 
-    const useCommandRevision = clientCmdRvn != undefined;
-
-    const baseRevision = useCommandRevision ? profile.commandRevision : profile.rvn;
-    const clientRevision = useCommandRevision ? clientCmdRvn : config.revision;
-
-    const bIsUpToDate = baseRevision == clientRevision;
-
-    const response: mcpResponse = {
-        "profileRevision": profile.rvn,
-        "profileId": config.profileId,
-        "profileChangesBaseRevision": profile.rvn,
-        "profileChanges": [],
-        "serverTime": new Date(),
-        "profileCommandRevision": profile.commandRevision,
-        "responseVersion": 1,
-        "command": config.command,
-    }
-
-    if (!bIsUpToDate) {
-        response.profileChanges = [
-            {
-                changeType: 'fullProfileUpdate',
-                //@ts-ignore
-                profile: await profile.getFullProfile()
-            }
-        ]
-    }
-
-    return response;
+    return profile.generateResponse(config);
 }

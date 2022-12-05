@@ -32,29 +32,6 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
     const profile = new Profile(config.profileId, config.accountId);
     await profile.init();
 
-    // since the header is optional
-    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
-        x.profileId == config.profileId
-    )?.clientCommandRevision;
-
-    const useCommandRevision = clientCmdRvn != undefined;
-
-    const baseRevision = useCommandRevision ? profile.commandRevision : profile.rvn;
-    const clientRevision = useCommandRevision ? clientCmdRvn : config.revision;
-
-    const bIsUpToDate = baseRevision == clientRevision;
-
-    const response: mcpResponse = {
-        "profileRevision": profile.rvn,
-        "profileId": config.profileId,
-        "profileChangesBaseRevision": profile.rvn,
-        "profileChanges": [],
-        "serverTime": new Date(),
-        "profileCommandRevision": profile.commandRevision,
-        "responseVersion": 1,
-        "command": config.command,
-    }
-
     const result = validate(config.body, schema);
 
     if (!result.valid) {
@@ -88,25 +65,9 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
     if (profile.stats.attributes.loadouts[config.body.targetIndex]) {
         if (config.body.optNewNameForTarget) {
             await profile.setItemAttribute(profile.stats.attributes.loadouts[config.body.targetIndex], 'locker_name', config.body.optNewNameForTarget);
-            response.profileChanges.push(
-                {
-                    changeType: 'itemAttrChanged',
-                    itemId: profile.stats.attributes.loadouts[config.body.targetIndex],
-                    attributeName: 'locker_name',
-                    attributeValue: config.body.optNewNameForTarget
-                }
-            );
         }
 
         await profile.setItemAttribute(profile.stats.attributes.loadouts[config.body.targetIndex], 'locker_slots_data', loadoutToCopy.attributes.locker_slots_data);
-        response.profileChanges.push(
-            {
-                changeType: 'itemAttrChanged',
-                itemId: profile.stats.attributes.loadouts[config.body.targetIndex],
-                attributeName: 'locker_slots_data',
-                attributeValue: loadoutToCopy.attributes.locker_slots_data
-            }
-        );
     } else {
         const newId = randomUUID();
         profile.stats.attributes.loadouts[config.body.targetIndex] = newId;
@@ -115,40 +76,8 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
         }
 
         await profile.addItem(newId, loadoutToCopy);
-
-        response.profileChanges.push(
-            {
-                changeType: 'itemAdded',
-                itemId: newId,
-                item: loadoutToCopy
-            }
-        );
-
         await profile.setStat('loadouts', profile.stats.attributes.loadouts.concat([newId]));
-
-        response.profileChanges.push(
-            {
-                changeType: 'statModified',
-                name: 'loadouts',
-                value: profile.stats.attributes.loadouts
-            }
-        );
     }
 
-    if (response.profileChanges.length > 0) {
-        await profile.bumpRvn(response);
-    }
-
-
-
-    if (!bIsUpToDate) {
-        response.profileChanges = [
-            {
-                changeType: 'fullProfileUpdate',
-                profile: await profile.getFullProfile()
-            }
-        ]
-    }
-
-    return response;
+    return profile.generateResponse(config);
 }

@@ -14,7 +14,11 @@ export const supportedProfiles: types.ProfileID[] = [
     'common_core',
 ]
 
-export async function handle(config: Handleparams): Promise<mcpResponse> {
+interface body {
+    newPlatform: string
+}
+
+export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
     const existOrCreated = await ensureProfileExist(config.profileId, config.accountId);
 
     if (!existOrCreated) {
@@ -26,29 +30,6 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
     const profile = new Profile(config.profileId, config.accountId);
     await profile.init();
 
-    // since the header is optional
-    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
-        x.profileId == config.profileId
-    )?.clientCommandRevision;
-
-    const useCommandRevision = clientCmdRvn != undefined;
-
-    const baseRevision = useCommandRevision ? profile.commandRevision : profile.rvn;
-    const clientRevision = useCommandRevision ? clientCmdRvn : config.revision;
-
-    const bIsUpToDate = baseRevision == clientRevision;
-
-    const response: mcpResponse = {
-        "profileRevision": profile.rvn,
-        "profileId": config.profileId,
-        "profileChangesBaseRevision": profile.rvn,
-        "profileChanges": [],
-        "serverTime": new Date(),
-        "profileCommandRevision": profile.commandRevision,
-        "responseVersion": 1,
-        "command": config.command,
-    }
-
     const result = validate(config.body, schema);
 
     if (!result.valid) {
@@ -57,14 +38,6 @@ export async function handle(config: Handleparams): Promise<mcpResponse> {
         throw errors.neoniteDev.internal.validationFailed.withMessage(`Validation Failed. Invalid fields were [${invalidFields}]`).with(`[${invalidFields}]`)
     }
 
-    if (!bIsUpToDate) {
-        response.profileChanges = [
-            {
-                changeType: 'fullProfileUpdate',
-                profile: await profile.getFullProfile()
-            }
-        ]
-    }
-
-    return response;
+    profile.setStat('current_mtx_platform', config.body.newPlatform || "EpicPC");
+    return profile.generateResponse(config);
 }

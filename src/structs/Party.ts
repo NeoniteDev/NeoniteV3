@@ -5,9 +5,9 @@ import errors from './errors';
 import { PartyConfig, PartyData, partyInvite, partyMember } from './types';
 import { party } from '../types/bodies';
 import { randomUUID } from 'crypto';
-import parties from '../database/partiesController';
-import users from '../database/usersController';
-import Friends from '../database/friendsController';
+// import parties from '../database/partiesController';
+import users from '../database/local/usersController';
+import Friends from '../database/local/friendsController';
 
 interface partyUpdate {
     meta: {
@@ -18,14 +18,18 @@ interface partyUpdate {
 
 }
 
+export const localParties: Party[] = []
+
 export async function getParty(id: string) {
-    const partyData = await parties.getById(id);
+    /*const partyData = await parties.getById(id);
 
     if (!partyData) {
         return undefined;
     }
 
-    return new Party(partyData);
+    return new Party(partyData);*/
+
+    return localParties.find(x => x.id == id);
 }
 
 class Party implements PartyData {
@@ -58,7 +62,7 @@ class Party implements PartyData {
             this.meta = {};
             this.members = [];
 
-            parties.create(this.getData());
+            //parties.create(this.getData());
         }
     }
 
@@ -105,6 +109,9 @@ class Party implements PartyData {
             throw errors.neoniteDev.party.memberNotFound.withMessage('cannot find party leader.');
         }
 
+
+        //this.updateDB();
+ 
         this.broadcastMessage(
             {
                 sent: new Date().toISOString(),
@@ -125,8 +132,6 @@ class Party implements PartyData {
                 updated_at: this.updated_at
             }
         )
-
-        await this.updateDB();
     }
 
 
@@ -150,6 +155,9 @@ class Party implements PartyData {
         member.revision++;
         member.updated_at = new Date().toISOString();
 
+       // await this.updateDB();
+
+        
         this.broadcastMessage(
             {
                 "sent": new Date(),
@@ -165,8 +173,6 @@ class Party implements PartyData {
                 "updated_at": member.updated_at
             }
         )
-
-        this.updateDB();
     }
 
     kick() {
@@ -196,7 +202,7 @@ class Party implements PartyData {
         };
 
         this.invites.push(invite);
-        this.updateDB();
+        //await this.updateDB();
 
         xmppApi.sendMesage(
             `${invitedId}@xmpp.neonitedev.live`,
@@ -219,7 +225,7 @@ class Party implements PartyData {
         );
     }
 
-    async cancellInvite(sent_to: string) {
+    async cancelInvite(sent_to: string) {
         var invite = this.invites.find(x => x.sent_to == sent_to);
         var inviter = this.members.find(x => x.account_id == sent_to);
 
@@ -228,7 +234,7 @@ class Party implements PartyData {
         }
 
         this.invites.remove(invite);
-        this.updateDB();
+        //this.updateDB();
 
         xmppApi.sendMesage(
             `${sent_to}@xmpp.neonitedev.live`,
@@ -257,7 +263,7 @@ class Party implements PartyData {
 
         this.members.remove(memeber);
 
-        await this.updateDB();
+        //await this.updateDB();
 
         this.broadcastMessage(
             {
@@ -272,6 +278,36 @@ class Party implements PartyData {
         )
     }
 
+    reconnect(connection: party.JoinParty.Connection, accountId: string, meta?: Record<string, string>) {
+        const member = this.members.find(x => x.account_id == accountId);
+
+        if (!member) {
+            throw errors.neoniteDev.party.memberNotFound.with(accountId);
+        }
+
+        member.connections = [
+            connection
+        ];
+
+        //parties.updateMember(this.id, member.account_id, member);
+/*
+        this.broadcastMessage(
+            {
+                sent: new Date(),
+                type: "com.epicgames.social.party.notification.v0.MEMBER_JOINED",
+                connection: member.connections[0],
+                revision: member.revision,
+                ns: "Fortnite",
+                party_id: this.id,
+                account_id: member.account_id,
+                account_dn: accountId,
+                member_state_updated: connection.meta,
+                joined_at: member.joined_at,
+                updated_at: member.updated_at
+            }
+        );*/
+    }
+
     addMember(connection: party.JoinParty.Connection, accountId: string, meta?: Record<string, string>) {
         var member: partyMember = {
             account_id: accountId,
@@ -284,7 +320,7 @@ class Party implements PartyData {
         }
 
         this.members.push(member);
-        this.updateDB();
+        //parties.addMember(this.id, member);
 
         this.broadcastMessage(
             {
@@ -296,7 +332,7 @@ class Party implements PartyData {
                 party_id: this.id,
                 account_id: member.account_id,
                 account_dn: accountId,
-                member_state_updated: meta,
+                member_state_updated: connection.meta,
                 joined_at: member.joined_at,
                 updated_at: member.updated_at
             }
@@ -304,20 +340,22 @@ class Party implements PartyData {
     }
 
     deleteParty() {
-        return parties.remove(this.id);
+       // return parties.remove(this.id);
+       localParties.remove(this);
     }
 
     broadcastMessage(message: object) {
+        console.log(this.members.flatMap(x => x.connections).map(x => x.id))
         return xmppApi.sendMesageMulti(
             this.members.flatMap(x => x.connections).map(x => x.id),
             message
         )
     }
 
-    private async updateDB() {
+   /* private updateDB() {
         this.updated_at = new Date().toISOString();
         parties.update(this.getData());
-    }
+    }*/
 }
 
 export default Party;

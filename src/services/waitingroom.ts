@@ -1,6 +1,6 @@
-const express = require('express');
+import PromiseRouter from 'express-promise-router';
 
-const app = express.Router();
+const app = PromiseRouter();
 
 app.get('/api/waitingroom', (req, res) => res.status(204).end());
 

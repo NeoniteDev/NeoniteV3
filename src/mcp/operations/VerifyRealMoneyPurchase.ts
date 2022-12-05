@@ -1,11 +1,11 @@
-import { mcpResponse, Handleparams, CatalogPurchase, multiUpdate } from '../operations'
+import { mcpResponse, Handleparams, CatalogPurchase, multiUpdate, notification } from '../operations'
 import { Profile, ensureProfileExist } from '../profile'
 import errors from '../../structs/errors'
 import * as Path from 'path';
 import { validate, ValidationError } from 'jsonschema';
 import * as fs from 'fs'
 import { getCatalog } from '../../online';
-import pendingPurchases from '../../database/purchasesController';
+import pendingPurchases from '../../database/local/purchasesController';
 import { profile } from '../../structs/types';
 import * as crypto from 'crypto';
 
@@ -15,7 +15,8 @@ const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'))
 
 
 export const supportedProfiles = [
-    'common_core'
+    'common_core',
+    'profile0'
 ]
 
 interface body {
@@ -35,32 +36,9 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
             .with(config.profileId)
     }
 
+    const notifications: notification[] = [];
     const profile = new Profile(config.profileId, config.accountId);
     await profile.init();
-
-    // since the header is optional
-    const clientCmdRvn: number | undefined = config.revisions?.find(x =>
-        x.profileId == config.profileId
-    )?.clientCommandRevision;
-
-    const useCommandRevision = clientCmdRvn != undefined;
-
-    const baseRevision = useCommandRevision ? profile.commandRevision : profile.rvn;
-    const clientRevision = useCommandRevision ? clientCmdRvn : config.revision;
-
-    const bIsUpToDate = baseRevision == clientRevision;
-
-    const response: mcpResponse = {
-        "profileRevision": profile.rvn,
-        "profileId": config.profileId,
-        "profileChangesBaseRevision": profile.rvn,
-        "profileChanges": [],
-        "serverTime": new Date(),
-        "notifications": [],
-        "profileCommandRevision": profile.commandRevision,
-        "responseVersion": 1,
-        "command": config.command,
-    }
 
     const result = validate(config.body, schema);
 
@@ -73,18 +51,8 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
     const catalog = await getCatalog();
 
     if (!catalog) {
-        if (!bIsUpToDate) {
-            response.profileChanges = [
-                {
-                    changeType: 'fullProfileUpdate',
-                    profile: await profile.getFullProfile()
-                }
-            ]
-        }
-
-        return response;
+        return profile.generateResponse(config);
     }
-
 
     const catalogToOffer = catalog.storefronts.find(catalog => catalog.catalogEntries.find(x => x.appStoreId.includes(config.body.appStoreId)));
 
@@ -96,19 +64,6 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
 
     if (!offer) {
         throw errors.neoniteDev.mcp.catalogOutOfDate.with(config.body.appStoreId);
-    }
-
-
-    const athenaProfile = new Profile('athena', config.accountId);
-    await athenaProfile.init();
-
-    const athenaResponse: multiUpdate = {
-        "profileRevision": profile.rvn,
-        "profileId": config.profileId,
-        "profileChangesBaseRevision": profile.rvn,
-        "profileChanges": [],
-        "notifications": [],
-        "profileCommandRevision": profile.commandRevision
     }
 
     if (catalogToOffer.name == 'CurrencyStorefront') {
@@ -141,30 +96,24 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
         const itemId = crypto.randomUUID();
         const itemValue = {
             attributes: {
-                platform: "EpicPC"
+                platform: "Shared"
             },
             quantity: MtxTotal,
             templateId: "Currency:MtxPurchased"
         };
+
 
         profile.addItem(
             itemId,
             itemValue
         );
 
-        response.profileChanges.push(
-            {
-                changeType: 'itemAdded',
-                item: itemValue,
-                itemId
-            }
-        );
-
-        response.notifications = [
+        notifications.push(
             {
                 primary: true,
                 type: 'CatalogPurchase',
                 lootResult: {
+                    tierGroupName: 'Fulfillment:/864A9F524C248D515F8113AED9A6AB91',
                     items: [
                         {
                             itemGuid: itemId,
@@ -175,92 +124,72 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
                     ]
                 }
             }
-        ];
-    } else {
-        response.notifications = [
-            {
-                primary: true,
-                type: 'CatalogPurchase',
-                lootResult: {
-                    items: offer.itemGrants.map(item => {
-                        const profileId = item.templateId.startsWith('Athena') ? 'athena' : 'common_core';
-                        const itemId = crypto.randomUUID();
+        )
 
-                        if (profileId == 'athena') {
-                            const itemData = {
-                                attributes: {
-                                    level: 1,
-                                    item_seen: false,
-                                    rnd_sel_cnt: 0,
-                                    favorite: false,
-                                    creation_time: new Date().toISOString(),
-                                    ...item.attributes
-                                },
-                                quantity: item.quantity,
-                                templateId: item.templateId
-                            };
-
-                            athenaProfile.addItem(itemId, itemData);
-                            athenaResponse.profileChanges.push(
-                                {
-                                    changeType: 'itemAdded',
-                                    item: itemData,
-                                    itemId: itemId
-                                }
-                            );
-                        } else {
-                            const itemData = {
-                                attributes: {
-                                    level: 1,
-                                    item_seen: false,
-                                    rnd_sel_cnt: 0,
-                                    favorite: false,
-                                    creation_time: new Date().toISOString(),
-                                    ...item.attributes
-                                },
-                                quantity: item.quantity,
-                                templateId: item.templateId
-                            };
-
-                            profile.addItem(itemId, itemData);
-                            response.profileChanges.push(
-                                {
-                                    changeType: 'itemAdded',
-                                    item: itemData,
-                                    itemId: itemId
-                                }
-                            );
-                        }
-
-                        return {
-                            itemGuid: itemId,
-                            itemProfile: profileId,
-                            itemType: item.templateId,
-                            quantity: item.quantity
-                        }
-                    })
-                }
+        profile.setStat('in_app_purchases', {
+            "receipts": [
+                "EPIC:341b287dbb104d54a9c350e19a53cb4e",
+            ],
+            "ignoredReceipts": [],
+            "fulfillmentCounts": {
+                "864A9F524C248D515F8113AED9A6AB91": 1,
             }
-        ];
+        })
+
+        return profile.generateResponse(config, notifications);
     }
 
-    if (response.profileChanges.length > 0) {
-        await profile.bumpRvn(response);
-    }
+    const athena = new Profile('athena', config.accountId);
+    await athena.init();
 
-    if (athenaResponse.profileChanges.length > 0) {
-        await athenaProfile.bumpRvn(athenaResponse);
-        response.multiUpdate = [ athenaResponse ];
-    }
+    notifications.push(
+        {
+            primary: true,
+            type: 'CatalogPurchase',
+            lootResult: {
+                tierGroupName: 'Fulfillment:/864A9F524C248D515F8113AED9A6AB91',
+                items: offer.itemGrants.map(item => {
+                    const profileId = item.templateId.startsWith('Athena') ? 'athena' : 'common_core';
+                    const itemId = crypto.randomUUID();
+                    const itemData = {
+                        attributes: {
+                            level: 1,
+                            item_seen: false,
+                            rnd_sel_cnt: 0,
+                            favorite: false,
+                            creation_time: new Date().toISOString(),
+                            ...item.attributes
+                        },
+                        quantity: item.quantity,
+                        templateId: item.templateId
+                    };
 
-    if (!bIsUpToDate) {
-        response.profileChanges = [
-            {
-                changeType: 'fullProfileUpdate',
-                profile: await profile.getFullProfile()
+                    if (profileId == 'athena')
+                        athena.addItem(itemId, itemData);
+                    else
+                        profile.addItem(itemId, itemData)
+
+
+                    return {
+                        itemGuid: itemId,
+                        itemProfile: profileId,
+                        itemType: item.templateId,
+                        quantity: item.quantity
+                    }
+                })
             }
-        ]
-    }
+        }
+    );
 
-    return response;
+    profile.setStat('in_app_purchases', {
+        "receipts": [
+            "EPIC:341b287dbb104d54a9c350e19a53cb4e",
+        ],
+        "ignoredReceipts": [],
+        "fulfillmentCounts": {
+            "864A9F524C248D515F8113AED9A6AB91": 1,
+        }
+    })
+
+    return profile.generateResponse(config, notifications, athena);
 }

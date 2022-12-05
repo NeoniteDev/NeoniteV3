@@ -3,7 +3,7 @@ import validateMethod from '../middlewares/Method'
 import * as Path from 'path';
 import errors from '../structs/errors';
 import * as operations from './operations';
-import { profileRevisions } from './operations';
+import { profileRevision } from './operations';
 import { profile as types } from '../structs/types';
 import PromiseRouter from 'express-promise-router';
 import verifyAuthorization from '../middlewares/authorization';
@@ -42,7 +42,7 @@ app.post('/api/game/v2/profile/:accountId/client/:command', verifyAuthorization(
 
         const s_profileRevisions = req.get('X-EpicGames-ProfileRevisions');
 
-        var profileRevisions: profileRevisions[] | undefined = undefined;
+        var profileRevisions: profileRevision[] | undefined = undefined;
 
         if (s_profileRevisions) {
             try {
@@ -84,5 +84,7 @@ app.post('/api/game/v2/profile/:accountId/public/:command', verifyAuthorization(
 })
 
 app.use(validateMethod(app))
+
+
 
 export default app;

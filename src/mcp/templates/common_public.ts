@@ -9,7 +9,7 @@ export function handle(accountId: string): types.Profile {
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
         rvn: 1,
-        wipeNumber: 9,
+        wipeNumber: 1,
         accountId: accountId,
         profileId: "common_public",
         version: 'fortnite_start',

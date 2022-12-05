@@ -20,7 +20,7 @@ const client = axios.create(
 )
 
 export async function sendMesage(to: string, message: object | string) {
-    const fragment = xmlBuilder.fragment({
+    /*const fragment = xmlBuilder.fragment({
         message: {
             '@from': 'xmpp-admin@xmpp.neonitedev.live',
             '@to': to,
@@ -38,54 +38,60 @@ export async function sendMesage(to: string, message: object | string) {
                 'Content-Type': 'application/xml'
             }
         }
-    ).then(() => { })
+    ).then(() => { })*/
 }
 
 export function sendMesageMulti(to: string[], message: object | string) {
-    const fragment = xmlBuilder.fragment({
-        message: {
-            '@from': 'xmpp-admin@xmpp.neonitedev.live',
-            '@to': '{{$userName}}', // the plugin will handle
-            body: {
-                '#': message instanceof Object ? JSON.stringify(message) : message
-            }
-        }
+
+
+    console.log('\n\nMESSAGE BRODCATING', message);
+
+    to.forEach(to => {
+        console.log('Sending broadcast to ',to);
+        sendMesage(to, message)
     })
 
-    var queryString = new URLSearchParams(
-        to.map(x => [
-            'userNames',
-            x
-        ])
-    ).toString()
-
-    return client.post(
-        `https://xmpp.neonitedev.live:9091/plugins/restapi/v1/packets/users/?${queryString}`,
-        fragment.end({ headless: true }),
-        {
-            headers: {
-                'Content-Type': 'application/xml'
+    console.log('\n\n\n')
+    /*
+        var queryString = new URLSearchParams(
+            to.map(x => [
+                'userNames',
+                x
+            ])
+        ).toString()
+    
+    
+    
+        return client.post(
+            `https://xmpp.neonitedev.live:9091/plugins/restapi/v1/packets/users/?${queryString}`,
+            fragment.end({ headless: true }),
+            {
+                headers: {
+                    'Content-Type': 'application/xml'
+                }
             }
-        }
-    ).then(() => { })
+        ).then(() => { })*/
 }
 
 export async function getChatRooms(): Promise<XmppApi.ChatRoom[]> {
-    const response = await client.get<XmppApi.ChatRoomRoot>(`https://xmpp.neonitedev.live:9091/plugins/restapi/v1/chatrooms?servicename=muc`);
+ /*   const response = await client.get<XmppApi.ChatRoomRoot>(`https://xmpp.neonitedev.live:9091/plugins/restapi/v1/chatrooms?servicename=muc`);
 
-    return response.data.chatRoom;
+    return response.data.chatRoom;*/
+
+    return [];
 }
 
 export async function getRoomParticipants(roomName: string): Promise<XmppApi.Participant[]> {
-    const response = await client.get<XmppApi.ParticipantRoot>(
+    /*const response = await client.get<XmppApi.ParticipantRoot>(
         `https://xmpp.neonitedev.live:9091/plugins/restapi/v1/chatrooms/${roomName}/participants?servicename=muc`
     );
 
-    return response.data.participant;
+    return response.data.participant;*/
+    return [];
 }
 
 export async function createChatRoom(roomName: string, naturalName: string, description: string, maxUsers: number, publicRoom: boolean): Promise<XmppApi.ChatRoom> {
-    var roomData: XmppApi.ChatRoom = {
+   /* var roomData: XmppApi.ChatRoom = {
         roomName: roomName,
         naturalName: naturalName,
         description: description,
@@ -124,15 +130,18 @@ export async function createChatRoom(roomName: string, naturalName: string, desc
         roomData
     );
 
-    return roomData;
+    return roomData;*/
+
+    throw new Error("Not Supported");
 }
 
 export async function getUserSessions(accountId: string): Promise<XmppApi.Session[]> {
-    if (accountId.length != 32) {
+/*    if (accountId.length != 32) {
         throw new Error('Invalid AccountId');
     }
 
     const response = await client.get<XmppApi.SessionResponse>(`https://xmpp.neonitedev.live:9091/plugins/restapi/v1/sessions/${accountId}`);
-    return response.data.sessions || response.data.session;
+    return response.data.sessions || response.data.session;*/
+    return [];
 }
 

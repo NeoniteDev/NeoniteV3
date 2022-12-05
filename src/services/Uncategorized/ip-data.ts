@@ -2,7 +2,7 @@ import Router from "express-promise-router";
 import errors, { ApiError } from "../../structs/errors";
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { HttpError } from 'http-errors';
-import users from "../../database/usersController";
+import users from "../../database/local/usersController";
 import verifyAuthorization from "../../middlewares/authorization";
 import * as geoIp from 'geoip-lite'
 import * as iso3166 from 'iso-3166-2'

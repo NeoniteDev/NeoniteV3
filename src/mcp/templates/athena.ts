@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 import { profile as types } from '../../structs/types';
 
-import { profiles } from '../../database/profilesController';
+import { profiles } from '../../database/local/profilesController';
 
 export const profileId = 'athena';
 
@@ -10,7 +10,7 @@ export function handle(accountId: string): types.Profile {
     return {
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
-        rvn: 0,
+        rvn: 1,
         wipeNumber: 1,
         accountId: accountId,
         profileId: 'athena',
@@ -119,7 +119,23 @@ export function handle(accountId: string): types.Profile {
                 purchased_bp_offers: [],
                 last_match_end_datetime: new Date(0).toISOString(),
                 last_stw_accolade_transfer_datetime: new Date(0).toISOString(),
-                active_loadout_index: 0
+                active_loadout_index: 0,
+                favorite_musicpack: "",
+                favorite_glider: "",
+                favorite_pickaxe: "",
+                favorite_skydivecontrail: "",
+                favorite_backpack: "",
+                favorite_dance: [
+                  "",
+                  "",
+                  "",
+                  "",
+                  "",
+                  ""
+                ],
+                favorite_itemwraps: [],
+                favorite_character: "",
+                favorite_loadingscreen: ""
             }
         },
         commandRevision: 0

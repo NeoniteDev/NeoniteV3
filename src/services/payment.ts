@@ -3,11 +3,11 @@ import * as express from 'express';
 import errors, { ApiError } from "../structs/errors";
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { HttpError } from 'http-errors';
-import Users, { User } from "../database/usersController";
+import Users, { User } from "../database/local/usersController";
 import verifyAuthorization, { reqWithAuth } from "../middlewares/authorization";
 import * as Path from 'path';
 import * as crypto from 'crypto';
-import pendingPurchases from "../database/purchasesController";
+import pendingPurchases from "../database/local/purchasesController";
 const app = Router();
 
 app.use(express.json());
@@ -41,9 +41,9 @@ app.post('/v1/purchaseToken', verifyAuthorization(), async (req: reqWithAuth, re
     );
 })
 
+/*
 const html = Path.join(__dirname, '../../resources/html/purchase.html');
-const FailureHtml = Path.join(__dirname, '../../resources/html/purchaseFailed.html');
-
+const FailureHtml = Path.join(__dirname, '../../resources/html/purchaseFailed.html');*/
 
 // custom api
 

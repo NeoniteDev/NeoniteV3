@@ -6,10 +6,10 @@ import * as express from "express";
 import verifyAuthorization, { reqWithAuth, reqWithAuthMulti, validateToken } from "../middlewares/authorization";
 import validateMethod from "../middlewares/Method";
 import { Credentials } from "../structs/types";
-import tokens from "../database/tokenController";
-import { exchanges } from "../database/exchangesController";
-import users from "../database/usersController";
-import refresh_tokens from "../database/refreshController";
+import { exchanges } from "../database/local/exchangesController";
+import users from "../database/local/usersController";
+//import refresh_tokens from "../database/local/refreshController";
+import tokens from "../database/local/tokenController";
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { HttpError } from "http-errors";
 import userAgentParse from "../middlewares/useragent";
@@ -68,42 +68,45 @@ app.post('/api/oauth/token', async (req, res, next) => {
         case 'client_credentials':
             {
                 const token = crypto.randomUUID().replace(/-/g, '');
-                const expires = new Date().addHours(1); // only one hours since we don't support killing them.
-                const expiteIn = expires.getTime() - Date.now();
-                const expireInSec = Math.floor(expiteIn / 1000);
+                const expires = new Date().addHours(4); 
+                const expireIn = expires.getTime() - Date.now();
+                const expireInSec = Math.floor(expireIn / 1000);
 
-                const jwtToken = jwt.sign(
-                    {
-                        'mver': false,
-                        'clid': credentials.username,
-                        'am': grant_type,
-                        'sia': '4e656f6e697465',
-                        'clsvc': 'fortnite',
-                        'ic': true,
-                        't': 's',
-                    },
-                    jwtSecret,
-                    {
-                        jwtid: token,
-                        expiresIn: expireInSec,
-                    }
-                );
 
-                /* who cares about revoking client tokens....
-                await tokens.add(
-                    {
-                        auth_method: grant_type,
-                        clientId: credentials.username,
-                        client_service: 'fortnite',
-                        expireAt: expires.getTime(),
-                        internal: true,
-                        token: token,
-                    }
-                );*/
+                const response_token = req.body.token_type == 'eg1' ?
+                    'eg1~' + jwt.sign(
+                        {
+                            'mver': false,
+                            'clid': credentials.username,
+                            'am': grant_type,
+                            'sia': '4e656f6e697465',
+                            'clsvc': 'fortnite',
+                            'ic': true,
+                            't': 's',
+                        },
+                        jwtSecret,
+                        {
+                            jwtid: token,
+                            expiresIn: expireInSec,
+                        }
+                    ) : token;
+
+                if (req.body.token_type != 'eg1') {
+                    tokens.add(
+                        {
+                            auth_method: 'client_credentials',
+                            client_service: 'fortnite',
+                            clientId: credentials.username,
+                            expireAt: expires,
+                            internal: true,
+                            token: token
+                        }
+                    )
+                };
 
                 res.json(
                     {
-                        access_token: 'eg1~' + jwtToken,
+                        access_token: response_token,
                         expires_in: expireInSec,
                         expires_at: expires,
                         token_type: 'bearer',
@@ -112,7 +115,6 @@ app.post('/api/oauth/token', async (req, res, next) => {
                         client_service: 'fortnite'
                     }
                 );
-
                 return;
             }
 
@@ -129,13 +131,13 @@ app.post('/api/oauth/token', async (req, res, next) => {
                 };
 
                 var userPromise = users.getById(code.accountId);
-                var originatingSessionPromise = tokens.get(code.sessionId, false);
+                /*var originatingSessionPromise = tokens.get(code.sessionId, false);
 
                 var originatingSession = await originatingSessionPromise;
 
                 if (!originatingSession) {
                     throw errors.neoniteDev.authentication.oauth.expiredExchangeCodeSession;
-                }
+                }*/
 
                 user = await userPromise;
 
@@ -172,50 +174,52 @@ app.post('/api/oauth/token', async (req, res, next) => {
 
         case 'refresh_token':
             {
-                if ('refresh_token' in req.body == false) {
-                    throw errors.neoniteDev.authentication.invalidRequest.withMessage('refresh_token is required.')
-                }
+                /* if ('refresh_token' in req.body == false) {
+                     throw errors.neoniteDev.authentication.invalidRequest.withMessage('refresh_token is required.')
+                 }
+ 
+                 /** @type {string} *//*
+const refresh = req.body.refresh_token;
 
-                /** @type {string} */
-                const refresh = req.body.refresh_token;
+if (refresh.startsWith('eg1~')) {
+    try {
+        var decoded = jwt.verify(req.body.refresh_token.slice(4), jwtSecret);
+    } catch { throw errors.neoniteDev.authentication.oauth.invalidRefresh; }
 
-                if (refresh.startsWith('eg1~')) {
-                    try {
-                        var decoded = jwt.verify(req.body.refresh_token.slice(4), jwtSecret);
-                    } catch { throw errors.neoniteDev.authentication.oauth.invalidRefresh; }
+    if (typeof decoded != 'object' || !decoded.jti) {
+        throw errors.neoniteDev.authentication.oauth.invalidRefresh;
+    }
 
-                    if (typeof decoded != 'object' || !decoded.jti) {
-                        throw errors.neoniteDev.authentication.oauth.invalidRefresh;
-                    }
+    var infos = await refresh_tokens.get(decoded.jti);
 
-                    var infos = await refresh_tokens.get(decoded.jti);
+    if (!infos) {
+        throw errors.neoniteDev.authentication.oauth.invalidRefresh;
+    }
+} else if (refresh.length == 32) {
+    var infos = await refresh_tokens.get(refresh);
 
-                    if (!infos) {
-                        throw errors.neoniteDev.authentication.oauth.invalidRefresh;
-                    }
-                } else if (refresh.length == 32) {
-                    var infos = await refresh_tokens.get(refresh);
+    if (!infos) {
+        throw errors.neoniteDev.authentication.oauth.invalidRefresh;
+    }
+} else {
+    throw errors.neoniteDev.authentication.oauth.invalidRefresh;
+}
 
-                    if (!infos) {
-                        throw errors.neoniteDev.authentication.oauth.invalidRefresh;
-                    }
-                } else {
-                    throw errors.neoniteDev.authentication.oauth.invalidRefresh;
-                }
+if (infos.clientId != credentials.username) {
+    throw errors.neoniteDev.authentication.invalidHeader.withMessage(`invalid client ${credentials.username}`);
+}
 
-                if (infos.clientId != credentials.username) {
-                    throw errors.neoniteDev.authentication.invalidHeader.withMessage(`invalid client ${credentials.username}`);
-                }
+refresh_tokens.remove(infos.token);
+tokens.remove(infos.bearer_token);
 
-                refresh_tokens.remove(infos.token);
-                tokens.remove(infos.bearer_token);
+user = await users.getById(infos.account_id)
 
-                user = await users.getById(infos.account_id)
+if (!user) {
+    throw errors.neoniteDev.authentication.oauth.invalidRefresh;
+}*/
 
-                if (!user) {
-                    throw errors.neoniteDev.authentication.oauth.invalidRefresh;
-                }
 
+                throw errors.neoniteDev.authentication.oauth.invalidRefresh;
                 break;
             }
 
@@ -227,35 +231,35 @@ app.post('/api/oauth/token', async (req, res, next) => {
 
     var numTokens = await tokens.getUserTokensCount(user.accountId);
 
-    if (numTokens >= 75) {
+    if (numTokens >= 20) {
         throw errors.neoniteDev.authentication.oauth.tooManySessions;
     }
 
-    var access_token = crypto.randomUUID().replace(/-/g, '');
-    var refresh_token = crypto.randomUUID().replace(/-/g, '');
+    const access_token = crypto.randomUUID().replace(/-/g, '');
+    //var refresh_token = crypto.randomUUID().replace(/-/g, '');
 
     const tokenExpires = new Date().addHours(8);
-    const refreshExpires = new Date().addHours(24);
+    //const refreshExpires = new Date().addHours(24);
 
     const expireIn = tokenExpires.getTime() - Date.now();
-    const refreshExpireIn = refreshExpires.getTime() - Date.now();
+    //const refreshExpireIn = refreshExpires.getTime() - Date.now();
 
 
-    const tokenAdd = tokens.add(
+    tokens.add(
         {
             auth_method: grant_type,
             clientId: credentials.username,
             client_service: 'fortnite',
-            expireAt: tokenExpires.getTime(),
+            expireAt: tokenExpires,
             internal: true,
             token: access_token,
+            refresh_token: access_token,
             account_id: user.accountId,
             displayName: user.displayName,
             in_app_id: user.accountId,
-            refresh_token: refresh_token
         }
     );
-
+    /*
     const refreshAdd = refresh_tokens.add(
         {
             auth_method: grant_type,
@@ -269,13 +273,12 @@ app.post('/api/oauth/token', async (req, res, next) => {
             in_app_id: user.accountId,
             bearer_token: access_token
         }
-    );
-
-    if (!(await tokenAdd) || !(await refreshAdd)) {
-        throw errors.neoniteDev.internal.dataBaseError;
-    }
-
-    var jwt_token = jwt.sign(
+    );* /
+    /*
+        if (!(await tokenAdd) || !(await refreshAdd)) {
+            throw errors.neoniteDev.internal.dataBaseError;
+        }*/
+    const response_token = req.body.token_type == 'eg1' ? 'eg1~' + jwt.sign(
         {
             'sub': user.accountId,
             'mver': false,
@@ -293,30 +296,30 @@ app.post('/api/oauth/token', async (req, res, next) => {
             expiresIn: Math.floor(expireIn / 1000),
             jwtid: access_token
         }
-    );
-
-    var jwt_refresh = jwt.sign(
-        {
-            'sub': user.accountId,
-            't': 'r',
-            'clid': credentials.username,
-            'am': grant_type,
-        },
-        jwtSecret,
-        {
-            expiresIn: Math.floor(refreshExpireIn / 1000),
-            jwtid: refresh_token
-        }
-    );
+    ) : access_token
+    /*
+        var jwt_refresh = jwt.sign(
+            {
+                'sub': user.accountId,
+                't': 'r',
+                'clid': credentials.username,
+                'am': grant_type,
+            },
+            jwtSecret,
+            {
+                expiresIn: Math.floor(refreshExpireIn / 1000),
+                jwtid: refresh_token
+            }
+        );*/
 
     res.json(
         {
-            'access_token': 'eg1~' + jwt_token,
-            'refresh_token': 'eg1~' + jwt_refresh,
+            'access_token': response_token,
+            'refresh_token': response_token,
             'expires_in': Math.round(expireIn / 1000),
+            'refresh_expires': Math.round(expireIn / 1000),
+            'refresh_expires_at': tokenExpires,
             'expires_at': tokenExpires,
-            'refresh_expires': Math.round(refreshExpireIn / 1000),
-            'refresh_expires_at': refreshExpires,
             'client_id': credentials.username,
             'account_id': user.accountId,
             'internal_client': true,
@@ -335,7 +338,7 @@ app.get('/api/oauth/verify', verifyAuthorization(true), userAgentParse(false), (
     }
 
     const token = req.headers.authorization.replace(/^bearer /i, '');
-    const expires_date = new Date(req.auth.expireAt * 1000);
+    const expires_date = req.auth.expireAt;
     const expire_in = expires_date.getTime() - Date.now()
 
     // typescript...
@@ -413,15 +416,16 @@ app.delete('/api/oauth/sessions/kill/:token', verifyAuthorization(true, false), 
     if (req.auth.account_id != tokenToKill.account_id) {
         throw errors.neoniteDev.authentication.notOwnSessionRemoval.with(req.params.token)
     }
+    /*
+        await Promise.all(
+            [
+                refresh_tokens.removeByToken(tokenToKill.token),
+                tokens.remove(tokenToKill.token)
+            ]
+        );*/
 
-    await Promise.all(
-        [
-            refresh_tokens.removeByToken(tokenToKill.token),
-            tokens.remove(tokenToKill.token)
-        ]
-    );
-
-    res.status(204).end()
+    tokens.remove(tokenToKill.token);
+    res.status(204).end();
 });
 
 // kill other tokens
@@ -430,13 +434,15 @@ app.delete('/api/oauth/sessions/kill/', verifyAuthorization(false, false), async
         throw errors.neoniteDev.authentication.invalidRequest.withMessage('a valid killType is required.')
     }
 
+    /*
     await Promise.all(
         [
             tokens.removeOthers(req.auth.token, req.auth.account_id),
             refresh_tokens.removeOthers(req.auth.token, req.auth.account_id)
         ]
-    );
+    );*/
 
+    tokens.removeOthers(req.auth.token, req.auth.account_id);
     res.status(204).end()
 });
 

@@ -2,7 +2,7 @@ import Router from "express-promise-router";
 import errors, { ApiError } from "../../structs/errors";
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { HttpError } from 'http-errors';
-import Users, { User } from "../../database/usersController";
+import Users, { User } from "../../database/local/usersController";
 import VerifyAuthorization, { reqWithAuth, reqWithAuthMulti } from "../../middlewares/authorization";
 import validateMethod from '../../middlewares/Method'
 

@@ -627,6 +627,6 @@ export function handle(accountId: string): types.Profile {
                 active_loadout_index: 0
             }
         },
-        commandRevision: 1
+        commandRevision: 0
     }
 }

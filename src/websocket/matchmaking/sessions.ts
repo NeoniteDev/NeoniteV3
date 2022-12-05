@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import matchmakingClient, { states } from ".";
-import gameSessions, { availability, Session } from "../../database/gameSessionsController";
+import gameSessions, { availability, session } from "../../database/local/gameSessionsController";
 
 export enum groupState {
     Queued,
@@ -13,28 +13,46 @@ export default class GameSession {
         this.creator = creator;
         this.id = randomUUID().replaceAll('-', '');
 
+        // like 127.0.0.1:7777
+        const ipAndPort = this.creator.payload.attributes['player.option.customKey'].split(':');
+
+        const serverIp = ipAndPort[0];
+        const serverPort = parseInt(ipAndPort[1]);
+
         this.sessionData = {
             id: this.id,
-            availableTo: availability.trusted,
-            expireAt: new Date(),
-            createdAt: new Date(),
-            numPlayers: this.QueuedClients.length + 1,
-            maxPlayers: 200,
-            minPlayers: 1,
+            ownerId: this.creator.payload.playerId,
             ownerName: this.creator.payload.playerId,
+            totalPlayers: this.QueuedClients.length + 1,
             serverName: `${this.creator.payload.playerId}-gameserver`,
-            severIp: this.creator.payload.attributes['player.option.customKey'],
+            serverAddress: serverIp,
+            serverPort: isNaN(serverPort) ? 7777 : serverPort,
+            maxPrivatePlayers: 200,
+            maxPublicPlayers: 0,
+            allowInvites: false,
+            allowJoinInProgress: false,
+            allowJoinViaPresence: false,
+            allowJoinViaPresenceFriendsOnly: false,
+            attributes: {},
+            buildUniqueId: '',
+            isDedicated: true,
+            lastUpdated: new Date(),
+            openPrivatePlayers: 200,
+            openPublicPlayers: 0,
+            privatePlayers: [this.creator.payload.playerId],
+            publicPlayers: [],
+            shouldAdvertise: false,
+            started: false,
+            usesPresence: false,
+            usesStats: false
         }
 
-        gameSessions.create({
-            ...this.sessionData,
-            expireAt: this.sessionData.expireAt.getTime()
-        });
+        gameSessions.create(this.sessionData);
 
         this.updateQueue();
     }
 
-    sessionData: Session;
+    sessionData: session;
     id: string;
     state: groupState = groupState.Queued;
     QueuedClients: matchmakingClient[] = [];
@@ -58,7 +76,7 @@ export default class GameSession {
 
     onMemberDisconnect(client: matchmakingClient) {
         if (client.ticketId == this.creator.ticketId) {
-            this.cancellSession();
+            this.cancelSession();
         } else {
             this.updateQueue()
         }
@@ -113,11 +131,11 @@ export default class GameSession {
         })
     }
 
-    cancellSession() {
+    cancelSession() {
         if (this.state != groupState.Queued) {
             return;
         }
-        
+
         this.QueuedClients.forEach(x => {
             x.ws.close(4999, "Match was cancelled");
         })

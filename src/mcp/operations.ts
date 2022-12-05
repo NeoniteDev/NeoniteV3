@@ -34,7 +34,9 @@ interface itemRemoved {
     itemId: string,
 }
 
-type profileChange = fullProfileUpdate | itemAdded | itemAttrChanged | statModified | itemRemoved;
+export type profileChange = fullProfileUpdate | itemAdded | itemAttrChanged | statModified | itemRemoved;
+
+export type notification = CatalogPurchase;
 
 export interface CatalogPurchase {
     "type": "CatalogPurchase",
@@ -58,16 +60,16 @@ export interface mcpResponse {
     multiUpdate?: multiUpdate[],
     profileChanges: profileChange[],
     serverTime: Date,
-    notifications?: CatalogPurchase[]
+    notifications?: notification[]
     profileCommandRevision: number,
     responseVersion: 1,
     command: string
 }
 
-export type multiUpdate = Omit<mcpResponse, 'responseVersion' | 'serverTime' | 'multiUpdate' | 'command'>;
+export type multiUpdate = Omit<mcpResponse, 'responseVersion' | 'serverTime' | 'multiUpdate' | 'notifications' | 'command'>;
 
 
-export interface profileRevisions {
+export interface profileRevision {
     profileId: string,
     clientCommandRevision: number
 }
@@ -77,7 +79,7 @@ export interface Handleparams<T = (any | undefined)> {
     /** the rvn query */
     revision: number;
     accountId: string;
-    revisions?: profileRevisions[]
+    revisions?: profileRevision[]
     body: T;
     command: string;
 }

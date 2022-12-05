@@ -68,7 +68,7 @@ export interface tokenInfo {
     auth_method: 'exchange_code' | 'password' | 'refresh_token' | 'authorization_code' | 'device_auth' ,
     in_app_id: string,
     internal: boolean,
-    expireAt: number,
+    expireAt: Date,
     client_service: string;
 }
 
@@ -77,7 +77,7 @@ export interface tokenInfoClient {
     clientId: string,
     auth_method: 'client_credentials',
     internal: boolean,
-    expireAt: number,
+    expireAt: Date,
     client_service: string;
 }
 
