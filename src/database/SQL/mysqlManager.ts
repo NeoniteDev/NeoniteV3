@@ -4,12 +4,12 @@
 import * as mysql from 'mysql';
 import * as crypto from 'crypto';
 
-import { tokenInfo, profile as profileTypes, partyMember, PartyData } from '../../structs/types';
+import { tokenInfo, profile as profileTypes, partyMember, PartyData } from '../../utils/types';
 import * as path from 'path';
 import { readFileSync } from 'fs';
 import { create } from 'domain';
 import { party } from '../../types/bodies';
-import Party from '../../structs/Party';
+import Party from '../../utils/Party';
 import * as dotenv from 'dotenv'
 import * as nodeCache from 'node-cache';
 

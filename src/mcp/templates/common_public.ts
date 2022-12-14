@@ -1,6 +1,6 @@
 
 import { randomUUID } from 'crypto';
-import { profile as types } from '../../structs/types';
+import { profile as types } from '../../utils/types';
 
 export const profileId = 'common_public';
 
@@ -8,14 +8,18 @@ export function handle(accountId: string): types.Profile {
     return {
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
-        rvn: 1,
+        rvn: 0,
         wipeNumber: 1,
         accountId: accountId,
         profileId: "common_public",
         version: 'fortnite_start',
         items: {},
         stats: {
-            attributes: { banner_color: '', homebase_name: '', banner_icon: '' }
+            attributes: {
+                banner_color: '',
+                homebase_name: '',
+                banner_icon: ''
+            }
         },
         commandRevision: 0
     }

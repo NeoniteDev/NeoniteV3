@@ -1,9 +1,9 @@
-import { BRShop, timeline, pastSeasons, CloudstorageFile, Middlewares } from './structs/types';
+import { BRShop, timeline, pastSeasons, CloudstorageFile, Middlewares } from './utils/types';
 import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
-import { newClientSession, session } from './structs/EpicSession';
-import CachedItem from './structs/cachedItem';
+import { newClientSession, session } from './utils/EpicSession';
+import CachedItem from './utils/cachedItem';
 import * as nodeCache from 'node-cache'
 import { ConfigIniParser as iniparser } from 'config-ini-parser';
 import { content, launcherService } from './types/responses';
@@ -233,12 +233,18 @@ export async function getLastest(): Promise<Middlewares.fortniteReq> {
 }
 
 export interface season {
-    "season": number,
-    "chapter": number,
-    "seasonInChapter": number,
-    "displayName": string,
-    "startDate": string,
-    "endDate": string
+    season:          number;
+    chapter:         number;
+    seasonInChapter: number;
+    displayName:     string;
+    startDate:       string;
+    endDate:         null | string;
+    patchList:       PatchList[];
+}
+
+export interface PatchList {
+    version: string;
+    date:    string;
 }
 
 const pastSeasonsPath = path.join(
@@ -275,7 +281,8 @@ export async function getPastSeasons(season?: number) {
                             "seasonInChapter": x.seasonInChapter,
                             "displayName": x.displayName,
                             "startDate": new Date(x.startDate).toISOString(),
-                            "endDate": new Date(x.endDate).toISOString()
+                            "endDate": new Date(x.endDate).toISOString(),
+                            patchList: x.patchList.filter(x => !x.version.includes('-'))
                         }
                     })
 
@@ -289,5 +296,10 @@ export async function getPastSeasons(season?: number) {
         }
     }
 
-    return past_seasons;
+    return past_seasons.map(x => {
+        return {
+            ...x,
+            patchList: x.patchList.filter(x => !x.version.includes('-'))
+        }
+    });
 }

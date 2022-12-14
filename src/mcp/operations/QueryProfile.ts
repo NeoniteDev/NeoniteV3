@@ -1,22 +1,12 @@
 import { mcpResponse, Handleparams } from '../operations'
 import { Profile, ensureProfileExist } from '../profile'
-import { profile as types } from '../../structs/types';
-import errors from '../../structs/errors'
+import { profile as types } from '../../utils/types';
+import errors from '../../utils/errors'
 
 export const supportedProfiles = '*';
 
-export async function handle(config: Handleparams): Promise<mcpResponse> {
-    const existOrCreated = await ensureProfileExist(config.profileId, config.accountId);
+export async function handle(config: Handleparams, profile: Profile): Promise<mcpResponse> {
+    profile.setStat('season_num', config.clientInfos.season);
 
-    if (!existOrCreated) {
-        throw errors.neoniteDev.mcp.templateNotFound
-            .withMessage(`Unable to find template configuration for profile ${config.profileId}`)
-            .with(config.profileId)
-    }
-
-    const profile = new Profile(config.profileId, config.accountId);
-    await profile.init();
-
-
-    return profile.generateResponse(config);
+    return await profile.generateResponse(config);
 }

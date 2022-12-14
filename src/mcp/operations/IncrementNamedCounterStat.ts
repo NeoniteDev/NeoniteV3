@@ -1,22 +1,24 @@
 import { mcpResponse, Handleparams } from '../operations'
 import { Profile, ensureProfileExist } from '../profile'
-import errors from '../../structs/errors'
+import { profile } from '../../utils/types'
+import errors from '../../utils/errors'
 
 export const supportedProfiles = [
     'profile0'
 ]
 
-export async function handle(config: Handleparams): Promise<mcpResponse> {
-    const existOrCreated = await ensureProfileExist(config.profileId, config.accountId);
+interface body {
+    counterName: string
+}
 
-    if (!existOrCreated) {
-        throw errors.neoniteDev.mcp.templateNotFound
-            .withMessage(`Unable to find template configuration for profile ${config.profileId}`)
-            .with(config.profileId)
-    }
+export async function handle(config: Handleparams<body>, profile: Profile): Promise<mcpResponse> {
+    if (typeof config.body.counterName !== 'string') throw errors.neoniteDev.mcp.invalidPayload;
 
-    const profile = new Profile(config.profileId, config.accountId);
-    await profile.init();
+    // @ts-ignore
+    const named_counters: profile.StatsAttributes['named_counters'] = profile.stats.attributes.named_counters;
+    named_counters[config.body.counterName].current_count++;
+    named_counters[config.body.counterName].last_incremented_time = new Date().toISOString();
 
-    return profile.generateResponse(config);
+    profile.setStat('named_counters', named_counters);
+    return await profile.generateResponse(config);
 }

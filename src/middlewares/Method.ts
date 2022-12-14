@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import { Request, Response, NextFunction, Handler } from 'express-serve-static-core'
-import errors from '../structs/errors';
+import errors from '../utils/errors';
 
 export default function validateMethod(_router: any): () => Handler {
     return function (req: Request, res: Response, next: NextFunction) {

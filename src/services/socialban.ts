@@ -1,6 +1,6 @@
 import PromiseRouter from "express-promise-router";
 import verifyAuthorization from "../middlewares/authorization";
-import errors from "../structs/errors";
+import errors from "../utils/errors";
 const app = PromiseRouter();
 
 app.get('/api/public/v1/:accountId', verifyAuthorization(), (req, res) => {

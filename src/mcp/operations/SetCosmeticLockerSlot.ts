@@ -1,13 +1,10 @@
 import { mcpResponse, Handleparams } from '../operations'
 import { ensureProfileExist, Profile } from '../profile'
-import errors from '../../structs/errors'
-import { loadout, profile as types } from '../../structs/types';
-import * as Path from 'path';
+import errors from '../../utils/errors'
+import { loadout, profile as types } from '../../utils/types';
 import { validate, ValidationError, ValidatorResult } from 'jsonschema';
-import * as fs from 'fs'
+import * as resources from '../../utils/resources';
 
-const schemaPath = Path.join(__dirname, '../../../resources/schemas/mcp/json/SetCosmeticLockerSlot.json');
-const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'))
 
 export const supportedProfiles: types.ProfileID[] = [
     'athena',
@@ -42,32 +39,7 @@ const itemsLenghts = {
     VictoryPose: 1
 }
 
-// so typescript wont yell that body is possibly undefined
-function validateBody(body: body | undefined, validatorResult: ValidatorResult): body is body {
-    return body != undefined && validatorResult.valid;
-}
-
-export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
-    const existOrCreated = await ensureProfileExist(config.profileId, config.accountId);
-
-    if (!existOrCreated) {
-        throw errors.neoniteDev.mcp.templateNotFound
-            .withMessage(`Unable to find template configuration for profile ${config.profileId}`)
-            .with(config.profileId)
-    }
-
-    const profile = new Profile(config.profileId, config.accountId);
-    await profile.init();
-
-    const result = validate(config.body, schema);
-
-    if (!result.valid || !validateBody(config.body, result)) {
-        const validationErrors = result.errors.filter(x => x instanceof ValidationError)
-        const invalidFields = validationErrors.map(x => x.argument).join(', ');
-        throw errors.neoniteDev.internal.validationFailed.withMessage(`Validation Failed. Invalid fields were [${invalidFields}]`).with(`[${invalidFields}]`)
-    }
-
-
+export async function handle(config: Handleparams<body>, profile: Profile): Promise<mcpResponse> {
     const lockerItem = await profile.getItem(config.body.lockerItem);
 
     if (!lockerItem ||
@@ -104,5 +76,5 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
     }
     
 
-    return profile.generateResponse(config);
+    return await profile.generateResponse(config);
 }

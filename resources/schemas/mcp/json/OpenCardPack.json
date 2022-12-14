@@ -1,0 +1,33 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "cardPackItemId",
+        "selectionIdx"
+    ],
+    "properties": {
+        "cardPackItemId": {
+            "type": "string",
+            "default": "",
+            "title": "The cardPackItemId Schema",
+            "examples": [
+                "5e90a168-529d-452a-987f-68180d458219"
+            ]
+        },
+        "selectionIdx": {
+            "type": "integer",
+            "default": 0,
+            "title": "The selectionIdx Schema",
+            "examples": [
+                0
+            ]
+        }
+    },
+    "examples": [{
+        "cardPackItemId": "5e90a168-529d-452a-987f-68180d458219",
+        "selectionIdx": 0
+    }]
+}

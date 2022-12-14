@@ -10,5 +10,29 @@
         "google_account_id": null,
         "createdAt": 1669594893509,
         "modifiedAt": 1669594893509
+    },
+    {
+        "displayName": "BeatYT-1",
+        "accountId": "z1bac684f6284b74883e5ef843f17c96",
+        "email": "BeatYT@neonite.net",
+        "password": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+        "discord_account_id": null,
+        "discord_user_name": null,
+        "google_display_name": null,
+        "google_account_id": null,
+        "createdAt": 1669594893509,
+        "modifiedAt": 1669594893509
+    },
+    {
+        "displayName": "BeatYT-1",
+        "accountId": "u1bac684f6284b74883e5ef843f17c96",
+        "email": "BeatYT@xmpp.neonite.net",
+        "password": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+        "discord_account_id": null,
+        "discord_user_name": null,
+        "google_display_name": null,
+        "google_account_id": null,
+        "createdAt": 1669594893509,
+        "modifiedAt": 1669594893509
     }
 ]

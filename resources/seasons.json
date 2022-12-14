@@ -1,162 +1,973 @@
 [
-   {
-       "season": 1,
-       "chapter": 1,
-       "seasonInChapter": 1,
-       "displayName": "Chapter 1, Season 1",
-       "startDate": "2017-10-24T09:00:00.000Z",
-       "endDate": "2017-12-14T08:59:59.000Z"
-   },
-   {
-       "season": 2,
-       "chapter": 1,
-       "seasonInChapter": 2,
-       "displayName": "Chapter 1, Season 2",
-       "startDate": "2017-12-14T09:00:00.000Z",
-       "endDate": "2018-02-22T08:59:59.000Z"
-   },
-   {
-       "season": 3,
-       "chapter": 1,
-       "seasonInChapter": 3,
-       "displayName": "Chapter 1, Season 3",
-       "startDate": "2018-02-22T09:00:00.000Z",
-       "endDate": "2018-05-01T08:59:59.000Z"
-   },
-   {
-       "season": 4,
-       "chapter": 1,
-       "seasonInChapter": 4,
-       "displayName": "Chapter 1, Season 4",
-       "startDate": "2018-05-01T09:00:00.000Z",
-       "endDate": "2018-07-11T08:59:59.000Z"
-   },
-   {
-       "season": 5,
-       "chapter": 1,
-       "seasonInChapter": 5,
-       "displayName": "Chapter 1, Season 5",
-       "startDate": "2018-07-11T09:00:00.000Z",
-       "endDate": "2018-09-27T08:59:59.000Z"
-   },
-   {
-       "season": 6,
-       "chapter": 1,
-       "seasonInChapter": 6,
-       "displayName": "Chapter 1, Season 6",
-       "startDate": "2018-09-27T09:00:00.000Z",
-       "endDate": "2018-12-06T08:59:59.000Z"
-   },
-   {
-       "season": 7,
-       "chapter": 1,
-       "seasonInChapter": 7,
-       "displayName": "Chapter 1, Season 7",
-       "startDate": "2018-12-06T09:00:00.000Z",
-       "endDate": "2019-02-28T07:59:59.000Z"
-   },
-   {
-       "season": 8,
-       "chapter": 1,
-       "seasonInChapter": 8,
-       "displayName": "Chapter 1, Season 8",
-       "startDate": "2019-02-28T08:00:00.000Z",
-       "endDate": "2019-05-09T07:59:59.000Z"
-   },
-   {
-       "season": 9,
-       "chapter": 1,
-       "seasonInChapter": 9,
-       "displayName": "Chapter 1, Season 9",
-       "startDate": "2019-05-09T08:00:00.000Z",
-       "endDate": "2019-08-01T07:59:59.000Z"
-   },
-   {
-       "season": 10,
-       "chapter": 1,
-       "seasonInChapter": 10,
-       "displayName": "Chapter 1, Season X",
-       "startDate": "2019-08-01T08:00:00.000Z",
-       "endDate": "2019-10-13T18:00:00.000Z"
-   },
-   {
-       "season": 11,
-       "chapter": 2,
-       "seasonInChapter": 1,
-       "displayName": "Chapter 2, Season 1",
-       "startDate": "2019-10-15T08:00:00.000Z",
-       "endDate": "2020-02-20T08:59:59.000Z"
-   },
-   {
-       "season": 12,
-       "chapter": 2,
-       "seasonInChapter": 2,
-       "displayName": "Chapter 2, Season 2",
-       "startDate": "2020-02-20T09:00:00.000Z",
-       "endDate": "2020-06-17T05:59:59.000Z"
-   },
-   {
-       "season": 13,
-       "chapter": 2,
-       "seasonInChapter": 3,
-       "displayName": "Chapter 2, Season 3",
-       "startDate": "2020-06-17T06:00:00.000Z",
-       "endDate": "2020-08-27T05:59:59.000Z"
-   },
-   {
-       "season": 14,
-       "chapter": 2,
-       "seasonInChapter": 4,
-       "displayName": "Chapter 2, Season 4",
-       "startDate": "2020-08-27T06:00:00.000Z",
-       "endDate": "2020-12-02T04:59:59.000Z"
-   },
-   {
-       "season": 15,
-       "chapter": 2,
-       "seasonInChapter": 5,
-       "displayName": "Chapter 2, Season 5",
-       "startDate": "2020-12-02T05:00:00.000Z",
-       "endDate": "2021-03-16T03:59:59.000Z"
-   },
-   {
-       "season": 16,
-       "chapter": 2,
-       "seasonInChapter": 6,
-       "displayName": "Chapter 2, Season 6",
-       "startDate": "2021-03-16T04:00:00.000Z",
-       "endDate": "2021-06-08T05:59:59.000Z"
-   },
-   {
-       "season": 17,
-       "chapter": 2,
-       "seasonInChapter": 7,
-       "displayName": "Chapter 2, Season 7",
-       "startDate": "2021-06-08T06:00:00.000Z",
-       "endDate": "2021-09-13T05:59:59.000Z"
-   },
-   {
-       "season": 18,
-       "chapter": 2,
-       "seasonInChapter": 8,
-       "displayName": "Chapter 2, Season 8",
-       "startDate": "2021-09-13T06:00:00.000Z",
-       "endDate": "2021-12-04T21:15:00.000Z"
-   },
-   {
-       "season": 19,
-       "chapter": 3,
-       "seasonInChapter": 1,
-       "displayName": "Chapter 3, Season 1",
-       "startDate": "2021-12-05T15:00:00.000Z",
-       "endDate": "2022-03-19T08:59:59.000Z"
-   },
-   {
-       "season": 20,
-       "chapter": 3,
-       "seasonInChapter": 2,
-       "displayName": "Chapter 3, Season 2",
-       "startDate": "2022-03-19T09:00:00.000Z",
-       "endDate": null
-   }
-]
+        {
+            "season": 1,
+            "chapter": 1,
+            "seasonInChapter": 1,
+            "displayName": "Chapter 1, Season 1",
+            "startDate": "2017-10-24 09:00:00+00:00",
+            "endDate": "2017-12-14 08:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "1.6.0",
+                    "date": "2017-09-12"
+                },
+                {
+                    "version": "1.6.3",
+                    "date": "2017-09-26"
+                },
+                {
+                    "version": "1.6.4",
+                    "date": "2017-09-29"
+                },
+                {
+                    "version": "1.7.0",
+                    "date": "2017-10-05"
+                },
+                {
+                    "version": "1.7.1",
+                    "date": "2017-10-11"
+                },
+                {
+                    "version": "1.7.2",
+                    "date": "2017-10-17"
+                },
+                {
+                    "version": "1.8.0",
+                    "date": "2017-10-25"
+                },
+                {
+                    "version": "1.8.1",
+                    "date": "2017-11-02"
+                },
+                {
+                    "version": "1.8.2",
+                    "date": "2017-11-08"
+                },
+                {
+                    "version": "1.9.0",
+                    "date": "2017-11-14"
+                },
+                {
+                    "version": "1.9.1",
+                    "date": "2017-11-29"
+                },
+                {
+                    "version": "1.10.0",
+                    "date": "2017-12-07"
+                }
+            ]
+        },
+        {
+            "season": 2,
+            "chapter": 1,
+            "seasonInChapter": 2,
+            "displayName": "Chapter 1, Season 2",
+            "startDate": "2017-12-14 09:00:00+00:00",
+            "endDate": "2018-02-22 08:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "1.11.0",
+                    "date": "2017-12-14"
+                },
+                {
+                    "version": "1.11.0-Small Potion Update",
+                    "date": "2017-12-19"
+                },
+                {
+                    "version": "1.11.0-Boogie Bomb Update",
+                    "date": "2017-12-23"
+                },
+                {
+                    "version": "1.11.0-Silenced Pistol Update",
+                    "date": "2018-01-02"
+                },
+                {
+                    "version": "2.1.0",
+                    "date": "2018-01-10"
+                },
+                {
+                    "version": "2.2.0",
+                    "date": "2018-01-18"
+                },
+                {
+                    "version": "2.3.0",
+                    "date": "2018-01-25"
+                },
+                {
+                    "version": "2.4.0",
+                    "date": "2018-01-31"
+                },
+                {
+                    "version": "2.4.2",
+                    "date": "2018-02-08"
+                },
+                {
+                    "version": "2.5.0",
+                    "date": "2018-02-12"
+                }
+            ]
+        },
+        {
+            "season": 3,
+            "chapter": 1,
+            "seasonInChapter": 3,
+            "displayName": "Chapter 1, Season 3",
+            "startDate": "2018-02-22 09:00:00+00:00",
+            "endDate": "2018-05-01 08:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "3.0.0",
+                    "date": "2018-02-22"
+                },
+                {
+                    "version": "3.1.0",
+                    "date": "2018-03-01"
+                },
+                {
+                    "version": "3.2.0",
+                    "date": "2018-03-08"
+                },
+                {
+                    "version": "3.3.0",
+                    "date": "2018-03-15"
+                },
+                {
+                    "version": "3.4.0",
+                    "date": "2018-03-29"
+                },
+                {
+                    "version": "3.4.0-CU",
+                    "date": "2018-04-04"
+                },
+                {
+                    "version": "3.5.0",
+                    "date": "2018-04-11"
+                },
+                {
+                    "version": "3.5.0-CU",
+                    "date": "2018-04-18"
+                },
+                {
+                    "version": "3.6.0",
+                    "date": "2018-04-23"
+                }
+            ]
+        },
+        {
+            "season": 4,
+            "chapter": 1,
+            "seasonInChapter": 4,
+            "displayName": "Chapter 1, Season 4",
+            "startDate": "2018-05-01 09:00:00+00:00",
+            "endDate": "2018-07-11 08:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "4.0",
+                    "date": "2018-05-01"
+                },
+                {
+                    "version": "4.1",
+                    "date": "2018-05-08"
+                },
+                {
+                    "version": "4.2",
+                    "date": "2018-05-16"
+                },
+                {
+                    "version": "4.2-CU",
+                    "date": "2018-05-22"
+                },
+                {
+                    "version": "4.3",
+                    "date": "2018-05-30"
+                },
+                {
+                    "version": "4.3-CU",
+                    "date": "2018-06-05"
+                },
+                {
+                    "version": "4.4",
+                    "date": "2018-06-11"
+                },
+                {
+                    "version": "4.4-CU",
+                    "date": "2018-06-19"
+                },
+                {
+                    "version": "4.5",
+                    "date": "2018-06-27"
+                },
+                {
+                    "version": "4.5-CU",
+                    "date": "2018-07-03"
+                }
+            ]
+        },
+        {
+            "season": 5,
+            "chapter": 1,
+            "seasonInChapter": 5,
+            "displayName": "Chapter 1, Season 5",
+            "startDate": "2018-07-11 09:00:00+00:00",
+            "endDate": "2018-09-27 08:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "5.0",
+                    "date": "2018-07-12"
+                },
+                {
+                    "version": "5.0-CU",
+                    "date": "2018-07-17"
+                },
+                {
+                    "version": "5.10",
+                    "date": "2018-07-24"
+                },
+                {
+                    "version": "5.10-CU",
+                    "date": "2018-07-31"
+                },
+                {
+                    "version": "5.20",
+                    "date": "2018-08-07"
+                },
+                {
+                    "version": "5.21",
+                    "date": "2018-08-15"
+                },
+                {
+                    "version": "5.30",
+                    "date": "2018-08-23"
+                },
+                {
+                    "version": "5.30-CU",
+                    "date": "2018-08-31"
+                },
+                {
+                    "version": "5.40",
+                    "date": "2018-09-06"
+                },
+                {
+                    "version": "5.40-CU",
+                    "date": "2018-09-11"
+                },
+                {
+                    "version": "5.41",
+                    "date": "2018-09-18"
+                }
+            ]
+        },
+        {
+            "season": 6,
+            "chapter": 1,
+            "seasonInChapter": 6,
+            "displayName": "Chapter 1, Season 6",
+            "startDate": "2018-09-27 09:00:00+00:00",
+            "endDate": "2018-12-06 08:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "6.0",
+                    "date": "2018-09-27"
+                },
+                {
+                    "version": "6.01",
+                    "date": "2018-10-03"
+                },
+                {
+                    "version": "6.02",
+                    "date": "2018-10-10"
+                },
+                {
+                    "version": "6.10",
+                    "date": "2018-10-16"
+                },
+                {
+                    "version": "6.20",
+                    "date": "2018-10-23"
+                },
+                {
+                    "version": "6.21",
+                    "date": "2018-11-01"
+                },
+                {
+                    "version": "6.22",
+                    "date": "2018-11-06"
+                },
+                {
+                    "version": "6.30",
+                    "date": "2018-11-14"
+                },
+                {
+                    "version": "6.30-CU",
+                    "date": "2018-11-20"
+                },
+                {
+                    "version": "6.31",
+                    "date": "2018-11-27"
+                }
+            ]
+        },
+        {
+            "season": 7,
+            "chapter": 1,
+            "seasonInChapter": 7,
+            "displayName": "Chapter 1, Season 7",
+            "startDate": "2018-12-06 09:00:00+00:00",
+            "endDate": "2019-02-28 07:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "7.00",
+                    "date": "2018-12-06"
+                },
+                {
+                    "version": "7.01",
+                    "date": "2018-12-11"
+                },
+                {
+                    "version": "7.10",
+                    "date": "2018-12-18"
+                },
+                {
+                    "version": "7.10-CU1",
+                    "date": "2018-12-23"
+                },
+                {
+                    "version": "7.10-CU2",
+                    "date": "2018-12-30"
+                },
+                {
+                    "version": "7.10-CU3",
+                    "date": "2019-01-08"
+                },
+                {
+                    "version": "7.20",
+                    "date": "2019-01-15"
+                },
+                {
+                    "version": "7.20-CU1",
+                    "date": "2019-01-22"
+                },
+                {
+                    "version": "7.30",
+                    "date": "2019-01-29"
+                },
+                {
+                    "version": "7.30-CU",
+                    "date": "2019-02-05"
+                },
+                {
+                    "version": "7.40",
+                    "date": "2019-02-14"
+                },
+                {
+                    "version": "7.40-CU",
+                    "date": "2019-02-19"
+                }
+            ]
+        },
+        {
+            "season": 8,
+            "chapter": 1,
+            "seasonInChapter": 8,
+            "displayName": "Chapter 1, Season 8",
+            "startDate": "2019-02-28 08:00:00+00:00",
+            "endDate": "2019-05-09 07:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "8.00",
+                    "date": "2019-02-28"
+                },
+                {
+                    "version": "8.01",
+                    "date": "2019-03-05"
+                },
+                {
+                    "version": "8.10",
+                    "date": "2019-03-12"
+                },
+                {
+                    "version": "8.11",
+                    "date": "2019-03-20"
+                },
+                {
+                    "version": "8.20",
+                    "date": "2019-03-27"
+                },
+                {
+                    "version": "8.20-CU",
+                    "date": "2019-04-02"
+                },
+                {
+                    "version": "8.30",
+                    "date": "2019-04-10"
+                },
+                {
+                    "version": "8.40",
+                    "date": "2019-04-17"
+                },
+                {
+                    "version": "8.50",
+                    "date": "2019-04-25"
+                },
+                {
+                    "version": "8.51",
+                    "date": "2019-05-02"
+                }
+            ]
+        },
+        {
+            "season": 9,
+            "chapter": 1,
+            "seasonInChapter": 9,
+            "displayName": "Chapter 1, Season 9",
+            "startDate": "2019-05-09 08:00:00+00:00",
+            "endDate": "2019-08-01 07:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "9.00",
+                    "date": "2019-05-09"
+                },
+                {
+                    "version": "9.01",
+                    "date": "2019-05-15"
+                },
+                {
+                    "version": "9.10",
+                    "date": "2019-05-22"
+                },
+                {
+                    "version": "9.10-CU",
+                    "date": "2019-05-29"
+                },
+                {
+                    "version": "9.20",
+                    "date": "2019-06-05"
+                },
+                {
+                    "version": "9.21",
+                    "date": "2019-06-12"
+                },
+                {
+                    "version": "9.30",
+                    "date": "2019-06-18"
+                },
+                {
+                    "version": "9.30-CU",
+                    "date": "2019-06-25"
+                },
+                {
+                    "version": "9.30-CU2",
+                    "date": "2019-07-02"
+                },
+                {
+                    "version": "9.30-CU3",
+                    "date": "2019-07-09"
+                },
+                {
+                    "version": "9.40",
+                    "date": "2019-07-17"
+                },
+                {
+                    "version": "9.41",
+                    "date": "2019-07-23"
+                }
+            ]
+        },
+        {
+            "season": 10,
+            "chapter": 1,
+            "seasonInChapter": 10,
+            "displayName": "Chapter 1, Season X",
+            "startDate": "2019-08-01 08:00:00+00:00",
+            "endDate": "2019-10-13 18:00:00+00:00",
+            "patchList": [
+                {
+                    "version": "10.0",
+                    "date": "2019-08-01"
+                },
+                {
+                    "version": "10.0-CU",
+                    "date": "2019-08-06"
+                },
+                {
+                    "version": "10.10",
+                    "date": "2019-08-14"
+                },
+                {
+                    "version": "10.10-CU",
+                    "date": "2019-08-20"
+                },
+                {
+                    "version": "10.20",
+                    "date": "2019-08-27"
+                },
+                {
+                    "version": "10.20-CU",
+                    "date": "2019-09-03"
+                },
+                {
+                    "version": "10.30",
+                    "date": "2019-09-11"
+                },
+                {
+                    "version": "10.31",
+                    "date": "2019-09-18"
+                },
+                {
+                    "version": "10.40",
+                    "date": "2019-09-25"
+                }
+            ]
+        },
+        {
+            "season": 11,
+            "chapter": 2,
+            "seasonInChapter": 1,
+            "displayName": "Chapter 2, Season 1",
+            "startDate": "2019-10-15 08:00:00+00:00",
+            "endDate": "2020-02-20 08:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "11.00",
+                    "date": "2019-10-14"
+                },
+                {
+                    "version": "11.10",
+                    "date": "2019-10-29"
+                },
+                {
+                    "version": "11.20",
+                    "date": "2019-11-20"
+                },
+                {
+                    "version": "11.30",
+                    "date": "2019-12-12"
+                },
+                {
+                    "version": "11.31",
+                    "date": "2019-12-18"
+                },
+                {
+                    "version": "11.40",
+                    "date": "2020-01-15"
+                },
+                {
+                    "version": "11.50",
+                    "date": "2020-02-05"
+                }
+            ]
+        },
+        {
+            "season": 12,
+            "chapter": 2,
+            "seasonInChapter": 2,
+            "displayName": "Chapter 2, Season 2",
+            "startDate": "2020-02-20 09:00:00+00:00",
+            "endDate": "2020-06-17 05:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "12.00",
+                    "date": "2020-02-20"
+                },
+                {
+                    "version": "12.10",
+                    "date": "2020-03-03"
+                },
+                {
+                    "version": "12.20",
+                    "date": "2020-03-17"
+                },
+                {
+                    "version": "12.21",
+                    "date": "2020-03-24"
+                },
+                {
+                    "version": "12.30",
+                    "date": "2020-03-31"
+                },
+                {
+                    "version": "12.40",
+                    "date": "2020-04-15"
+                },
+                {
+                    "version": "12.41",
+                    "date": "2020-04-21"
+                },
+                {
+                    "version": "12.50",
+                    "date": "2020-04-29"
+                },
+                {
+                    "version": "12.60",
+                    "date": "2020-05-20"
+                },
+                {
+                    "version": "12.61",
+                    "date": "2020-05-26"
+                }
+            ]
+        },
+        {
+            "season": 13,
+            "chapter": 2,
+            "seasonInChapter": 3,
+            "displayName": "Chapter 2, Season 3",
+            "startDate": "2020-06-17 06:00:00+00:00",
+            "endDate": "2020-08-27 05:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "13.00",
+                    "date": "2020-06-17"
+                },
+                {
+                    "version": "13.20",
+                    "date": "2020-06-30"
+                },
+                {
+                    "version": "13.30",
+                    "date": "2020-07-21"
+                },
+                {
+                    "version": "13.40",
+                    "date": "2020-08-05"
+                }
+            ]
+        },
+        {
+            "season": 14,
+            "chapter": 2,
+            "seasonInChapter": 4,
+            "displayName": "Chapter 2, Season 4",
+            "startDate": "2020-08-27 06:00:00+00:00",
+            "endDate": "2020-12-02 04:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "14.00",
+                    "date": "2020-08-27"
+                },
+                {
+                    "version": "14.10",
+                    "date": "2020-09-10"
+                },
+                {
+                    "version": "14.20",
+                    "date": "2020-09-23"
+                },
+                {
+                    "version": "14.30",
+                    "date": "2020-10-13"
+                },
+                {
+                    "version": "14.40",
+                    "date": "2020-10-21"
+                },
+                {
+                    "version": "14.50",
+                    "date": "2020-11-03"
+                },
+                {
+                    "version": "14.60",
+                    "date": "2020-11-18"
+                }
+            ]
+        },
+        {
+            "season": 15,
+            "chapter": 2,
+            "seasonInChapter": 5,
+            "displayName": "Chapter 2, Season 5",
+            "startDate": "2020-12-02 05:00:00+00:00",
+            "endDate": "2021-03-16 03:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "15.00",
+                    "date": "2020-12-02"
+                },
+                {
+                    "version": "15.10",
+                    "date": "2020-12-15"
+                },
+                {
+                    "version": "15.20",
+                    "date": "2021-01-13"
+                },
+                {
+                    "version": "15.21",
+                    "date": "2021-01-20"
+                },
+                {
+                    "version": "15.30",
+                    "date": "2021-02-02"
+                },
+                {
+                    "version": "15.40",
+                    "date": "2021-02-16"
+                },
+                {
+                    "version": "15.50",
+                    "date": "2021-03-02"
+                }
+            ]
+        },
+        {
+            "season": 16,
+            "chapter": 2,
+            "seasonInChapter": 6,
+            "displayName": "Chapter 2, Season 6",
+            "startDate": "2021-03-16 04:00:00+00:00",
+            "endDate": "2021-06-08 05:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "16.00",
+                    "date": "2021-03-16"
+                },
+                {
+                    "version": "16.10",
+                    "date": "2021-03-30"
+                },
+                {
+                    "version": "16.20",
+                    "date": "2021-04-13"
+                },
+                {
+                    "version": "16.30",
+                    "date": "2021-04-27"
+                },
+                {
+                    "version": "16.40",
+                    "date": "2021-05-11"
+                },
+                {
+                    "version": "16.50",
+                    "date": "2021-05-25"
+                }
+            ]
+        },
+        {
+            "season": 17,
+            "chapter": 2,
+            "seasonInChapter": 7,
+            "displayName": "Chapter 2, Season 7",
+            "startDate": "2021-06-08 06:00:00+00:00",
+            "endDate": "2021-09-13 05:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "17.00",
+                    "date": "2021-06-08"
+                },
+                {
+                    "version": "17.10",
+                    "date": "2021-06-22"
+                },
+                {
+                    "version": "17.20",
+                    "date": "2021-07-20"
+                },
+                {
+                    "version": "17.21",
+                    "date": "2021-07-27"
+                },
+                {
+                    "version": "17.30",
+                    "date": "2021-08-03"
+                },
+                {
+                    "version": "17.40",
+                    "date": "2021-08-17"
+                },
+                {
+                    "version": "17.50",
+                    "date": "2021-08-31"
+                }
+            ]
+        },
+        {
+            "season": 18,
+            "chapter": 2,
+            "seasonInChapter": 8,
+            "displayName": "Chapter 2, Season 8",
+            "startDate": "2021-09-13 06:00:00+00:00",
+            "endDate": "2021-12-04 21:15:00+00:00",
+            "patchList": [
+                {
+                    "version": "18.00",
+                    "date": "2021-09-13"
+                },
+                {
+                    "version": "18.10",
+                    "date": "2021-09-28"
+                },
+                {
+                    "version": "18.20",
+                    "date": "2021-10-12"
+                },
+                {
+                    "version": "18.21",
+                    "date": "2021-10-19"
+                },
+                {
+                    "version": "18.30",
+                    "date": "2021-10-26"
+                },
+                {
+                    "version": "18.40",
+                    "date": "2021-11-16"
+                }
+            ]
+        },
+        {
+            "season": 19,
+            "chapter": 3,
+            "seasonInChapter": 1,
+            "displayName": "Chapter 3, Season 1",
+            "startDate": "2021-12-05 15:00:00+00:00",
+            "endDate": "2022-03-20 06:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "19.00",
+                    "date": "2021-12-05"
+                },
+                {
+                    "version": "19.01",
+                    "date": "2021-12-14"
+                },
+                {
+                    "version": "19.10",
+                    "date": "2022-01-18"
+                },
+                {
+                    "version": "19.20",
+                    "date": "2022-02-01"
+                },
+                {
+                    "version": "19.30",
+                    "date": "2022-02-15"
+                },
+                {
+                    "version": "19.40",
+                    "date": "2022-03-01"
+                }
+            ]
+        },
+        {
+            "season": 20,
+            "chapter": 3,
+            "seasonInChapter": 2,
+            "displayName": "Chapter 3, Season 2",
+            "startDate": "2022-03-20 07:00:00+00:00",
+            "endDate": "2022-06-05 06:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "20.00",
+                    "date": "2022-03-20"
+                },
+                {
+                    "version": "20.10",
+                    "date": "2022-04-05"
+                },
+                {
+                    "version": "20.20",
+                    "date": "2022-04-19"
+                },
+                {
+                    "version": "20.30",
+                    "date": "2022-05-03"
+                },
+                {
+                    "version": "20.40",
+                    "date": "2022-05-17"
+                }
+            ]
+        },
+        {
+            "season": 21,
+            "chapter": 3,
+            "seasonInChapter": 3,
+            "displayName": "Chapter 3, Season 3",
+            "startDate": "2022-06-05 07:00:00+00:00",
+            "endDate": "2022-09-18 05:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "21.00",
+                    "date": "2022-06-04"
+                },
+                {
+                    "version": "21.10",
+                    "date": "2022-06-21"
+                },
+                {
+                    "version": "21.20",
+                    "date": "2022-07-06"
+                },
+                {
+                    "version": "21.30",
+                    "date": "2022-07-18"
+                },
+                {
+                    "version": "21.40",
+                    "date": "2022-08-16"
+                },
+                {
+                    "version": "21.50",
+                    "date": "2022-08-30"
+                },
+                {
+                    "version": "21.51",
+                    "date": "2022-09-07"
+                }
+            ]
+        },
+        {
+            "season": 22,
+            "chapter": 3,
+            "seasonInChapter": 4,
+            "displayName": "Chapter 3, Season 4",
+            "startDate": "2022-09-18 06:00:00+00:00",
+            "endDate": "2022-12-03 22:30:00+00:00",
+            "patchList": [
+                {
+                    "version": "22.00",
+                    "date": "2022-09-18"
+                },
+                {
+                    "version": "22.10",
+                    "date": "2022-10-04"
+                },
+                {
+                    "version": "22.20",
+                    "date": "2022-10-18"
+                },
+                {
+                    "version": "22.30",
+                    "date": "2022-11-01"
+                },
+                {
+                    "version": "22.40",
+                    "date": "2022-11-15"
+                }
+            ]
+        },
+        {
+            "season": 23,
+            "chapter": 4,
+            "seasonInChapter": 1,
+            "displayName": "Chapter 4, Season 1",
+            "startDate": "2022-12-04 08:00:00+00:00",
+            "endDate": "2023-03-26 05:59:59+00:00",
+            "patchList": [
+                {
+                    "version": "23.00",
+                    "date": "2022-12-04"
+                }
+            ]
+        },
+        {
+            "season": 26,
+            "chapter": 4,
+            "seasonInChapter": 4,
+            "displayName": "Chapter 4, Season 4",
+            "startDate": "2023-02-26 06:00:00+00:00",
+            "endDate": null,
+            "patchList": []
+        }
+    ]

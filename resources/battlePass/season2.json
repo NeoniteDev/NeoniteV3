@@ -1,0 +1,4877 @@
+{
+  "tierOfferId": "F86AC2ED4B3EA4B2D65EF1B2629572A0",
+  "season": 2,
+  "displayInfo": {
+    "chapter": "Chapter 1",
+    "season": "Season 2",
+    "chapterSeason": "Chapter 1 - Season 2",
+    "battlepassName": "Battle Pass"
+  },
+  "seasonDates": {
+    "begin": "2017-12-14T09:00:00.000Z",
+    "end": "2018-02-22T08:59:59.000Z"
+  },
+  "videos": [
+    {
+      "lang": "en",
+      "type": "bp",
+      "url": "https://media.fortniteapi.io/videos/seasons/bp_s2_en.mp4"
+    }
+  ],
+  "rewards": [
+    {
+      "tier": 1,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 50,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonXpBoost",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Personal XP Boost",
+        "description": "Grants a boost to the amount of match XP you receive for the entire season.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/04c766525344f7f53b5fee1a67635870/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 10,
+          "tier": 96,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season X",
+            "chapterSeason": "Chapter 1 - Season X"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 1,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 10,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonFriendXpBoost",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Friend XP Boost",
+        "description": "Grants a boost to the amount of match XP you receive when playing with friends this season",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/1c80bad5a6842cecd00c83ee99c5b1ac/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 10,
+          "tier": 88,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season X",
+            "chapterSeason": "Chapter 1 - Season X"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 1,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "CID_032_Athena_Commando_M_Medieval",
+        "type": {
+          "id": "outfit",
+          "name": "Outfit"
+        },
+        "name": "Blue Squire",
+        "description": "The bold warrior of Moisty Mire.",
+        "rarity": {
+          "id": "Rare",
+          "name": "RARE"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.05,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/e074c67-f759a46-0a99fd2-4827ba2/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/e074c67-f759a46-0a99fd2-4827ba2/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/e074c67-f759a46-0a99fd2-4827ba2/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/e074c67-f759a46-0a99fd2-4827ba2/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Set.FortKnights",
+          "Cosmetics.Filter.Season.2",
+          "SoundLibrary.ID.StepType.BootsCombat",
+          "SoundLibrary.ID.ClothingType.ArmorMetal",
+          "SoundLibrary.ID.HandType.Glove"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 1,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": {
+          "id": "FortKnights",
+          "name": "Fort Knights",
+          "partOf": "Part of the Fort Knights set."
+        },
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [
+          {
+            "id": "BID_001_BlueSquire",
+            "type": {
+              "id": "backpack",
+              "name": "BackBling"
+            },
+            "name": "Squire Shield",
+            "description": "A trusty shield.",
+            "rarity": {
+              "id": "Rare",
+              "name": "RARE"
+            },
+            "series": null,
+            "images": {
+              "icon": "https://media.fortniteapi.io/images/9288a22-b871220-4734e68-6baf8d7/transparent.png",
+              "featured": null,
+              "background": "https://media.fortniteapi.io/images/cosmetics/9288a22-b871220-4734e68-6baf8d7/v2/background.png",
+              "icon_background": "https://media.fortniteapi.io/images/cosmetics/9288a22-b871220-4734e68-6baf8d7/v2/icon_background.png",
+              "full_background": "https://media.fortniteapi.io/images/cosmetics/9288a22-b871220-4734e68-6baf8d7/v2/info.en.png"
+            }
+          }
+        ],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 2,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 10,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonXpBoost",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Personal XP Boost",
+        "description": "Grants a boost to the amount of match XP you receive for the entire season.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/04c766525344f7f53b5fee1a67635870/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 10,
+          "tier": 96,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season X",
+            "chapterSeason": "Chapter 1 - Season X"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 2,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 5,
+      "price": null,
+      "item": {
+        "id": "AthenaNextSeasonTierBoost",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Free Tiers",
+        "description": "Get a head start on the next season with these free tiers.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/64f5380488cb644565890dc455fa3159/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/64f5380488cb644565890dc455fa3159/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/64f5380488cb644565890dc455fa3159/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/64f5380488cb644565890dc455fa3159/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 7,
+          "tier": 2,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 7",
+            "chapterSeason": "Chapter 1 - Season 7"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 2,
+      "page": null,
+      "battlepass": "free",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_LOL",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "LOL",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-08-13",
+          "version": "10.0-CU"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/50bf7017d9ad8a04bd0f384fb2c9bd3e/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/50bf7017d9ad8a04bd0f384fb2c9bd3e/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/50bf7017d9ad8a04bd0f384fb2c9bd3e/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/50bf7017d9ad8a04bd0f384fb2c9bd3e/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Free",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 2,
+          "page": null,
+          "type": "free",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 4,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 100,
+      "price": null,
+      "item": {
+        "id": "MtxGiveaway",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "V-bucks",
+        "description": "Valuable currency used to purchase goods from the store.",
+        "rarity": {
+          "id": "Legendary",
+          "name": "LEGENDARY"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.01,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/652b99f7863db4ba398c40c326ac15a9/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 23,
+          "tier": 0,
+          "page": 14,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 4",
+            "season": "Season 1",
+            "chapterSeason": "Chapter 4 - Season 1"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 5,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_Clapping",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "Clapping",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/c90b6d0a8c11d6733df40a97987c803f/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/c90b6d0a8c11d6733df40a97987c803f/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/c90b6d0a8c11d6733df40a97987c803f/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/c90b6d0a8c11d6733df40a97987c803f/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 5,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 5,
+      "page": null,
+      "battlepass": "free",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "EID_Wave",
+        "type": {
+          "id": "emote",
+          "name": "Emote"
+        },
+        "name": "Wave",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.02,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/84eaa65-784586f-0164af8-f9a765d/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/84eaa65-784586f-0164af8-f9a765d/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/84eaa65-784586f-0164af8-f9a765d/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/84eaa65-784586f-0164af8-f9a765d/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Dance",
+          "Cosmetics.Source.Season2.BattlePass.Free",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [
+          "emoteDuration:1.83"
+        ],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 5,
+          "page": null,
+          "type": "free",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 6,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1000,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonalXP",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Season XP",
+        "description": "Used to increase the Battle Royale Season Level.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/0718d29f89a777b3995d9b19db6172ea/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 9,
+          "tier": 69,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 9",
+            "chapterSeason": "Chapter 1 - Season 9"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 7,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Pickaxe_ID_012_District",
+        "type": {
+          "id": "pickaxe",
+          "name": "Harvesting Tool"
+        },
+        "name": "Pulse Axe",
+        "description": "Bleeding edge axe technology.",
+        "rarity": {
+          "id": "Rare",
+          "name": "RARE"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.03,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/5ddeb83-5eaecbf-f07a3dd-e594ac9/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/5ddeb83-5eaecbf-f07a3dd-e594ac9/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/5ddeb83-5eaecbf-f07a3dd-e594ac9/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/5ddeb83-5eaecbf-f07a3dd-e594ac9/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Set.StormFusion",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 7,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": {
+          "id": "StormFusion",
+          "name": "Storm Fusion",
+          "partOf": "Part of the Storm Fusion set."
+        },
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 8,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1000,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonalXP",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Season XP",
+        "description": "Used to increase the Battle Royale Season Level.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/0718d29f89a777b3995d9b19db6172ea/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 9,
+          "tier": 69,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 9",
+            "chapterSeason": "Chapter 1 - Season 9"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 9,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 5,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonFriendXpBoost",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Friend XP Boost",
+        "description": "Grants a boost to the amount of match XP you receive when playing with friends this season",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/1c80bad5a6842cecd00c83ee99c5b1ac/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 10,
+          "tier": 88,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season X",
+            "chapterSeason": "Chapter 1 - Season X"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 11,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 100,
+      "price": null,
+      "item": {
+        "id": "MtxGiveaway",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "V-bucks",
+        "description": "Valuable currency used to purchase goods from the store.",
+        "rarity": {
+          "id": "Legendary",
+          "name": "LEGENDARY"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.01,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/652b99f7863db4ba398c40c326ac15a9/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 23,
+          "tier": 0,
+          "page": 14,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 4",
+            "season": "Season 1",
+            "chapterSeason": "Chapter 4 - Season 1"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 11,
+      "page": null,
+      "battlepass": "free",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_HeartHands",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "Heart Hands",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-08-13",
+          "version": "10.0-CU"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/2922ce9f91aadafcd7ff6dd349ab4a5c/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/2922ce9f91aadafcd7ff6dd349ab4a5c/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/2922ce9f91aadafcd7ff6dd349ab4a5c/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/2922ce9f91aadafcd7ff6dd349ab4a5c/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Free",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 11,
+          "page": null,
+          "type": "free",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 12,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_RIP",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "RIP",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/332796d610428fd7210006b5baaf2257/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/332796d610428fd7210006b5baaf2257/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/332796d610428fd7210006b5baaf2257/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/332796d610428fd7210006b5baaf2257/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 12,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 13,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1000,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonalXP",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Season XP",
+        "description": "Used to increase the Battle Royale Season Level.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/0718d29f89a777b3995d9b19db6172ea/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 9,
+          "tier": 69,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 9",
+            "chapterSeason": "Chapter 1 - Season 9"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 14,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Glider_ID_004_Disco",
+        "type": {
+          "id": "glider",
+          "name": "Glider"
+        },
+        "name": "Get Down!",
+        "description": "Can you dig it?",
+        "rarity": {
+          "id": "Epic",
+          "name": "Epic"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.02,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/48a8cf6-45c7a2f-5db5902-7b4502b/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/48a8cf6-45c7a2f-5db5902-7b4502b/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/48a8cf6-45c7a2f-5db5902-7b4502b/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/48a8cf6-45c7a2f-5db5902-7b4502b/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Set.FortniteFever",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 14,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": {
+          "id": "FortniteFever",
+          "name": "Fortnite Fever",
+          "partOf": "Part of the Fortnite Fever set."
+        },
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 14,
+      "page": null,
+      "battlepass": "free",
+      "quantity": 100,
+      "price": null,
+      "item": {
+        "id": "MtxGiveaway",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "V-bucks",
+        "description": "Valuable currency used to purchase goods from the store.",
+        "rarity": {
+          "id": "Legendary",
+          "name": "LEGENDARY"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.01,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/652b99f7863db4ba398c40c326ac15a9/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 23,
+          "tier": 0,
+          "page": 14,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 4",
+            "season": "Season 1",
+            "chapterSeason": "Chapter 4 - Season 1"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 16,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 10,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonXpBoost",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Personal XP Boost",
+        "description": "Grants a boost to the amount of match XP you receive for the entire season.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/04c766525344f7f53b5fee1a67635870/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 10,
+          "tier": 96,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season X",
+            "chapterSeason": "Chapter 1 - Season X"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 17,
+      "page": null,
+      "battlepass": "free",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_Bullseye",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "Bullseye",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-08-13",
+          "version": "10.0-CU"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/b5c72bf90ca98ec9676c401d51310102/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/b5c72bf90ca98ec9676c401d51310102/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/b5c72bf90ca98ec9676c401d51310102/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/b5c72bf90ca98ec9676c401d51310102/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Free",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 17,
+          "page": null,
+          "type": "free",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 18,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 100,
+      "price": null,
+      "item": {
+        "id": "MtxGiveaway",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "V-bucks",
+        "description": "Valuable currency used to purchase goods from the store.",
+        "rarity": {
+          "id": "Legendary",
+          "name": "LEGENDARY"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.01,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/652b99f7863db4ba398c40c326ac15a9/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 23,
+          "tier": 0,
+          "page": 14,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 4",
+            "season": "Season 1",
+            "chapterSeason": "Chapter 4 - Season 1"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 19,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_Rage",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "Rage",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/27dee234326efe88851e08e5e5089fbc/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/27dee234326efe88851e08e5e5089fbc/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/27dee234326efe88851e08e5e5089fbc/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/27dee234326efe88851e08e5e5089fbc/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 19,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 20,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1000,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonalXP",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Season XP",
+        "description": "Used to increase the Battle Royale Season Level.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/0718d29f89a777b3995d9b19db6172ea/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 9,
+          "tier": 69,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 9",
+            "chapterSeason": "Chapter 1 - Season 9"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 20,
+      "page": null,
+      "battlepass": "free",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "EID_RideThePony_Athena",
+        "type": {
+          "id": "emote",
+          "name": "Emote"
+        },
+        "name": "Ride The Pony",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Rare",
+          "name": "RARE"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.08,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/8f172af-205bcee-739d178-8cf0ab1/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/8f172af-205bcee-739d178-8cf0ab1/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/8f172af-205bcee-739d178-8cf0ab1/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/8f172af-205bcee-739d178-8cf0ab1/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Dance",
+          "Cosmetics.Source.Season2.BattlePass.Free",
+          "Cosmetics.Source.Granted.Founders",
+          "Cosmetics.UserFacingFlags.Emote.Traversal",
+          "Cosmetics.Filter.Season.2",
+          "Cosmetics.Filter.Granted.Founders"
+        ],
+        "apiTags": [
+          "emoteDuration:0.80",
+          "emoteLoop"
+        ],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 20,
+          "page": null,
+          "type": "free",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 21,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "CID_033_Athena_Commando_F_Medieval",
+        "type": {
+          "id": "outfit",
+          "name": "Outfit"
+        },
+        "name": "Royale Knight",
+        "description": "The dauntless champion of Tomato Town.",
+        "rarity": {
+          "id": "Rare",
+          "name": "RARE"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.05,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/f63a2c4-75e4593-e39f79a-258f852/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/f63a2c4-75e4593-e39f79a-258f852/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/f63a2c4-75e4593-e39f79a-258f852/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/f63a2c4-75e4593-e39f79a-258f852/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Set.FortKnights",
+          "Cosmetics.Filter.Season.2",
+          "SoundLibrary.ID.StepType.BootsCombat",
+          "SoundLibrary.ID.ClothingType.ArmorMetal",
+          "SoundLibrary.ID.HandType.Glove"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 21,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": {
+          "id": "FortKnights",
+          "name": "Fort Knights",
+          "partOf": "Part of the Fort Knights set."
+        },
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [
+          {
+            "id": "BID_002_RoyaleKnight",
+            "type": {
+              "id": "backpack",
+              "name": "BackBling"
+            },
+            "name": "Royale Shield",
+            "description": "A royal shield.",
+            "rarity": {
+              "id": "Rare",
+              "name": "RARE"
+            },
+            "series": null,
+            "images": {
+              "icon": "https://media.fortniteapi.io/images/9d04655-3e2f006-eaeda34-dde202a/transparent.png",
+              "featured": null,
+              "background": "https://media.fortniteapi.io/images/cosmetics/9d04655-3e2f006-eaeda34-dde202a/v2/background.png",
+              "icon_background": "https://media.fortniteapi.io/images/cosmetics/9d04655-3e2f006-eaeda34-dde202a/v2/icon_background.png",
+              "full_background": "https://media.fortniteapi.io/images/cosmetics/9d04655-3e2f006-eaeda34-dde202a/v2/info.en.png"
+            }
+          }
+        ],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 22,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_PeaceSign",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "Peace",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/2c91247712212aecd6b4783a545ac1c1/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/2c91247712212aecd6b4783a545ac1c1/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/2c91247712212aecd6b4783a545ac1c1/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/2c91247712212aecd6b4783a545ac1c1/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 22,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 23,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 5,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonFriendXpBoost",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Friend XP Boost",
+        "description": "Grants a boost to the amount of match XP you receive when playing with friends this season",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/1c80bad5a6842cecd00c83ee99c5b1ac/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 10,
+          "tier": 88,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season X",
+            "chapterSeason": "Chapter 1 - Season X"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 23,
+      "page": null,
+      "battlepass": "free",
+      "quantity": 1000,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonalXP",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Season XP",
+        "description": "Used to increase the Battle Royale Season Level.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/0718d29f89a777b3995d9b19db6172ea/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 9,
+          "tier": 69,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 9",
+            "chapterSeason": "Chapter 1 - Season 9"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 25,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 100,
+      "price": null,
+      "item": {
+        "id": "MtxGiveaway",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "V-bucks",
+        "description": "Valuable currency used to purchase goods from the store.",
+        "rarity": {
+          "id": "Legendary",
+          "name": "LEGENDARY"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.01,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/652b99f7863db4ba398c40c326ac15a9/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 23,
+          "tier": 0,
+          "page": 14,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 4",
+            "season": "Season 1",
+            "chapterSeason": "Chapter 4 - Season 1"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 26,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_Disco",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "Dance Party",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/d1a77008a0fba92ea5d9446650b4eabe/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/d1a77008a0fba92ea5d9446650b4eabe/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/d1a77008a0fba92ea5d9446650b4eabe/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/d1a77008a0fba92ea5d9446650b4eabe/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 26,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 27,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1000,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonalXP",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Season XP",
+        "description": "Used to increase the Battle Royale Season Level.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/0718d29f89a777b3995d9b19db6172ea/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 9,
+          "tier": 69,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 9",
+            "chapterSeason": "Chapter 1 - Season 9"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 28,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "EID_Worm",
+        "type": {
+          "id": "emote",
+          "name": "Emote"
+        },
+        "name": "The Worm",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Rare",
+          "name": "RARE"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.03,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/dda3790-318d524-bf7c99b-e113f09/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/dda3790-318d524-bf7c99b-e113f09/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/dda3790-318d524-bf7c99b-e113f09/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/dda3790-318d524-bf7c99b-e113f09/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Dance",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [
+          "emoteDuration:4.17",
+          "emoteLoop"
+        ],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 28,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 29,
+      "page": null,
+      "battlepass": "free",
+      "quantity": 100,
+      "price": null,
+      "item": {
+        "id": "MtxGiveaway",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "V-bucks",
+        "description": "Valuable currency used to purchase goods from the store.",
+        "rarity": {
+          "id": "Legendary",
+          "name": "LEGENDARY"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.01,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/652b99f7863db4ba398c40c326ac15a9/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 23,
+          "tier": 0,
+          "page": 14,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 4",
+            "season": "Season 1",
+            "chapterSeason": "Chapter 4 - Season 1"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 30,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 10,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonXpBoost",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Personal XP Boost",
+        "description": "Grants a boost to the amount of match XP you receive for the entire season.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/04c766525344f7f53b5fee1a67635870/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 10,
+          "tier": 96,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season X",
+            "chapterSeason": "Chapter 1 - Season X"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 32,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 100,
+      "price": null,
+      "item": {
+        "id": "MtxGiveaway",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "V-bucks",
+        "description": "Valuable currency used to purchase goods from the store.",
+        "rarity": {
+          "id": "Legendary",
+          "name": "LEGENDARY"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.01,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/652b99f7863db4ba398c40c326ac15a9/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 23,
+          "tier": 0,
+          "page": 14,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 4",
+            "season": "Season 1",
+            "chapterSeason": "Chapter 4 - Season 1"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 33,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_Exclamation",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "Exclamation",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/ebb5b3254c5281de74c0e3072e7c45cb/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/ebb5b3254c5281de74c0e3072e7c45cb/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/ebb5b3254c5281de74c0e3072e7c45cb/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/ebb5b3254c5281de74c0e3072e7c45cb/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 33,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 34,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1000,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonalXP",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Season XP",
+        "description": "Used to increase the Battle Royale Season Level.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/0718d29f89a777b3995d9b19db6172ea/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 9,
+          "tier": 69,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 9",
+            "chapterSeason": "Chapter 1 - Season 9"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 35,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Pickaxe_ID_011_Medieval",
+        "type": {
+          "id": "pickaxe",
+          "name": "Harvesting Tool"
+        },
+        "name": "Axecalibur",
+        "description": "Stone and anvil not included.",
+        "rarity": {
+          "id": "Rare",
+          "name": "RARE"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.02,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/4909c1f-370b915-a1c0c31-9c85cc1/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/4909c1f-370b915-a1c0c31-9c85cc1/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/4909c1f-370b915-a1c0c31-9c85cc1/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/4909c1f-370b915-a1c0c31-9c85cc1/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Set.FortKnights",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 35,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": {
+          "id": "FortKnights",
+          "name": "Fort Knights",
+          "partOf": "Part of the Fort Knights set."
+        },
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 35,
+      "page": null,
+      "battlepass": "free",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Glider_ID_002_Medieval",
+        "type": {
+          "id": "glider",
+          "name": "Glider"
+        },
+        "name": "Sir Glider the Brave",
+        "description": "First of his name.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-04-01",
+          "version": "8.20"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.02,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/7fb9dc2-b3e8c3f-521e59c-451773e/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/7fb9dc2-b3e8c3f-521e59c-451773e/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/7fb9dc2-b3e8c3f-521e59c-451773e/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/7fb9dc2-b3e8c3f-521e59c-451773e/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.Source.Season2.BattlePass.Free",
+          "Cosmetics.Set.FortKnights",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 35,
+          "page": null,
+          "type": "free",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": {
+          "id": "FortKnights",
+          "name": "Fort Knights",
+          "partOf": "Part of the Fort Knights set."
+        },
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 36,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_ArmFlex",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "Flex",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/83a8adace47e6190bef28cb547ccbfc8/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/83a8adace47e6190bef28cb547ccbfc8/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/83a8adace47e6190bef28cb547ccbfc8/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/83a8adace47e6190bef28cb547ccbfc8/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 36,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 37,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 5,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonFriendXpBoost",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Friend XP Boost",
+        "description": "Grants a boost to the amount of match XP you receive when playing with friends this season",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/1c80bad5a6842cecd00c83ee99c5b1ac/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 10,
+          "tier": 88,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season X",
+            "chapterSeason": "Chapter 1 - Season X"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 39,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 100,
+      "price": null,
+      "item": {
+        "id": "MtxGiveaway",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "V-bucks",
+        "description": "Valuable currency used to purchase goods from the store.",
+        "rarity": {
+          "id": "Legendary",
+          "name": "LEGENDARY"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.01,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/652b99f7863db4ba398c40c326ac15a9/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 23,
+          "tier": 0,
+          "page": 14,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 4",
+            "season": "Season 1",
+            "chapterSeason": "Chapter 4 - Season 1"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 40,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_MVP",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "MVP",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/1f6201e663ddc0885d5419f90329eb2e/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/1f6201e663ddc0885d5419f90329eb2e/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/1f6201e663ddc0885d5419f90329eb2e/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/1f6201e663ddc0885d5419f90329eb2e/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 40,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 41,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1000,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonalXP",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Season XP",
+        "description": "Used to increase the Battle Royale Season Level.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/0718d29f89a777b3995d9b19db6172ea/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 9,
+          "tier": 69,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 9",
+            "chapterSeason": "Chapter 1 - Season 9"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 42,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Glider_ID_003_District",
+        "type": {
+          "id": "glider",
+          "name": "Glider"
+        },
+        "name": "Royale X",
+        "description": "State of the art combat glider.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.03,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/5b5bd99-5474eae-68d22b5-65d913f/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/5b5bd99-5474eae-68d22b5-65d913f/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/5b5bd99-5474eae-68d22b5-65d913f/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/5b5bd99-5474eae-68d22b5-65d913f/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Set.StormFusion",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 42,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": {
+          "id": "StormFusion",
+          "name": "Storm Fusion",
+          "partOf": "Part of the Storm Fusion set."
+        },
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 43,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1000,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonalXP",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Season XP",
+        "description": "Used to increase the Battle Royale Season Level.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/0718d29f89a777b3995d9b19db6172ea/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 9,
+          "tier": 69,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 9",
+            "chapterSeason": "Chapter 1 - Season 9"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 44,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 10,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonXpBoost",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Personal XP Boost",
+        "description": "Grants a boost to the amount of match XP you receive for the entire season.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/04c766525344f7f53b5fee1a67635870/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 10,
+          "tier": 96,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season X",
+            "chapterSeason": "Chapter 1 - Season X"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 46,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 100,
+      "price": null,
+      "item": {
+        "id": "MtxGiveaway",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "V-bucks",
+        "description": "Valuable currency used to purchase goods from the store.",
+        "rarity": {
+          "id": "Legendary",
+          "name": "LEGENDARY"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.01,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/652b99f7863db4ba398c40c326ac15a9/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 23,
+          "tier": 0,
+          "page": 14,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 4",
+            "season": "Season 1",
+            "chapterSeason": "Chapter 4 - Season 1"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 47,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_Baited",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "Baited",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/2b67e2560ee2f1b460953c2893180546/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/2b67e2560ee2f1b460953c2893180546/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/2b67e2560ee2f1b460953c2893180546/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/2b67e2560ee2f1b460953c2893180546/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 47,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 48,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1000,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonalXP",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Season XP",
+        "description": "Used to increase the Battle Royale Season Level.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/0718d29f89a777b3995d9b19db6172ea/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 9,
+          "tier": 69,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 9",
+            "chapterSeason": "Chapter 1 - Season 9"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 49,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "EID_Floss",
+        "type": {
+          "id": "emote",
+          "name": "Emote"
+        },
+        "name": "Floss",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Rare",
+          "name": "RARE"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.18,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/8402ccf-20d91e5-321eadf-d71b1c8/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/8402ccf-20d91e5-321eadf-d71b1c8/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/8402ccf-20d91e5-321eadf-d71b1c8/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/8402ccf-20d91e5-321eadf-d71b1c8/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Dance",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2",
+          "Phoebe.Cosmetic.Minus.Zone1",
+          "Phoebe.Cosmetic.Minus.Zone2"
+        ],
+        "apiTags": [
+          "emoteDuration:1.60",
+          "emoteLoop"
+        ],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 49,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 51,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 5,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonFriendXpBoost",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Friend XP Boost",
+        "description": "Grants a boost to the amount of match XP you receive when playing with friends this season",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/1c80bad5a6842cecd00c83ee99c5b1ac/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/1c80bad5a6842cecd00c83ee99c5b1ac/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 10,
+          "tier": 88,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season X",
+            "chapterSeason": "Chapter 1 - Season X"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 53,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 100,
+      "price": null,
+      "item": {
+        "id": "MtxGiveaway",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "V-bucks",
+        "description": "Valuable currency used to purchase goods from the store.",
+        "rarity": {
+          "id": "Legendary",
+          "name": "LEGENDARY"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.01,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/652b99f7863db4ba398c40c326ac15a9/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 23,
+          "tier": 0,
+          "page": 14,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 4",
+            "season": "Season 1",
+            "chapterSeason": "Chapter 4 - Season 1"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 54,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_Salty",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "Salty",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/86a442513b70466c791e3a85deb359ab/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/86a442513b70466c791e3a85deb359ab/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/86a442513b70466c791e3a85deb359ab/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/86a442513b70466c791e3a85deb359ab/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 54,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 55,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1000,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonalXP",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Season XP",
+        "description": "Used to increase the Battle Royale Season Level.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/0718d29f89a777b3995d9b19db6172ea/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 9,
+          "tier": 69,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 9",
+            "chapterSeason": "Chapter 1 - Season 9"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 56,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "CID_039_Athena_Commando_F_Disco",
+        "type": {
+          "id": "outfit",
+          "name": "Outfit"
+        },
+        "name": "Sparkle Specialist",
+        "description": "It's time to shine!",
+        "rarity": {
+          "id": "Epic",
+          "name": "Epic"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.05,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/9cafb13-6f380c6-8910f33-2fbe6fe/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/9cafb13-6f380c6-8910f33-2fbe6fe/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/9cafb13-6f380c6-8910f33-2fbe6fe/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/9cafb13-6f380c6-8910f33-2fbe6fe/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Set.FortniteFever",
+          "Cosmetics.Filter.Season.2",
+          "SoundLibrary.ID.StepType.BootsCombat",
+          "SoundLibrary.ID.HandType.Glove",
+          "SoundLibrary.ID.ClothingType.GearTactical"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 56,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": {
+          "id": "FortniteFever",
+          "name": "Fortnite Fever",
+          "partOf": "Part of the Fortnite Fever set."
+        },
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 57,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_Stealthy",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "Stealthy",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/b328a0c1f724c206cc45f7c544973ec5/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/b328a0c1f724c206cc45f7c544973ec5/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/b328a0c1f724c206cc45f7c544973ec5/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/b328a0c1f724c206cc45f7c544973ec5/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 57,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 58,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 10,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonXpBoost",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Personal XP Boost",
+        "description": "Grants a boost to the amount of match XP you receive for the entire season.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/04c766525344f7f53b5fee1a67635870/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 10,
+          "tier": 96,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season X",
+            "chapterSeason": "Chapter 1 - Season X"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 60,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 100,
+      "price": null,
+      "item": {
+        "id": "MtxGiveaway",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "V-bucks",
+        "description": "Valuable currency used to purchase goods from the store.",
+        "rarity": {
+          "id": "Legendary",
+          "name": "LEGENDARY"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.01,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/652b99f7863db4ba398c40c326ac15a9/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 23,
+          "tier": 0,
+          "page": 14,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 4",
+            "season": "Season 1",
+            "chapterSeason": "Chapter 4 - Season 1"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 61,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_PotatoAim",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "Potato Aim",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/bb2e51479385ba74eea9f96ef130e0eb/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/bb2e51479385ba74eea9f96ef130e0eb/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/bb2e51479385ba74eea9f96ef130e0eb/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/bb2e51479385ba74eea9f96ef130e0eb/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 61,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 62,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1000,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonalXP",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Season XP",
+        "description": "Used to increase the Battle Royale Season Level.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/0718d29f89a777b3995d9b19db6172ea/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 9,
+          "tier": 69,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 9",
+            "chapterSeason": "Chapter 1 - Season 9"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 63,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Pickaxe_ID_013_Teslacoil",
+        "type": {
+          "id": "pickaxe",
+          "name": "Harvesting Tool"
+        },
+        "name": "AC/DC",
+        "description": "Warning: High Voltage!",
+        "rarity": {
+          "id": "Epic",
+          "name": "Epic"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.03,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/bf781d1-baafaa7-40a5dc8-7bb3923/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/bf781d1-baafaa7-40a5dc8-7bb3923/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/bf781d1-baafaa7-40a5dc8-7bb3923/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/bf781d1-baafaa7-40a5dc8-7bb3923/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 63,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 64,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1000,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonalXP",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Season XP",
+        "description": "Used to increase the Battle Royale Season Level.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/0718d29f89a777b3995d9b19db6172ea/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 9,
+          "tier": 69,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 9",
+            "chapterSeason": "Chapter 1 - Season 9"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 65,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 10,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonXpBoost",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Personal XP Boost",
+        "description": "Grants a boost to the amount of match XP you receive for the entire season.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/04c766525344f7f53b5fee1a67635870/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/04c766525344f7f53b5fee1a67635870/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 10,
+          "tier": 96,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season X",
+            "chapterSeason": "Chapter 1 - Season X"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 67,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 100,
+      "price": null,
+      "item": {
+        "id": "MtxGiveaway",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "V-bucks",
+        "description": "Valuable currency used to purchase goods from the store.",
+        "rarity": {
+          "id": "Legendary",
+          "name": "LEGENDARY"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.01,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/652b99f7863db4ba398c40c326ac15a9/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/652b99f7863db4ba398c40c326ac15a9/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 23,
+          "tier": 0,
+          "page": 14,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 4",
+            "season": "Season 1",
+            "chapterSeason": "Chapter 4 - Season 1"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 68,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "Emoji_OnFire",
+        "type": {
+          "id": "emoji",
+          "name": "Emoticon"
+        },
+        "name": "On Fire",
+        "description": "Express yourself on the battlefield.",
+        "rarity": {
+          "id": "Uncommon",
+          "name": "UNCOMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/4469bc6b8142108bc129703a7c2a176e/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/4469bc6b8142108bc129703a7c2a176e/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/4469bc6b8142108bc129703a7c2a176e/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/4469bc6b8142108bc129703a7c2a176e/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.EmoteType.Emoji",
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Filter.Season.2"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 68,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 69,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1000,
+      "price": null,
+      "item": {
+        "id": "AthenaSeasonalXP",
+        "type": {
+          "id": "misc",
+          "name": "Other"
+        },
+        "name": "Season XP",
+        "description": "Used to increase the Battle Royale Season Level.",
+        "rarity": {
+          "id": "Common",
+          "name": "COMMON"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2019-10-13",
+          "version": "10.40"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/0718d29f89a777b3995d9b19db6172ea/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/0718d29f89a777b3995d9b19db6172ea/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 9,
+          "tier": 69,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 9",
+            "chapterSeason": "Chapter 1 - Season 9"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": null,
+        "introduction": null,
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [],
+        "grantedBy": []
+      }
+    },
+    {
+      "tier": 70,
+      "page": null,
+      "battlepass": "paid",
+      "quantity": 1,
+      "price": null,
+      "item": {
+        "id": "CID_035_Athena_Commando_M_Medieval",
+        "type": {
+          "id": "outfit",
+          "name": "Outfit"
+        },
+        "name": "Black Knight",
+        "description": "The odious scourge of Wailing Woods.",
+        "rarity": {
+          "id": "Legendary",
+          "name": "LEGENDARY"
+        },
+        "series": null,
+        "price": 0,
+        "added": {
+          "date": "2017-12-14",
+          "version": "1.11.0"
+        },
+        "builtInEmote": null,
+        "copyrightedAudio": false,
+        "upcoming": false,
+        "reactive": false,
+        "releaseDate": null,
+        "lastAppearance": null,
+        "interest": 0.21,
+        "images": {
+          "icon": "https://media.fortniteapi.io/images/59eb4f6-e81c036-42fab23-375205c/transparent.png",
+          "featured": null,
+          "background": "https://media.fortniteapi.io/images/cosmetics/59eb4f6-e81c036-42fab23-375205c/v2/background.png",
+          "icon_background": "https://media.fortniteapi.io/images/cosmetics/59eb4f6-e81c036-42fab23-375205c/v2/icon_background.png",
+          "full_background": "https://media.fortniteapi.io/images/cosmetics/59eb4f6-e81c036-42fab23-375205c/v2/info.en.png"
+        },
+        "video": null,
+        "audio": null,
+        "gameplayTags": [
+          "Cosmetics.Source.Season2.BattlePass.Paid",
+          "Cosmetics.Set.FortKnights",
+          "Cosmetics.Filter.Season.2",
+          "SoundLibrary.ID.StepType.BootsCombat",
+          "SoundLibrary.ID.ClothingType.ArmorMetal",
+          "SoundLibrary.ID.HandType.Glove"
+        ],
+        "apiTags": [],
+        "searchTags": [],
+        "battlepass": {
+          "season": 2,
+          "tier": 70,
+          "page": null,
+          "type": "paid",
+          "displayText": {
+            "chapter": "Chapter 1",
+            "season": "Season 2",
+            "chapterSeason": "Chapter 1 - Season 2"
+          },
+          "battlePassName": "Battle Pass"
+        },
+        "set": {
+          "id": "FortKnights",
+          "name": "Fort Knights",
+          "partOf": "Part of the Fort Knights set."
+        },
+        "introduction": {
+          "chapter": "Chapter 1",
+          "season": "Season 2",
+          "text": "Introduced in Chapter 1 - Season 2."
+        },
+        "displayAssets": [],
+        "shopHistory": null,
+        "styles": [],
+        "previewVideos": [],
+        "grants": [
+          {
+            "id": "BID_004_BlackKnight",
+            "type": {
+              "id": "backpack",
+              "name": "BackBling"
+            },
+            "name": "Black Shield",
+            "description": "The Black Knight's legendary shield.",
+            "rarity": {
+              "id": "Legendary",
+              "name": "LEGENDARY"
+            },
+            "series": null,
+            "images": {
+              "icon": "https://media.fortniteapi.io/images/316db7c-de81a10-7f79c82-2bd8b7c/transparent.png",
+              "featured": null,
+              "background": "https://media.fortniteapi.io/images/cosmetics/316db7c-de81a10-7f79c82-2bd8b7c/v2/background.png",
+              "icon_background": "https://media.fortniteapi.io/images/cosmetics/316db7c-de81a10-7f79c82-2bd8b7c/v2/icon_background.png",
+              "full_background": "https://media.fortniteapi.io/images/cosmetics/316db7c-de81a10-7f79c82-2bd8b7c/v2/info.en.png"
+            }
+          }
+        ],
+        "grantedBy": []
+      }
+    }
+  ]
+}

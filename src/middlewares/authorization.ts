@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { JsonWebTokenError } from 'jsonwebtoken'
 import * as JWT from 'jsonwebtoken'
-import errors, { neoniteDev } from '../structs/errors';
+import errors, { neoniteDev } from '../utils/errors';
 //import * as database from '../database/mysqlManager';
-import { fulltokenInfo, tokenInfo, tokenInfoClient } from '../structs/types';
+import { fulltokenInfo, tokenInfo, tokenInfoClient } from '../utils/types';
 //import tokens from '../database/tokenController';
 import * as flexRateLimit from 'rate-limiter-flexible';
-import { tokenCache } from '../structs/globals';
+import { tokenCache } from '../utils/globals';
 import tokens from '../database/local/tokenController';
 
 export async function validateToken(token: string): Promise<tokenInfo | tokenInfoClient | undefined> {

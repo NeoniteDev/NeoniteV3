@@ -2,7 +2,7 @@
 import PromiseRouter from 'express-promise-router';
 import verifyAuthorization from '../middlewares/authorization';
 import { Request, Response, NextFunction } from 'express-serve-static-core';
-import errors, { ApiError } from '../structs/errors';
+import errors, { ApiError } from '../utils/errors';
 import { HttpError } from 'http-errors';
 
 const app = PromiseRouter()

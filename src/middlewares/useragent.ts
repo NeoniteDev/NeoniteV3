@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express-serve-static-core';
-import errors from '../structs/errors';
-import { Middlewares } from '../structs/types';
+import errors from '../utils/errors';
+import { Middlewares } from '../utils/types';
 
 
 const rUserAgent = new RegExp('(.*)/(.*)-CL-(\\d+) (\\w+)/.*');

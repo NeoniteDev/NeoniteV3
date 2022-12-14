@@ -1,13 +1,11 @@
 import { mcpResponse, Handleparams } from '../operations'
 import { Profile, ensureProfileExist } from '../profile'
-import errors from '../../structs/errors'
+import errors from '../../utils/errors'
 import * as Path from 'path'
 import { validate, ValidationError } from 'jsonschema';
 import * as fs from 'fs';
 import { randomUUID } from 'crypto';
-
-const schemaPath = Path.join(__dirname, '../../../resources/schemas/mcp/json/CopyCosmeticLoadout.json');
-const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'))
+import * as resources from '../../utils/resources';
 
 export const supportedProfiles = [
     'athena',
@@ -20,26 +18,7 @@ interface body {
     "optNewNameForTarget"?: string
 }
 
-export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
-    const existOrCreated = await ensureProfileExist(config.profileId, config.accountId);
-
-    if (!existOrCreated) {
-        throw errors.neoniteDev.mcp.templateNotFound
-            .withMessage(`Unable to find template configuration for profile ${config.profileId}`)
-            .with(config.profileId)
-    }
-
-    const profile = new Profile(config.profileId, config.accountId);
-    await profile.init();
-
-    const result = validate(config.body, schema);
-
-    if (!result.valid) {
-        const validationErrors = result.errors.filter(x => x instanceof ValidationError)
-        const invalidFields = validationErrors.map(x => x.argument).join(', ');
-        throw errors.neoniteDev.internal.validationFailed.withMessage(`Validation Failed. Invalid fields were [${invalidFields}]`).with(`[${invalidFields}]`)
-    }
-
+export async function handle(config: Handleparams<body>, profile: Profile): Promise<mcpResponse> {
     if (config.body.targetIndex > 100 || config.body.sourceIndex > 100 || config.body.targetIndex < 0 || config.body.sourceIndex < 0) {
         throw errors.neoniteDev.mcp.outOfBounds.with(config.body.sourceIndex.toString(), config.body.targetIndex.toString());
     }
@@ -79,5 +58,5 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
         await profile.setStat('loadouts', profile.stats.attributes.loadouts.concat([newId]));
     }
 
-    return profile.generateResponse(config);
+    return await profile.generateResponse(config);
 }

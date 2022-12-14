@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import * as path from "path";
-import errors from "../../structs/errors";
+import errors from "../../utils/errors";
 
 const localDataPath = path.join(__dirname, '../../../local-data');
 

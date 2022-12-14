@@ -1,8 +1,8 @@
 import { existsSync } from 'fs';
 import * as path from 'path';
 import { send } from 'process';
-import errors from '../../structs/errors';
-import * as types from '../../structs/types';
+import errors from '../../utils/errors';
+import * as types from '../../utils/types';
 import { getService, updateService } from './LocalDBmanager';
 
 

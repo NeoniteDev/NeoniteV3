@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { profile as types } from '../../structs/types';
+import { profile as types } from '../../utils/types';
 
 import { profiles } from '../../database/local/profilesController';
 
@@ -10,7 +10,7 @@ export function handle(accountId: string): types.Profile {
     return {
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
-        rvn: 1,
+        rvn: 0,
         wipeNumber: 1,
         accountId: accountId,
         profileId: 'athena',
@@ -77,9 +77,17 @@ export function handle(accountId: string): types.Profile {
                 style_points: 0,
                 mfa_reward_claimed: false,
                 rested_xp_overflow: 0,
+                // @ts-ignore
                 quest_manager: {
-                    dailyLoginInterval: "2021-11-20T20:26:32.305Z",
-                    dailyQuestRerolls: 1
+                    dailyLoginInterval: "2017-12-25T01:44:10.602Z",
+                    dailyQuestRerolls: 1,
+                    questPoolStats: {
+                        poolStats: [],
+                        dailyLoginInterval: "2017-12-25T01:44:10.602Z",
+                        poolLockouts: {
+                            poolLockouts: [ ]
+                        }
+                    }
                 },
                 book_level: 1,
                 season_num: 19,
@@ -113,6 +121,7 @@ export function handle(accountId: string): types.Profile {
                 inventory_limit_bonus: 0,
                 pinned_quest: "",
                 last_applied_loadout: loadout,
+                // @ts-ignore
                 daily_rewards: {},
                 xp: 0,
                 season_friend_match_boost: 0,

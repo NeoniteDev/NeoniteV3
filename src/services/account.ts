@@ -1,11 +1,11 @@
 import Router from "express-promise-router";
-import errors, { ApiError } from "../structs/errors";
+import errors, { ApiError } from "../utils/errors";
 import * as crypto from 'crypto';
 import * as jwt from 'jsonwebtoken';
 import * as express from "express";
 import verifyAuthorization, { reqWithAuth, reqWithAuthMulti, validateToken } from "../middlewares/authorization";
 import validateMethod from "../middlewares/Method";
-import { Credentials } from "../structs/types";
+import { Credentials } from "../utils/types";
 import { exchanges } from "../database/local/exchangesController";
 import users from "../database/local/usersController";
 //import refresh_tokens from "../database/local/refreshController";
@@ -166,7 +166,7 @@ app.post('/api/oauth/token', async (req, res, next) => {
 
 
                 if (!user || user.password !== hash_password) {
-                    throw errors.neoniteDev.authentication.oauth.invalidGrant;
+                    throw errors.neoniteDev.authentication.oauth.invalidAccountCredentials;
                 }
 
                 break;
@@ -642,6 +642,8 @@ app.use(() => {
 app.use(
     (err: any, req: Request, res: Response, next: NextFunction) => {
         if (err instanceof ApiError) {
+            err.response.originatingService = 'account';
+            err.response.intent = 'prod';
             err.apply(res);
         }
         else if (err instanceof HttpError && err.type == 'entity.parse.failed') {

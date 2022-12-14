@@ -1,4 +1,4 @@
-import * as types from '../../structs/types';
+import * as types from '../../utils/types';
 import { getService, updateService } from './LocalDBmanager';
 
 interface purchase {

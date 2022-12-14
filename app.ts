@@ -1,9 +1,9 @@
 import * as express from 'express';
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import * as fs from 'fs';
-import errors, { ApiError } from './src/structs/errors';
+import errors, { ApiError } from './src/utils/errors';
 import * as statuses from 'statuses'
-import { } from './src/structs/types'
+import { } from './src/utils/types'
 import * as https from 'http'
 import * as dotenv from 'dotenv'
 import * as path from 'path'
@@ -13,7 +13,7 @@ import { } from 'colors'
 import { HttpError } from 'http-errors';
 
 const packageFile = require('./package.json');
-require('./src/structs/polyfill');
+require('./src/utils/polyfill');
 require('colors');
 
 dotenv.config();

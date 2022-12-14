@@ -4,7 +4,7 @@ import * as crypto from 'crypto';
 import validateMethod from '../middlewares/Method';
 import Router from "express-promise-router";
 import verifyAuthorization, { reqWithAuth } from '../middlewares/authorization';
-import errors, { ApiError, neoniteDev } from '../structs/errors';
+import errors, { ApiError, neoniteDev } from '../utils/errors';
 import { HttpError } from 'http-errors';
 //import parties from '../database/local/partiesController';
 import * as xmppApi from '../xmppManager';
@@ -12,11 +12,11 @@ import * as Path from 'path';
 import { validate } from 'jsonschema';
 import * as fs from 'fs'
 import { party } from '../types/bodies';
-import Party, { getParty, localParties } from '../structs/Party';
+import Party, { getParty, localParties } from '../utils/Party';
 import Friends from '../database/local/friendsController';
 import Pings from '../database/local/pingsController';
-import generateJoinToken from '../structs/EOSvoiceChat';
-import { vxGenerateToken } from '../structs/vivox';
+import generateJoinToken from '../utils/EOSvoiceChat';
+import { vxGenerateToken } from '../utils/vivox';
 
 
 const createSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../resources/schemas/party/json/create.json'), 'utf-8'))

@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import * as Path from 'path';
-import { Request, Response, NextFunction } from 'express-serve-static-core'
-import { profile } from '../structs/types';
+import { Middlewares } from '../utils/types'
+import { profile } from '../utils/types';
+import { Profile } from './profile';
 const operationDir = Path.join(__dirname, 'operations');
 
 
@@ -34,16 +35,49 @@ interface itemRemoved {
     itemId: string,
 }
 
-export type profileChange = fullProfileUpdate | itemAdded | itemAttrChanged | statModified | itemRemoved;
+interface itemQuantityChanged {
+    changeType: 'itemQuantityChanged',
+    itemId: string,
+    quantity: number
+}
 
-export type notification = CatalogPurchase;
+export type profileChange = fullProfileUpdate | itemAdded | itemAttrChanged | statModified | itemRemoved | itemQuantityChanged;
+
+export type notification = CatalogPurchase | DailyRewards | CardPackResult;
+
+export interface DailyRewards {
+    "type": "daily_rewards",
+    "primary": boolean,
+    "daysLoggedIn": number,
+    "items": {
+        "itemType": string,
+        "quantity": number,
+    }[]
+}
+
+export interface CardPackResult {
+    "type": "cardPackResult",
+    "primary": boolean,
+    "displayLevel": number,
+    "lootGranted": {
+        "tierGroupName": string,
+        "items": {
+            "itemType": string,
+            "itemGuid": string,
+            "itemProfile": string  ,
+            "attributes": Record<string, any>,
+            "quantity": 1
+        }[],
+    }
+}
+
 
 export interface CatalogPurchase {
     "type": "CatalogPurchase",
     "primary": boolean,
     "lootResult": {
         "tierGroupName"?: string,
-        "items":{
+        "items": {
             "itemType": string,
             "itemGuid": string,
             "itemProfile": string,
@@ -82,12 +116,13 @@ export interface Handleparams<T = (any | undefined)> {
     revisions?: profileRevision[]
     body: T;
     command: string;
+    clientInfos: Middlewares.fortniteReq
 }
 
 export interface commandHandle {
     supportedProfiles: string[] | '*',
     command: string,
-    execute: (request: Handleparams) => mcpResponse
+    execute: (request: Handleparams, profile: Profile) => mcpResponse
 }
 
 export interface commandModule {

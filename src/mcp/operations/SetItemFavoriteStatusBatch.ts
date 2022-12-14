@@ -1,10 +1,7 @@
 import { mcpResponse, Handleparams } from '../operations'
 import { Profile, ensureProfileExist } from '../profile'
-import errors from '../../structs/errors'
-import * as Path from 'path';
+import errors from '../../utils/errors'
 import { validate, ValidationError } from 'jsonschema';
-import * as fs from 'fs'
-import { type } from 'os';
 
 interface body {
     itemIds: string[],
@@ -17,22 +14,7 @@ export const supportedProfiles = [
     'athena'
 ]
 
-
-const schemaPath = Path.join(__dirname, '../../../resources/schemas/mcp/json/SetItemFavoriteStatusBatch.json');
-const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'))
-
-export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
-    const existOrCreated = await ensureProfileExist(config.profileId, config.accountId);
-
-    if (!existOrCreated) {
-        throw errors.neoniteDev.mcp.templateNotFound
-            .withMessage(`Unable to find template configuration for profile ${config.profileId}`)
-            .with(config.profileId)
-    }
-
-    const profile = new Profile(config.profileId, config.accountId);
-    await profile.init();
-
+export async function handle(config: Handleparams<body>, profile: Profile): Promise<mcpResponse> {
     const itemFavStatus = config.body.itemFavStatus.map((x, index) => {
         if (x === null) {
             return false;
@@ -57,7 +39,7 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
 
 
     if (itemFavStatus.length !== config.body.itemIds.length) {
-        throw errors.neoniteDev.mcp.invalidParameter.withMessage('itemIds and itemFavStatus must match in size');
+        throw errors.neoniteDev.mcp.invalidPayload.withMessage('itemIds and itemFavStatus must match in size');
     }
 
     const items = await profile.getItems(config.body.itemIds)
@@ -74,5 +56,5 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
         })
     );
 
-    return profile.generateResponse(config);
+    return await profile.generateResponse(config);
 }

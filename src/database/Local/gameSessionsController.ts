@@ -1,4 +1,4 @@
-import * as types from '../../structs/types';
+import * as types from '../../utils/types';
 import { escape } from "mysql";
 
 const idRegexp = /^[0-9a-f]{8}[0-9a-f]{4}[0-9a-f]{4}[0-9a-f]{4}[0-9a-f]{12}$/;
@@ -66,6 +66,10 @@ namespace gameSessions {
 
         sessions[sessions.findIndex(x => x.id == id)].privatePlayers.remove(playerId);
         sessions[sessions.findIndex(x => x.id == id)].totalPlayers--;
+    }
+
+    export async function getAll() {
+        return sessions;
     }
 }
 

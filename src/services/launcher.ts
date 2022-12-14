@@ -3,7 +3,7 @@ import PromiseRouter from "express-promise-router";
 import verifyAuthorization, { reqWithAuthMulti } from "../middlewares/authorization";
 import userAgentParse from "../middlewares/useragent";
 import { getClientSession } from "../online";
-import errors from "../structs/errors";
+import errors from "../utils/errors";
 const app = PromiseRouter();
 
 app.get('/api/public/assets/Windows/:catalogItemId/:appName', verifyAuthorization(true), async (req: reqWithAuthMulti, res) => {

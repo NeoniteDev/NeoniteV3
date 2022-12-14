@@ -1,4 +1,4 @@
-import errors, { ApiError } from '../structs/errors'
+import errors, { ApiError } from '../utils/errors'
 import Router from 'express-promise-router';
 import verifyAuthorization from '../middlewares/authorization'
 import validateMethod from '../middlewares/Method'

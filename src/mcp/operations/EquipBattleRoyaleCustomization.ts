@@ -1,6 +1,6 @@
 import { mcpResponse, Handleparams } from '../operations'
 import { Profile, ensureProfileExist } from '../profile'
-import errors from '../../structs/errors'
+import errors from '../../utils/errors'
 
 export const supportedProfiles = [
     'athena', "campaign"
@@ -26,33 +26,37 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
     const profile = new Profile(config.profileId, config.accountId);
     await profile.init();
 
+    
+
     const slotName = config.body.slotName.toLowerCase();
 
     if (!validSlotNames.includes(slotName)) {
-        throw errors.neoniteDev.mcp.invalidParameter
+        throw errors.neoniteDev.mcp.invalidPayload
             .withMessage(`parameter slotName must be within ['character', 'backpack', 'pickaxe', 'glider', 'skydivecontrail', 'musicpack', 'loadingscreen', 'dance', 'itemwraps'].`)
             .with(slotName)
     }
 
     if (typeof config.body.itemToSlot != 'string') {
-        throw errors.neoniteDev.mcp.invalidParameter
+        throw errors.neoniteDev.mcp.invalidPayload
             .withMessage(`parameter itemToSlot must be a string`)
             .with(slotName)
     }
 
     if (config.body.indexWithinSlot != undefined && (typeof config.body.indexWithinSlot != 'number' || config.body.indexWithinSlot > 5 || config.body.indexWithinSlot < 0)) {
-        throw errors.neoniteDev.mcp.invalidParameter
+        throw errors.neoniteDev.mcp.invalidPayload
             .withMessage(`parameter indexWithinSlot must be a number`)
             .with(slotName)
     }
 
     const indexWithinSlot = config.body.indexWithinSlot || 0;
 
-    const itemToSlot = await profile.getItem(config.body.itemToSlot);
+    if (config.body.itemToSlot != "") {
+        const itemToSlot = await profile.getItem(config.body.itemToSlot);
 
-    if (!itemToSlot) {
-        throw errors.neoniteDev.mcp.itemNotFound;
-    }
+        if (!itemToSlot) {
+            throw errors.neoniteDev.mcp.itemNotFound;
+        }
+    };
 
     if (slotName == 'dance') {
         const dances = profile.stats.attributes.favorite_dance;
@@ -71,5 +75,5 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
         profile.setStat(`favorite_${slotName}`, config.body.itemToSlot);
     }
 
-    return profile.generateResponse(config);
+    return await profile.generateResponse(config);
 }

@@ -1,16 +1,23 @@
 import * as express from 'express'
 import validateMethod from '../middlewares/Method'
 import * as Path from 'path';
-import errors from '../structs/errors';
+import errors from '../utils/errors';
 import * as operations from './operations';
 import { profileRevision } from './operations';
-import { profile as types } from '../structs/types';
+import { profile as types } from '../utils/types';
 import PromiseRouter from 'express-promise-router';
-import verifyAuthorization from '../middlewares/authorization';
+import verifyAuthorization, { reqWithAuth } from '../middlewares/authorization';
+import userAgentParse from '../middlewares/useragent';
+import { ensureProfileExist, Profile } from './profile';
+import { readdirSync } from 'fs';
+import * as resources from '../utils/resources';
+import { validate, ValidationError } from 'jsonschema';
 
 const app = PromiseRouter();
 
-app.post('/api/game/v2/profile/:accountId/client/:command', verifyAuthorization(), async (req, res, next) => {
+const shemas = resources.getMcpSchemaList();
+
+app.post('/api/game/v2/profile/:accountId/client/:command', verifyAuthorization(), async (req: reqWithAuth, res, next) => {
     try {
         if (!req.auth) {
             throw errors.neoniteDev.authentication.authenticationFailed;
@@ -40,6 +47,11 @@ app.post('/api/game/v2/profile/:accountId/client/:command', verifyAuthorization(
                 .with(command, `player:profile_${profileId}`, profileId)
         }
 
+        const contentType = req.get('Content-Type');
+        if (!contentType || !contentType.startsWith('application/json')) {
+            throw errors.neoniteDev.internal.unsupportedMediaType;
+        }
+
         const s_profileRevisions = req.get('X-EpicGames-ProfileRevisions');
 
         var profileRevisions: profileRevision[] | undefined = undefined;
@@ -50,14 +62,35 @@ app.post('/api/game/v2/profile/:accountId/client/:command', verifyAuthorization(
             } catch { throw errors.neoniteDev.mcp.invalidHeader; }
         }
 
-        var response = await handle.execute({
+        if (shemas.has(command)) {
+            const result = validate(req.body, resources.getMcpSchema('PurchaseCatalogEntry'));
+            if (!result.valid) {
+                const validationErrors = result.errors.filter(x => x instanceof ValidationError)
+                const invalidFields = validationErrors.map(x => x.argument).join(', ');
+                throw errors.neoniteDev.internal.validationFailed.withMessage(`Validation Failed. Invalid fields were [${invalidFields}]`).with(`[${invalidFields}]`)
+            }
+        }
+
+        const existOrCreated = await ensureProfileExist(profileId, accountId);
+        if (!existOrCreated) {
+            throw errors.neoniteDev.mcp.templateNotFound
+                .withMessage(`Unable to find template configuration for profile ${profileId}`)
+                .with(profileId)
+        }
+
+        const profile = new Profile(profileId, accountId);
+        await profile.init();
+
+
+        const response = await handle.execute({
             accountId,
             profileId: profileId,
             revision: revision,
             revisions: profileRevisions,
             body: req.body,
             command: command,
-        });
+            clientInfos: req.clientInfos
+        }, profile);
 
         res.setHeader('Content-Type', 'application/json')
         res.json(response);

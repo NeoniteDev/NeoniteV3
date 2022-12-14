@@ -1,0 +1,33 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "homebaseBannerIconId",
+        "homebaseBannerColorId"
+    ],
+    "properties": {
+        "homebaseBannerIconId": {
+            "type": "string",
+            "default": "",
+            "title": "The homebaseBannerIconId Schema",
+            "examples": [
+                "InfluencerBanner7"
+            ]
+        },
+        "homebaseBannerColorId": {
+            "type": "string",
+            "default": "",
+            "title": "The homebaseBannerColorId Schema",
+            "examples": [
+                "DefaultColor15"
+            ]
+        }
+    },
+    "examples": [{
+        "homebaseBannerIconId": "InfluencerBanner7",
+        "homebaseBannerColorId": "DefaultColor15"
+    }]
+}

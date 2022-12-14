@@ -1,5 +1,5 @@
 
-import * as types from '../../structs/types';
+import * as types from '../../utils/types';
 import * as nodeCache from 'node-cache';
 import * as mysql from 'mysql';
 import * as path from 'path';

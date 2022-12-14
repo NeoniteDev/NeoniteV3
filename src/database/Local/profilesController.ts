@@ -1,4 +1,4 @@
-import * as types from '../../structs/types';
+import * as types from '../../utils/types';
 import { escape, escapeId } from 'mysql';
 import { join } from "path";
 import { createService, getService, isServiceExist, updateService } from './LocalDBmanager';
@@ -20,7 +20,6 @@ interface ProfilesDB {
 }
 
 type basicProfile = Omit<types.profile.Profile, 'items' | '_id'>;
-
 
 export namespace profiles {
     export async function has(profileId: string, accountId: string): Promise<boolean> {

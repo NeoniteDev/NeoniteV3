@@ -1,5 +1,5 @@
 import Router from "express-promise-router";
-import errors, { ApiError } from "../../structs/errors";
+import errors, { ApiError } from "../../utils/errors";
 import { Request, Response, NextFunction } from 'express-serve-static-core';
 import { HttpError } from 'http-errors';
 import Users, { User } from "../../database/local/usersController";

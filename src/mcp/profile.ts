@@ -1,13 +1,14 @@
 // @ts-nocheck
 import { randomUUID } from 'crypto';
-import { profile as types } from '../structs/types';
+import { profile as types } from '../utils/types';
 import * as fs from 'fs';
 import * as Path from 'path';
 import { mcpResponse, multiUpdate, Handleparams, notification } from './operations';
-import errors from '../structs/errors';
+import errors from '../utils/errors';
 import * as path from 'path';
 import { profiles } from '../database/Local/profilesController';
 import { profileChange } from './operations'
+import { TypeInfo } from 'ts-node';
 
 export async function ensureProfileExist(profileId: string, accountId: string): Promise<boolean> {
     let hasProfile = await profiles.has(profileId, accountId);
@@ -109,6 +110,17 @@ export class Profile implements Omit<types.Profile, 'items'> {
         return this.fullProfile.items[itemId];
     }
 
+    async getItemsByAttribute(attributeName: string, attributeValueType: string) {
+        const fullProfile = await this.getFullProfile();
+        const items =
+            Object.entries(fullProfile.items)
+                .filter(([id, x]) => x.attributes && typeof x.attributes[attributeName] == attributeValueType)
+                .map(x => ({itemId: x[0], itemValue: x[1]}))
+
+    
+        return items;
+    }
+
     async getItems(itemIds: string[]): Promise<Record<string, types.ItemValue>> {
         /*
         if (injections[this.profileId]) {
@@ -151,17 +163,32 @@ export class Profile implements Omit<types.Profile, 'items'> {
         this.fullProfile.items[itemId] = itemValue;
     }
 
+    async addItems(items: { itemId: string, itemValue: types.ItemValue }[]) {
+        this.profileChanges = this.profileChanges.concat(
+            items.filter(x => !(x.itemId in this.fullProfile)).map(
+                x => {
+                    this.fullProfile.items[x.itemId] = x.itemValue;
+                    return {
+                        changeType: 'itemAdded',
+                        itemId: x.itemId,
+                        item: x.itemValue
+                    }
+                }
+            )
+        );
+    }
+
     async removeItem(itemId: string) {
         // return profiles.removeItem(itemId, this.profileId, this.accountId);
-        if (!(itemId in this.fullProfile.items)) return;
-        delete this.fullProfile.items[itemId];
-
         this.profileChanges.push(
             {
                 changeType: 'itemRemoved',
                 itemId: itemId
             }
         );
+
+        if (!(itemId in this.fullProfile.items)) return;
+        delete this.fullProfile.items[itemId];
     }
 
     async setItemAttribute(itemId: string, attributeName: string, attributeValue: any) {
@@ -191,12 +218,21 @@ export class Profile implements Omit<types.Profile, 'items'> {
     async setMutliItemAttribute(values: { itemId: string, attributeName: string, attributeValue: any }[]) {
         //return profiles.setMutliItemAttr(this.profileId, this.accountId, values);
 
-        const validChanges = values.filter(x => this.getItem(x) != undefined)
+        const validChanges = values.filter(x => this.getItem(x.itemId) != undefined)
         if (validChanges.length <= 0) return;
 
         this.profileChanges = this.profileChanges.concat(
             validChanges.map(
                 x => {
+                    if (!this.fullProfile.items[x.itemId]) {
+                        this.fullProfile.items[x.itemId] = { attributes: {} }
+                    }
+
+                    if (!this.fullProfile.items[x.itemId].attributes) {
+                        this.fullProfile.items[x.itemId].attributes = {}
+                    }
+
+                    this.fullProfile.items[x.itemId].attributes[x.attributeName] = x.attributeValue;
                     return {
                         changeType: 'itemAttrChanged',
                         itemId: x.itemId,
@@ -206,29 +242,43 @@ export class Profile implements Omit<types.Profile, 'items'> {
                 }
             )
         );
+    }
 
-        values.forEach((itemAttr) => {
-            this.fullProfile.items[itemAttr.itemId].attributes[itemAttr.attributeName] = itemAttr.attributeValue;
-        });
+
+    async changeItemQuantity(itemId: string, newQuantity: number) {
+        const item = this.getItem(itemId);
+        if (!item) { return; }
+
+        if (!this.fullProfile.items[itemId]) {
+            this.fullProfile.items[itemId] = {
+                templateId: item.templateId,
+                quantity: newQuantity
+            }
+        } else {
+            this.fullProfile.items[itemId].quantity = newQuantity;
+        }
+
+        this.profileChanges.push(
+            {
+                changeType: 'itemQuantityChanged',
+                itemId: itemId,
+                quantity: newQuantity
+            }
+        );
     }
 
     async getFullProfile(): Promise<types.Profile> {
-        const profileData = { ...this.fullProfile }; //await profiles.get(this.profileId, this.accountId);
-
-        /* if (!profileData) {
-             return undefined
-         };*/
-
         if (injections[this.profileId]) {
+            const profileData = { ...this.fullProfile };
             profileData.items = mergeDeep(injections[this.profileId], profileData.items)
+            return profileData;
         }
 
-        //return profileData;
-        return profileData;
+        return this.fullProfile;
     }
 
     async setStat(name: string, value: any): Promise<types.Stats> {
-        if (this.stats.attributes[name] == value) return;
+        if (typeof value == 'string' && this.stats.attributes[name] == value) return;
 
         this.stats.attributes[name] = value;
         this.profileChanges.push(
@@ -275,7 +325,7 @@ export class Profile implements Omit<types.Profile, 'items'> {
             profileId: this.profileId,
             profileChangesBaseRevision: this.baseRvn,
             profileChanges: bIsUpToDate ? this.profileChanges : [
-                { changeType: 'fullProfileUpdate', profile:  await this.getFullProfile() }
+                { changeType: 'fullProfileUpdate', profile: await this.getFullProfile() }
             ],
             notifications: notifications,
             multiUpdate: mutliUpdate,

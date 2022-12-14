@@ -2,7 +2,7 @@ import { Server, VerifyClientCallbackAsync, VerifyClientCallbackSync, WebSocket 
 import { Application } from 'express-serve-static-core'
 import * as fs from 'fs';
 import * as path from 'path';
-import { } from '../structs/types'
+import { } from '../utils/types'
 import { IncomingMessage } from 'http';
 import * as https from 'http'
 
