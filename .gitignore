@@ -3,3 +3,4 @@ node_modules
 saved
 dist
 local-data
+cloudstorage/users
