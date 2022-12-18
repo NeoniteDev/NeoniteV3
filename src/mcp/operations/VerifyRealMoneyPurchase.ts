@@ -2,10 +2,11 @@ import { mcpResponse, Handleparams, CatalogPurchase, multiUpdate, notification }
 import { Profile, ensureProfileExist } from '../profile'
 import errors from '../../utils/errors'
 import { validate, ValidationError } from 'jsonschema';
-import { getCatalog } from '../../online';
+import { getCatalog, getLastest } from '../../online';
 import pendingPurchases from '../../database/local/purchasesController';
 import * as crypto from 'crypto';
 import * as resources from '../../utils/resources';
+import { getStorefronts } from '../../utils/storefront';
 
 
 export const supportedProfiles = [
@@ -22,13 +23,16 @@ interface body {
 }
 
 export async function handle(config: Handleparams<body>, profile: Profile): Promise<mcpResponse> {
-    const catalog = await getCatalog();
+    const lastest = await getLastest().catch(x => undefined);
+    const catalog = (lastest != undefined && config.clientInfos.CL == lastest.CL) ?
+        (await getCatalog())?.storefronts :
+        await getStorefronts(config.clientInfos.season, config.clientInfos.friendlyVersion)
 
     if (!catalog) {
         return profile.generateResponse(config);
     }
 
-    const catalogToOffer = catalog.storefronts.find(catalog => catalog.catalogEntries.find(x => x.appStoreId.includes(config.body.appStoreId)));
+    const catalogToOffer = catalog.find(catalog => catalog.catalogEntries.find(x => x.appStoreId.includes(config.body.appStoreId)));
 
     if (!catalogToOffer) {
         throw errors.neoniteDev.gamecatalog.itemNotFound(config.body.appStoreId).withMessage(`Could not find appStoreId ${config.body.appStoreId}`);
@@ -41,6 +45,25 @@ export async function handle(config: Handleparams<body>, profile: Profile): Prom
     }
 
     const notifications: notification[] = [];
+
+    var fulfillmentId= crypto.randomUUID().replaceAll('-', '');
+
+    if (offer.fulfillmentIds && offer.fulfillmentIds.length > 0) {
+        const inAppPurchases = profile.stats.attributes.in_app_purchases;
+        if (!inAppPurchases) throw errors.neoniteDev.internal.dataBaseError;
+
+        inAppPurchases.fulfillmentCounts = {
+            ...inAppPurchases.fulfillmentCounts,
+            ...offer.fulfillmentIds.reduce((acc, cur) => {
+                acc[cur] = 1;
+                return acc;
+            }, {})
+            
+        }
+
+        fulfillmentId = offer.fulfillmentIds[0];
+        profile.setStat('in_app_purchases', inAppPurchases);
+    }
 
     if (catalogToOffer.name == 'CurrencyStorefront') {
         if (!offer.metaInfo) {
@@ -84,6 +107,32 @@ export async function handle(config: Handleparams<body>, profile: Profile): Prom
             itemValue
         );
 
+        if (config.clientInfos.season > 2) {
+            profile.addItem(
+                crypto.randomUUID(),
+                {
+                    templateId: 'GiftBox:GB_MakeGood',
+                    attributes: {
+                        item_seen: false,
+                        lootList: [
+                            {
+                                itemGuid: itemId,
+                                itemProfile: config.profileId,
+                                itemType: 'Currency:MtxPurchased',
+                                quantity: MtxTotal
+                            }
+                        ],
+                        fromAccountId: '',
+                        giftedOn: new Date().toISOString(),
+                        params: {
+                            userMessage: "Thanks for using Neonite"
+                        }
+                    },
+                    quantity: 1
+                }
+            );
+        }
+
         notifications.push(
             {
                 primary: true,
@@ -101,6 +150,7 @@ export async function handle(config: Handleparams<body>, profile: Profile): Prom
                 }
             }
         )
+        
 
         return profile.generateResponse(config, notifications);
     } else if (catalogToOffer.name == 'FoundersPack') {
@@ -212,42 +262,62 @@ export async function handle(config: Handleparams<body>, profile: Profile): Prom
     const athena = new Profile('athena', config.accountId);
     await athena.init();
 
+    const lootList = offer.itemGrants.map(item => {
+        const profileId = item.templateId.startsWith('Athena') ? 'athena' : 'common_core';
+        const itemId = crypto.randomUUID();
+        const itemData = {
+            attributes: {
+                level: 1,
+                item_seen: false,
+                rnd_sel_cnt: 0,
+                favorite: false,
+                creation_time: new Date().toISOString(),
+                ...item.attributes
+            },
+            quantity: item.quantity,
+            templateId: item.templateId
+        };
+
+        if (profileId == 'athena')
+            athena.addItem(itemId, itemData);
+        else
+            profile.addItem(itemId, itemData)
+
+        return {
+            itemGuid: itemId,
+            itemProfile: profileId,
+            itemType: item.templateId,
+            quantity: item.quantity
+        }
+    });
+
+    const giftBoxId = resources.getOffersGiftBoxes()[offer.offerId] || 'GB_MakeGood';
+
     notifications.push(
         {
             primary: true,
             type: 'CatalogPurchase',
             lootResult: {
-                tierGroupName: 'Fulfillment:/' + crypto.randomUUID().replaceAll('-', ''),
-                items: offer.itemGrants.map(item => {
-                    const profileId = item.templateId.startsWith('Athena') ? 'athena' : 'common_core';
-                    const itemId = crypto.randomUUID();
-                    const itemData = {
-                        attributes: {
-                            level: 1,
-                            item_seen: false,
-                            rnd_sel_cnt: 0,
-                            favorite: false,
-                            creation_time: new Date().toISOString(),
-                            ...item.attributes
-                        },
-                        quantity: item.quantity,
-                        templateId: item.templateId
-                    };
-
-                    if (profileId == 'athena')
-                        athena.addItem(itemId, itemData);
-                    else
-                        profile.addItem(itemId, itemData)
-
-
-                    return {
-                        itemGuid: itemId,
-                        itemProfile: profileId,
-                        itemType: item.templateId,
-                        quantity: item.quantity
-                    }
-                })
+                tierGroupName: 'Fulfillment:/' + fulfillmentId,
+                items: lootList
             }
+        }
+    );
+
+    profile.addItem(
+        crypto.randomUUID(),
+        {
+            templateId: 'GiftBox:' + giftBoxId,
+            attributes: {
+                item_seen: false,
+                lootList: lootList,
+                fromAccountId: '',
+                giftedOn: new Date().toISOString(),
+                params: {
+                    userMessage: "Thanks for using Neonite"
+                }
+            },
+            quantity: 1
         }
     );
 

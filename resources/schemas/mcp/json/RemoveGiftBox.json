@@ -10,8 +10,17 @@
             "giftBoxItemIds": []
         }
     ],
-    "required": [
-        "giftBoxItemIds"
+    "oneOf": [
+        {
+            "required": [
+                "giftBoxItemIds"
+            ]
+        },
+        {
+            "required": [
+                "giftBoxItemId"
+            ]
+        }
     ],
     "properties": {
         "giftBoxItemIds": {
@@ -37,6 +46,14 @@
                     }
                 ]
             }
+        },
+        "giftBoxItemId": {
+            "type": "string",
+            "default": "",
+            "title": "The giftBoxItemId Schema",
+            "examples": [
+                "yo"
+            ]
         }
     },
     "additionalProperties": true

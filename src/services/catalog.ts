@@ -45,6 +45,10 @@ app.get('/api/shared/bulk/offers', VerifyAuthorization(true), userAgentParse(fal
         }
     };
 
+    if (responseData['e2f25dae43604a839dd6f2c21b675d5e']) {
+        responseData['e2f25dae43604a839dd6f2c21b675d5e'].expiryDate = '9999-01-01T00:00:00.000Z';
+    }
+
     const extraPacks = extraStarterPacks[req.clientInfos.season];
 
     if (extraPacks) {

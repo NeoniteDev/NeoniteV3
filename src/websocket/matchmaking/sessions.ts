@@ -19,32 +19,35 @@ export default class GameSession {
         const serverIp = ipAndPort[0];
         const serverPort = parseInt(ipAndPort[1]);
 
+        // Neonite:Live:4774386:0:NAE:playlist_defaultsolo:PC:public:1
+        const [game, env, netcl] = creator.payload.bucketId.split(':');
+
         this.sessionData = {
-            id: this.id,
-            ownerId: this.creator.payload.playerId,
-            ownerName: this.creator.payload.playerId,
-            totalPlayers: this.QueuedClients.length + 1,
-            serverName: `${this.creator.payload.playerId}-gameserver`,
-            serverAddress: serverIp,
-            serverPort: isNaN(serverPort) ? 7777 : serverPort,
-            maxPrivatePlayers: 200,
-            maxPublicPlayers: 0,
-            allowInvites: false,
-            allowJoinInProgress: false,
-            allowJoinViaPresence: false,
-            allowJoinViaPresenceFriendsOnly: false,
-            attributes: {},
-            buildUniqueId: '',
-            isDedicated: true,
-            lastUpdated: new Date(),
-            openPrivatePlayers: 200,
-            openPublicPlayers: 0,
-            privatePlayers: [this.creator.payload.playerId],
-            publicPlayers: [],
-            shouldAdvertise: false,
-            started: false,
-            usesPresence: false,
-            usesStats: false
+            "id": this.id,
+            "ownerId": "Neonite",
+            "ownerName": "Kemo",
+            "serverName": "Neonite",
+            "serverAddress": serverIp,
+            "serverPort": isNaN(serverPort) ? 7777 : serverPort,
+            "totalPlayers": 0,
+            "maxPublicPlayers": 10,
+            "openPublicPlayers": 10,
+            "maxPrivatePlayers": 1,
+            "openPrivatePlayers": 5,
+            "attributes": {},
+            "publicPlayers": [],
+            "privatePlayers": [],
+            "allowJoinInProgress": false,
+            "shouldAdvertise": false,
+            "isDedicated": true,
+            "usesStats": false,
+            "allowInvites": false,
+            "usesPresence": false,
+            "allowJoinViaPresence": true,
+            "allowJoinViaPresenceFriendsOnly": false,
+            "buildUniqueId": parseInt(netcl),
+            "lastUpdated": new Date(),
+            "started": false
         }
 
         gameSessions.create(this.sessionData);

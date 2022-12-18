@@ -63,7 +63,7 @@ app.post('/api/game/v2/profile/:accountId/client/:command', verifyAuthorization(
         }
 
         if (shemas.has(command)) {
-            const result = validate(req.body, resources.getMcpSchema('PurchaseCatalogEntry'));
+            const result = validate(req.body, resources.getMcpSchema(command));
             if (!result.valid) {
                 const validationErrors = result.errors.filter(x => x instanceof ValidationError)
                 const invalidFields = validationErrors.map(x => x.argument).join(', ');
@@ -81,6 +81,37 @@ app.post('/api/game/v2/profile/:accountId/client/:command', verifyAuthorization(
         const profile = new Profile(profileId, accountId);
         await profile.init();
 
+        if (profileId == 'athena' && profile.stats.attributes.season_num != req.clientInfos.season) {
+            profile.setStat('season_num', req.clientInfos.season);
+
+            if (!profile.stats.attributes.past_seasons) throw errors.neoniteDev.internal.dataBaseError;
+
+            let seasonInfo = profile.stats.attributes.past_seasons.find(x => x.seasonNumber == req.clientInfos.season);
+
+            if (!seasonInfo) {
+                seasonInfo = {
+                    seasonNumber: req.clientInfos.season,
+                    purchasedVIP: false,
+                    bookLevel: 1,
+                    xpBoost: 0,
+                    friendXpBoost: 0,
+                    bookXp: 0,
+                    numHighBracket: 0,
+                    numLowBracket: 0,
+                    numWins: 0,
+                    seasonLevel: 1,
+                    seasonXp: 0,
+                }
+
+                profile.stats.attributes.past_seasons.push(seasonInfo);
+                profile.setStat('past_seasons', profile.stats.attributes.past_seasons)
+            }
+
+            profile.setStat('book_purchased', seasonInfo.purchasedVIP);
+            profile.setStat('book_level', seasonInfo.bookLevel);
+            profile.setStat('season_match_boost', seasonInfo.xpBoost);
+            profile.setStat('season_friend_match_boost', seasonInfo.friendXpBoost);
+        }
 
         const response = await handle.execute({
             accountId,

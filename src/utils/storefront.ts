@@ -9,101 +9,30 @@ import { BRShop, CatalogEntry, Storefront } from "./types";
 import * as semver from 'semver';
 import { compareVersions } from "compare-versions";
 import * as resources from './resources'
-
-const fortniteApiFile = path.join(__dirname, '../../resources/cosmetics.json');
-
-
-
+import { randomUUID } from "crypto";
 
 const starterPackPath = path.join(__dirname, '../../resources/catalog/BRStarterKits.json');
 const starterPackContent = JSON.parse(readFileSync(starterPackPath, 'utf-8'));
 
-var fileContent: Cosmetic[];
-
-export async function getCosmetics(): Promise<Cosmetic[]> {
-    if (fileContent)
-        return fileContent;
-
-
-    fileContent = JSON.parse(await readFile(fortniteApiFile, 'utf-8'));
-    return fileContent;
-}
+const cosmetics = resources.getCosmetics();
 
 export function getStarterPackStoreFront(): CatalogEntry[] {
     return starterPackContent;
 }
 
-/**
- * 
- * @param seasonNumber the patch number (e.g 1, 6, 19)
- * @param patchVersion season number (e.g 1.8, 9.40, 12.61)
- */
-export async function generateStorefronts(seasonNum: number, patchVersion: string): Promise<Storefront[]> {
-    const cosmetics = await getCosmetics();
-    const pastSeasons = await getPastSeasons();
-
-    const seasonIndex = pastSeasons.findIndex(x => x.season == seasonNum);
-
-    if (seasonIndex == -1) {
-        return resources.getDefaultStorefronts();
-    }
-
-    const season = pastSeasons[seasonIndex];
-    const patchIndex = season.patchList.findIndex(x => x.version.startsWith(patchVersion));
-
-    const nextPatchDate =
-        new Date(season.patchList.length == patchIndex + 1
-            ? season.endDate || '2999' : season.patchList[patchIndex + 1].date);
-
-    console.log(nextPatchDate)
-
-
-    const validCosmetics = cosmetics.filter(x => {
-        //if (!x.gameplayTags || !x.gameplayTags.includes('Cosmetics.Source.ItemShop')) return false;
-        if (!x.lastAppearance || !x.releaseDate) return false;
-
-        if (seasonNum <= 1 && x.type.id == "emote") {
-            return false;
-        }
-
-        if (new Date(x.releaseDate).getTime() >= nextPatchDate.getTime()) return false;
-
-        return compareVersions(patchVersion, x.added.version.replace(/[^\d.]/g, '')) >= 0;
-    });
-
-    console.log(`seasonNum: ${seasonNum}, patchVersion:${patchVersion}`);
-    console.log('found a nubmer of valid cosmetics: ' + validCosmetics.length);
-
-    const dailyItems = getRandom(validCosmetics, 6);
-    const featuredItems = getRandom(validCosmetics.filter(x => !dailyItems.includes(x)), 2);
-
-    const featuredStoreFront = featuredItems.map(x => mapItemForStore(x));
-    const dailyStoreFront = dailyItems.map(x => mapItemForStore(x));
-
+export async function getStorefronts(seasonNum: number, patchVersion: string): Promise<Storefront[]> {
     var battlePassInfo = undefined;
-
     try {
         battlePassInfo = resources.getBattlePassInfo(seasonNum);
     } catch {
         console.log(`No battle pass info for season ${seasonNum}`);
     }
 
+
     return [
         {
-            name: "BRDailyStorefront",
-            catalogEntries: dailyStoreFront
-        },
-        {
-            name: "BRSpecialFeatured",
-            catalogEntries: featuredStoreFront
-        },
-        {
-            name: "BRWeeklyStorefront",
-            catalogEntries: featuredStoreFront
-        },
-        {
             name: "BRStarterKits",
-            catalogEntries: starterPackContent
+            catalogEntries: seasonNum > 2 ? starterPackContent : []
         },
         ...battlePassInfo == undefined ? [] : [
             {
@@ -228,82 +157,260 @@ export async function generateStorefronts(seasonNum: number, patchVersion: strin
     ]
 }
 
+/**
+ * 
+ * @param seasonNumber the patch number (e.g 1, 6, 19)
+ * @param patchVersion season number (e.g 1.8, 9.40, 12.61)
+ */
+export async function generateStorefronts(seasonNum: number, patchVersion: string): Promise<Storefront[]> {
+    const pastSeasons = await getPastSeasons();
+
+    const seasonIndex = pastSeasons.findIndex(x => x.season == seasonNum);
+
+    if (seasonIndex == -1) {
+        return resources.getDefaultStorefronts();
+    }
+
+    const season = pastSeasons[seasonIndex];
+    const patchIndex = season.patchList.findIndex(x => x.version.startsWith(patchVersion));
+
+    const nextPatchDate =
+        new Date(season.patchList.length == patchIndex + 1
+            ? season.endDate || '2999' : season.patchList[patchIndex + 1].date);
+
+    console.log(nextPatchDate)
+
+
+    const validCosmetics = cosmetics.filter(x => {
+        //if (!x.gameplayTags || !x.gameplayTags.includes('Cosmetics.Source.ItemShop')) return false;
+        if (!x.lastAppearance || !x.releaseDate) return false;
+
+        if (seasonNum <= 1 && x.type.id == "emote") {
+            return false;
+        }
+
+        if (new Date(x.releaseDate).getTime() >= nextPatchDate.getTime()) return false;
+
+        return compareVersions(patchVersion, x.added.version.replace(/[^\d.]/g, '')) >= 0;
+    });
+
+    const storeItems = getItems(validCosmetics, seasonNum <= 1)
+
+    console.log(`seasonNum: ${seasonNum}, patchVersion:${patchVersion}`);
+    console.log('found a nubmer of valid cosmetics: ' + validCosmetics.length);
+
+    var battlePassInfo = undefined;
+    try {
+        battlePassInfo = resources.getBattlePassInfo(seasonNum);
+    } catch {
+        console.log(`No battle pass info for season ${seasonNum}`);
+    }
+
+    return [
+        {
+            name: "BRDailyStorefront",
+            catalogEntries: storeItems.daily
+        },
+        {
+            name: "BRSpecialFeatured",
+            catalogEntries: storeItems.featured
+        },
+        {
+            name: "BRWeeklyStorefront",
+            catalogEntries: storeItems.featured
+        },
+        {
+            name: "BRStarterKits",
+            catalogEntries: seasonNum > 2 ? starterPackContent : []
+        },
+        ...battlePassInfo == undefined ? [] : [
+            {
+                name: `BRSeason${seasonNum}`,
+                catalogEntries: [
+                    {
+                        offerId: `BR.Season${seasonNum}.BattlePass.01`,
+                        devName: `BR.Season${seasonNum}.BattlePass.01`,
+                        offerType: "StaticPrice",
+                        prices: [
+                            {
+                                currencyType: "MtxCurrency",
+                                currencySubType: "",
+                                regularPrice: seasonNum == 2 ? 1800 : 950,
+                                finalPrice: 950,
+                                saleType: seasonNum == 2 ? "PercentOff" : undefined,
+                                saleExpiration: "9999-12-31T23:59:59.999Z",
+                                basePrice: 950
+                            }
+                        ],
+                        categories: [],
+                        dailyLimit: -1,
+                        weeklyLimit: -1,
+                        monthlyLimit: -1,
+                        appStoreId: [],
+                        requirements: [
+                            {
+                                requirementType: "DenyOnFulfillment",
+                                requiredId: `neofulfillment_bpseason${seasonNum}`,
+                                minQuantity: 1
+                            }
+                        ],
+                        metaInfo: [],
+                        catalogGroup: "",
+                        catalogGroupPriority: 0,
+                        sortPriority: 1,
+                        title: "Battle Pass",
+                        shortDescription: "Season 2 Battle Pass\r\n\r\nPlay to level up your Battle Pass, unlocking up to 65+ rewards worth 12,000 V-Bucks (typically takes 75 to 150 hours of play). Want it all faster? You can use V-Bucks to buy levels any time!",
+                        description: "Season 2 Battle Pass\r\n\r\nPlay to level up your Battle Pass, unlocking up to 65+ rewards worth 12,000 V-Bucks (typically takes 75 to 150 hours of play). Want it all faster? You can use V-Bucks to buy levels any time!",
+                        displayAssetPath: `/Game/Catalog/DisplayAssets/DA_BR_Season${seasonNum}_BattlePass.DA_BR_Season${seasonNum}_BattlePass`,
+                        itemGrants: []
+                    },
+                    {
+                        offerId: battlePassInfo.tierOfferId || `BR.Season${seasonNum}.SingleTier.01`,
+                        devName: `BR.Season${seasonNum}.SingleTier.01`,
+                        offerType: "StaticPrice",
+                        prices: [
+                            {
+                                currencyType: "MtxCurrency",
+                                currencySubType: "",
+                                regularPrice: 150,
+                                finalPrice: 150,
+                                saleExpiration: "9999-12-31T23:59:59.999Z",
+                                basePrice: 150
+                            }
+                        ],
+                        categories: [],
+                        dailyLimit: -1,
+                        weeklyLimit: -1,
+                        monthlyLimit: -1,
+                        appStoreId: [],
+                        requirements: [
+                            {
+                                requirementType: "RequireFulfillment",
+                                requiredId: `neofulfillment_bpseason${seasonNum}`,
+                                minQuantity: 1
+                            }
+                        ],
+                        metaInfo: [],
+                        catalogGroup: "",
+                        catalogGroupPriority: 0,
+                        sortPriority: 0,
+                        title: "Battle Pass Tier",
+                        shortDescription: "Get great rewards now!",
+                        description: "Get great rewards now!",
+                        displayAssetPath: "",
+                        itemGrants: []
+                    },
+                    ...seasonNum > 2 ? [
+                        {
+                            offerId: `BR.Season${seasonNum}.BattleBundle.01`,
+                            devName: `BR.Season${seasonNum}.BattleBundle.01`,
+                            offerType: "StaticPrice",
+                            prices: [
+                                {
+                                    currencyType: "MtxCurrency",
+                                    currencySubType: "",
+                                    regularPrice: 4700,
+                                    finalPrice: 2800,
+                                    saleExpiration: "9999-12-31T23:59:59.999Z",
+                                    basePrice: 2800,
+                                    saleType: "PercentOff"
+                                }
+                            ],
+                            categories: [],
+                            dailyLimit: -1,
+                            weeklyLimit: -1,
+                            monthlyLimit: -1,
+                            appStoreId: [],
+                            requirements: [
+                                {
+                                    requirementType: "DenyOnFulfillment",
+                                    requiredId: `neofulfillment_bpseason${seasonNum}`,
+                                    minQuantity: 1
+                                }
+                            ],
+                            metaInfo: [],
+                            catalogGroup: "",
+                            catalogGroupPriority: 1,
+                            sortPriority: 2,
+                            title: "Battle Pass + 25 tiers!",
+                            shortDescription: `Season ${seasonNum} Battle Pass + 25 tiers!\r\n\r\nPlay to level up your Battle Pass, unlocking up to 65+ rewards worth 12,000 V-Bucks (typically takes 75 to 150 hours of play). Want it all faster? You can use V-Bucks to buy levels any time!`,
+                            description: `Season ${seasonNum} Battle Pass + 25 tiers!\r\n\r\nPlay to level up your Battle Pass, unlocking up to 65+ rewards worth 12,000 V-Bucks (typically takes 75 to 150 hours of play). Want it all faster? You can use V-Bucks to buy levels any time!`,
+                            displayAssetPath: `/Game/Catalog/DisplayAssets/DA_BR_Season${seasonNum}_BattlePassWithLevels.DA_BR_Season${seasonNum}_BattlePassWithLevels`,
+                            itemGrants: []
+                        }
+                    ] : []
+                ]
+            }
+        ],
+        ...resources.getDefaultStorefronts()
+    ]
+}
 
 function mapItemForStore(item: Cosmetic) {
     const price = calculatePrice(item);
-
-    const displayAssetPath = `/Game/Catalog/DisplayAssets/DA_Featured_${item.id}.DA_Featured_${item.id}`;
+    const templateId = `${getAssetType(item)}:${item.id.toLowerCase()}`
 
     return {
-        devName: `neonite shop offering ${item.name} for ${price} vbucks`,
-        offerId: `neoOffer:/${getAssetType(item)}:${item.id}`,
-        fulfillmentIds: [],
-        dailyLimit: -1,
-        weeklyLimit: -1,
-        monthlyLimit: -1,
-        categories: [
-            "Panel 02"
+        "devName": `Neonite Store offering item ${item.id} with for ${price}`,
+        "offerId": "v2:/neoOffer@" + item.id,
+        "fulfillmentIds": [
+
         ],
-        prices: [
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [
+            randomUUID()
+        ],
+        "prices": [
             {
-                currencyType: "MtxCurrency",
-                currencySubType: "",
-                regularPrice: price,
-                dynamicRegularPrice: price,
-                finalPrice: price,
-                saleExpiration: "9999-12-31T23:59:59.999Z",
-                basePrice: price
+                "currencyType": "MtxCurrency",
+                "currencySubType": "",
+                "regularPrice": price,
+                "dynamicRegularPrice": price,
+                "finalPrice": price,
+                "saleExpiration": "9999-12-31T23:59:59.999Z",
+                "basePrice": price
             }
         ],
-        meta: {
-            NewDisplayAssetPath: `/Game/Catalog/DisplayAssets/DAv2_${item.id}.DAv2_${item.id}`,
-            SectionId: "daily",
-            TileSize: "Normal",
-            AnalyticOfferGroupId: "1",
-            FirstSeen: item.releaseDate ? new Date(item.releaseDate) : undefined,
+        "meta": {
+
         },
-        matchFilter: "",
-        filterWeight: 0.0,
-        appStoreId: [],
-        requirements: [
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [
+
+        ],
+        "requirements": [
             {
-                requirementType: "DenyOnItemOwnership",
-                requiredId: "AthenaCharacter:cid_029_athena_commando_f_halloween",
-                minQuantity: 1
+                "requirementType": "DenyOnItemOwnership",
+                "requiredId": templateId,
+                "minQuantity": 1
             }
         ],
-        offerType: "StaticPrice",
-        giftInfo: {
-            bIsEnabled: true,
-            forcedGiftBoxTemplateId: "",
-            purchaseRequirements: [],
-            giftRecordIds: []
+        "offerType": "StaticPrice",
+        "giftInfo": {
+            "bIsEnabled": true,
+            "forcedGiftBoxTemplateId": "",
+            "purchaseRequirements": [
+
+            ],
+            "giftRecordIds": [
+
+            ]
         },
-        refundable: true,
-        metaInfo: [
+        "refundable": true,
+        "itemGrants": [
             {
-                key: "NewDisplayAssetPath",
-                value: `/Game/Catalog/DisplayAssets/DAv2_${item.id}.DAv2_${item.id}`
-            },
-            {
-                key: "SectionId",
-                value: "Daily"
-            },
-            {
-                key: "TileSize",
-                value: "Normal"
+                "templateId": templateId,
+                "quantity": 1
             }
         ],
-        displayAssetPath: displayAssetPath,
-        itemGrants: [
-            {
-                templateId: `${getAssetType(item)}:${item.id}`,
-                quantity: 1
-            }
+        "additionalGrants": [
+
         ],
-        additionalGrants: [],
-        sortPriority: -1,
-        catalogGroupPriority: 0
+        "sortPriority": 0,
+        "catalogGroupPriority": 0
     }
 }
 
@@ -329,6 +436,8 @@ export function calculatePrice(item: Cosmetic) {
 
 
         case 'emote': {
+            if (item.id == "EID_WIR") return 0;
+
             switch (item.rarity.id) {
                 case 'Epic': return 800;
                 case 'Rare': return 500;
@@ -366,8 +475,6 @@ export function calculatePrice(item: Cosmetic) {
 }
 
 export async function getItem(itemId: string) {
-    const cosmetics = await getCosmetics();
-
     return cosmetics.find(x => x.id.toLowerCase() == itemId.toLowerCase());
 }
 
@@ -407,11 +514,49 @@ export function getAssetType(item: Cosmetic) {
     }
 }
 
+
+function getItems(availableItems: Cosmetic[], bIsLegacy: boolean) {
+    if (bIsLegacy) {
+        const daily = getRandom(availableItems, 6);
+        const featured = getRandom(availableItems.filter(x => !daily.includes(x)), 2);
+
+        return {
+            featured: featured.map((x, i) => mapItemForStore(x)),
+            daily: daily.map((x, i) => mapItemForStore(x))
+        }
+    }
+
+    const template = getRandom(resources.getStoreTemplate(), 1)[0];
+
+    const daily = Object.entries(template.daily).map(([type, rarities]: [string, Record<string, number>]) => {
+        return Object.entries(rarities)
+            .filter(([_, i]) => i > 0)
+            .map(([rarity, count]) => {
+                return getRandom(availableItems.filter(x => x.rarity.id.toLowerCase() == rarity.toLowerCase() && x.type.id.toLowerCase() == type.toLowerCase()), count);
+            }).flat();
+    }).flat().filter(x => x != null);
+
+
+    const availableItemsFeatured = availableItems.filter(x => !daily.includes(x));
+    const featured = Object.entries(template.featured).map(([type, rarities]: [string, Record<string, number>]) => {
+        return Object.entries(rarities)
+            .filter(([_, i]) => i > 0)
+            .map(([rarity, count]) => {
+                return getRandom(availableItemsFeatured.filter(x => x.rarity.id.toLowerCase() == rarity.toLowerCase() && x.type.id.toLowerCase() == type.toLowerCase()), count);
+            }).flat();
+    }).flat().filter(x => x != null);
+
+    return {
+        featured: featured.map(x => mapItemForStore(x)),
+        daily: daily.map(x => mapItemForStore(x))
+    }
+}
+
 // https://stackoverflow.com/a/19270021
-function getRandom<T>(arr: T[], n: number): T[] {
+function getRandom<T>(array: T[], n: number): T[] {
     // Shuffle array
-    const shuffled = arr.sort(() => 0.5 - Math.random());
+    const shuffled = array.sort(() => 0.5 - Math.random());
 
     // Get sub-array of first n elements after shuffled
-    return shuffled.slice(0, n);;
+    return shuffled.slice(0, n);
 }

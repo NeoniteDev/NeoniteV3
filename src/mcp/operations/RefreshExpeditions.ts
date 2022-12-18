@@ -3,7 +3,7 @@ import { Profile, ensureProfileExist } from '../profile'
 import errors from '../../utils/errors'
 
 export const supportedProfiles = [
-    'profile0'
+    'profile0', 'campaign'
 ]
 
 export async function handle(config: Handleparams, profile: Profile): Promise<mcpResponse> {

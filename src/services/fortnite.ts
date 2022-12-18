@@ -23,6 +23,7 @@ import rateLimit from 'express-rate-limit'
 import * as resources from '../utils/resources';
 import * as multer from 'multer'
 import * as JSZip from 'jszip';
+import { error } from 'console';
 
 const app = Router();
 
@@ -120,7 +121,12 @@ app.get('/api/cloudstorage/system/config', verifyAuthorization(true), async (req
   );
 });
 
-app.get('/api/cloudstorage/system', verifyAuthorization(true), async (req, res) => {
+app.get('/api/cloudstorage/system', verifyAuthorization(true), async (req: reqWithAuthMulti, res) => {
+  // I hate this
+  if (req.clientInfos.friendlyVersion.startsWith('9.4')) {
+    throw errors.neoniteDev.internal.invalidUserAgent.withMessage('cloudstorage is disabled for this version')
+  }
+
   const output = [
     /* {
          'uniqueFilename': 'LanguagePatches.ini',
@@ -1014,6 +1020,15 @@ app.get('/api/game/v2/br-inventory/account/:accountId', verifyAuthorization(), (
   )
 })
 
+
+app.post('/api/game/v2/profileToken/verify/:accountId', verifyAuthorization(), (req, res) => {
+  if (req.params.accountId != req.auth.account_id) {
+    throw neoniteDev.authentication.notYourAccount;
+  }
+
+  res.status(204).send();
+});
+
 app.get('/api/game/v2/matchmakingservice/ticket/player/:accountId', cookieParser(), verifyAuthorization(),
   async (req, res) => {
     if (req.params.accountId != req.auth.in_app_id) {
@@ -1024,15 +1039,11 @@ app.get('/api/game/v2/matchmakingservice/ticket/player/:accountId', cookieParser
       throw neoniteDev.internal.invalidUserAgent;
     }
 
-    if (!req.query.bucketId || typeof req.query.bucketId != 'string') {
+    if (typeof req.query.bucketId !== 'string') {
       throw neoniteDev.matchmaking.invalidBucketId;
     }
 
-    if (!req.query.partyPlayerIds || typeof req.query.partyPlayerIds != 'string') {
-      throw neoniteDev.matchmaking.invalidPartyPlayers;
-    }
-
-    if (!req.query.partyPlayerIds || typeof req.query.partyPlayerIds != 'string') {
+    if (typeof req.query.partyPlayerIds != 'string') {
       throw neoniteDev.matchmaking.invalidPartyPlayers;
     }
 
@@ -1079,11 +1090,20 @@ app.get('/api/game/v2/matchmakingservice/ticket/player/:accountId', cookieParser
       'nonce': crypto.randomUUID()
     }
 
-    if (req.query['player.option.partyId'] && typeof req.query['player.option.partyId'] == 'string') {
+    if (typeof req.query['player.option.partyId'] == 'string') {
       data.attributes['player.option.partyId'] = req.query['player.option.partyId'];
     }
 
-    if (req.query['player.option.customKey'] && typeof req.query['player.option.customKey'] == 'string') {
+    if (typeof req.query['player.option.customKey'] == 'string') {
+      const bIsValid = /(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):(\d{1,5})/.test(req.query['player.option.customKey']);
+
+      if (!bIsValid) {
+        throw neoniteDev.customError(
+          `Invalid custom key: '${req.query['player.option.customKey']}'.\nMust be in format: 'ip:port'`,
+          '', 1001, 400
+        );
+      }
+
       data.attributes['player.option.customKey'] = req.query['player.option.customKey'];
     }
 
@@ -1139,14 +1159,14 @@ app.post('/api/matchmaking/session/matchMakingRequest', verifyAuthorization(), a
 
 app.post('/api/matchmaking/session/:SessionId/join', verifyAuthorization(), (req, res) => res.status(204).end())
 
-app.get('/api/matchmaking/session/:sessionId', cookieParser(), verifyAuthorization(), (req, res) => {
+app.get('/api/matchmaking/session/:sessionId', cookieParser(), verifyAuthorization(), async (req, res) => {
   var NetCL = req.cookies['NetCL'];
 
   if (!NetCL) {
     throw neoniteDev.matchmaking.missingCookie;
   }
 
-  const session = gameSessions.get(req.params.sessionId);
+  const session = await gameSessions.get(req.params.sessionId);
 
   if (!session) {
     throw errors.neoniteDev.basic.notFound.withMessage('Session not found');
@@ -1154,33 +1174,7 @@ app.get('/api/matchmaking/session/:sessionId', cookieParser(), verifyAuthorizati
 
   var buildUniqueId = parseInt(NetCL);
 
-  res.json({
-    "id": req.params.sessionId,
-    "ownerId": "Neonite",
-    "ownerName": "Kemo",
-    "serverName": "Neonite",
-    "serverAddress": "127.0.0.1",
-    "serverPort": 7777,
-    "totalPlayers": 0,
-    "maxPublicPlayers": 10,
-    "openPublicPlayers": 10,
-    "maxPrivatePlayers": 1,
-    "openPrivatePlayers": 5,
-    "attributes": {},
-    "publicPlayers": [],
-    "privatePlayers": [],
-    "allowJoinInProgress": false,
-    "shouldAdvertise": false,
-    "isDedicated": true,
-    "usesStats": false,
-    "allowInvites": false,
-    "usesPresence": false,
-    "allowJoinViaPresence": true,
-    "allowJoinViaPresenceFriendsOnly": false,
-    "buildUniqueId": buildUniqueId,
-    "lastUpdated": new Date(),
-    "started": false
-  });
+  res.json(session);
 });
 
 app.get('/api/storefront/v2/keychain', verifyAuthorization(), async (req, res) => {
@@ -1415,15 +1409,15 @@ app.get('/api/version', (req, res) => {
 
 const limiter = rateLimit(
   {
-      windowMs: 30000,
-      max: 1,
-      standardHeaders: false,
-      legacyHeaders: false,
-      handler(req, res, next, optionsUsed) {
-          errors.neoniteDev.basic.throttled
-              .withMessage(`Operation access is limited by throttling policy, please try again in ${Math.round(optionsUsed.windowMs) / 1000} second(s)`)
-              .with(optionsUsed.windowMs.toString()).apply(res);
-      }
+    windowMs: 30000,
+    max: 1,
+    standardHeaders: false,
+    legacyHeaders: false,
+    handler(req, res, next, optionsUsed) {
+      errors.neoniteDev.basic.throttled
+        .withMessage(`Operation access is limited by throttling policy, please try again in ${Math.round(optionsUsed.windowMs) / 1000} second(s)`)
+        .with(optionsUsed.windowMs.toString()).apply(res);
+    }
   }
 )
 

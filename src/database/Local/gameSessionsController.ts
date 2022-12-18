@@ -32,7 +32,7 @@ export interface session {
     "usesPresence": boolean,
     "allowJoinViaPresence": boolean,
     "allowJoinViaPresenceFriendsOnly": boolean,
-    "buildUniqueId": string,
+    "buildUniqueId": string | number,
     "lastUpdated": Date,
     "started": boolean
 }

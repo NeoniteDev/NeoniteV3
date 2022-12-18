@@ -12,7 +12,7 @@ interface body {
     "indexWithinSlot"?: number
 }
 
-const validSlotNames = ['character', 'backpack', 'pickaxe', 'glider', 'skydivecontrail', 'musicpack', 'loadingscreen', 'dance', 'itemwraps']
+const validSlotNames = ['character', 'backpack', 'pickaxe', 'glider', 'skydivecontrail', 'musicpack', 'loadingscreen', 'dance', 'itemwrap']
 
 export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
     const existOrCreated = await ensureProfileExist(config.profileId, config.accountId);
@@ -25,8 +25,6 @@ export async function handle(config: Handleparams<body>): Promise<mcpResponse> {
 
     const profile = new Profile(config.profileId, config.accountId);
     await profile.init();
-
-    
 
     const slotName = config.body.slotName.toLowerCase();
 

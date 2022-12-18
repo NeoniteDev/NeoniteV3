@@ -2,6 +2,8 @@ import { readdirSync, readFileSync } from "fs";
 import * as path from "path";
 import { Battlepass } from "../types/battlePass";
 import { BRShop, TimelineSaved } from "./types";
+import { Cosmetic } from "../types/cosmetics";
+import { ShopTemplate } from "../types/shop-template";
 
 const loadedJsons: Record<string, any> = {
 
@@ -91,4 +93,38 @@ export function getWinterfestRewards(): Record<string, string[]>  {
     }
 
     return loadedJsons.winterfestRewards;
+}
+
+
+const cosmeticsFile = path.join(__dirname, '../../resources/cosmetics.json');
+export function getCosmetics(): Cosmetic[]  {
+    if (!loadedJsons.cosmetics) {
+        loadedJsons.cosmetics = JSON.parse(
+            readFileSync(cosmeticsFile, 'utf-8')
+        );
+    }
+
+    return loadedJsons.cosmetics;
+}
+
+const storeTemplateFile = path.join(__dirname, '../../resources/catalog/shopTemplates.json');
+export function getStoreTemplate(): ShopTemplate[] {
+    if (!loadedJsons.store_template) {
+        loadedJsons.store_template = JSON.parse(
+            readFileSync(storeTemplateFile, 'utf-8')
+        );
+    }
+
+    return loadedJsons.store_template;
+}
+
+const offerGbsPath = path.join(__dirname, '../../resources/catalog/OfferGiftBoxs.json');
+export function getOffersGiftBoxes(): Record<string, string> {
+    if (!loadedJsons.offers_gb) {
+        loadedJsons.offers_gb = JSON.parse(
+            readFileSync(offerGbsPath, 'utf-8')
+        );
+    }
+
+    return loadedJsons.offers_gb;
 }

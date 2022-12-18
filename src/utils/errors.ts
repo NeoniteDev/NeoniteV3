@@ -52,15 +52,18 @@ export class ApiError {
             }
         );
 
+        const numericCode = this.response.numericErrorCode;
+
         //bypass express content type charset
         res.setHeader('Content-Type', 'application/json');
-        res.status(this.statusCode)
-            .set("X-Epic-Error-Code", this.response.numericErrorCode.toString())
-            .set("X-Epic-Error-Name", this.response.errorCode)
-            .end(
-                JSON.stringify(this.response)
-            );
 
+        try {
+            res
+                .set("X-Epic-Error-Code", this.response.numericErrorCode + '')
+                .set("X-Epic-Error-Name", this.response.errorCode)
+        } catch {}
+
+        res.status(this.statusCode).end(JSON.stringify(this.response));
         return res;
     }
 
@@ -99,7 +102,8 @@ export const neoniteDev = {
             get invalidRefresh() { return new ApiError('errors.com.neoniteDev.authentication.oauth.invalidRefresh', 'The refresh token you provided is invalid.', 18036, 400) },
             get invalidClient() { return new ApiError('errors.com.neoniteDev.authentication.oauth.invalidClient', 'The client credentials you are using are invalid.', 18033, 403) },
             get invalidExchange() { return new ApiError('errors.com.neoniteDev.authentication.oauth.invalidExchange', 'The exchange code you provided is invalid.', 18057, 400) },
-            get expiredExchangeCodeSession() { return new ApiError('errors.com.neoniteDev.authentication.oauth.expiredExchangeCodeSession', 'Sorry the originating session for the exchange code has expired.', 18128, 400) }
+            get expiredExchangeCodeSession() { return new ApiError('errors.com.neoniteDev.authentication.oauth.expiredExchangeCodeSession', 'Sorry the originating session for the exchange code has expired.', 18128, 400) },
+            get correctiveActionRequired() { return new ApiError('errors.com.neoniteDev.authentication.oauth.corrective_action_required', 'Corrective action is required to continue.', 18206, 400) },
         }
     },
     party: {
@@ -195,7 +199,25 @@ export const neoniteDev = {
         get methodNotAllowed() { return new ApiError('errors.com.neoniteDev.basic.methodNotAllowed', 'Sorry the resource you were trying to access cannot be accessed with the HTTP method you used.', 1009, 405) },
         get jsonMappingFailed() { return new ApiError('errors.com.neoniteDev.basic.jsonMappingFailed', 'Json mapping failed.', 1019, 400) },
         get throttled() { return new ApiError('errors.com.neoniteDev.basic.throttled', 'Operation access is limited by throttling policy.', 1041, 429) }
+    },
+    customError(code: string, message: string, numericErrorCode: number, status: number) {
+        return new ApiError(code, message, numericErrorCode, status)
     }
 };
+
+
+/*
+{
+    "errorCode": "errors.com.epicgames.oauth.corrective_action_required",
+    "errorMessage": "Corrective action is required to continue.",
+    "messageVars": [],
+    "numericErrorCode": 18206,
+    "originatingService": "com.epicgames.account.public",
+    "intent": "prod",
+    "continuation": "uuid here lol",
+    "continuationUrl": "https://epicgames.com/continue/{{id}}",
+    "correctiveAction": "DATE_OF_BIRTH"
+}
+*/
 
 export default { neoniteDev: neoniteDev };

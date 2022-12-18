@@ -199,5 +199,1689 @@
         "itemGrants": []
       }
     ]
+  },
+  {
+    "name": "BRSeasonStorefront",
+    "catalogEntries": [
+      {
+        "devName": "[VIRTUAL]1 x Aerial Assault One for 500 MtxCurrency",
+        "offerId": "v2:/km5i4yvqxd8sqav1r4tk4qlsjolqkd7o5g25p6elcbqwtlsulqnu6hv84ug58i9c",
+        "fulfillmentIds": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [
+          "Panel 1"
+        ],
+        "prices": [
+          {
+            "currencyType": "MtxCurrency",
+            "currencySubType": "",
+            "regularPrice": 500,
+            "finalPrice": 500,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 500
+          }
+        ],
+        "meta": {},
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [],
+        "requirements": [
+          {
+            "requirementType": "DenyOnItemOwnership",
+            "requiredId": "AthenaGlider:Glider_ID_001",
+            "minQuantity": 1
+          }
+        ],
+        "offerType": "StaticPrice",
+        "giftInfo": {},
+        "refundable": true,
+        "metaInfo": [],
+        "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_GliderMiG.DA_Featured_GliderMiG",
+        "itemGrants": [
+          {
+            "templateId": "AthenaGlider:Glider_ID_001",
+            "quantity": 1
+          }
+        ],
+        "sortPriority": -1,
+        "catalogGroupPriority": 0
+      },
+      {
+        "devName": "[VIRTUAL]1 x Aerial Assault Trooper for 1200 MtxCurrency",
+        "offerId": "v2:/6icfozpr9g7o1gxperhc5rl8dty1o4rzlszmiky0iafc012w5gcdczvsvbvqw8fv",
+        "fulfillmentIds": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [
+          "Panel 2"
+        ],
+        "prices": [
+          {
+            "currencyType": "MtxCurrency",
+            "currencySubType": "",
+            "regularPrice": 1200,
+            "finalPrice": 1200,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 1200
+          }
+        ],
+        "meta": {},
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [],
+        "requirements": [
+          {
+            "requirementType": "DenyOnItemOwnership",
+            "requiredId": "AthenaCharacter:CID_017_Athena_Commando_M",
+            "minQuantity": 1
+          }
+        ],
+        "offerType": "StaticPrice",
+        "giftInfo": {},
+        "refundable": true,
+        "metaInfo": [],
+        "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_SMaleHID017.DA_Featured_SMaleHID017",
+        "itemGrants": [
+          {
+            "templateId": "AthenaCharacter:CID_017_Athena_Commando_M",
+            "quantity": 1
+          }
+        ],
+        "sortPriority": -1,
+        "catalogGroupPriority": 0
+      },
+      {
+        "devName": "[VIRTUAL]1 x Renegade Raider for 1200 MtxCurrency",
+        "offerId": "v2:/erpaf2rm87d5xgdtqpgx3qyqwrjmn5gsog0cu792enrxh9k1jckzjvgvn6qu7fq7",
+        "fulfillmentIds": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [
+          "Panel 3"
+        ],
+        "prices": [
+          {
+            "currencyType": "MtxCurrency",
+            "currencySubType": "",
+            "regularPrice": 1200,
+            "finalPrice": 1200,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 1200
+          }
+        ],
+        "meta": {},
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [],
+        "requirements": [
+          {
+            "requirementType": "DenyOnItemOwnership",
+            "requiredId": "AthenaCharacter:CID_028_Athena_Commando_F",
+            "minQuantity": 1
+          }
+        ],
+        "offerType": "StaticPrice",
+        "giftInfo": {},
+        "refundable": true,
+        "metaInfo": [],
+        "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_SFemaleHID028.DA_Featured_SFemaleHID028",
+        "itemGrants": [
+          {
+            "templateId": "AthenaCharacter:CID_028_Athena_Commando_F",
+            "quantity": 1
+          }
+        ],
+        "sortPriority": -1,
+        "catalogGroupPriority": 0
+      },
+      {
+        "devName": "[VIRTUAL]1 x Raider's Revenge for 1500 MtxCurrency4",
+        "offerId": "v2:/w6aq7n8ma7gz342b4wus42hmkqz8suurbdvjo51ug6on7j9rme577eax92rlt4g9",
+        "fulfillmentIds": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [
+          "Panel 4"
+        ],
+        "prices": [
+          {
+            "currencyType": "MtxCurrency",
+            "currencySubType": "",
+            "regularPrice": 1500,
+            "finalPrice": 1500,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 1500
+          }
+        ],
+        "meta": {},
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [],
+        "requirements": [
+          {
+            "requirementType": "DenyOnItemOwnership",
+            "requiredId": "AthenaPickaxe:Pickaxe_Lockjaw",
+            "minQuantity": 1
+          }
+        ],
+        "offerType": "StaticPrice",
+        "giftInfo": {},
+        "refundable": true,
+        "metaInfo": [],
+        "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_Featured_PickaxeLockjaw.DA_Featured_PickaxeLockjaw",
+        "itemGrants": [
+          {
+            "templateId": "AthenaPickaxe:Pickaxe_Lockjaw",
+            "quantity": 1
+          }
+        ],
+        "sortPriority": -1,
+        "catalogGroupPriority": 0
+      }
+    ]
+  },
+  {
+    "name": "STWSpecialEventStorefront",
+    "catalogEntries": [
+      {
+        "devName": "[VIRTUAL]1 x Commando Renegade for 2800 GameItem : AccountResource:eventcurrency_scaling",
+        "offerId": "v2:/fe91e5ee1e64e09367f7f641e897c054a23822387ef79eb81b0bf0805f993c34",
+        "fulfillmentIds": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [],
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:eventcurrency_scaling",
+            "regularPrice": 2800,
+            "dynamicRegularPrice": 2800,
+            "finalPrice": 2800,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 2800
+          }
+        ],
+        "meta": {},
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [],
+        "requirements": [],
+        "offerType": "StaticPrice",
+        "refundable": false,
+        "itemGrants": [
+          {
+            "templateId": "Hero:HID_Commando_XBOX_SR_T01",
+            "quantity": 1
+          }
+        ],
+        "additionalGrants": [],
+        "sortPriority": 0,
+        "catalogGroupPriority": 0
+      },
+      {
+        "devName": "[VIRTUAL]1 x Guardian Knox for 2800 GameItem : AccountResource:eventcurrency_scaling",
+        "offerId": "v2:/83ac0269acedb2d5634a031f55b643b852272903e74d9fa1bb49256a0c06abef",
+        "fulfillmentIds": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [],
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:eventcurrency_scaling",
+            "regularPrice": 2800,
+            "dynamicRegularPrice": 2800,
+            "finalPrice": 2800,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 2800
+          }
+        ],
+        "meta": {},
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [],
+        "requirements": [],
+        "offerType": "StaticPrice",
+        "refundable": false,
+        "itemGrants": [
+          {
+            "templateId": "Hero:HID_Constructor_XBOX_SR_T01",
+            "quantity": 1
+          }
+        ],
+        "additionalGrants": [],
+        "sortPriority": 0,
+        "catalogGroupPriority": 0
+      },
+      {
+        "devName": "[VIRTUAL]1 x Jade Assassin Sarah for 2800 GameItem : AccountResource:eventcurrency_scaling",
+        "offerId": "v2:/9b91076467e61cf01a3c16e39a18331d2e23d754cdafc860aac0fdd7155615ae",
+        "fulfillmentIds": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [],
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:eventcurrency_scaling",
+            "regularPrice": 2800,
+            "dynamicRegularPrice": 2800,
+            "finalPrice": 2800,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 2800
+          }
+        ],
+        "meta": {},
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [],
+        "requirements": [],
+        "offerType": "StaticPrice",
+        "refundable": false,
+        "itemGrants": [
+          {
+            "templateId": "Hero:HID_Ninja_XBOX_SR_T01",
+            "quantity": 1
+          }
+        ],
+        "additionalGrants": [],
+        "sortPriority": 0,
+        "catalogGroupPriority": 0
+      },
+      {
+        "devName": "[VIRTUAL]1 x Trailblazer Jess for 2800 GameItem : AccountResource:eventcurrency_scaling",
+        "offerId": "v2:/aacc97a394a9feaa106ad275caad4e4f22b987d8ceb42d64991024bf6d8a5404",
+        "fulfillmentIds": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [],
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:eventcurrency_scaling",
+            "regularPrice": 2800,
+            "dynamicRegularPrice": 2800,
+            "finalPrice": 2800,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 2800
+          }
+        ],
+        "meta": {},
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [],
+        "requirements": [],
+        "offerType": "StaticPrice",
+        "refundable": false,
+        "itemGrants": [
+          {
+            "templateId": "Hero:HID_Outlander_XBOX_SR_T01",
+            "quantity": 1
+          }
+        ],
+        "additionalGrants": [],
+        "sortPriority": 0,
+        "catalogGroupPriority": 0
+      }
+    ]
+  },
+  {
+    "name": "STWRotationalEventStorefront",
+    "catalogEntries": [
+      {
+        "devName": "[VIRTUAL]1 x Commando Ramirez for 2800 GameItem : AccountResource:eventcurrency_scaling",
+        "offerId": "v2:/cbb7b1eb042cb87002d6a688e25dcabdb08a7de29bea0ced23aca176cd5c174a",
+        "fulfillmentIds": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [],
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:eventcurrency_scaling",
+            "regularPrice": 2800,
+            "dynamicRegularPrice": 2800,
+            "finalPrice": 2800,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 2800
+          }
+        ],
+        "meta": {},
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [],
+        "requirements": [],
+        "offerType": "StaticPrice",
+        "refundable": false,
+        "itemGrants": [
+          {
+            "templateId": "Hero:HID_Commando_Sony_SR_T01",
+            "quantity": 1
+          }
+        ],
+        "additionalGrants": [],
+        "sortPriority": 0,
+        "catalogGroupPriority": 0
+      },
+      {
+        "devName": "[VIRTUAL]1 x Guardian Penny for 2800 GameItem : AccountResource:eventcurrency_scaling",
+        "offerId": "v2:/3e03cd9c32d3b2c809b523aac846762ef0401c701e383451e88a0594318522fa",
+        "fulfillmentIds": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [],
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:eventcurrency_scaling",
+            "regularPrice": 2800,
+            "dynamicRegularPrice": 2800,
+            "finalPrice": 2800,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 2800
+          }
+        ],
+        "meta": {},
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [],
+        "requirements": [],
+        "offerType": "StaticPrice",
+        "refundable": false,
+        "itemGrants": [
+          {
+            "templateId": "Hero:HID_Constructor_Sony_SR_T01",
+            "quantity": 1
+          }
+        ],
+        "additionalGrants": [],
+        "sortPriority": 0,
+        "catalogGroupPriority": 0
+      },
+      {
+        "devName": "[VIRTUAL]1 x Bluestreak Ken for 2800 GameItem : AccountResource:eventcurrency_scaling",
+        "offerId": "v2:/4f1c82dc8fb66fef5a0046fb2163344069b65b6ba64e496939d2fc8e8f779157",
+        "fulfillmentIds": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [],
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:eventcurrency_scaling",
+            "regularPrice": 2800,
+            "dynamicRegularPrice": 2800,
+            "finalPrice": 2800,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 2800
+          }
+        ],
+        "meta": {},
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [],
+        "requirements": [],
+        "offerType": "StaticPrice",
+        "refundable": false,
+        "itemGrants": [
+          {
+            "templateId": "Hero:HID_Ninja_Sony_SR_T01",
+            "quantity": 1
+          }
+        ],
+        "additionalGrants": [],
+        "sortPriority": 0,
+        "catalogGroupPriority": 0
+      },
+      {
+        "devName": "[VIRTUAL]1 x Trailblazer A.C. for 2800 GameItem : AccountResource:eventcurrency_scaling",
+        "offerId": "v2:/5e359069d870aebce7043bcca03da243402bb3ac13b39a87a17e272682b0486f",
+        "fulfillmentIds": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [],
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:eventcurrency_scaling",
+            "regularPrice": 2800,
+            "dynamicRegularPrice": 2800,
+            "finalPrice": 2800,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 2800
+          }
+        ],
+        "meta": {},
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [],
+        "requirements": [],
+        "offerType": "StaticPrice",
+        "refundable": false,
+        "itemGrants": [
+          {
+            "templateId": "Hero:HID_Outlander_Sony_SR_T01",
+            "quantity": 1
+          }
+        ],
+        "additionalGrants": [],
+        "sortPriority": 0,
+        "catalogGroupPriority": 0
+      }
+    ]
+  },
+  {
+    "name": "CardPackStore",
+    "catalogEntries": [
+      {
+        "offerId": "B9B0CE758A5049F898773C1A47A69ED4",
+        "devName": "Always.UpgradePack.03",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "MtxCurrency",
+            "currencySubType": "",
+            "regularPrice": 0,
+            "finalPrice": 0,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 0
+          }
+        ],
+        "categories": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "appStoreId": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "requirements": [
+          {
+            "requirementType": "DenyOnFulfillment",
+            "requiredId": "63BE689248CAF1251C84B4B3574F90EF",
+            "minQuantity": 1
+          }
+        ],
+        "metaInfo": [],
+        "metaAssetInfo": {
+          "structName": "FortCatalogMeta",
+          "payload": {
+            "chaseItems": [
+              "FortSchematicItemDefinition'/Game/Items/Schematics/Ranged/Assault/Raygun/SID_Assault_Raygun_VR_Ore_T01.SID_Assault_Raygun_VR_Ore_T01'",
+              "FortSchematicItemDefinition'/Game/Items/Schematics/Melee/Blunt/Tools/Hammer_Heavy/SID_Blunt_Hammer_Heavy_R_Ore_T01.SID_Blunt_Hammer_Heavy_R_Ore_T01'",
+              "FortWorkerType'/Game/Items/Workers/Managers/ManagerDoctor_R_T01.ManagerDoctor_R_T01'"
+            ],
+            "packDefinition": "FortCardPackItemDefinition'/Game/Items/CardPacks/CardPack_Bronze.CardPack_Bronze'"
+          }
+        },
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 0,
+        "title": {
+          "de": "Upgrade-Lama",
+          "ru": "Лама с улучшениями",
+          "ko": "업그레이드 라마",
+          "en": "Upgrade Llama",
+          "it": "Lama plus",
+          "fr": "Lama amélioré",
+          "es": "Llama mejorable",
+          "ar": "لاما الترقية",
+          "ja": "アップグレードラマ",
+          "pl": "Ulepszlama",
+          "es-419": "Llama de mejoras",
+          "tr": "Geliştirme Laması"
+        },
+        "shortDescription": "",
+        "description": {
+          "de": "Das treue alte Lama, vollgepackt mit einer Fülle toller Sachen und Upgrade-Materialien. Enthält mindestens 4 Gegenstände, darunter ein seltener Gegenstand oder ein Held! Hat eine hohe Chance, sich aufzurüsten.",
+          "ru": "Старая добрая лама, набитая полезными вещами и материалами для улучшений. Содержит как минимум 4 предмета, включая один редкий предмет или героя. Высокая вероятность получить улучшение.",
+          "ko": "다양한 물건과 업그레이드 재료가 담긴 믿음직한 라마입니다. 희귀 아이템이나 영웅을 포함해 최소 4개의 아이템이 들어있습니다! 업그레이드 확률이 높습니다.",
+          "en": "The old faithful llama, packed with a variety of goodies and upgrade materials. Contains at least 4 items, including a rare item or a hero! Has a high chance to upgrade.",
+          "it": "Il caro vecchio lama, carico di oggetti e materiali da potenziamento. Include almeno 4 oggetti, di cui un oggetto o un eroe rari! Probabilità elevata di potenziamento.",
+          "fr": "Un bon vieux lama, plein de marchandises et de matériaux d'amélioration divers et variés. Contient au moins 4 objets, dont un objet rare ou un héros. A de fortes chances de gagner en valeur.",
+          "es": "La vieja y querida llama de siempre, atiborrada con una variedad de artículos y de materiales de mejora. Contiene al menos 4 objetos, ¡entre ellos un objeto raro o un héroe! Tiene una alta probabilidad de mejorarse.",
+          "ar": "اللاما المخلصة القديمة المكدسة بمجموعة متنوعة من السلع ومواد الترقية. يحتوي على 4 عناصر على الأقل، تشتمل على عنصر نادر أو بطل! لديه فرصة كبيرة للترقية.",
+          "ja": "様々なアイテムやアップグレード用素材が詰まった、安心定番のラマ。レアアイテム1個、またはヒーロー1体を含む4個以上のアイテムが入っている！ 高確率でアップグレードのチャンスあり。",
+          "pl": "Stara dobra lama, pełna różnych skarbów i materiałów do ulepszania. Zawiera przynajmniej 4 elementy. Jednym z nich jest na pewno rzadki przedmiot lub bohater. Ma duże szanse na ulepszenie. PRO100Kąt pozdrawia wszystkich Polaków.",
+          "es-419": "La llama siempre fiel, llena de una variedad de productos y materiales de mejora. Contiene al menos 4 objetos, ¡incluido un héroe u objeto raro! Tiene una alta probabilidad de mejora.",
+          "tr": "Çeşitli ürünler ve geliştirme malzemeleri ile doldurulmuş bildiğimiz lama. Nadir bir eşya veya kahraman da dahil olmak üzere en az 4 eşya içerir! Geliştirme şansı yüksektir."
+        },
+        "displayAssetPath": "",
+        "itemGrants": [
+          {
+            "templateId": "CardPack:cardpack_bronze",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "offerId": "1F6B613D4B7BAD47D8A93CAEED2C4996",
+        "devName": "Mini Llama Manual Tutorial - high SharedDisplayPriority",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:voucher_basicpack",
+            "regularPrice": 0,
+            "finalPrice": 0,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 0
+          }
+        ],
+        "categories": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "appStoreId": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "requirements": [
+          {
+            "requirementType": "DenyOnFulfillment",
+            "requiredId": "82ADCC874CFC2D47927208BAE871CF2B",
+            "minQuantity": 1
+          }
+        ],
+        "metaInfo": [],
+        "metaAssetInfo": {
+          "structName": "FortCatalogMeta",
+          "payload": {
+            "chaseItems": [
+              "FortWorkerType'/Game/Items/Workers/WorkerBasic_UC_T02.WorkerBasic_UC_T02'",
+              "FortSchematicItemDefinition'/Game/Items/Schematics/Melee/Blunt/Tools/Hammer_Heavy/SID_Blunt_Hammer_Heavy_UC_Ore_T02.SID_Blunt_Hammer_Heavy_UC_Ore_T02'",
+              "FortWorkerType'/Game/Items/Workers/Managers/ManagerDoctor_UC_T01.ManagerDoctor_UC_T01'"
+            ],
+            "packDefinition": "FortCardPackItemDefinition'/Game/Items/CardPacks/CardPack_Basic.CardPack_Basic'"
+          }
+        },
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 0,
+        "title": {
+          "de": "Mini-Belohnungslama",
+          "ru": "Мини-лама с наградой",
+          "ko": "미니 보상 라마",
+          "en": "Mini Reward Llama",
+          "it": "Lama miniricompensa",
+          "fr": "Mini lama à récompense",
+          "es": "Minillama de recompensa",
+          "ar": "لاما جوائز مصغرة",
+          "ja": "ミニ報酬ラマ",
+          "pl": "Minilama",
+          "es-419": "Minillama de recompensa",
+          "tr": "Mini Ödül Laması"
+        },
+        "shortDescription": "",
+        "description": {
+          "de": "Ein einfaches Lama, das mit allerlei gewöhnlichen Dingen gefüllt ist, um dich durch deine erste Apokalypse zu bringen. Enthält mindestens 3 Gegenstände.\r\n",
+          "ru": "Простенькая лама, набитая самыми важными вещами, которые помогут вам пережить ваш первый апокалипсис. Содержит по меньшей мере 3 предмета.\r\n",
+          "ko": "첫 종말에서 생존을 도와줄 기본적인 물품이 담긴 단촐한 라마입니다. 최소 아이템 3개를 얻을 수 있습니다!\r\n",
+          "en": "A simple llama stuffed with basic goods to get you through your first apocalypse. Contains at least 3 items.\r\n",
+          "it": "Lama comune carico di oggetti base con cui affrontare la tua prima apocalisse. Include almeno 3 oggetti.\r\n",
+          "fr": "Un lama rempli de marchandises de base pour vous permettre de survivre à votre première apocalypse. Contient au moins 3 objets.\r\n",
+          "es": "Una simple llama rellena de artículos básicos con los que sobrevivir a tu primer apocalipsis. Contiene al menos 3 objetos.\r\n",
+          "ar": "لاما بسيطة مملوءة بالسلع الأساسية لتخرج من نهاية العالم الأولى. تحتوي على 3 عناصر.\r\n",
+          "ja": "最初のアポカリプスを乗り切れるよう、基本グッズを詰め込んだシンプルなラマ。アイテムが3個以上入っている。\r\n",
+          "pl": "Zwykła lama wypchana podstawowymi rzeczami, które pomogą ci przetrwać pierwszą apokalipsę. Zawiera co najmniej 3 przedmioty. PRO100Kąt pozdrawia wszystkich Polaków.\r\n",
+          "es-419": "Una llama simple llena de productos básicos para que puedas sobrevivir a tu primer apocalipsis. Contiene al menos 3 objetos.\r\n",
+          "tr": "İlk kıyametinden sağ salim çıkabilmen için gerekli temel ürünlerle doldurulmuş basit bir lama. En az 3 öğe içerir.\r\n"
+        },
+        "displayAssetPath": "",
+        "itemGrants": [
+          {
+            "templateId": "CardPack:cardpack_basic",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "offerId": "73216346454B1B2892DDA381C75E1BCB",
+        "devName": "Mini Llama Manual Default - Low SharedDisplayPriority",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "MtxCurrency",
+            "currencySubType": "",
+            "regularPrice": 0,
+            "finalPrice": 0,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 0
+          }
+        ],
+        "categories": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "appStoreId": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "requirements": [
+          {
+            "requirementType": "RequireFulfillment",
+            "requiredId": "82ADCC874CFC2D47927208BAE871CF2B",
+            "minQuantity": 1
+          }
+        ],
+        "metaInfo": [],
+        "metaAssetInfo": {
+          "structName": "FortCatalogMeta",
+          "payload": {
+            "chaseItems": [
+              "FortWorkerType'/Game/Items/Workers/WorkerBasic_UC_T02.WorkerBasic_UC_T02'",
+              "FortSchematicItemDefinition'/Game/Items/Schematics/Melee/Blunt/Tools/Hammer_Heavy/SID_Blunt_Hammer_Heavy_UC_Ore_T02.SID_Blunt_Hammer_Heavy_UC_Ore_T02'",
+              "FortWorkerType'/Game/Items/Workers/Managers/ManagerDoctor_UC_T01.ManagerDoctor_UC_T01'"
+            ],
+            "packDefinition": "FortCardPackItemDefinition'/Game/Items/CardPacks/CardPack_Basic.CardPack_Basic'"
+          }
+        },
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 0,
+        "title": {
+          "de": "Mini-Belohnungslama",
+          "ru": "Мини-лама с наградой",
+          "ko": "미니 보상 라마",
+          "en": "Mini Reward Llama",
+          "it": "Lama miniricompensa",
+          "fr": "Mini lama à récompense",
+          "es": "Minillama de recompensa",
+          "ar": "لاما جوائز مصغرة",
+          "ja": "ミニ報酬ラマ",
+          "pl": "Minilama",
+          "es-419": "Minillama de recompensa",
+          "tr": "Mini Ödül Laması"
+        },
+        "shortDescription": "",
+        "description": {
+          "de": "Ein einfaches Lama, das mit allerlei gewöhnlichen Dingen gefüllt ist, um dich durch deine erste Apokalypse zu bringen. Enthält mindestens 3 Gegenstände.\r\n",
+          "ru": "Простенькая лама, набитая самыми важными вещами, которые помогут вам пережить ваш первый апокалипсис. Содержит по меньшей мере 3 предмета.\r\n",
+          "ko": "첫 종말에서 생존을 도와줄 기본적인 물품이 담긴 단촐한 라마입니다. 최소 아이템 3개를 얻을 수 있습니다!\r\n",
+          "en": "A simple llama stuffed with basic goods to get you through your first apocalypse. Contains at least 3 items.\r\n",
+          "it": "Lama comune carico di oggetti base con cui affrontare la tua prima apocalisse. Include almeno 3 oggetti.\r\n",
+          "fr": "Un lama rempli de marchandises de base pour vous permettre de survivre à votre première apocalypse. Contient au moins 3 objets.\r\n",
+          "es": "Una simple llama rellena de artículos básicos con los que sobrevivir a tu primer apocalipsis. Contiene al menos 3 objetos.\r\n",
+          "ar": "لاما بسيطة مملوءة بالسلع الأساسية لتخرج من نهاية العالم الأولى. تحتوي على 3 عناصر.\r\n",
+          "ja": "最初のアポカリプスを乗り切れるよう、基本グッズを詰め込んだシンプルなラマ。アイテムが3個以上入っている。\r\n",
+          "pl": "Zwykła lama wypchana podstawowymi rzeczami, które pomogą ci przetrwać pierwszą apokalipsę. Zawiera co najmniej 3 przedmioty. PRO100Kąt pozdrawia wszystkich Polaków.\r\n",
+          "es-419": "Una llama simple llena de productos básicos para que puedas sobrevivir a tu primer apocalipsis. Contiene al menos 3 objetos.\r\n",
+          "tr": "İlk kıyametinden sağ salim çıkabilmen için gerekli temel ürünlerle doldurulmuş basit bir lama. En az 3 öğe içerir.\r\n"
+        },
+        "displayAssetPath": "",
+        "itemGrants": [
+          {
+            "templateId": "CardPack:cardpack_basic",
+            "quantity": 1,
+            "attributes": {
+              "pack_source": "Schedule",
+              "override_loot_tier": 0,
+              "is_loot_tier_overridden": false
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "CardPackStorePreroll",
+    "catalogEntries": [
+      {
+        "offerId": "D2E08EFA731D437B85B7340EB51A5E1D",
+        "devName": "Always.UpgradePack.01",
+        "fulfillmentIds": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [],
+        "prices": [
+          {
+            "currencyType": "MtxCurrency",
+            "currencySubType": "",
+            "regularPrice": 50,
+            "dynamicRegularPrice": 50,
+            "finalPrice": 50,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 50
+          }
+        ],
+        "meta": {
+          "MaxConcurrentPurchases": "-1",
+          "Preroll": "True",
+          "ProfileId": "campaign",
+          "EventLimit": "-1"
+        },
+        "metaAssetInfo": {
+          "structName": "FortCatalogMeta",
+          "payload": {
+            "chaseItems": [
+              "FortSchematicItemDefinition'/Game/Items/Schematics/Ranged/Assault/Raygun/SID_Assault_Raygun_VR_Ore_T01.SID_Assault_Raygun_VR_Ore_T01'",
+              "FortSchematicItemDefinition'/Game/Items/Schematics/Melee/Blunt/Tools/Hammer_Heavy/SID_Blunt_Hammer_Heavy_R_Ore_T01.SID_Blunt_Hammer_Heavy_R_Ore_T01'",
+              "FortWorkerType'/Game/Items/Workers/Managers/ManagerDoctor_R_T01.ManagerDoctor_R_T01'"
+            ],
+            "packDefinition": "FortCardPackItemDefinition'/Game/Items/CardPacks/CardPack_Bronze.CardPack_Bronze'"
+          }
+        },
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [],
+        "requirements": [],
+        "offerType": "StaticPrice",
+        "refundable": false,
+        "metaInfo": [
+          {
+            "key": "MaxConcurrentPurchases",
+            "value": "-1"
+          },
+          {
+            "key": "Preroll",
+            "value": "True"
+          },
+          {
+            "key": "ProfileId",
+            "value": "campaign"
+          },
+          {
+            "key": "EventLimit",
+            "value": "-1"
+          }
+        ],
+        "displayAssetPath": "/Game/Items/CardPacks/CardPack_Bronze.CardPack_Bronze",
+        "itemGrants": [
+          {
+            "templateId": "CardPack:cardpack_bronze",
+            "quantity": 1
+          }
+        ],
+        "additionalGrants": [],
+        "sortPriority": 0,
+        "title": {
+          "de": "Upgrade-Lama",
+          "ru": "Лама с улучшениями",
+          "ko": "업그레이드 라마",
+          "en": "Upgrade Llama",
+          "it": "Lama plus",
+          "fr": "Lama amélioré",
+          "es": "Llama mejorable",
+          "ar": "لاما الترقية",
+          "ja": "アップグレードラマ",
+          "pl": "Ulepszlama",
+          "es-419": "Llama de mejoras",
+          "tr": "Geliştirme Laması"
+        },
+        "shortDescription": "",
+        "description": {
+          "de": "Das treue alte Lama, vollgepackt mit einer Fülle toller Sachen und Upgrade-Materialien. Enthält mindestens 4 Gegenstände, darunter ein seltener Gegenstand oder ein Held! Hat eine hohe Chance, sich aufzurüsten.",
+          "ru": "Старая добрая лама, набитая полезными вещами и материалами для улучшений. Содержит как минимум 4 предмета, включая один редкий предмет или героя. Высокая вероятность получить улучшение.",
+          "ko": "다양한 물건과 업그레이드 재료가 담긴 믿음직한 라마입니다. 희귀 아이템이나 영웅을 포함해 최소 4개의 아이템이 들어있습니다! 업그레이드 확률이 높습니다.",
+          "en": "The old faithful llama, packed with a variety of goodies and upgrade materials. Contains at least 4 items, including a rare item or a hero! Has a high chance to upgrade.",
+          "it": "Il caro vecchio lama, carico di oggetti e materiali da potenziamento. Include almeno 4 oggetti, di cui un oggetto o un eroe rari! Probabilità elevata di potenziamento.",
+          "fr": "Un bon vieux lama, plein de marchandises et de matériaux d'amélioration divers et variés. Contient au moins 4 objets, dont un objet rare ou un héros. A de fortes chances de gagner en valeur.",
+          "es": "La vieja y querida llama de siempre, atiborrada con una variedad de artículos y de materiales de mejora. Contiene al menos 4 objetos, ¡entre ellos un objeto raro o un héroe! Tiene una alta probabilidad de mejorarse.",
+          "ar": "اللاما المخلصة القديمة المكدسة بمجموعة متنوعة من السلع ومواد الترقية. يحتوي على 4 عناصر على الأقل، تشتمل على عنصر نادر أو بطل! لديه فرصة كبيرة للترقية.",
+          "ja": "様々なアイテムやアップグレード用素材が詰まった、安心定番のラマ。レアアイテム1個、またはヒーロー1体を含む4個以上のアイテムが入っている！ 高確率でアップグレードのチャンスあり。",
+          "pl": "Stara dobra lama, pełna różnych skarbów i materiałów do ulepszania. Zawiera przynajmniej 4 elementy. Jednym z nich jest na pewno rzadki przedmiot lub bohater. Ma duże szanse na ulepszenie. PRO100Kąt pozdrawia wszystkich Polaków.",
+          "es-419": "La llama siempre fiel, llena de una variedad de productos y materiales de mejora. Contiene al menos 4 objetos, ¡incluido un héroe u objeto raro! Tiene una alta probabilidad de mejora.",
+          "tr": "Çeşitli ürünler ve geliştirme malzemeleri ile doldurulmuş bildiğimiz lama. Nadir bir eşya veya kahraman da dahil olmak üzere en az 4 eşya içerir! Geliştirme şansı yüksektir."
+        },
+        "catalogGroup": "Upgrade",
+        "catalogGroupPriority": 2,
+        "fulfillmentClass": "com.epicgames.fortnite.core.game.fulfillments.PrerollFulfillment"
+      },
+      {
+        "offerId": "2D09C70ABD0049EBAF1D4054127287FF",
+        "devName": "Always.Jackpot.01",
+        "fulfillmentIds": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "categories": [],
+        "prices": [
+          {
+            "currencyType": "MtxCurrency",
+            "currencySubType": "",
+            "regularPrice": 500,
+            "dynamicRegularPrice": 500,
+            "finalPrice": 500,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 500
+          }
+        ],
+        "meta": {
+          "MaxConcurrentPurchases": "-1",
+          "Preroll": "True",
+          "ProfileId": "campaign",
+          "EventLimit": "-1"
+        },
+        "matchFilter": "",
+        "filterWeight": 0,
+        "appStoreId": [],
+        "requirements": [],
+        "offerType": "StaticPrice",
+        "refundable": false,
+        "metaInfo": [
+          {
+            "key": "MaxConcurrentPurchases",
+            "value": "-1"
+          },
+          {
+            "key": "Preroll",
+            "value": "True"
+          },
+          {
+            "key": "ProfileId",
+            "value": "campaign"
+          },
+          {
+            "key": "EventLimit",
+            "value": "-1"
+          }
+        ],
+        "metaAssetInfo": {
+          "structName": "FortCatalogMeta",
+          "payload": {
+            "chaseItems": [
+              "FortSchematicItemDefinition'/Game/Items/Schematics/Ranged/Assault/Hydraulic/SID_Assault_Hydraulic_Drum_SR_Ore_T01.SID_Assault_Hydraulic_Drum_SR_Ore_T01'",
+              "FortSchematicItemDefinition'/Game/Items/Schematics/Ranged/Sniper/TripleShot/SID_Sniper_TripleShot_VR_Ore_T01.SID_Sniper_TripleShot_VR_Ore_T01'",
+              "FortHeroType'/Game/Heroes/Outlander/ItemDefinition/HID_Outlander_010_M_SR_T01.HID_Outlander_010_M_SR_T01'",
+              "FortSchematicItemDefinition'/Game/Items/Schematics/Melee/Piercing/Spear_High/SID_Piercing_Spear_SR_Ore_T01.SID_Piercing_Spear_SR_Ore_T01'",
+              "FortHeroType'/Game/Heroes/Ninja/ItemDefinition/HID_Ninja_010_F_SR_T01.HID_Ninja_010_F_SR_T01'",
+              "FortSchematicItemDefinition'/Game/Items/Schematics/Ranged/Shotgun/Scavenger/SID_Shotgun_SemiAuto_Scavenger_SR_Ore_T01.SID_Shotgun_SemiAuto_Scavenger_SR_Ore_T01'"
+            ],
+            "packDefinition": "FortCardPackItemDefinition'/Game/Items/CardPacks/CardPack_Jackpot.CardPack_Jackpot'"
+          }
+        },
+        "displayAssetPath": "/Game/Items/CardPacks/CardPack_Jackpot.CardPack_Jackpot",
+        "itemGrants": [
+          {
+            "templateId": "CardPack:cardpack_jackpot",
+            "quantity": 1
+          }
+        ],
+        "additionalGrants": [],
+        "sortPriority": 0,
+        "title": {
+          "de": "Legendäres Trollschatz-Lama",
+          "ru": "Лама с легендарной заначкой тролля",
+          "ko": "전설 트롤 상자 라마",
+          "en": "Legendary Troll Stash Llama",
+          "it": "Lama Tesoro Troll leggendario",
+          "fr": "Lama à butin de Troll légendaire",
+          "es": "Llama de alijo de trol legendario",
+          "ar": "لاما مخبأ الأقزام الأسطوري",
+          "ja": "トロールのお宝ラマ(レジェンド)",
+          "pl": "Legendarna lama ze skrytki trolla",
+          "es-419": "Llama de provisión trol legendaria",
+          "tr": "Efsanevi Trol Zulası Laması"
+        },
+        "shortDescription": "",
+        "description": {
+          "de": "Eine ganze Suite voller toller Sachen, direkt aus dem Lager vom Troll um die Ecke! Enthält mindestens 8 absolut legal erstandene Gegenstände.",
+          "ru": "Груда всяких вкусностей из заначки вашего местного тролля! Содержит как минимум 8 совершенно точно не краденых предметов.",
+          "ko": "주변 트롤 상자에서 얻어온 물건입니다! 최소 8개의 아이템을 획득할 수 있습니다. 훔친 물건은 절대... 아닐걸요?",
+          "en": "An entire suite of goodies, direct from your local troll's stash! Contains at least 8 definitely-not-stolen items.",
+          "it": "Un'intera raccolta di oggetti provenienti da tesori Troll a chilometro zero! Include almeno 8 oggetti assolutamente non rubati.",
+          "fr": "Un lot de marchandises directement tirées du butin de Troll le plus proche ! Contient au moins 8 objets. Dont aucun n'a été volé. Promis.",
+          "es": "¡Un surtido completo de artículos que procede directamente del alijo de tu trol convecino! Contiene al menos 8 objetos obtenidos de forma indudablemente legal.",
+          "ar": "مجموعة كاملة من المقتنيات مباشرةً من مخبأ الأقزام المحلي الخاص بك! تحتوي على 8 عناصر على الأقل غير مسروقة قطعًا. ",
+          "ja": "アイテムをドンと一式、近所にあるトロールの隠れ家から直送！ もちろん盗品じゃないアイテムが8個以上入っている。",
+          "pl": "Cały zestaw skarbów prosto ze skrytki miejscowego trolla! Zawiera przynajmniej 8 przedmiotów (na pewno nie kradzionych). PRO100Kąt pozdrawia wszystkich Polaków.",
+          "es-419": "¡Un conjunto completo de productos, directo de las provisiones de tu trol local! Contiene al menos 8 objetos que definitivamente no fueron robados.",
+          "tr": "Mahallenizin trolünün zulasından çıkarılmış bir grup ürün! En az 8 tane kesinlikle çalıntı olmayan öğe içerir."
+        },
+        "catalogGroup": "Shared",
+        "catalogGroupPriority": 2,
+        "fulfillmentClass": "com.epicgames.fortnite.core.game.fulfillments.PrerollFulfillment"
+      }
+    ]
+  },
+  {
+    "name": "CardPackStoreGameplay",
+    "catalogEntries": [
+      {
+        "offerId": "5366E22A41C8428682737CF99513DC5F",
+        "devName": "Always.Gameplay.JackpotVoucher.01",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:voucher_cardpack_jackpot",
+            "regularPrice": 1,
+            "dynamicRegularPrice": -1,
+            "finalPrice": 1,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 1
+          }
+        ],
+        "categories": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "refundable": false,
+        "appStoreId": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "requirements": [],
+        "metaInfo": [
+          {
+            "key": "bUseSharedDisplay",
+            "value": "True"
+          },
+          {
+            "key": "SharedDisplayPriority",
+            "value": "100"
+          },
+          {
+            "key": "Preroll",
+            "value": "False"
+          }
+        ],
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 0,
+        "title": "Legendary Troll Stash Llama",
+        "shortDescription": "",
+        "description": "An entire suite of goodies, direct from your local troll's stash! Contains at least 8 definitely-not-stolen items.",
+        "displayAssetPath": "/Game/Items/CardPacks/CardPack_Jackpot.CardPack_Jackpot",
+        "itemGrants": [
+          {
+            "templateId": "CardPack:cardpack_jackpot",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "offerId": "30A676BCF19B4D179F11D59079C69B6D",
+        "devName": "Always.Gameplay.DailyLoginPack.01",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:voucher_custom_firecracker_r",
+            "regularPrice": 1,
+            "dynamicRegularPrice": -1,
+            "finalPrice": 1,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 1
+          }
+        ],
+        "categories": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "refundable": false,
+        "appStoreId": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "requirements": [],
+        "metaInfo": [
+          {
+            "key": "bUseSharedDisplay",
+            "value": "True"
+          },
+          {
+            "key": "SharedDisplayPriority",
+            "value": "101"
+          },
+          {
+            "key": "Preroll",
+            "value": "False"
+          }
+        ],
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 0,
+        "title": "Rare Firecracker Pistol",
+        "shortDescription": "",
+        "description": "One random Firecracker schematic.",
+        "displayAssetPath": "/Game/Items/CardPacks/SpecificRewards/CardPack_Custom_Firecracker_R.CardPack_Custom_Firecracker_R",
+        "itemGrants": [
+          {
+            "templateId": "CardPack:cardpack_custom_firecracker_r",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "offerId": "959E6F5FD39445539F65789EDB551013",
+        "devName": "Always.Gameplay.2021AnniversaryVoucher.01",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:voucher_cardpack_2021anniversary",
+            "regularPrice": 1,
+            "dynamicRegularPrice": -1,
+            "finalPrice": 1,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 1
+          }
+        ],
+        "categories": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "refundable": false,
+        "appStoreId": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "requirements": [],
+        "metaInfo": [
+          {
+            "key": "bUseSharedDisplay",
+            "value": "True"
+          },
+          {
+            "key": "SharedDisplayPriority",
+            "value": "100"
+          },
+          {
+            "key": "Preroll",
+            "value": "False"
+          }
+        ],
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 0,
+        "title": "2021 Birthday Llama",
+        "shortDescription": "",
+        "description": "A blast from the past! Guarantees a weapon schematic and hero introduced during Fortnite events. One Epic or better, and one Legendary!",
+        "displayAssetPath": "/Game/Items/CardPacks/Events/2021_Anniversary/CardPack_Event_2021_Anniversary.CardPack_Event_2021_Anniversary",
+        "itemGrants": [
+          {
+            "templateId": "CardPack:cardpack_event_2021_anniversary",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "offerId": "1F6B613D4B7BAD47D8A93CAEED2C4996",
+        "devName": "Mini Llama Manual Tutorial - high SharedDisplayPriority",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:voucher_basicpack",
+            "regularPrice": 1,
+            "dynamicRegularPrice": -1,
+            "finalPrice": 1,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 1
+          }
+        ],
+        "categories": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "refundable": false,
+        "appStoreId": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "requirements": [
+          {
+            "requirementType": "DenyOnFulfillment",
+            "requiredId": "82ADCC874CFC2D47927208BAE871CF2B",
+            "minQuantity": 1
+          }
+        ],
+        "metaInfo": [
+          {
+            "key": "bUseSharedDisplay",
+            "value": "true"
+          },
+          {
+            "key": "SharedDisplayPriority",
+            "value": "999999"
+          }
+        ],
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 0,
+        "title": "Mini Reward Llama",
+        "shortDescription": "",
+        "description": "A simple llama stuffed with basic goods to get you through your first apocalypse. Contains at least 3 items.\r\n",
+        "displayAssetPath": "/Game/Items/CardPacks/CardPack_Basic.CardPack_Basic",
+        "itemGrants": [
+          {
+            "templateId": "CardPack:cardpack_basic",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "offerId": "73216346454B1B2892DDA381C75E1BCB",
+        "devName": "Mini Llama Manual Default - Low SharedDisplayPriority",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:voucher_basicpack",
+            "regularPrice": 1,
+            "dynamicRegularPrice": -1,
+            "finalPrice": 1,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 1
+          }
+        ],
+        "categories": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "refundable": false,
+        "appStoreId": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "requirements": [
+          {
+            "requirementType": "RequireFulfillment",
+            "requiredId": "82ADCC874CFC2D47927208BAE871CF2B",
+            "minQuantity": 1
+          }
+        ],
+        "metaInfo": [
+          {
+            "key": "bUseSharedDisplay",
+            "value": "true"
+          },
+          {
+            "key": "SharedDisplayPriority",
+            "value": "1"
+          }
+        ],
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 0,
+        "title": "Mini Reward Llama",
+        "shortDescription": "",
+        "description": "A simple llama stuffed with basic goods to get you through your first apocalypse. Contains at least 3 items.\r\n",
+        "displayAssetPath": "/Game/Items/CardPacks/CardPack_Basic.CardPack_Basic",
+        "itemGrants": [
+          {
+            "templateId": "CardPack:cardpack_basic",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "offerId": "5726F71BD7A445BE8E1689F5C009F1E3",
+        "devName": "Event.Event.Persistent.Fortnitemares.01",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "GameItem",
+            "currencySubType": "AccountResource:eventcurrency_candy",
+            "regularPrice": 500,
+            "dynamicRegularPrice": -1,
+            "finalPrice": 500,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 500
+          }
+        ],
+        "categories": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "refundable": false,
+        "appStoreId": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "requirements": [],
+        "metaInfo": [
+          {
+            "key": "Preroll",
+            "value": "False"
+          }
+        ],
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 0,
+        "title": "Fortnitemares Llama",
+        "shortDescription": "",
+        "description": "Guarantees at least one Epic or better limited time Fortnitemares weapon or hero plus at least one Fortnitemares Survivor!",
+        "displayAssetPath": "/Game/Items/CardPacks/Events/Release/CardPack_Event_Persistent_Fortnitemares.CardPack_Event_Persistent_Fortnitemares",
+        "itemGrants": [
+          {
+            "templateId": "CardPack:cardpack_event_persistent_fortnitemares",
+            "quantity": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "CardPackStorePromo",
+    "catalogEntries": [
+      {
+        "offerId": "C060A6539A1743CA94C35D132EA91F4D",
+        "devName": "Bonus.WeaponsPack.02",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "MtxCurrency",
+            "currencySubType": "",
+            "regularPrice": 200,
+            "finalPrice": 200,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 200
+          }
+        ],
+        "categories": [],
+        "dailyLimit": 3,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "appStoreId": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "requirements": [],
+        "metaInfo": [
+          {
+            "key": "RequiredTag",
+            "value": "Account.Buff.BonusStoreOffer"
+          }
+        ],
+        "metaAssetInfo": {
+          "structName": "FortCatalogMeta",
+          "payload": {
+            "chaseItems": [
+              "FortHeroType'/Game/Heroes/Class_Commando.Class_Commando'",
+              "FortWorkerType'/Game/Items/Workers/Managers/ManagerDoctor_T01.ManagerDoctor_T01'",
+              "FortSchematicItemDefinition'/Game/Loot/Schematics/Ranged/Assault_Auto_T04.Assault_Auto_T04'"
+            ],
+            "packDefinition": "FortCardPackItemDefinition'/Game/Loot/CardPacks/CardPack_Bronze_Weapons.CardPack_Bronze_Weapons'"
+          }
+        },
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 0,
+        "title": "Upgrade Llama",
+        "shortDescription": "",
+        "description": "Upgrade Llama",
+        "displayAssetPath": "",
+        "itemGrants": [
+          {
+            "templateId": "CardPack:CardPack_Bronze_Weapons",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "offerId": "C060A6539A1743CA94C35D132EA91F4D",
+        "devName": "Bonus.WeaponsPack.02",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "MtxCurrency",
+            "currencySubType": "",
+            "regularPrice": 0,
+            "finalPrice": 0,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 0
+          }
+        ],
+        "categories": [],
+        "dailyLimit": 3,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "appStoreId": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "requirements": [],
+        "metaInfo": [
+          {
+            "key": "RequiredTag",
+            "value": "Account.Buff.BonusStoreOffer"
+          }
+        ],
+        "metaAssetInfo": {
+          "structName": "FortCatalogMeta",
+          "payload": {
+            "chaseItems": [
+              "FortSchematicItemDefinition'/Game/Loot/Schematics/Ranged/Assault_Auto_T10.Assault_Auto_T10'",
+              "FortSchematicItemDefinition'/Game/Loot/Schematics/Ranged/Assault_Hydra_T09.Assault_Hydra_T09'",
+              "FortSchematicItemDefinition'/Game/Loot/Schematics/Ranged/Assault_Raygun_Auto_T08.Assault_Raygun_Auto_T08'"
+            ],
+            "packDefinition": "FortCardPackItemDefinition'/Game/Loot/CardPacks/CardPack_Jackpot.CardPack_Jackpot'"
+          }
+        },
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 0,
+        "title": "Free Llama",
+        "shortDescription": "",
+        "description": "Free",
+        "displayAssetPath": "",
+        "itemGrants": [
+          {
+            "templateId": "CardPack:CardPack_Jackpot",
+            "quantity": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "FoundersPack",
+    "catalogEntries": [
+      {
+        "offerId": "48DC9478462A5DCD3D93EBB81D4488AB",
+        "devName": "FoundersPack_1",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "RealMoney",
+            "currencySubType": "",
+            "regularPrice": 0,
+            "dynamicRegularPrice": -1,
+            "finalPrice": 0,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 0
+          }
+        ],
+        "categories": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "refundable": false,
+        "appStoreId": [
+          "",
+          "e2f25dae43604a839dd6f2c21b675d5e",
+          "",
+          "",
+          "",
+          "",
+          "FNDR010000000001",
+          "b0e02cfe-8d1e-4aa0-a02b-e64fa7263617",
+          "",
+          "",
+          "BXWNX8ST04JS",
+          ""
+        ],
+        "requirements": [
+          {
+            "requirementType": "DenyOnItemOwnership",
+            "requiredId": "Token:founderspack_1",
+            "minQuantity": 1
+          }
+        ],
+        "metaInfo": [],
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 1,
+        "title": "Standard Founder's Pack",
+        "shortDescription": "",
+        "description": "Purchase the Standard Founder's Pack",
+        "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_1.DA_FoundersPack_1",
+        "itemGrants": []
+      },
+      {
+        "offerId": "8F9E54194FBF331A9CCC4BB6FDFB8FC2",
+        "devName": "FoundersPack_2",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "RealMoney",
+            "currencySubType": "",
+            "regularPrice": 0,
+            "dynamicRegularPrice": -1,
+            "finalPrice": 0,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 0
+          }
+        ],
+        "categories": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "refundable": false,
+        "appStoreId": [
+          "",
+          "41134f4ff35a45a4923604cbb15e487d",
+          "",
+          "",
+          "",
+          "",
+          "FNDR020000000001",
+          "369267a1-3e63-4b6e-82be-286d741d7370",
+          "",
+          "",
+          "BRD01SWKX9WS",
+          ""
+        ],
+        "requirements": [
+          {
+            "requirementType": "DenyOnItemOwnership",
+            "requiredId": "Token:founderspack_1",
+            "minQuantity": 1
+          }
+        ],
+        "metaInfo": [],
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 4,
+        "title": "Deluxe Founder's Pack",
+        "shortDescription": "",
+        "description": "Purchase the Deluxe Founder's Pack",
+        "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_2.DA_FoundersPack_2",
+        "itemGrants": []
+      },
+      {
+        "offerId": "E86A50A14891B241DBA126BE8FCD0C42",
+        "devName": "FoundersPack_3",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "RealMoney",
+            "currencySubType": "",
+            "regularPrice": 0,
+            "dynamicRegularPrice": -1,
+            "finalPrice": 0,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 0
+          }
+        ],
+        "categories": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "refundable": false,
+        "appStoreId": [
+          "",
+          "c8319a037f9840e8b7549de480efb9c7",
+          "",
+          "",
+          "",
+          "",
+          "FNDR030000000001",
+          "8b2e873d-4dba-4367-9bb9-0c2b0951918a",
+          "",
+          "",
+          "BWWG58N9HFKF",
+          ""
+        ],
+        "requirements": [
+          {
+            "requirementType": "DenyOnItemOwnership",
+            "requiredId": "Token:founderspack_1",
+            "minQuantity": 1
+          }
+        ],
+        "metaInfo": [],
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 3,
+        "title": "Super Deluxe Founder's Pack",
+        "shortDescription": "",
+        "description": "Purchase the Super Deluxe Founder's Pack",
+        "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_3.DA_FoundersPack_3",
+        "itemGrants": []
+      },
+      {
+        "offerId": "17B3F0D54574684E0B9185A10910E324",
+        "devName": "FoundersPack_4",
+        "offerType": "StaticPrice",
+        "prices": [
+          {
+            "currencyType": "RealMoney",
+            "currencySubType": "",
+            "regularPrice": 0,
+            "dynamicRegularPrice": -1,
+            "finalPrice": 0,
+            "saleExpiration": "9999-12-31T23:59:59.999Z",
+            "basePrice": 0
+          }
+        ],
+        "categories": [],
+        "dailyLimit": -1,
+        "weeklyLimit": -1,
+        "monthlyLimit": -1,
+        "refundable": false,
+        "appStoreId": [
+          "85125898f3914946a9443bcce4667660",
+          "85125898f3914946a9443bcce4667660",
+          "",
+          "",
+          "",
+          "",
+          "FNDR040000000001",
+          "e3c292c9-9337-41e8-ba90-e96b85002f68",
+          "",
+          "",
+          "BTC5H6VZBHPF",
+          ""
+        ],
+        "requirements": [
+          {
+            "requirementType": "DenyOnItemOwnership",
+            "requiredId": "Token:founderspack_1",
+            "minQuantity": 1
+          }
+        ],
+        "metaInfo": [],
+        "catalogGroup": "",
+        "catalogGroupPriority": 0,
+        "sortPriority": 2,
+        "title": "Limited Founder's Pack",
+        "shortDescription": "",
+        "description": "Purchase the Limited Founder's Pack",
+        "displayAssetPath": "/Game/Catalog/DisplayAssets/DA_FoundersPack_4.DA_FoundersPack_4",
+        "itemGrants": []
+      }
+    ]
   }
 ]

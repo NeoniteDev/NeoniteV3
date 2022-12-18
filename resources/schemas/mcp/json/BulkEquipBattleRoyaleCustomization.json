@@ -1,0 +1,72 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "loadoutData"
+    ],
+    "properties": {
+        "loadoutData": {
+            "type": "array",
+            "default": [],
+            "title": "The loadoutData Schema",
+            "items": {
+                "type": "object",
+                "default": {},
+                "title": "A Schema",
+                "required": [
+                    "slotName",
+                    "itemToSlot",
+                    "indexWithinSlot"
+                ],
+                "properties": {
+                    "slotName": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The slotName Schema",
+                        "examples": [
+                            "Dance"
+                        ]
+                    },
+                    "itemToSlot": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The itemToSlot Schema",
+                        "examples": [
+                            "508aaf1e-83c1-4a62-9a24-1d871ebe61ea"
+                        ]
+                    },
+                    "indexWithinSlot": {
+                        "type": "integer",
+                        "default": 0,
+                        "title": "The indexWithinSlot Schema",
+                        "examples": [
+                            5
+                        ]
+                    }
+                },
+                "examples": [{
+                    "slotName": "Dance",
+                    "itemToSlot": "508aaf1e-83c1-4a62-9a24-1d871ebe61ea",
+                    "indexWithinSlot": 5
+                }]
+            },
+            "examples": [
+                [{
+                    "slotName": "Dance",
+                    "itemToSlot": "508aaf1e-83c1-4a62-9a24-1d871ebe61ea",
+                    "indexWithinSlot": 5
+                }]
+            ]
+        }
+    },
+    "examples": [{
+        "loadoutData": [{
+            "slotName": "Dance",
+            "itemToSlot": "508aaf1e-83c1-4a62-9a24-1d871ebe61ea",
+            "indexWithinSlot": 5
+        }]
+    }]
+}

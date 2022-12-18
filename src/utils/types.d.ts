@@ -1014,6 +1014,9 @@ export namespace profile {
         bookXp: number;
         bookLevel: number;
         purchasedVIP: boolean;
+        // doesn't exist in the actual fortnite mcp
+        friendXpBoost: number,
+        xpBoost: number
     }
 
     export interface PurchasedBpOffer {

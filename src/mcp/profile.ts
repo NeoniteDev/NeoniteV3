@@ -277,7 +277,7 @@ export class Profile implements Omit<types.Profile, 'items'> {
         return this.fullProfile;
     }
 
-    async setStat(name: string, value: any): Promise<types.Stats> {
+    setStat(name: string, value: any): Promise<types.Stats> {
         if (typeof value == 'string' && this.stats.attributes[name] == value) return;
 
         this.stats.attributes[name] = value;

@@ -126,10 +126,10 @@ export default function userAgentParse(bRequired: boolean) {
                 throw errors.neoniteDev.internal.invalidUserAgent.with('null', rUserAgent.source);
             } else {
                 uaData = {
-                    build: '++Fortnite+Release-Live-CL-3724489',
-                    friendlyVersion: '1.8',
-                    season: 1,
-                    CL: 3724489
+                    build: '++Fortnite+Release-Live-CL-UNKNOWN',
+                    friendlyVersion: 'UNKNOWN',
+                    season: 0,
+                    CL: 0
                 }
             }
         }

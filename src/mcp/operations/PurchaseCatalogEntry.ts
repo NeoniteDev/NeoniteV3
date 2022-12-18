@@ -45,20 +45,22 @@ export async function handle(config: Handleparams<body>, profile: Profile): Prom
             .with(`mcp.operations.${config.command}.ts`, `[${validCurrencyType.join(', ')}]`);
     };
 
+
+    const battlePassInfo = resources.getBattlePassInfo(config.clientInfos.season);
     const bIsPurchasingBattlePass = [
         `BR.Season${config.clientInfos.season}.BattlePass.01`,
         `BR.Season${config.clientInfos.season}.BattleBundle.01`
     ].includes(config.body.offerId);
 
-    const bIsPurchasingTiers = !bIsPurchasingBattlePass && [
-        `BR.Season${config.clientInfos.season}.SingleTier.01`,
-        'F86AC2ED4B3EA4B2D65EF1B2629572A0'
-    ].includes(config.body.offerId);
+    const bIsPurchasingTiers = !bIsPurchasingBattlePass && (
+        battlePassInfo.tierOfferId ?
+            battlePassInfo.tierOfferId === config.body.offerId :
+            `BR.Season${config.clientInfos.season}.SingleTier.01` === config.body.offerId
+    )
 
     if (bIsPurchasingBattlePass) {
-        const battlePassInfo = resources.getBattlePassInfo(config.clientInfos.season);
         const bIsBattleBundle = config.body.offerId.endsWith('BattleBundle.01');
-
+        
         // Add the tier one items of the battlepass
         const athena = new Profile('athena', config.accountId);
         await athena.init();
@@ -122,7 +124,6 @@ export async function handle(config: Handleparams<body>, profile: Profile): Prom
         if (!inAppPurchases) throw errors.neoniteDev.internal.dataBaseError;
 
         inAppPurchases.fulfillmentCounts[`neofulfillment_bpseason${config.clientInfos.season}`] = 1;
-
         profile.setStat('in_app_purchases', inAppPurchases);
 
         await athena.addItems(itemsGranted);
@@ -131,18 +132,18 @@ export async function handle(config: Handleparams<body>, profile: Profile): Prom
         // Purchase tier(s)
         const athena = new Profile('athena', config.accountId);
         await athena.init();
+
         const currentBookLevel = athena.stats.attributes.book_level;
 
-        if (!athena.stats.attributes.season_match_boost ||
-            !athena.stats.attributes.season_friend_match_boost ||
-            !currentBookLevel
-        ) throw errors.neoniteDev.internal.dataBaseError;
+
+        if (athena.stats.attributes.season_match_boost === undefined||
+            !athena.stats.attributes.season_friend_match_boost === undefined ||
+            currentBookLevel === undefined
+        ) throw errors.neoniteDev.internal.dataBaseError.withMessage('Missing battlepass data. Please report this error on our discord server.');
 
         if (currentBookLevel >= 100) throw errors.neoniteDev.gamecatalog.invalidParameter.withMessage('You already have the maximum level of the battlepass');
 
         const newBookLevel = currentBookLevel + (config.body.purchaseQuantity || 1);
-        const battlePassInfo = resources.getBattlePassInfo(config.clientInfos.season);
-
         const tiersRewards = battlePassInfo.rewards.filter(x =>
             x.tier > currentBookLevel && x.tier <= newBookLevel
         ).filter(x => {
@@ -226,17 +227,11 @@ export async function handle(config: Handleparams<body>, profile: Profile): Prom
         athena.setStat('season_friend_match_boost', athena.stats.attributes.season_friend_match_boost);
         athena.setStat('book_level', newBookLevel);
         return await profile.generateResponse(config, undefined, athena);
-    } else if (config.body.offerId.startsWith('neoOffer:/')) {
+    } else if (config.body.offerId.startsWith('v2:/neoOffer@')) {
         const athenaProfile = new Profile('athena', config.accountId);
         await athenaProfile.init();
 
-        const templateId = config.body.offerId.substring(10);
-
-        if (templateId.length < 12 || !templateId.includes(':') || !templateId.startsWith('Athena')) {
-            throw errors.neoniteDev.gamecatalog.itemNotFound(config.body.offerId)
-        }
-
-        const itemId = templateId.split(':')[1];
+        const itemId = config.body.offerId.substring(13);
         const item = await getItem(itemId);
 
         if (!item) {
@@ -244,6 +239,8 @@ export async function handle(config: Handleparams<body>, profile: Profile): Prom
         }
 
         const neoPrice = calculatePrice(item);
+        const templateId = `${getAssetType(item)}:${item.id}`
+        
         if (
             config.body.expectedTotalPrice != undefined &&
             neoPrice != config.body.expectedTotalPrice
@@ -260,7 +257,6 @@ export async function handle(config: Handleparams<body>, profile: Profile): Prom
         }
 
         const id = randomUUID();
-
         athenaProfile.addItem(
             id,
             {

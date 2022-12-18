@@ -85,7 +85,7 @@ export function handle(accountId: string): types.Profile {
                         poolStats: [],
                         dailyLoginInterval: "2017-12-25T01:44:10.602Z",
                         poolLockouts: {
-                            poolLockouts: [ ]
+                            poolLockouts: []
                         }
                     }
                 },
@@ -135,14 +135,22 @@ export function handle(accountId: string): types.Profile {
                 favorite_skydivecontrail: "",
                 favorite_backpack: "",
                 favorite_dance: [
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  ""
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
                 ],
-                favorite_itemwraps: [],
+                favorite_itemwraps: [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
                 favorite_character: "",
                 favorite_loadingscreen: ""
             }
